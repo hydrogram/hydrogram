@@ -49,7 +49,7 @@ from hydrogram.errors import (
 from hydrogram.handlers.handler import Handler
 from hydrogram.methods import Methods
 from hydrogram.session import Auth, Session
-from hydrogram.storage import FileStorage, MemoryStorage
+from hydrogram.storage import FileStorage, MemoryStorage, Storage
 from hydrogram.types import TermsOfService, User
 from hydrogram.utils import ainput
 
@@ -114,6 +114,10 @@ class Client(Methods):
         session_string (``str``, *optional*):
             Pass a session string to load the session in-memory.
             Implies ``in_memory=True``.
+
+        session_storage_engine (:obj:`~pyrogram.storage.Storage`, *optional*):
+            Pass an instance of your own implementation of session storage engine.
+            Useful when you want to store your session in databases like Mongo, Redis, etc.
 
         in_memory (``bool``, *optional*):
             Pass True to start an in-memory session that will be discarded as soon as the client stops.
@@ -216,6 +220,7 @@ class Client(Methods):
         test_mode: bool = False,
         bot_token: Optional[str] = None,
         session_string: Optional[str] = None,
+        session_storage_engine: Optional[Storage] = None,
         in_memory: Optional[bool] = None,
         phone_number: Optional[str] = None,
         phone_code: Optional[str] = None,
@@ -262,6 +267,8 @@ class Client(Methods):
 
         if self.session_string:
             self.storage = MemoryStorage(self.name, self.session_string)
+        elif isinstance(session_storage_engine, Storage):
+            self.storage = session_storage_engine
         elif self.in_memory:
             self.storage = MemoryStorage(self.name)
         else:
