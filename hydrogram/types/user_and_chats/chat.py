@@ -69,6 +69,9 @@ class Chat(Object):
         last_name (``str``, *optional*):
             Last name of the other party in a private chat, for private chats.
 
+        full_name (``str``, *property*):
+            Full name of the other party in a private chat, for private chats and bots.
+
         photo (:obj:`~hydrogram.types.ChatPhoto`, *optional*):
             Chat photo. Suitable for downloads only.
 
@@ -198,6 +201,10 @@ class Chat(Object):
         self.linked_chat = linked_chat
         self.send_as_chat = send_as_chat
         self.available_reactions = available_reactions
+
+    @property
+    def full_name(self) -> str:
+        return " ".join(filter(None, [self.first_name, self.last_name])) or None
 
     @staticmethod
     def _parse_user_chat(client, user: raw.types.User) -> "Chat":

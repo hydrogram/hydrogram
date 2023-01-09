@@ -101,6 +101,9 @@ class User(Object, Update):
         last_name (``str``, *optional*):
             User's or bot's last name.
 
+        full_name (``str``, *property*):
+            Full name of the other party in a private chat.
+
         status (:obj:`~hydrogram.enums.UserStatus`, *optional*):
             User's last seen & online status. ``None``, for bots.
 
@@ -197,6 +200,10 @@ class User(Object, Update):
         self.phone_number = phone_number
         self.photo = photo
         self.restrictions = restrictions
+
+    @property
+    def full_name(self) -> str:
+        return " ".join(filter(None, [self.first_name, self.last_name])) or None
 
     @property
     def mention(self):
