@@ -24,6 +24,7 @@ from .chosen_inline_result_handler import ChosenInlineResultHandler
 from .deleted_messages_handler import DeletedMessagesHandler
 from .disconnect_handler import DisconnectHandler
 from .edited_message_handler import EditedMessageHandler
+from .error_handler import ErrorHandler
 from .inline_query_handler import InlineQueryHandler
 from .message_handler import MessageHandler
 from .poll_handler import PollHandler
@@ -38,6 +39,7 @@ __all__ = [
     "DeletedMessagesHandler",
     "DisconnectHandler",
     "EditedMessageHandler",
+    "ErrorHandler",
     "InlineQueryHandler",
     "MessageHandler",
     "PollHandler",

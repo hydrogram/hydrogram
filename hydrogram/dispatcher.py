@@ -31,6 +31,7 @@ from hydrogram.handlers import (
     ChosenInlineResultHandler,
     DeletedMessagesHandler,
     EditedMessageHandler,
+    ErrorHandler,
     InlineQueryHandler,
     MessageHandler,
     PollHandler,
@@ -79,6 +80,7 @@ class Dispatcher:
         self.updates_queue = asyncio.Queue()
         self.groups = OrderedDict()
         self._init_update_parsers()
+        self.error_handlers = []
 
     def _init_update_parsers(self):
         self.update_parsers = {
@@ -160,24 +162,38 @@ class Dispatcher:
             await asyncio.gather(*self.handler_worker_tasks)
             self.handler_worker_tasks.clear()
             self.groups.clear()
+            self.error_handlers.clear()
+
             log.info("Stopped %s HandlerTasks", self.client.workers)
 
     def add_handler(self, handler, group: int):
         async def fn():
             async with asyncio.Lock():
-                if group not in self.groups:
-                    self.groups[group] = []
-                    self.groups = OrderedDict(sorted(self.groups.items()))
-                self.groups[group].append(handler)
+                if isinstance(handler, ErrorHandler):
+                    if handler not in self.error_handlers:
+                        self.error_handlers.append(handler)
+                else:
+                    if group not in self.groups:
+                        self.groups[group] = []
+                        self.groups = OrderedDict(sorted(self.groups.items()))
+                    self.groups[group].append(handler)
 
         self.loop.create_task(fn())
 
     def remove_handler(self, handler, group: int):
         async def fn():
             async with asyncio.Lock():
-                if group not in self.groups:
-                    raise ValueError(f"Group {group} does not exist. Handler was not removed.")
-                self.groups[group].remove(handler)
+                if isinstance(handler, ErrorHandler):
+                    if handler not in self.error_handlers:
+                        raise ValueError(
+                            f"Error handler {handler} does not exist. Handler was not removed."
+                        )
+
+                    self.error_handlers.remove(handler)
+                else:
+                    if group not in self.groups:
+                        raise ValueError(f"Group {group} does not exist. Handler was not removed.")
+                    self.groups[group].remove(handler)
 
         self.loop.create_task(fn())
 
@@ -225,7 +241,23 @@ class Dispatcher:
         except hydrogram.ContinuePropagation:
             pass
         except Exception as e:
-            log.exception(e)
+            handled_error = False
+            for error_handler in self.error_handlers:
+                try:
+                    if await error_handler.check(self.client, e):
+                        await error_handler.callback(self.client, e)
+                        handled_error = True
+                        break
+                except hydrogram.StopPropagation:
+                    raise
+                except hydrogram.ContinuePropagation:
+                    continue
+                except Exception as e:
+                    log.exception(e)
+                    continue
+
+            if not handled_error:
+                log.exception(e)
 
     async def _execute_callback(self, handler, *args):
         if inspect.iscoroutinefunction(handler.callback):
