@@ -40,7 +40,7 @@ class InputMediaVideo(InputMedia):
             pass a binary file-like object with its attribute “.name” set for in-memory uploads or
             pass an HTTP URL as a string for Telegram to get a video from the Internet.
 
-        thumb (``str``):
+        thumb (``str | BinaryIO``, *optional*):
             Thumbnail of the video sent.
             The thumbnail should be in JPEG format and less than 200 KB in size.
             A thumbnail's width and height should not exceed 320 pixels.
@@ -76,8 +76,8 @@ class InputMediaVideo(InputMedia):
     def __init__(
         self,
         media: str | BinaryIO,
-        thumb: str | None = None,
-        caption: str = "",
+        thumb: str | BinaryIO | None = None,
+        caption: str | None = None,
         parse_mode: enums.ParseMode | None = None,
         caption_entities: list[MessageEntity] | None = None,
         width: int = 0,

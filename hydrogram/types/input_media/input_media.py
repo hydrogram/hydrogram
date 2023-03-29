@@ -42,7 +42,7 @@ class InputMedia(Object):
     def __init__(
         self,
         media: str | BinaryIO,
-        caption: str = "",
+        caption: str | None = None,
         parse_mode: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
     ):

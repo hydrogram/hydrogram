@@ -10,9 +10,10 @@ RUFF_TOML=$(cat <<EOF
 line-length = 99
 target-version = "py39"
 select = [
+    "FURB", # refurb
     "I",    # isort
-    "E",    # pycodestyle
-    "W",    # pycodestyle
+    "E",    # pycodestyle: error
+    "W",    # pycodestyle: warning
     "UP",   # pyupgrade
     "F",    # pyflakes
     "SIM",  # flake8-simplify
@@ -24,8 +25,23 @@ select = [
     "RUF",  # ruff
     "G",    # flake8-logging-format
     "TID",  # flake8-tidy-imports
+    "TCH",  # flake8-type-checking
+    "FA",   # flake8-future-annotations
+    "PL",   # pylint
 ]
-ignore = ["RUF001", "RUF002", "RUF003", "E203", "PERF203", "F401", "F403"]
+ignore = [
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "E203",
+    "PERF203",
+    "PLR09",
+    "PLR2004",
+    "PLR1702",
+    "PLW1514",
+    "PLW2901",
+    "PLW0603",
+]
 preview = true
 
 [tool.ruff.isort]

@@ -1357,7 +1357,7 @@ class Message(Object, Update):
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: str | None = None,
+        thumb: str | BinaryIO | None = None,
         disable_notification: bool | None = None,
         reply_markup: types.InlineKeyboardMarkup
         | types.ReplyKeyboardMarkup
@@ -1418,7 +1418,7 @@ class Message(Object, Update):
             height (``int``, *optional*):
                 Animation height.
 
-            thumb (``str``, *optional*):
+            thumb (``str | BinaryIO``, *optional*):
                 Thumbnail of the animation file sent.
                 The thumbnail should be in JPEG format and less than 200 KB in size.
                 A thumbnail's width and height should not exceed 320 pixels.
@@ -1500,7 +1500,7 @@ class Message(Object, Update):
         duration: int = 0,
         performer: str | None = None,
         title: str | None = None,
-        thumb: str | None = None,
+        thumb: str | BinaryIO | None = None,
         disable_notification: bool | None = None,
         reply_to_message_id: int | None = None,
         reply_markup: types.InlineKeyboardMarkup
@@ -1556,7 +1556,7 @@ class Message(Object, Update):
             title (``str``, *optional*):
                 Track name.
 
-            thumb (``str``, *optional*):
+            thumb (``str | BinaryIO``, *optional*):
                 Thumbnail of the music file album cover.
                 The thumbnail should be in JPEG format and less than 200 KB in size.
                 A thumbnail's width and height should not exceed 320 pixels.
@@ -1837,7 +1837,7 @@ class Message(Object, Update):
         self,
         document: str | BinaryIO,
         quote: bool | None = None,
-        thumb: str | None = None,
+        thumb: str | BinaryIO | None = None,
         caption: str = "",
         parse_mode: enums.ParseMode | None = None,
         caption_entities: list[types.MessageEntity] | None = None,
@@ -1880,7 +1880,7 @@ class Message(Object, Update):
                 If *reply_to_message_id* is passed, this parameter will be ignored.
                 Defaults to ``True`` in group chats and ``False`` in private chats.
 
-            thumb (``str``, *optional*):
+            thumb (``str | BinaryIO``, *optional*):
                 Thumbnail of the file sent.
                 The thumbnail should be in JPEG format and less than 200 KB in size.
                 A thumbnail's width and height should not exceed 320 pixels.
@@ -2725,7 +2725,7 @@ class Message(Object, Update):
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: str | None = None,
+        thumb: str | BinaryIO | None = None,
         supports_streaming: bool = True,
         disable_notification: bool | None = None,
         reply_to_message_id: int | None = None,
@@ -2790,7 +2790,7 @@ class Message(Object, Update):
             height (``int``, *optional*):
                 Video height.
 
-            thumb (``str``, *optional*):
+            thumb (``str | BinaryIO``, *optional*):
                 Thumbnail of the video sent.
                 The thumbnail should be in JPEG format and less than 200 KB in size.
                 A thumbnail's width and height should not exceed 320 pixels.
@@ -2873,7 +2873,7 @@ class Message(Object, Update):
         quote: bool | None = None,
         duration: int = 0,
         length: int = 1,
-        thumb: str | None = None,
+        thumb: str | BinaryIO | None = None,
         disable_notification: bool | None = None,
         reply_to_message_id: int | None = None,
         reply_markup: types.InlineKeyboardMarkup
@@ -2918,7 +2918,7 @@ class Message(Object, Update):
             length (``int``, *optional*):
                 Video width and height.
 
-            thumb (``str``, *optional*):
+            thumb (``str | BinaryIO``, *optional*):
                 Thumbnail of the video sent.
                 The thumbnail should be in JPEG format and less than 200 KB in size.
                 A thumbnail's width and height should not exceed 320 pixels.
