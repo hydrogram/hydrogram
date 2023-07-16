@@ -206,6 +206,8 @@ class Dispatcher:
             pass
         except Exception as e:
             log.exception(e)
+        finally:
+            self.updates_queue.task_done()
 
     async def _handle_update(self, handler, handler_type, parsed_update, update, users, chats):
         try:
