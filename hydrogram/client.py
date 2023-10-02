@@ -859,6 +859,9 @@ class Client(Methods):
                 if isinstance(e, asyncio.CancelledError):
                     raise e
 
+                if isinstance(e, hydrogram.errors.FloodWait):
+                    raise e
+
                 return None
             else:
                 if in_memory:
@@ -1072,6 +1075,8 @@ class Client(Methods):
                     finally:
                         await cdn_session.stop()
             except hydrogram.StopTransmission:
+                raise
+            except hydrogram.errors.FloodWait:
                 raise
             except Exception as e:
                 log.exception(e)
