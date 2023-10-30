@@ -6,12 +6,12 @@ main.py
 unknown_errors.txt
 .DS_Store
 
-# Pyrogram generated code
-pyrogram/errors/exceptions/
-pyrogram/raw/functions/
-pyrogram/raw/types/
-pyrogram/raw/base/
-pyrogram/raw/all.py
+# Hydrogram generated code
+hydrogram/errors/exceptions/
+hydrogram/raw/functions/
+hydrogram/raw/types/
+hydrogram/raw/base/
+hydrogram/raw/all.py
 docs/source/telegram
 docs/source/api/methods/
 docs/source/api/bound-methods/

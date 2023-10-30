@@ -1,4 +1,4 @@
-name: Pyrogram
+name: Hydrogram
 
 on: [push, pull_request]
 
