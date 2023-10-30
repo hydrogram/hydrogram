@@ -37,7 +37,7 @@ class MessageEntityType(AutoName):
     "``/start@hydrogrambot``"
 
     URL = raw.types.MessageEntityUrl
-    "``https://hydrogram.org`` (see ``url``)"
+    "``https://hydrogram.amanoteam.com`` (see ``url``)"
 
     EMAIL = raw.types.MessageEntityEmail
     "``do-not-reply@hydrogram.org``"

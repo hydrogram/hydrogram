@@ -55,7 +55,7 @@ except ImportError:
     log.warning(
         "TgCrypto is missing! "
         "Hydrogram will work the same, but at a much slower speed. "
-        "More info: https://docs.hydrogram.org/topics/speedups"
+        "More info: https://hydrogram.amanoteam.com/docs/topics/speedups"
     )
 
 
