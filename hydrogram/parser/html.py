@@ -1,5 +1,6 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
-#  Copyright (C) 2017-present Dan <https://github.com/delivrance>
+#  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
+#  Copyright (C) 2023-present Amano LLC <https://amanoteam.com>
 #
 #  This file is part of Hydrogram.
 #
