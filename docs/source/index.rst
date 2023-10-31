@@ -18,7 +18,7 @@ Welcome to Hydrogram
             Homepage
         </a>
         •
-        <a href="https://github.com/hydrogram/hydrogram">
+        <a href="https://github.com/AmanoTeam/hydrogram">
             Development
         </a>
         •

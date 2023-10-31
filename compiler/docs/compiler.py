@@ -23,7 +23,7 @@ import shutil
 
 HOME = "compiler/docs"
 DESTINATION = "docs/source/telegram"
-PYROGRAM_API_DEST = "docs/source/api"
+HYDROGRAM_API_DEST = "docs/source/api"
 
 FUNCTIONS_PATH = "hydrogram/raw/functions"
 TYPES_PATH = "hydrogram/raw/types"
@@ -333,7 +333,7 @@ def hydrogram_api():
         """
     )
 
-    root = PYROGRAM_API_DEST + "/methods"
+    root = HYDROGRAM_API_DEST + "/methods"
 
     shutil.rmtree(root, ignore_errors=True)
     os.mkdir(root)
@@ -495,7 +495,7 @@ def hydrogram_api():
         """
     )
 
-    root = PYROGRAM_API_DEST + "/types"
+    root = HYDROGRAM_API_DEST + "/types"
 
     shutil.rmtree(root, ignore_errors=True)
     os.mkdir(root)
@@ -606,7 +606,7 @@ def hydrogram_api():
         """
     )
 
-    root = PYROGRAM_API_DEST + "/bound-methods"
+    root = HYDROGRAM_API_DEST + "/bound-methods"
 
     shutil.rmtree(root, ignore_errors=True)
     os.mkdir(root)
@@ -660,6 +660,6 @@ if "__main__" == __name__:
     BASE_PATH = "../../hydrogram/raw/base"
     HOME = "."
     DESTINATION = "../../docs/source/telegram"
-    PYROGRAM_API_DEST = "../../docs/source/api"
+    HYDROGRAM_API_DEST = "../../docs/source/api"
 
     start()
