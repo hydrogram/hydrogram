@@ -61,7 +61,7 @@ allow-direct-references = true
 
 [tool.hatch.build]
 include = ["hydrogram/py.typed"]
-exclude = ["compiler*", "tests*"]
+exclude = ["compiler*", "tests*", "requirements.lock", "requirements-dev.lock"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["hydrogram"]
