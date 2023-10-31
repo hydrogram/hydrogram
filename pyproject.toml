@@ -64,3 +64,6 @@ exclude = ["compiler*", "tests*", "requirements.lock", "requirements-dev.lock"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["hydrogram"]
+
+[tool.hatch.build.targets.sdist]
+include = ["hydrogram"]
