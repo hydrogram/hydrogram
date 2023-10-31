@@ -1,5 +1,5 @@
 Hydrogram Client
-===============
+================
 
 You have entered the API Reference section where you can find detailed information about Hydrogram's API. The main Client
 class, all available methods and types, filters, handlers, decorators and bound-methods detailed descriptions can be

@@ -7,7 +7,7 @@ We recommend using the latest versions of both Python 3 and pip.
 -----
 
 Install Hydrogram
-----------------
+-----------------
 
 -   The easiest way to install and upgrade Hydrogram to its latest stable version is by using **pip**:
 

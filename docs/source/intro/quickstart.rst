@@ -4,13 +4,7 @@ Quick Start
 The next few steps serve as a quick start to see Hydrogram in action as fast as possible.
 
 Get Hydrogram Real Fast
-----------------------
-
-.. admonition :: Cloud Credits
-    :class: tip
-
-    If you need a cloud server to host your applications, try Hetzner Cloud. You can sign up with
-    `this link <https://hetzner.cloud/?ref=9CyT92gZEINU>`_ to get €20 in cloud credits.
+-----------------------
 
 1. Install Hydrogram with ``pip3 install -U hydrogram``.
 

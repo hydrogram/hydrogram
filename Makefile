@@ -1,11 +1,11 @@
-VENV := venv
+VENV := .venv
 PYTHON := $(VENV)/bin/python
 HOST = $(shell ifconfig | grep "inet " | tail -1 | cut -d\  -f2)
 TAG = v$(shell grep -E '__version__ = ".*"' hydrogram/__init__.py | cut -d\" -f2)
 
 RM := rm -rf
 
-.PHONY: venv clean-build clean-api clean api build docs-clean docs
+.PHONY: venv clean-build clean-api clean api build clean-docs docs
 
 venv:
 	$(RM) $(VENV)

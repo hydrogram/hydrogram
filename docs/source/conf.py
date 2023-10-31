@@ -50,6 +50,15 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
 }
 
+master_doc = "index"
+source_suffix = ".rst"
+autodoc_member_order = "bysource"
+
+templates_path = ["../resources/templates"]
+
+napoleon_use_rtype = False
+napoleon_use_param = False
+
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
