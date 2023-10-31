@@ -1,5 +1,4 @@
 # Development
-docs
 *.session
 config.ini
 main.py
@@ -16,6 +15,10 @@ docs/source/telegram
 docs/source/api/methods/
 docs/source/api/bound-methods/
 docs/source/api/types/
+
+# Sphinx documentation
+docs/build/
+docs/source/_build/
 
 # PyCharm stuff
 .idea/
