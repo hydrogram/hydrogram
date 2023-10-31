@@ -35,6 +35,9 @@ keywords = ["telegram chat messenger mtproto api client library python"]
 [tool.hatch.version]
 path = "hydrogram/__init__.py"
 
+# Used to call hatch_build.py
+[tool.hatch.build.hooks.custom]
+
 [project.urls]
 Tracker = "https://github.com/AmanoTeam/Hydrogram/issues"
 Community = "https://t.me/HydrogramNews"
@@ -59,11 +62,8 @@ dev-dependencies = [
 allow-direct-references = true
 
 [tool.hatch.build]
-include = ["hydrogram/py.typed"]
-exclude = ["compiler*", "tests*", "requirements.lock", "requirements-dev.lock"]
+exclude = ["tests", "requirements.lock", "requirements-dev.lock", ".github", ".gitignore"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["hydrogram"]
-
-[tool.hatch.build.targets.sdist]
-include = ["hydrogram"]
+ignore-vcs = true
+package = "hydrogram"
