@@ -21,10 +21,7 @@ import hydrogram
 
 
 class Stop:
-    async def stop(
-        self: "hydrogram.Client",
-        block: bool = True
-    ):
+    async def stop(self: "hydrogram.Client", block: bool = True):
         """Stop the Client.
 
         This method disconnects the client from Telegram and stops the underlying tasks.

@@ -66,7 +66,7 @@ class ChatPermissions(Object):
         can_add_web_page_previews: bool = None,
         can_change_info: bool = None,
         can_invite_users: bool = None,
-        can_pin_messages: bool = None
+        can_pin_messages: bool = None,
     ):
         super().__init__(None)
 
@@ -85,15 +85,17 @@ class ChatPermissions(Object):
             return ChatPermissions(
                 can_send_messages=not denied_permissions.send_messages,
                 can_send_media_messages=not denied_permissions.send_media,
-                can_send_other_messages=any([
-                    not denied_permissions.send_stickers,
-                    not denied_permissions.send_gifs,
-                    not denied_permissions.send_games,
-                    not denied_permissions.send_inline
-                ]),
+                can_send_other_messages=any(
+                    [
+                        not denied_permissions.send_stickers,
+                        not denied_permissions.send_gifs,
+                        not denied_permissions.send_games,
+                        not denied_permissions.send_inline,
+                    ]
+                ),
                 can_add_web_page_previews=not denied_permissions.embed_links,
                 can_send_polls=not denied_permissions.send_polls,
                 can_change_info=not denied_permissions.change_info,
                 can_invite_users=not denied_permissions.invite_users,
-                can_pin_messages=not denied_permissions.pin_messages
+                can_pin_messages=not denied_permissions.pin_messages,
             )

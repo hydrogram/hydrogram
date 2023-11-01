@@ -48,7 +48,4 @@ class BotCommand(Object):
 
     @staticmethod
     def read(c: "raw.types.BotCommand") -> "BotCommand":
-        return BotCommand(
-            command=c.command,
-            description=c.description
-        )
+        return BotCommand(command=c.command, description=c.description)

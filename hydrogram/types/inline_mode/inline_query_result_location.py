@@ -86,7 +86,7 @@ class InlineQueryResultLocation(InlineQueryResult):
         input_message_content: "types.InputMessageContent" = None,
         thumb_url: str = None,
         thumb_width: int = 0,
-        thumb_height: int = 0
+        thumb_height: int = 0,
     ):
         super().__init__("location", id, input_message_content, reply_markup)
 
@@ -111,13 +111,14 @@ class InlineQueryResultLocation(InlineQueryResult):
                 if self.input_message_content
                 else raw.types.InputBotInlineMessageMediaGeo(
                     geo_point=raw.types.InputGeoPoint(
-                        lat=self.latitude,
-                        long=self.longitude
+                        lat=self.latitude, long=self.longitude
                     ),
                     heading=self.heading,
                     period=self.live_period,
                     proximity_notification_radius=self.proximity_alert_radius,
-                    reply_markup=await self.reply_markup.write(client) if self.reply_markup else None
+                    reply_markup=await self.reply_markup.write(client)
+                    if self.reply_markup
+                    else None,
                 )
-            )
+            ),
         )

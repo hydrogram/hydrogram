@@ -21,10 +21,7 @@ import hydrogram
 
 
 class Restart:
-    async def restart(
-        self: "hydrogram.Client",
-        block: bool = True
-    ):
+    async def restart(self: "hydrogram.Client", block: bool = True):
         """Restart the Client.
 
         This method will first call :meth:`~hydrogram.Client.stop` and then :meth:`~hydrogram.Client.start` in a row in

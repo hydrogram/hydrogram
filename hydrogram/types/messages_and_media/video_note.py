@@ -68,7 +68,7 @@ class VideoNote(Object):
         thumbs: List["types.Thumbnail"] = None,
         mime_type: str = None,
         file_size: int = None,
-        date: datetime = None
+        date: datetime = None,
     ):
         super().__init__(client)
 
@@ -85,7 +85,7 @@ class VideoNote(Object):
     def _parse(
         client,
         video_note: "raw.types.Document",
-        video_attributes: "raw.types.DocumentAttributeVideo"
+        video_attributes: "raw.types.DocumentAttributeVideo",
     ) -> "VideoNote":
         return VideoNote(
             file_id=FileId(
@@ -93,11 +93,10 @@ class VideoNote(Object):
                 dc_id=video_note.dc_id,
                 media_id=video_note.id,
                 access_hash=video_note.access_hash,
-                file_reference=video_note.file_reference
+                file_reference=video_note.file_reference,
             ).encode(),
             file_unique_id=FileUniqueId(
-                file_unique_type=FileUniqueType.DOCUMENT,
-                media_id=video_note.id
+                file_unique_type=FileUniqueType.DOCUMENT, media_id=video_note.id
             ).encode(),
             length=video_attributes.w,
             duration=video_attributes.duration,
@@ -105,5 +104,5 @@ class VideoNote(Object):
             mime_type=video_note.mime_type,
             date=utils.timestamp_to_datetime(video_note.date),
             thumbs=types.Thumbnail._parse(client, video_note),
-            client=client
+            client=client,
         )

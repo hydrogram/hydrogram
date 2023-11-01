@@ -50,7 +50,7 @@ class Contact(Object):
         first_name: str,
         last_name: str = None,
         user_id: int = None,
-        vcard: str = None
+        vcard: str = None,
     ):
         super().__init__(client)
 
@@ -61,12 +61,14 @@ class Contact(Object):
         self.vcard = vcard
 
     @staticmethod
-    def _parse(client: "hydrogram.Client", contact: "raw.types.MessageMediaContact") -> "Contact":
+    def _parse(
+        client: "hydrogram.Client", contact: "raw.types.MessageMediaContact"
+    ) -> "Contact":
         return Contact(
             phone_number=contact.phone_number,
             first_name=contact.first_name,
             last_name=contact.last_name or None,
             vcard=contact.vcard or None,
             user_id=contact.user_id or None,
-            client=client
+            client=client,
         )

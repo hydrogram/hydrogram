@@ -60,17 +60,14 @@ class TCP:
                 addr=hostname,
                 port=proxy.get("port", None),
                 username=proxy.get("username", None),
-                password=proxy.get("password", None)
+                password=proxy.get("password", None),
             )
 
             self.socket.settimeout(TCP.TIMEOUT)
 
             log.info("Using proxy %s", hostname)
         else:
-            self.socket = socket.socket(
-                socket.AF_INET6 if ipv6
-                else socket.AF_INET
-            )
+            self.socket = socket.socket(socket.AF_INET6 if ipv6 else socket.AF_INET)
 
             self.socket.setblocking(False)
 
@@ -80,8 +77,13 @@ class TCP:
                 await self.loop.run_in_executor(executor, self.socket.connect, address)
         else:
             try:
-                await asyncio.wait_for(asyncio.get_event_loop().sock_connect(self.socket, address), TCP.TIMEOUT)
-            except asyncio.TimeoutError:  # Re-raise as TimeoutError. asyncio.TimeoutError is deprecated in 3.11
+                await asyncio.wait_for(
+                    asyncio.get_event_loop().sock_connect(self.socket, address),
+                    TCP.TIMEOUT,
+                )
+            except (
+                asyncio.TimeoutError
+            ):  # Re-raise as TimeoutError. asyncio.TimeoutError is deprecated in 3.11
                 raise TimeoutError("Connection timed out")
 
         self.reader, self.writer = await asyncio.open_connection(sock=self.socket)
@@ -110,8 +112,7 @@ class TCP:
         while len(data) < length:
             try:
                 chunk = await asyncio.wait_for(
-                    self.reader.read(length - len(data)),
-                    TCP.TIMEOUT
+                    self.reader.read(length - len(data)), TCP.TIMEOUT
                 )
             except (OSError, asyncio.TimeoutError):
                 return None

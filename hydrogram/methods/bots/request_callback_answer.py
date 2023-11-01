@@ -29,7 +29,7 @@ class RequestCallbackAnswer:
         chat_id: Union[int, str],
         message_id: int,
         callback_data: Union[str, bytes],
-        timeout: int = 10
+        timeout: int = 10,
     ):
         """Request a callback answer from bots.
         This is the equivalent of clicking an inline button containing callback data.
@@ -65,14 +65,16 @@ class RequestCallbackAnswer:
         """
 
         # Telegram only wants bytes, but we are allowed to pass strings too.
-        data = bytes(callback_data, "utf-8") if isinstance(callback_data, str) else callback_data
+        data = (
+            bytes(callback_data, "utf-8")
+            if isinstance(callback_data, str)
+            else callback_data
+        )
 
         return await self.invoke(
             raw.functions.messages.GetBotCallbackAnswer(
-                peer=await self.resolve_peer(chat_id),
-                msg_id=message_id,
-                data=data
+                peer=await self.resolve_peer(chat_id), msg_id=message_id, data=data
             ),
             retries=0,
-            timeout=timeout
+            timeout=timeout,
         )

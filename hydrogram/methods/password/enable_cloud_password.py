@@ -26,10 +26,7 @@ from hydrogram.utils import compute_password_hash, btoi, itob
 
 class EnableCloudPassword:
     async def enable_cloud_password(
-        self: "hydrogram.Client",
-        password: str,
-        hint: str = "",
-        email: str = None
+        self: "hydrogram.Client", password: str, hint: str = "", email: str = None
     ) -> bool:
         """Enable the Two-Step Verification security feature (Cloud Password) on your account.
 
@@ -81,8 +78,8 @@ class EnableCloudPassword:
                     new_algo=r.new_algo,
                     new_password_hash=new_hash,
                     hint=hint,
-                    email=email
-                )
+                    email=email,
+                ),
             )
         )
 

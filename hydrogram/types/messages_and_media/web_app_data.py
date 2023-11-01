@@ -46,7 +46,4 @@ class WebAppData(Object):
 
     @staticmethod
     def _parse(action: "raw.types.MessageActionWebViewDataSentMe"):
-        return WebAppData(
-            data=action.data,
-            button_text=action.text
-        )
+        return WebAppData(data=action.data, button_text=action.text)

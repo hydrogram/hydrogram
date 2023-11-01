@@ -25,8 +25,7 @@ from hydrogram import raw
 
 class DeleteSupergroup:
     async def delete_supergroup(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str]
+        self: "hydrogram.Client", chat_id: Union[int, str]
     ) -> bool:
         """Delete a supergroup.
 

@@ -23,8 +23,7 @@ from hydrogram import raw
 
 class GetDialogsCount:
     async def get_dialogs_count(
-        self: "hydrogram.Client",
-        pinned_only: bool = False
+        self: "hydrogram.Client", pinned_only: bool = False
     ) -> int:
         """Get the total count of your dialogs.
 
@@ -46,7 +45,13 @@ class GetDialogsCount:
         """
 
         if pinned_only:
-            return len((await self.invoke(raw.functions.messages.GetPinnedDialogs(folder_id=0))).dialogs)
+            return len(
+                (
+                    await self.invoke(
+                        raw.functions.messages.GetPinnedDialogs(folder_id=0)
+                    )
+                ).dialogs
+            )
         else:
             r = await self.invoke(
                 raw.functions.messages.GetDialogs(
@@ -54,7 +59,7 @@ class GetDialogsCount:
                     offset_id=0,
                     offset_peer=raw.types.InputPeerEmpty(),
                     limit=1,
-                    hash=0
+                    hash=0,
                 )
             )
 

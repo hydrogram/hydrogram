@@ -25,10 +25,7 @@ from hydrogram.methods.utilities.idle import idle
 
 
 class Run:
-    def run(
-        self: "hydrogram.Client",
-        coroutine=None
-    ):
+    def run(self: "hydrogram.Client", coroutine=None):
         """Start the client, idle the main script and finally stop the client.
 
         When calling this method without any argument it acts as a convenience method that calls

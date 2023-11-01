@@ -33,25 +33,24 @@ async def get_session(client: "hydrogram.Client", dc_id: int):
             return client.media_sessions[dc_id]
 
         session = client.media_sessions[dc_id] = Session(
-            client, dc_id,
+            client,
+            dc_id,
             await Auth(client, dc_id, await client.storage.test_mode()).create(),
-            await client.storage.test_mode(), is_media=True
+            await client.storage.test_mode(),
+            is_media=True,
         )
 
         await session.start()
 
         for _ in range(3):
             exported_auth = await client.invoke(
-                raw.functions.auth.ExportAuthorization(
-                    dc_id=dc_id
-                )
+                raw.functions.auth.ExportAuthorization(dc_id=dc_id)
             )
 
             try:
                 await session.invoke(
                     raw.functions.auth.ImportAuthorization(
-                        id=exported_auth.id,
-                        bytes=exported_auth.bytes
+                        id=exported_auth.id, bytes=exported_auth.bytes
                     )
                 )
             except AuthBytesInvalid:

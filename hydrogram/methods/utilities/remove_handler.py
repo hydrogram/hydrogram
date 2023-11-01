@@ -23,11 +23,7 @@ from hydrogram.handlers.handler import Handler
 
 
 class RemoveHandler:
-    def remove_handler(
-        self: "hydrogram.Client",
-        handler: "Handler",
-        group: int = 0
-    ):
+    def remove_handler(self: "hydrogram.Client", handler: "Handler", group: int = 0):
         """Remove a previously-registered update handler.
 
         Make sure to provide the right group where the handler was added in. You can use the return value of the

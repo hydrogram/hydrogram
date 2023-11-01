@@ -24,10 +24,7 @@ import hydrogram
 from .idle import idle
 
 
-async def compose(
-    clients: List["hydrogram.Client"],
-    sequential: bool = False
-):
+async def compose(clients: List["hydrogram.Client"], sequential: bool = False):
     """Run multiple clients at once.
 
     This method can be used to run multiple clients at once and can be found directly in the ``hydrogram`` package.

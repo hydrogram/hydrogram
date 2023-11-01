@@ -53,7 +53,7 @@ class Venue(Object):
         title: str,
         address: str,
         foursquare_id: str = None,
-        foursquare_type: str = None
+        foursquare_type: str = None,
     ):
         super().__init__(client)
 
@@ -71,5 +71,5 @@ class Venue(Object):
             address=venue.address,
             foursquare_id=venue.venue_id or None,
             foursquare_type=venue.venue_type,
-            client=client
+            client=client,
         )

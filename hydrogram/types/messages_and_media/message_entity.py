@@ -64,7 +64,7 @@ class MessageEntity(Object):
         url: str = None,
         user: "types.User" = None,
         language: str = None,
-        custom_emoji_id: int = None
+        custom_emoji_id: int = None,
     ):
         super().__init__(client)
 
@@ -77,7 +77,9 @@ class MessageEntity(Object):
         self.custom_emoji_id = custom_emoji_id
 
     @staticmethod
-    def _parse(client, entity: "raw.base.MessageEntity", users: dict) -> Optional["MessageEntity"]:
+    def _parse(
+        client, entity: "raw.base.MessageEntity", users: dict
+    ) -> Optional["MessageEntity"]:
         # Special case for InputMessageEntityMentionName -> MessageEntityType.TEXT_MENTION
         # This happens in case of UpdateShortSentMessage inside send_message() where entities are parsed from the input
         if isinstance(entity, raw.types.InputMessageEntityMentionName):
@@ -95,7 +97,7 @@ class MessageEntity(Object):
             user=types.User._parse(client, users.get(user_id, None)),
             language=getattr(entity, "language", None),
             custom_emoji_id=getattr(entity, "document_id", None),
-            client=client
+            client=client,
         )
 
     async def write(self):

@@ -54,10 +54,10 @@ class SendAnimation:
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
         ] = None,
         progress: Callable = None,
-        progress_args: tuple = ()
+        progress_args: tuple = (),
     ) -> Optional["types.Message"]:
         """Send animation files (animation or H.264/MPEG-4 AVC video without sound).
 
@@ -180,7 +180,9 @@ class SendAnimation:
             if isinstance(animation, str):
                 if os.path.isfile(animation):
                     thumb = await self.save_file(thumb)
-                    file = await self.save_file(animation, progress=progress, progress_args=progress_args)
+                    file = await self.save_file(
+                        animation, progress=progress, progress_args=progress_args
+                    )
                     media = raw.types.InputMediaUploadedDocument(
                         mime_type=self.guess_mime_type(animation) or "video/mp4",
                         file=file,
@@ -191,24 +193,30 @@ class SendAnimation:
                                 supports_streaming=True,
                                 duration=duration,
                                 w=width,
-                                h=height
+                                h=height,
                             ),
-                            raw.types.DocumentAttributeFilename(file_name=file_name or os.path.basename(animation)),
-                            raw.types.DocumentAttributeAnimated()
-                        ]
+                            raw.types.DocumentAttributeFilename(
+                                file_name=file_name or os.path.basename(animation)
+                            ),
+                            raw.types.DocumentAttributeAnimated(),
+                        ],
                     )
                 elif re.match("^https?://", animation):
                     media = raw.types.InputMediaDocumentExternal(
-                        url=animation,
-                        spoiler=has_spoiler
+                        url=animation, spoiler=has_spoiler
                     )
                 else:
-                    media = utils.get_input_media_from_file_id(animation, FileType.ANIMATION)
+                    media = utils.get_input_media_from_file_id(
+                        animation, FileType.ANIMATION
+                    )
             else:
                 thumb = await self.save_file(thumb)
-                file = await self.save_file(animation, progress=progress, progress_args=progress_args)
+                file = await self.save_file(
+                    animation, progress=progress, progress_args=progress_args
+                )
                 media = raw.types.InputMediaUploadedDocument(
-                    mime_type=self.guess_mime_type(file_name or animation.name) or "video/mp4",
+                    mime_type=self.guess_mime_type(file_name or animation.name)
+                    or "video/mp4",
                     file=file,
                     thumb=thumb,
                     spoiler=has_spoiler,
@@ -217,11 +225,13 @@ class SendAnimation:
                             supports_streaming=True,
                             duration=duration,
                             w=width,
-                            h=height
+                            h=height,
                         ),
-                        raw.types.DocumentAttributeFilename(file_name=file_name or animation.name),
-                        raw.types.DocumentAttributeAnimated()
-                    ]
+                        raw.types.DocumentAttributeFilename(
+                            file_name=file_name or animation.name
+                        ),
+                        raw.types.DocumentAttributeAnimated(),
+                    ],
                 )
 
             while True:
@@ -235,22 +245,34 @@ class SendAnimation:
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,
-                            reply_markup=await reply_markup.write(self) if reply_markup else None,
-                            **await utils.parse_text_entities(self, caption, parse_mode, caption_entities)
+                            reply_markup=await reply_markup.write(self)
+                            if reply_markup
+                            else None,
+                            **await utils.parse_text_entities(
+                                self, caption, parse_mode, caption_entities
+                            ),
                         )
                     )
                 except FilePartMissing as e:
                     await self.save_file(animation, file_id=file.id, file_part=e.value)
                 else:
                     for i in r.updates:
-                        if isinstance(i, (raw.types.UpdateNewMessage,
-                                          raw.types.UpdateNewChannelMessage,
-                                          raw.types.UpdateNewScheduledMessage)):
+                        if isinstance(
+                            i,
+                            (
+                                raw.types.UpdateNewMessage,
+                                raw.types.UpdateNewChannelMessage,
+                                raw.types.UpdateNewScheduledMessage,
+                            ),
+                        ):
                             message = await types.Message._parse(
-                                self, i.message,
+                                self,
+                                i.message,
                                 {i.id: i for i in r.users},
                                 {i.id: i for i in r.chats},
-                                is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage)
+                                is_scheduled=isinstance(
+                                    i, raw.types.UpdateNewScheduledMessage
+                                ),
                             )
 
                             if unsave:
@@ -261,8 +283,7 @@ class SendAnimation:
 
                                 await self.invoke(
                                     raw.functions.messages.SaveGif(
-                                        id=document_id,
-                                        unsave=True
+                                        id=document_id, unsave=True
                                     )
                                 )
 

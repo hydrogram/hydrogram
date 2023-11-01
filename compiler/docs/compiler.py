@@ -60,7 +60,9 @@ def generate(source_path, base):
                 else:
                     continue
 
-                full_path = os.path.basename(path) + "/" + snek(name).replace("_", "-") + ".rst"
+                full_path = (
+                    os.path.basename(path) + "/" + snek(name).replace("_", "-") + ".rst"
+                )
 
                 if level:
                     full_path = base + "/" + full_path
@@ -71,7 +73,9 @@ def generate(source_path, base):
 
                 full_name = f"{(namespace + '.') if namespace else ''}{name}"
 
-                os.makedirs(os.path.dirname(DESTINATION + "/" + full_path), exist_ok=True)
+                os.makedirs(
+                    os.path.dirname(DESTINATION + "/" + full_path), exist_ok=True
+                )
 
                 with open(DESTINATION + "/" + full_path, "w", encoding="utf-8") as f:
                     f.write(
@@ -80,7 +84,7 @@ def generate(source_path, base):
                             title_markup="=" * len(full_name),
                             full_class_path="hydrogram.raw.{}".format(
                                 ".".join(full_path.split("/")[:-1]) + "." + name
-                            )
+                            ),
                         )
                     )
 
@@ -119,7 +123,7 @@ def generate(source_path, base):
                     title=k.title(),
                     title_markup="=" * len(k),
                     module=module,
-                    entities="\n    ".join(entities)
+                    entities="\n    ".join(entities),
                 )
             )
 
@@ -330,7 +334,7 @@ def hydrogram_api():
             invoke
             resolve_peer
             save_file
-        """
+        """,
     )
 
     root = HYDROGRAM_API_DEST + "/methods"
@@ -492,7 +496,7 @@ def hydrogram_api():
         Authorization
             SentCode
             TermsOfService
-        """
+        """,
     )
 
     root = HYDROGRAM_API_DEST + "/types"
@@ -603,7 +607,7 @@ def hydrogram_api():
         ChatJoinRequest
             ChatJoinRequest.approve
             ChatJoinRequest.decline
-        """
+        """,
     )
 
     root = HYDROGRAM_API_DEST + "/bound-methods"
@@ -620,10 +624,21 @@ def hydrogram_api():
         for k, v in categories.items():
             name, *bound_methods = get_title_list(v)
 
-            fmt_keys.update({"{}_hlist".format(k): "\n    ".join("- :meth:`~{}`".format(bm) for bm in bound_methods)})
+            fmt_keys.update(
+                {
+                    "{}_hlist".format(k): "\n    ".join(
+                        "- :meth:`~{}`".format(bm) for bm in bound_methods
+                    )
+                }
+            )
 
             fmt_keys.update(
-                {"{}_toctree".format(k): "\n    ".join("{} <{}>".format(bm.split(".")[1], bm) for bm in bound_methods)})
+                {
+                    "{}_toctree".format(k): "\n    ".join(
+                        "{} <{}>".format(bm.split(".")[1], bm) for bm in bound_methods
+                    )
+                }
+            )
 
             # noinspection PyShadowingBuiltins
             for bm in bound_methods:

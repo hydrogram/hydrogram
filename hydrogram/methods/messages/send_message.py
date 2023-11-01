@@ -41,8 +41,8 @@ class SendMessage:
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
-        ] = None
+            "types.ForceReply",
+        ] = None,
     ) -> "types.Message":
         """Send text messages.
 
@@ -122,7 +122,9 @@ class SendMessage:
                         ]))
         """
 
-        message, entities = (await utils.parse_text_entities(self, text, parse_mode, entities)).values()
+        message, entities = (
+            await utils.parse_text_entities(self, text, parse_mode, entities)
+        ).values()
 
         r = await self.invoke(
             raw.functions.messages.SendMessage(
@@ -135,7 +137,7 @@ class SendMessage:
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
                 message=message,
                 entities=entities,
-                noforwards=protect_content
+                noforwards=protect_content,
             )
         )
 
@@ -150,29 +152,32 @@ class SendMessage:
 
             return types.Message(
                 id=r.id,
-                chat=types.Chat(
-                    id=peer_id,
-                    type=enums.ChatType.PRIVATE,
-                    client=self
-                ),
+                chat=types.Chat(id=peer_id, type=enums.ChatType.PRIVATE, client=self),
                 text=message,
                 date=utils.timestamp_to_datetime(r.date),
                 outgoing=r.out,
                 reply_markup=reply_markup,
                 entities=[
-                    types.MessageEntity._parse(None, entity, {})
-                    for entity in entities
-                ] if entities else None,
-                client=self
+                    types.MessageEntity._parse(None, entity, {}) for entity in entities
+                ]
+                if entities
+                else None,
+                client=self,
             )
 
         for i in r.updates:
-            if isinstance(i, (raw.types.UpdateNewMessage,
-                              raw.types.UpdateNewChannelMessage,
-                              raw.types.UpdateNewScheduledMessage)):
+            if isinstance(
+                i,
+                (
+                    raw.types.UpdateNewMessage,
+                    raw.types.UpdateNewChannelMessage,
+                    raw.types.UpdateNewScheduledMessage,
+                ),
+            ):
                 return await types.Message._parse(
-                    self, i.message,
+                    self,
+                    i.message,
                     {i.id: i for i in r.users},
                     {i.id: i for i in r.chats},
-                    is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage)
+                    is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
                 )

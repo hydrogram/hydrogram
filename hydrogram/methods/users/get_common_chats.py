@@ -26,8 +26,7 @@ from hydrogram import types
 
 class GetCommonChats:
     async def get_common_chats(
-        self: "hydrogram.Client",
-        user_id: Union[int, str]
+        self: "hydrogram.Client", user_id: Union[int, str]
     ) -> List["types.Chat"]:
         """Get the common chats you have with a user.
 

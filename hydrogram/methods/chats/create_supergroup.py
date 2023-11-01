@@ -23,9 +23,7 @@ from hydrogram import types
 
 class CreateSupergroup:
     async def create_supergroup(
-        self: "hydrogram.Client",
-        title: str,
-        description: str = ""
+        self: "hydrogram.Client", title: str, description: str = ""
     ) -> "types.Chat":
         """Create a new supergroup.
 
@@ -52,9 +50,7 @@ class CreateSupergroup:
         """
         r = await self.invoke(
             raw.functions.channels.CreateChannel(
-                title=title,
-                about=description,
-                megagroup=True
+                title=title, about=description, megagroup=True
             )
         )
 

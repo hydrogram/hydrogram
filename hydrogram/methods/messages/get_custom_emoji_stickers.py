@@ -42,9 +42,7 @@ class GetCustomEmojiStickers:
             List of :obj:`~hydrogram.types.Sticker`: On success, a list of sticker objects is returned.
         """
         result = await self.invoke(
-            raw.functions.messages.GetCustomEmojiDocuments(
-                document_id=custom_emoji_ids
-            )
+            raw.functions.messages.GetCustomEmojiDocuments(document_id=custom_emoji_ids)
         )
 
         stickers = []

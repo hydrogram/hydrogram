@@ -48,9 +48,7 @@ class Vector(bytes, TLObject):
         data.seek(-left, 1)
 
         return List(
-            t.read(data) if t
-            else Vector.read_bare(data, size)
-            for _ in range(count)
+            t.read(data) if t else Vector.read_bare(data, size) for _ in range(count)
         )
 
     def __new__(cls, value: list, t: Any = None) -> bytes:  # type: ignore

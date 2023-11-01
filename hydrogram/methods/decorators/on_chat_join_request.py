@@ -24,11 +24,7 @@ from hydrogram.filters import Filter
 
 
 class OnChatJoinRequest:
-    def on_chat_join_request(
-        self=None,
-        filters=None,
-        group: int = 0
-    ) -> Callable:
+    def on_chat_join_request(self=None, filters=None, group: int = 0) -> Callable:
         """Decorator for handling chat join requests.
 
         This does the same thing as :meth:`~hydrogram.Client.add_handler` using the
@@ -44,7 +40,9 @@ class OnChatJoinRequest:
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, hydrogram.Client):
-                self.add_handler(hydrogram.handlers.ChatJoinRequestHandler(func, filters), group)
+                self.add_handler(
+                    hydrogram.handlers.ChatJoinRequestHandler(func, filters), group
+                )
             elif isinstance(self, Filter) or self is None:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
@@ -52,7 +50,7 @@ class OnChatJoinRequest:
                 func.handlers.append(
                     (
                         hydrogram.handlers.ChatJoinRequestHandler(func, self),
-                        group if filters is None else filters
+                        group if filters is None else filters,
                     )
                 )
 

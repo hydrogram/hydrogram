@@ -33,7 +33,7 @@ class EditInlineText:
         text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
         disable_web_page_preview: bool = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None
+        reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> bool:
         """Edit the text of inline messages.
 
@@ -83,7 +83,7 @@ class EditInlineText:
                 id=unpacked,
                 no_webpage=disable_web_page_preview or None,
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
-                **await self.parser.parse(text, parse_mode)
+                **await self.parser.parse(text, parse_mode),
             ),
-            sleep_threshold=self.sleep_threshold
+            sleep_threshold=self.sleep_threshold,
         )

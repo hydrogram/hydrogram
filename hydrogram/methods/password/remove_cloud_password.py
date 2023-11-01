@@ -23,10 +23,7 @@ from hydrogram.utils import compute_password_check
 
 
 class RemoveCloudPassword:
-    async def remove_cloud_password(
-        self: "hydrogram.Client",
-        password: str
-    ) -> bool:
+    async def remove_cloud_password(self: "hydrogram.Client", password: str) -> bool:
         """Turn off the Two-Step Verification security feature (Cloud Password) on your account.
 
         .. include:: /_includes/usable-by/users.rst
@@ -57,8 +54,8 @@ class RemoveCloudPassword:
                 new_settings=raw.types.account.PasswordInputSettings(
                     new_algo=raw.types.PasswordKdfAlgoUnknown(),
                     new_password_hash=b"",
-                    hint=""
-                )
+                    hint="",
+                ),
             )
         )
 

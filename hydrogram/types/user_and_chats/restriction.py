@@ -47,5 +47,5 @@ class Restriction(Object):
         return Restriction(
             platform=restriction.platform,
             reason=restriction.reason,
-            text=restriction.text
+            text=restriction.text,
         )

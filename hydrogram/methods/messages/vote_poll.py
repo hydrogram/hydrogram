@@ -29,7 +29,7 @@ class VotePoll:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         message_id: id,
-        options: Union[int, List[int]]
+        options: Union[int, List[int]],
     ) -> "types.Poll":
         """Vote a poll.
 
@@ -63,7 +63,7 @@ class VotePoll:
             raw.functions.messages.SendVote(
                 peer=await self.resolve_peer(chat_id),
                 msg_id=message_id,
-                options=[poll.options[option].data for option in options]
+                options=[poll.options[option].data for option in options],
             )
         )
 

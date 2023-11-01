@@ -23,9 +23,7 @@ from hydrogram import types
 
 class CreateChannel:
     async def create_channel(
-        self: "hydrogram.Client",
-        title: str,
-        description: str = ""
+        self: "hydrogram.Client", title: str, description: str = ""
     ) -> "types.Chat":
         """Create a new broadcast channel.
 
@@ -48,9 +46,7 @@ class CreateChannel:
         """
         r = await self.invoke(
             raw.functions.channels.CreateChannel(
-                title=title,
-                about=description,
-                broadcast=True
+                title=title, about=description, broadcast=True
             )
         )
 

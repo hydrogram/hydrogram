@@ -24,11 +24,7 @@ from hydrogram.filters import Filter
 
 
 class OnUserStatus:
-    def on_user_status(
-        self=None,
-        filters=None,
-        group: int = 0
-    ) -> Callable:
+    def on_user_status(self=None, filters=None, group: int = 0) -> Callable:
         """Decorator for handling user status updates.
         This does the same thing as :meth:`~hydrogram.Client.add_handler` using the
         :obj:`~hydrogram.handlers.UserStatusHandler`.
@@ -43,7 +39,9 @@ class OnUserStatus:
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, hydrogram.Client):
-                self.add_handler(hydrogram.handlers.UserStatusHandler(func, filters), group)
+                self.add_handler(
+                    hydrogram.handlers.UserStatusHandler(func, filters), group
+                )
             elif isinstance(self, Filter) or self is None:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
@@ -51,7 +49,7 @@ class OnUserStatus:
                 func.handlers.append(
                     (
                         hydrogram.handlers.UserStatusHandler(func, self),
-                        group if filters is None else filters
+                        group if filters is None else filters,
                     )
                 )
 

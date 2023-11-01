@@ -25,9 +25,7 @@ from hydrogram import raw
 
 class DeclineAllChatJoinRequests:
     async def decline_all_chat_join_requests(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        invite_link: str = None
+        self: "hydrogram.Client", chat_id: Union[int, str], invite_link: str = None
     ) -> bool:
         """Decline all pending join requests in a chat.
 
@@ -47,9 +45,7 @@ class DeclineAllChatJoinRequests:
         """
         await self.invoke(
             raw.functions.messages.HideAllChatJoinRequests(
-                peer=await self.resolve_peer(chat_id),
-                approved=False,
-                link=invite_link
+                peer=await self.resolve_peer(chat_id), approved=False, link=invite_link
             )
         )
 

@@ -30,7 +30,7 @@ class StreamMedia:
         self: "hydrogram.Client",
         message: Union["types.Message", str],
         limit: int = 0,
-        offset: int = 0
+        offset: int = 0,
     ) -> Optional[Union[str, BinaryIO]]:
         """Stream the media from a message chunk by chunk.
 
@@ -74,8 +74,17 @@ class StreamMedia:
                 async for chunk in app.stream_media(message, offset=-3):
                     print(len(chunk))
         """
-        available_media = ("audio", "document", "photo", "sticker", "animation", "video", "voice", "video_note",
-                           "new_chat_photo")
+        available_media = (
+            "audio",
+            "document",
+            "photo",
+            "sticker",
+            "animation",
+            "video",
+            "voice",
+            "video_note",
+            "new_chat_photo",
+        )
 
         if isinstance(message, types.Message):
             for kind in available_media:
@@ -98,7 +107,9 @@ class StreamMedia:
 
         if offset < 0:
             if file_size == 0:
-                raise ValueError("Negative offsets are not supported for file ids, pass a Message object instead")
+                raise ValueError(
+                    "Negative offsets are not supported for file ids, pass a Message object instead"
+                )
 
             chunks = math.ceil(file_size / 1024 / 1024)
             offset += chunks

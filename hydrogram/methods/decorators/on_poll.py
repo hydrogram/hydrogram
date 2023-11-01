@@ -24,11 +24,7 @@ from hydrogram.filters import Filter
 
 
 class OnPoll:
-    def on_poll(
-        self=None,
-        filters=None,
-        group: int = 0
-    ) -> Callable:
+    def on_poll(self=None, filters=None, group: int = 0) -> Callable:
         """Decorator for handling poll updates.
 
         This does the same thing as :meth:`~hydrogram.Client.add_handler` using the
@@ -53,7 +49,7 @@ class OnPoll:
                 func.handlers.append(
                     (
                         hydrogram.handlers.PollHandler(func, self),
-                        group if filters is None else filters
+                        group if filters is None else filters,
                     )
                 )
 

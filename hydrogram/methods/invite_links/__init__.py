@@ -54,6 +54,6 @@ class InviteLinks(
     DeclineChatJoinRequest,
     ApproveAllChatJoinRequests,
     DeclineAllChatJoinRequests,
-    GetChatJoinRequests
+    GetChatJoinRequests,
 ):
     pass

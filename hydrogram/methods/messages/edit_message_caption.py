@@ -31,7 +31,7 @@ class EditMessageCaption:
         caption: str,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: List["types.MessageEntity"] = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None
+        reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> "types.Message":
         """Edit the caption of media messages.
 
@@ -73,5 +73,5 @@ class EditMessageCaption:
             text=caption,
             parse_mode=parse_mode,
             entities=caption_entities,
-            reply_markup=reply_markup
+            reply_markup=reply_markup,
         )

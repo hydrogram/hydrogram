@@ -25,9 +25,7 @@ from hydrogram import raw
 
 class UnpinChatMessage:
     async def unpin_chat_message(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        message_id: int = 0
+        self: "hydrogram.Client", chat_id: Union[int, str], message_id: int = 0
     ) -> bool:
         """Unpin a message in a group, channel or your own chat.
         You must be an administrator in the chat for this to work and must have the "can_pin_messages" admin
@@ -53,9 +51,7 @@ class UnpinChatMessage:
         """
         await self.invoke(
             raw.functions.messages.UpdatePinnedMessage(
-                peer=await self.resolve_peer(chat_id),
-                id=message_id,
-                unpin=True
+                peer=await self.resolve_peer(chat_id), id=message_id, unpin=True
             )
         )
 

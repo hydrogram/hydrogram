@@ -73,7 +73,7 @@ class InputMediaAudio(InputMedia):
         caption_entities: List[MessageEntity] = None,
         duration: int = 0,
         performer: str = "",
-        title: str = ""
+        title: str = "",
     ):
         super().__init__(media, caption, parse_mode, caption_entities)
 

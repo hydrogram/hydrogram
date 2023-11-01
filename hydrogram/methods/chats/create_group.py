@@ -28,7 +28,7 @@ class CreateGroup:
     async def create_group(
         self: "hydrogram.Client",
         title: str,
-        users: Union[Union[int, str], List[Union[int, str]]]
+        users: Union[Union[int, str], List[Union[int, str]]],
     ) -> "types.Chat":
         """Create a new basic group.
 
@@ -60,8 +60,7 @@ class CreateGroup:
 
         r = await self.invoke(
             raw.functions.messages.CreateChat(
-                title=title,
-                users=[await self.resolve_peer(u) for u in users]
+                title=title, users=[await self.resolve_peer(u) for u in users]
             )
         )
 

@@ -24,11 +24,7 @@ from hydrogram.filters import Filter
 
 
 class OnChosenInlineResult:
-    def on_chosen_inline_result(
-        self=None,
-        filters=None,
-        group: int = 0
-    ) -> Callable:
+    def on_chosen_inline_result(self=None, filters=None, group: int = 0) -> Callable:
         """Decorator for handling chosen inline results.
 
         This does the same thing as :meth:`~hydrogram.Client.add_handler` using the
@@ -45,7 +41,9 @@ class OnChosenInlineResult:
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, hydrogram.Client):
-                self.add_handler(hydrogram.handlers.ChosenInlineResultHandler(func, filters), group)
+                self.add_handler(
+                    hydrogram.handlers.ChosenInlineResultHandler(func, filters), group
+                )
             elif isinstance(self, Filter) or self is None:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
@@ -53,7 +51,7 @@ class OnChosenInlineResult:
                 func.handlers.append(
                     (
                         hydrogram.handlers.ChosenInlineResultHandler(func, self),
-                        group if filters is None else filters
+                        group if filters is None else filters,
                     )
                 )
 

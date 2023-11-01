@@ -76,7 +76,7 @@ class Animation(Object):
         mime_type: str = None,
         file_size: int = None,
         date: datetime = None,
-        thumbs: List["types.Thumbnail"] = None
+        thumbs: List["types.Thumbnail"] = None,
     ):
         super().__init__(client)
 
@@ -96,7 +96,7 @@ class Animation(Object):
         client,
         animation: "raw.types.Document",
         video_attributes: "raw.types.DocumentAttributeVideo",
-        file_name: str
+        file_name: str,
     ) -> "Animation":
         return Animation(
             file_id=FileId(
@@ -104,11 +104,10 @@ class Animation(Object):
                 dc_id=animation.dc_id,
                 media_id=animation.id,
                 access_hash=animation.access_hash,
-                file_reference=animation.file_reference
+                file_reference=animation.file_reference,
             ).encode(),
             file_unique_id=FileUniqueId(
-                file_unique_type=FileUniqueType.DOCUMENT,
-                media_id=animation.id
+                file_unique_type=FileUniqueType.DOCUMENT, media_id=animation.id
             ).encode(),
             width=getattr(video_attributes, "w", 0),
             height=getattr(video_attributes, "h", 0),
@@ -118,5 +117,5 @@ class Animation(Object):
             file_name=file_name,
             date=utils.timestamp_to_datetime(animation.date),
             thumbs=types.Thumbnail._parse(client, animation),
-            client=client
+            client=client,
         )

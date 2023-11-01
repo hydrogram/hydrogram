@@ -42,7 +42,7 @@ class PollOption(Object):
         client: "hydrogram.Client" = None,
         text: str,
         voter_count: int,
-        data: bytes
+        data: bytes,
     ):
         super().__init__(client)
 

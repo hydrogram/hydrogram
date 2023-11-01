@@ -28,10 +28,7 @@ log = logging.getLogger(__name__)
 
 
 class CheckPassword:
-    async def check_password(
-        self: "hydrogram.Client",
-        password: str
-    ) -> "types.User":
+    async def check_password(self: "hydrogram.Client", password: str) -> "types.User":
         """Check your Two-Step Verification password and log in.
 
         .. include:: /_includes/usable-by/users.rst
@@ -49,8 +46,7 @@ class CheckPassword:
         r = await self.invoke(
             raw.functions.auth.CheckPassword(
                 password=compute_password_check(
-                    await self.invoke(raw.functions.account.GetPassword()),
-                    password
+                    await self.invoke(raw.functions.account.GetPassword()), password
                 )
             )
         )

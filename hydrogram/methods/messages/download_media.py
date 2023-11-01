@@ -37,7 +37,7 @@ class DownloadMedia:
         in_memory: bool = False,
         block: bool = True,
         progress: Callable = None,
-        progress_args: tuple = ()
+        progress_args: tuple = (),
     ) -> Optional[Union[str, BinaryIO]]:
         """Download the media from a message.
 
@@ -120,8 +120,17 @@ class DownloadMedia:
                 file_name = file.name
                 file_bytes = bytes(file.getbuffer())
         """
-        available_media = ("audio", "document", "photo", "sticker", "animation", "video", "voice", "video_note",
-                           "new_chat_photo")
+        available_media = (
+            "audio",
+            "document",
+            "photo",
+            "sticker",
+            "animation",
+            "video",
+            "voice",
+            "video_note",
+            "new_chat_photo",
+        )
 
         if isinstance(message, types.Message):
             for kind in available_media:
@@ -175,11 +184,19 @@ class DownloadMedia:
                 FileType(file_id_obj.file_type).name.lower(),
                 (date or datetime.now()).strftime("%Y-%m-%d_%H-%M-%S"),
                 self.rnd_id(),
-                extension
+                extension,
             )
 
         downloader = self.handle_download(
-            (file_id_obj, directory, file_name, in_memory, file_size, progress, progress_args)
+            (
+                file_id_obj,
+                directory,
+                file_name,
+                in_memory,
+                file_size,
+                progress,
+                progress_args,
+            )
         )
 
         if block:

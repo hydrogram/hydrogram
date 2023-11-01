@@ -24,11 +24,7 @@ from hydrogram.filters import Filter
 
 
 class OnMessage:
-    def on_message(
-        self=None,
-        filters=None,
-        group: int = 0
-    ) -> Callable:
+    def on_message(self=None, filters=None, group: int = 0) -> Callable:
         """Decorator for handling new messages.
 
         This does the same thing as :meth:`~hydrogram.Client.add_handler` using the
@@ -45,7 +41,9 @@ class OnMessage:
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, hydrogram.Client):
-                self.add_handler(hydrogram.handlers.MessageHandler(func, filters), group)
+                self.add_handler(
+                    hydrogram.handlers.MessageHandler(func, filters), group
+                )
             elif isinstance(self, Filter) or self is None:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
@@ -53,7 +51,7 @@ class OnMessage:
                 func.handlers.append(
                     (
                         hydrogram.handlers.MessageHandler(func, self),
-                        group if filters is None else filters
+                        group if filters is None else filters,
                     )
                 )
 

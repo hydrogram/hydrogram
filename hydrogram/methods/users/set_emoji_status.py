@@ -25,8 +25,7 @@ from hydrogram import raw, types
 
 class SetEmojiStatus:
     async def set_emoji_status(
-        self: "hydrogram.Client",
-        emoji_status: Optional["types.EmojiStatus"] = None
+        self: "hydrogram.Client", emoji_status: Optional["types.EmojiStatus"] = None
     ) -> bool:
         """Set the emoji status.
 

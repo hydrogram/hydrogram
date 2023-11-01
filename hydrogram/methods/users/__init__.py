@@ -45,6 +45,6 @@ class Users(
     UnblockUser,
     UpdateProfile,
     GetDefaultEmojiStatuses,
-    SetEmojiStatus
+    SetEmojiStatus,
 ):
     pass

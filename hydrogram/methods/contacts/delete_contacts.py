@@ -25,8 +25,7 @@ from hydrogram import raw, types
 
 class DeleteContacts:
     async def delete_contacts(
-        self: "hydrogram.Client",
-        user_ids: Union[int, str, List[Union[int, str]]]
+        self: "hydrogram.Client", user_ids: Union[int, str, List[Union[int, str]]]
     ) -> Union["types.User", List["types.User"], None]:
         """Delete contacts from your Telegram address book.
 

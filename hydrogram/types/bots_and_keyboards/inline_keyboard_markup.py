@@ -50,9 +50,7 @@ class InlineKeyboardMarkup(Object):
 
             inline_keyboard.append(row)
 
-        return InlineKeyboardMarkup(
-            inline_keyboard=inline_keyboard
-        )
+        return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
     async def write(self, client: "hydrogram.Client"):
         rows = []

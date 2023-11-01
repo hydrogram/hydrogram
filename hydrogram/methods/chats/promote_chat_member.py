@@ -65,12 +65,13 @@ class PromoteChatMember:
             privileges = types.ChatPrivileges()
 
         try:
-            raw_chat_member = (await self.invoke(
-                raw.functions.channels.GetParticipant(
-                    channel=chat_id,
-                    participant=user_id
+            raw_chat_member = (
+                await self.invoke(
+                    raw.functions.channels.GetParticipant(
+                        channel=chat_id, participant=user_id
+                    )
                 )
-            )).participant
+            ).participant
         except errors.RPCError:
             raw_chat_member = None
 
@@ -93,9 +94,9 @@ class PromoteChatMember:
                     pin_messages=privileges.can_pin_messages,
                     add_admins=privileges.can_promote_members,
                     manage_call=privileges.can_manage_video_chats,
-                    other=privileges.can_manage_chat
+                    other=privileges.can_manage_chat,
                 ),
-                rank=rank or ""
+                rank=rank or "",
             )
         )
 

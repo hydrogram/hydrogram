@@ -72,7 +72,7 @@ class InlineQueryResultVoice(InlineQueryResult):
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: List["types.MessageEntity"] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
-        input_message_content: "types.InputMessageContent" = None
+        input_message_content: "types.InputMessageContent" = None,
     ):
         super().__init__("voice", id, input_message_content, reply_markup)
 
@@ -88,15 +88,19 @@ class InlineQueryResultVoice(InlineQueryResult):
             url=self.voice_url,
             size=0,
             mime_type="audio/mpeg",
-            attributes=[raw.types.DocumentAttributeAudio(
-                duration=self.voice_duration,
-                title=self.title,
-            )]
+            attributes=[
+                raw.types.DocumentAttributeAudio(
+                    duration=self.voice_duration,
+                    title=self.title,
+                )
+            ],
         )
 
-        message, entities = (await utils.parse_text_entities(
-            client, self.caption, self.parse_mode, self.caption_entities
-        )).values()
+        message, entities = (
+            await utils.parse_text_entities(
+                client, self.caption, self.parse_mode, self.caption_entities
+            )
+        ).values()
 
         return raw.types.InputBotInlineResult(
             id=self.id,
@@ -107,9 +111,11 @@ class InlineQueryResultVoice(InlineQueryResult):
                 await self.input_message_content.write(client, self.reply_markup)
                 if self.input_message_content
                 else raw.types.InputBotInlineMessageMediaAuto(
-                    reply_markup=await self.reply_markup.write(client) if self.reply_markup else None,
+                    reply_markup=await self.reply_markup.write(client)
+                    if self.reply_markup
+                    else None,
                     message=message,
-                    entities=entities
+                    entities=entities,
                 )
-            )
+            ),
         )

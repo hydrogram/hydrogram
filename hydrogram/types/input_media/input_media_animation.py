@@ -75,7 +75,7 @@ class InputMediaAnimation(InputMedia):
         width: int = 0,
         height: int = 0,
         duration: int = 0,
-        has_spoiler: bool = None
+        has_spoiler: bool = None,
     ):
         super().__init__(media, caption, parse_mode, caption_entities)
 

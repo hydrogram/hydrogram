@@ -27,8 +27,7 @@ from hydrogram import types
 
 class GetUsers:
     async def get_users(
-        self: "hydrogram.Client",
-        user_ids: Union[int, str, Iterable[Union[int, str]]]
+        self: "hydrogram.Client", user_ids: Union[int, str, Iterable[Union[int, str]]]
     ) -> Union["types.User", List["types.User"]]:
         """Get information about a user.
         You can retrieve up to 200 users at once.
@@ -58,11 +57,7 @@ class GetUsers:
         user_ids = list(user_ids) if is_iterable else [user_ids]
         user_ids = await asyncio.gather(*[self.resolve_peer(i) for i in user_ids])
 
-        r = await self.invoke(
-            raw.functions.users.GetUsers(
-                id=user_ids
-            )
-        )
+        r = await self.invoke(raw.functions.users.GetUsers(id=user_ids))
 
         users = types.List()
 

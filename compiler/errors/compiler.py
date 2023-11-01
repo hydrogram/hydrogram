@@ -73,16 +73,22 @@ def start():
             with open(init, "a", encoding="utf-8") as f_init:
                 f_init.write("from .{}_{} import *\n".format(name.lower(), code))
 
-            with open("{}/source/{}".format(HOME, i), encoding="utf-8") as f_csv, \
-                open("{}/{}_{}.py".format(DEST, name.lower(), code), "w", encoding="utf-8") as f_class:
+            with open("{}/source/{}".format(HOME, i), encoding="utf-8") as f_csv, open(
+                "{}/{}_{}.py".format(DEST, name.lower(), code), "w", encoding="utf-8"
+            ) as f_class:
                 reader = csv.reader(f_csv, delimiter="\t")
 
                 super_class = caml(name)
-                name = " ".join([str(i.capitalize()) for i in re.sub(r"_", " ", name).lower().split(" ")])
+                name = " ".join(
+                    [
+                        str(i.capitalize())
+                        for i in re.sub(r"_", " ", name).lower().split(" ")
+                    ]
+                )
 
                 sub_classes = []
 
-                f_all.write("        \"_\": \"{}\",\n".format(super_class))
+                f_all.write('        "_": "{}",\n'.format(super_class))
 
                 for j, row in enumerate(reader):
                     if j == 0:
@@ -99,14 +105,18 @@ def start():
                     sub_class = re.sub(r"^2", "Two", sub_class)
                     sub_class = re.sub(r" ", "", sub_class)
 
-                    f_all.write("        \"{}\": \"{}\",\n".format(error_id, sub_class))
+                    f_all.write('        "{}": "{}",\n'.format(error_id, sub_class))
 
                     sub_classes.append((sub_class, error_id, error_message))
 
-                with open("{}/template/class.txt".format(HOME), "r", encoding="utf-8") as f_class_template:
+                with open(
+                    "{}/template/class.txt".format(HOME), "r", encoding="utf-8"
+                ) as f_class_template:
                     class_template = f_class_template.read()
 
-                    with open("{}/template/sub_class.txt".format(HOME), "r", encoding="utf-8") as f_sub_class_template:
+                    with open(
+                        "{}/template/sub_class.txt".format(HOME), "r", encoding="utf-8"
+                    ) as f_sub_class_template:
                         sub_class_template = f_sub_class_template.read()
 
                     class_template = class_template.format(
@@ -114,12 +124,17 @@ def start():
                         super_class=super_class,
                         code=code,
                         docstring='"""{}"""'.format(name),
-                        sub_classes="".join([sub_class_template.format(
-                            sub_class=k[0],
-                            super_class=super_class,
-                            id="\"{}\"".format(k[1]),
-                            docstring='"""{}"""'.format(k[2])
-                        ) for k in sub_classes])
+                        sub_classes="".join(
+                            [
+                                sub_class_template.format(
+                                    sub_class=k[0],
+                                    super_class=super_class,
+                                    id='"{}"'.format(k[1]),
+                                    docstring='"""{}"""'.format(k[2]),
+                                )
+                                for k in sub_classes
+                            ]
+                        ),
                     )
 
                 f_class.write(class_template)

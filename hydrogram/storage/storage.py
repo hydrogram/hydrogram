@@ -86,7 +86,7 @@ class Storage:
             await self.test_mode(),
             await self.auth_key(),
             await self.user_id(),
-            await self.is_bot()
+            await self.is_bot(),
         )
 
         return base64.urlsafe_b64encode(packed).decode().rstrip("=")

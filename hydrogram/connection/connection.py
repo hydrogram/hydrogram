@@ -30,7 +30,9 @@ log = logging.getLogger(__name__)
 class Connection:
     MAX_CONNECTION_ATTEMPTS = 3
 
-    def __init__(self, dc_id: int, test_mode: bool, ipv6: bool, proxy: dict, media: bool = False):
+    def __init__(
+        self, dc_id: int, test_mode: bool, ipv6: bool, proxy: dict, media: bool = False
+    ):
         self.dc_id = dc_id
         self.test_mode = test_mode
         self.ipv6 = ipv6
@@ -52,11 +54,13 @@ class Connection:
                 await self.protocol.close()
                 await asyncio.sleep(1)
             else:
-                log.info("Connected! %s DC%s%s - IPv%s",
-                         "Test" if self.test_mode else "Production",
-                         self.dc_id,
-                         " (media)" if self.media else "",
-                         "6" if self.ipv6 else "4")
+                log.info(
+                    "Connected! %s DC%s%s - IPv%s",
+                    "Test" if self.test_mode else "Production",
+                    self.dc_id,
+                    " (media)" if self.media else "",
+                    "6" if self.ipv6 else "4",
+                )
                 break
         else:
             log.warning("Connection failed! Trying again...")

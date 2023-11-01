@@ -29,7 +29,7 @@ class ChangeCloudPassword:
         self: "hydrogram.Client",
         current_password: str,
         new_password: str,
-        new_hint: str = ""
+        new_hint: str = "",
     ) -> bool:
         """Change your Two-Step Verification password (Cloud Password) with a new one.
 
@@ -73,10 +73,8 @@ class ChangeCloudPassword:
             raw.functions.account.UpdatePasswordSettings(
                 password=compute_password_check(r, current_password),
                 new_settings=raw.types.account.PasswordInputSettings(
-                    new_algo=r.new_algo,
-                    new_password_hash=new_hash,
-                    hint=new_hint
-                )
+                    new_algo=r.new_algo, new_password_hash=new_hash, hint=new_hint
+                ),
             )
         )
 

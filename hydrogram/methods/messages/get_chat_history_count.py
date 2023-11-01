@@ -28,8 +28,7 @@ log = logging.getLogger(__name__)
 
 class GetChatHistoryCount:
     async def get_chat_history_count(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str]
+        self: "hydrogram.Client", chat_id: Union[int, str]
     ) -> int:
         """Get the total count of messages in a chat.
 
@@ -63,7 +62,7 @@ class GetChatHistoryCount:
                 limit=1,
                 max_id=0,
                 min_id=0,
-                hash=0
+                hash=0,
             )
         )
 

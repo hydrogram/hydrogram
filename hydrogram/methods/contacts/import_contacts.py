@@ -26,8 +26,7 @@ from hydrogram import types
 
 class ImportContacts:
     async def import_contacts(
-        self: "hydrogram.Client",
-        contacts: List["types.InputPhoneContact"]
+        self: "hydrogram.Client", contacts: List["types.InputPhoneContact"]
     ):
         """Import contacts to your Telegram address book.
 
@@ -51,9 +50,7 @@ class ImportContacts:
                     InputPhoneContact("+1-789-012-3456", "Baz")])
         """
         imported_contacts = await self.invoke(
-            raw.functions.contacts.ImportContacts(
-                contacts=contacts
-            )
+            raw.functions.contacts.ImportContacts(contacts=contacts)
         )
 
         return imported_contacts

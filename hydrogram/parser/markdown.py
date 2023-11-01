@@ -34,21 +34,27 @@ SPOILER_DELIM = "||"
 CODE_DELIM = "`"
 PRE_DELIM = "```"
 
-MARKDOWN_RE = re.compile(r"({d})|\[(.+?)\]\((.+?)\)".format(
-    d="|".join(
-        ["".join(i) for i in [
-            [rf"\{j}" for j in i]
-            for i in [
-                PRE_DELIM,
-                CODE_DELIM,
-                STRIKE_DELIM,
-                UNDERLINE_DELIM,
-                ITALIC_DELIM,
-                BOLD_DELIM,
-                SPOILER_DELIM
+MARKDOWN_RE = re.compile(
+    r"({d})|\[(.+?)\]\((.+?)\)".format(
+        d="|".join(
+            [
+                "".join(i)
+                for i in [
+                    [rf"\{j}" for j in i]
+                    for i in [
+                        PRE_DELIM,
+                        CODE_DELIM,
+                        STRIKE_DELIM,
+                        UNDERLINE_DELIM,
+                        ITALIC_DELIM,
+                        BOLD_DELIM,
+                        SPOILER_DELIM,
+                    ]
+                ]
             ]
-        ]]
-    )))
+        )
+    )
+)
 
 OPENING_TAG = "<{}>"
 CLOSING_TAG = "</{}>"
@@ -79,7 +85,9 @@ class Markdown:
                 continue
 
             if text_url:
-                text = utils.replace_once(text, full, URL_MARKUP.format(url, text_url), start)
+                text = utils.replace_once(
+                    text, full, URL_MARKUP.format(url, text_url), start
+                )
                 continue
 
             if delim == BOLD_DELIM:
@@ -107,9 +115,11 @@ class Markdown:
                 tag = CLOSING_TAG.format(tag)
 
             if delim == PRE_DELIM and delim in delims:
-                delim_and_language = text[text.find(PRE_DELIM):].split("\n")[0]
-                language = delim_and_language[len(PRE_DELIM):]
-                text = utils.replace_once(text, delim_and_language, f'<pre language="{language}">', start)
+                delim_and_language = text[text.find(PRE_DELIM) :].split("\n")[0]
+                language = delim_and_language[len(PRE_DELIM) :]
+                text = utils.replace_once(
+                    text, delim_and_language, f'<pre language="{language}">', start
+                )
                 continue
 
             text = utils.replace_once(text, delim, tag, start)
@@ -156,16 +166,24 @@ class Markdown:
             else:
                 continue
 
-            entities_offsets.append((start_tag, start,))
-            entities_offsets.append((end_tag, end,))
+            entities_offsets.append(
+                (
+                    start_tag,
+                    start,
+                )
+            )
+            entities_offsets.append(
+                (
+                    end_tag,
+                    end,
+                )
+            )
 
         entities_offsets = map(
             lambda x: x[1],
             sorted(
-                enumerate(entities_offsets),
-                key=lambda x: (x[1][1], x[0]),
-                reverse=True
-            )
+                enumerate(entities_offsets), key=lambda x: (x[1][1], x[0]), reverse=True
+            ),
         )
 
         for entity, offset in entities_offsets:

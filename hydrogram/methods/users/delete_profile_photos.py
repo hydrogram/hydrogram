@@ -27,8 +27,7 @@ from hydrogram.file_id import FileType
 
 class DeleteProfilePhotos:
     async def delete_profile_photos(
-        self: "hydrogram.Client",
-        photo_ids: Union[str, List[str]]
+        self: "hydrogram.Client", photo_ids: Union[str, List[str]]
     ) -> bool:
         """Delete your own profile photos.
 
@@ -55,10 +54,10 @@ class DeleteProfilePhotos:
                 await app.delete_profile_photos([p.file_id for p in photos[1:]])
         """
         photo_ids = photo_ids if isinstance(photo_ids, list) else [photo_ids]
-        input_photos = [utils.get_input_media_from_file_id(i, FileType.PHOTO).id for i in photo_ids]
+        input_photos = [
+            utils.get_input_media_from_file_id(i, FileType.PHOTO).id for i in photo_ids
+        ]
 
-        return bool(await self.invoke(
-            raw.functions.photos.DeletePhotos(
-                id=input_photos
-            )
-        ))
+        return bool(
+            await self.invoke(raw.functions.photos.DeletePhotos(id=input_photos))
+        )

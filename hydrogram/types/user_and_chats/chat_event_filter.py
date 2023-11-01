@@ -73,7 +73,8 @@ class ChatEventFilter(Object):
     """
 
     def __init__(
-        self, *,
+        self,
+        *,
         new_restrictions: bool = False,
         new_privileges: bool = False,
         new_members: bool = False,
@@ -84,7 +85,7 @@ class ChatEventFilter(Object):
         edited_messages: bool = False,
         pinned_messages: bool = False,
         leaving_members: bool = False,
-        video_chats: bool = False
+        video_chats: bool = False,
     ):
         super().__init__()
 
@@ -172,5 +173,5 @@ class ChatEventFilter(Object):
             edit=edit,
             delete=delete,
             group_call=group_call,
-            invites=invites
+            invites=invites,
         )

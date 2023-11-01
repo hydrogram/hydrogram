@@ -43,6 +43,6 @@ class Decorators(
     OnPoll,
     OnChosenInlineResult,
     OnChatMemberUpdated,
-    OnChatJoinRequest
+    OnChatJoinRequest,
 ):
     pass

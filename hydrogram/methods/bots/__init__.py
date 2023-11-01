@@ -51,6 +51,6 @@ class Bots(
     GetBotDefaultPrivileges,
     SetChatMenuButton,
     GetChatMenuButton,
-    AnswerWebAppQuery
+    AnswerWebAppQuery,
 ):
     pass

@@ -22,9 +22,7 @@ from hydrogram import raw
 
 
 class GetContactsCount:
-    async def get_contacts_count(
-        self: "hydrogram.Client"
-    ) -> int:
+    async def get_contacts_count(self: "hydrogram.Client") -> int:
         """Get the total count of contacts from your Telegram address book.
 
         .. include:: /_includes/usable-by/users.rst
@@ -39,4 +37,6 @@ class GetContactsCount:
                 print(count)
         """
 
-        return len((await self.invoke(raw.functions.contacts.GetContacts(hash=0))).contacts)
+        return len(
+            (await self.invoke(raw.functions.contacts.GetContacts(hash=0))).contacts
+        )

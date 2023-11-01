@@ -29,7 +29,7 @@ class GetChatInviteLinkJoiners:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         invite_link: str,
-        limit: int = 0
+        limit: int = 0,
     ) -> Optional[AsyncGenerator["types.ChatJoiner", None]]:
         """Get the members who joined the chat with the invite link.
 
@@ -67,7 +67,7 @@ class GetChatInviteLinkJoiners:
                     link=invite_link,
                     limit=limit,
                     offset_date=offset_date,
-                    offset_user=offset_user
+                    offset_user=offset_user,
                 )
             )
 

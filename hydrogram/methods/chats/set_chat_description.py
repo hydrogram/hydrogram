@@ -25,9 +25,7 @@ from hydrogram import raw
 
 class SetChatDescription:
     async def set_chat_description(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        description: str
+        self: "hydrogram.Client", chat_id: Union[int, str], description: str
     ) -> bool:
         """Change the description of a supergroup or a channel.
         You must be an administrator in the chat for this to work and must have the appropriate admin rights.
@@ -56,10 +54,7 @@ class SetChatDescription:
 
         if isinstance(peer, (raw.types.InputPeerChannel, raw.types.InputPeerChat)):
             await self.invoke(
-                raw.functions.messages.EditChatAbout(
-                    peer=peer,
-                    about=description
-                )
+                raw.functions.messages.EditChatAbout(peer=peer, about=description)
             )
         else:
             raise ValueError(f'The chat_id "{chat_id}" belongs to a user')

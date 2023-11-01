@@ -25,25 +25,46 @@ from collections import OrderedDict
 import hydrogram
 from hydrogram import utils
 from hydrogram.handlers import (
-    CallbackQueryHandler, MessageHandler, EditedMessageHandler, DeletedMessagesHandler,
-    UserStatusHandler, RawUpdateHandler, InlineQueryHandler, PollHandler,
-    ChosenInlineResultHandler, ChatMemberUpdatedHandler, ChatJoinRequestHandler
+    CallbackQueryHandler,
+    MessageHandler,
+    EditedMessageHandler,
+    DeletedMessagesHandler,
+    UserStatusHandler,
+    RawUpdateHandler,
+    InlineQueryHandler,
+    PollHandler,
+    ChosenInlineResultHandler,
+    ChatMemberUpdatedHandler,
+    ChatJoinRequestHandler,
 )
 from hydrogram.raw.types import (
-    UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage,
-    UpdateEditMessage, UpdateEditChannelMessage,
-    UpdateDeleteMessages, UpdateDeleteChannelMessages,
-    UpdateBotCallbackQuery, UpdateInlineBotCallbackQuery,
-    UpdateUserStatus, UpdateBotInlineQuery, UpdateMessagePoll,
-    UpdateBotInlineSend, UpdateChatParticipant, UpdateChannelParticipant,
-    UpdateBotChatInviteRequester
+    UpdateNewMessage,
+    UpdateNewChannelMessage,
+    UpdateNewScheduledMessage,
+    UpdateEditMessage,
+    UpdateEditChannelMessage,
+    UpdateDeleteMessages,
+    UpdateDeleteChannelMessages,
+    UpdateBotCallbackQuery,
+    UpdateInlineBotCallbackQuery,
+    UpdateUserStatus,
+    UpdateBotInlineQuery,
+    UpdateMessagePoll,
+    UpdateBotInlineSend,
+    UpdateChatParticipant,
+    UpdateChannelParticipant,
+    UpdateBotChatInviteRequester,
 )
 
 log = logging.getLogger(__name__)
 
 
 class Dispatcher:
-    NEW_MESSAGE_UPDATES = (UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage)
+    NEW_MESSAGE_UPDATES = (
+        UpdateNewMessage,
+        UpdateNewChannelMessage,
+        UpdateNewScheduledMessage,
+    )
     EDIT_MESSAGE_UPDATES = (UpdateEditMessage, UpdateEditChannelMessage)
     DELETE_MESSAGES_UPDATES = (UpdateDeleteMessages, UpdateDeleteChannelMessages)
     CALLBACK_QUERY_UPDATES = (UpdateBotCallbackQuery, UpdateInlineBotCallbackQuery)
@@ -66,66 +87,72 @@ class Dispatcher:
 
         async def message_parser(update, users, chats):
             return (
-                await hydrogram.types.Message._parse(self.client, update.message, users, chats,
-                                                    isinstance(update, UpdateNewScheduledMessage)),
-                MessageHandler
+                await hydrogram.types.Message._parse(
+                    self.client,
+                    update.message,
+                    users,
+                    chats,
+                    isinstance(update, UpdateNewScheduledMessage),
+                ),
+                MessageHandler,
             )
 
         async def edited_message_parser(update, users, chats):
             # Edited messages are parsed the same way as new messages, but the handler is different
             parsed, _ = await message_parser(update, users, chats)
 
-            return (
-                parsed,
-                EditedMessageHandler
-            )
+            return (parsed, EditedMessageHandler)
 
         async def deleted_messages_parser(update, users, chats):
             return (
                 utils.parse_deleted_messages(self.client, update),
-                DeletedMessagesHandler
+                DeletedMessagesHandler,
             )
 
         async def callback_query_parser(update, users, chats):
             return (
                 await hydrogram.types.CallbackQuery._parse(self.client, update, users),
-                CallbackQueryHandler
+                CallbackQueryHandler,
             )
 
         async def user_status_parser(update, users, chats):
             return (
                 hydrogram.types.User._parse_user_status(self.client, update),
-                UserStatusHandler
+                UserStatusHandler,
             )
 
         async def inline_query_parser(update, users, chats):
             return (
                 hydrogram.types.InlineQuery._parse(self.client, update, users),
-                InlineQueryHandler
+                InlineQueryHandler,
             )
 
         async def poll_parser(update, users, chats):
             return (
                 hydrogram.types.Poll._parse_update(self.client, update),
-                PollHandler
+                PollHandler,
             )
 
         async def chosen_inline_result_parser(update, users, chats):
             return (
                 hydrogram.types.ChosenInlineResult._parse(self.client, update, users),
-                ChosenInlineResultHandler
+                ChosenInlineResultHandler,
             )
 
         async def chat_member_updated_parser(update, users, chats):
             return (
-                hydrogram.types.ChatMemberUpdated._parse(self.client, update, users, chats),
-                ChatMemberUpdatedHandler
+                hydrogram.types.ChatMemberUpdated._parse(
+                    self.client, update, users, chats
+                ),
+                ChatMemberUpdatedHandler,
             )
 
         async def chat_join_request_parser(update, users, chats):
             return (
-                hydrogram.types.ChatJoinRequest._parse(self.client, update, users, chats),
-                ChatJoinRequestHandler
+                hydrogram.types.ChatJoinRequest._parse(
+                    self.client, update, users, chats
+                ),
+                ChatJoinRequestHandler,
             )
 
         self.update_parsers = {
@@ -138,10 +165,14 @@ class Dispatcher:
             Dispatcher.POLL_UPDATES: poll_parser,
             Dispatcher.CHOSEN_INLINE_RESULT_UPDATES: chosen_inline_result_parser,
             Dispatcher.CHAT_MEMBER_UPDATES: chat_member_updated_parser,
-            Dispatcher.CHAT_JOIN_REQUEST_UPDATES: chat_join_request_parser
+            Dispatcher.CHAT_JOIN_REQUEST_UPDATES: chat_join_request_parser,
         }
 
-        self.update_parsers = {key: value for key_tuple, value in self.update_parsers.items() for key in key_tuple}
+        self.update_parsers = {
+            key: value
+            for key_tuple, value in self.update_parsers.items()
+            for key in key_tuple
+        }
 
     async def start(self):
         if not self.client.no_updates:
@@ -191,7 +222,9 @@ class Dispatcher:
 
             try:
                 if group not in self.groups:
-                    raise ValueError(f"Group {group} does not exist. Handler was not removed.")
+                    raise ValueError(
+                        f"Group {group} does not exist. Handler was not removed."
+                    )
 
                 self.groups[group].remove(handler)
             finally:
@@ -244,7 +277,7 @@ class Dispatcher:
                                         self.client.executor,
                                         handler.callback,
                                         self.client,
-                                        *args
+                                        *args,
                                     )
                             except hydrogram.StopPropagation:
                                 raise

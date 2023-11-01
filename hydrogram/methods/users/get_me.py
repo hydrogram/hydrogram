@@ -23,9 +23,7 @@ from hydrogram import types
 
 
 class GetMe:
-    async def get_me(
-        self: "hydrogram.Client"
-    ) -> "types.User":
+    async def get_me(self: "hydrogram.Client") -> "types.User":
         """Get your own user identity.
 
         .. include:: /_includes/usable-by/users-bots.rst
@@ -40,9 +38,7 @@ class GetMe:
                 print(me)
         """
         r = await self.invoke(
-            raw.functions.users.GetFullUser(
-                id=raw.types.InputUserSelf()
-            )
+            raw.functions.users.GetFullUser(id=raw.types.InputUserSelf())
         )
 
         users = {u.id: u for u in r.users}

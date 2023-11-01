@@ -25,8 +25,7 @@ from hydrogram import raw
 
 class GetChatOnlineCount:
     async def get_chat_online_count(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str]
+        self: "hydrogram.Client", chat_id: Union[int, str]
     ) -> int:
         """Get the number of members that are currently online in a chat.
 
@@ -45,8 +44,8 @@ class GetChatOnlineCount:
                 online = await app.get_chat_online_count(chat_id)
                 print(online)
         """
-        return (await self.invoke(
-            raw.functions.messages.GetOnlines(
-                peer=await self.resolve_peer(chat_id)
+        return (
+            await self.invoke(
+                raw.functions.messages.GetOnlines(peer=await self.resolve_peer(chat_id))
             )
-        )).onlines
+        ).onlines

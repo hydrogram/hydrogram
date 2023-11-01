@@ -28,7 +28,7 @@ class AddChatMembers:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         user_ids: Union[Union[int, str], List[Union[int, str]]],
-        forward_limit: int = 100
+        forward_limit: int = 100,
     ) -> bool:
         """Add new chat members to a group, supergroup or channel
 
@@ -74,17 +74,14 @@ class AddChatMembers:
                     raw.functions.messages.AddChatUser(
                         chat_id=peer.chat_id,
                         user_id=await self.resolve_peer(user_id),
-                        fwd_limit=forward_limit
+                        fwd_limit=forward_limit,
                     )
                 )
         else:
             await self.invoke(
                 raw.functions.channels.InviteToChannel(
                     channel=peer,
-                    users=[
-                        await self.resolve_peer(user_id)
-                        for user_id in user_ids
-                    ]
+                    users=[await self.resolve_peer(user_id) for user_id in user_ids],
                 )
             )
 
