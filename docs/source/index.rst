@@ -11,7 +11,7 @@ Welcome to Hydrogram
     </div>
 
     <p align="center">
-        <b>Telegram MTProto API Framework for Python</b>
+        <b>Python Framework for the Telegram MTProto API</b>
 
         <br>
         <a href="https://hydrogram.amanoteam.com">
@@ -45,17 +45,17 @@ Welcome to Hydrogram
 
     app.run()
 
-**Hydrogram** is a modern, elegant and asynchronous :doc:`MTProto API <topics/mtproto-vs-botapi>` framework.
-It enables you to easily interact with the main Telegram API through a user account (custom client) or a bot identity
-(bot API alternative) using Python.
+Hydrogram is a Python library for interacting with the :doc:`Telegram MTProto API <topics/mtproto-vs-botapi>`.
+It provides a simple and intuitive interface for developers to leverage the power of Telegram's API in their Python applications.
 
 Support
 -------
 
-If you'd like to support Hydrogram, you can consider:
+Hydrogram is an open source project. Your support helps us maintain and improve the library.
+You can support the development of Hydrogram through the following platforms:
 
-- `Become a LiberaPay patron <https://liberapay.com/hydrogram>`_.
-- `Become an OpenCollective backer <https://opencollective.com/hydrogram>`_.
+- `LiberaPay <https://liberapay.com/hydrogram>`_.
+- `OpenCollective <https://opencollective.com/hydrogram>`_.
 
 How the Documentation is Organized
 ----------------------------------
