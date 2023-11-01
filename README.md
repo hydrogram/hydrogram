@@ -48,8 +48,8 @@ identity (bot API alternative) using Python.
 
 If you'd like to support Hydrogram, you can consider:
 
-- [Become a LiberaPay patron](https://liberapay.com/AmanoTeam).
-- [Become an OpenCollective backer](https://opencollective.com/AmanoTeam).
+- [Become a LiberaPay patron](https://liberapay.com/hydrogram).
+- [Become an OpenCollective backer](https://opencollective.com/hydrogram).
 
 ### Key Features
 

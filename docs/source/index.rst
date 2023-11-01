@@ -54,8 +54,7 @@ Support
 
 If you'd like to support Hydrogram, you can consider:
 
-- `Become a GitHub sponsor <https://github.com/sponsors/delivrance>`_.
-- `Become a LiberaPay patron <https://liberapay.com/delivrance>`_.
+- `Become a LiberaPay patron <https://liberapay.com/hydrogram>`_.
 - `Become an OpenCollective backer <https://opencollective.com/hydrogram>`_.
 
 How the Documentation is Organized

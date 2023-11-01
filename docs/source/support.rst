@@ -27,29 +27,14 @@ a sponsor of the project. You can support Hydrogram via the ways shown below:
 
 -----
 
-GitHub Sponsor
---------------
-
-`Become a GitHub sponsor <https://github.com/sponsors/delivrance>`_.
-
-.. raw:: html
-
-    <a class="github-button"
-       href="https://github.com/sponsors/delivrance"
-       data-color-scheme="no-preference: light; light: light; dark: dark;"
-       data-icon="octicon-heart" data-size="large"
-       aria-label="Sponsor @delivrance on GitHub">Sponsor</a>
-
------
-
 LiberaPay Patron
 ----------------
 
-`Become a LiberaPay patron <https://liberapay.com/delivrance>`_.
+`Become a LiberaPay patron <https://liberapay.com/hydrogram>`_.
 
 .. raw:: html
 
-    <script src="https://liberapay.com/delivrance/widgets/button.js"></script>
+    <script src="https://liberapay.com/hydrogram/widgets/button.js"></script>
 
 -----
 
