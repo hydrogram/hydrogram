@@ -655,7 +655,7 @@ class Message(Object, Update):
             forward_signature = None
             forward_date = None
 
-            forward_header = message.fwd_from  # type: raw.types.MessageFwdHeader
+            forward_header: raw.types.MessageFwdHeader = message.fwd_from
 
             if forward_header:
                 forward_date = utils.timestamp_to_datetime(forward_header.date)

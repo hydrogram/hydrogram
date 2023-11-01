@@ -91,7 +91,7 @@ class SQLiteStorage(Storage):
     def __init__(self, name: str):
         super().__init__(name)
 
-        self.conn = None  # type: sqlite3.Connection
+        self.conn: sqlite3.Connection = None
 
     def create(self):
         with self.conn:
