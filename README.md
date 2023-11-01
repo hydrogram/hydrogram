@@ -3,7 +3,7 @@
         <img src="https://hydrogram.amanoteam.com/docs/_static/hydrogram.png" alt="Hydrogram" width="128">
     </a>
     <br>
-    <b>Telegram MTProto API Framework for Python</b>
+    <b>Python Framework for the Telegram MTProto API</b>
     <br>
     <a href="https://hydrogram.amanoteam.com">
         Homepage
@@ -22,11 +22,34 @@
     </a>
 </p>
 
-## Hydrogram
+# Hydrogram
 
-> Elegant, modern and asynchronous Telegram MTProto API framework in Python for users and bots
+[![We use Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![PyPI package version](https://img.shields.io/pypi/v/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram)
+[![PyPI license](https://img.shields.io/pypi/l/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram)
+[![PyPI python versions](https://img.shields.io/pypi/pyversions/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram)
+[![PyPI download month](https://img.shields.io/pypi/dm/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram/)
+[![GitHub Actions status](https://github.com/AmanoTeam/hydrogram/workflows/CI/badge.svg)](https://github.com/AmanoTeam/hydrogram/actions)
 
-``` python
+## Description
+
+Hydrogram is a Python library for interacting with the Telegram MTProto API. It provides a simple and intuitive interface for developers to leverage the power of Telegram's API in their Python applications.
+
+## Installation
+
+To install Hydrogram, you need Python 3 installed on your system. If you don't have Python installed, you can download it from the official website.
+
+To install Hydrogram, use pip:
+
+```bash
+pip install hydrogram -U
+```
+
+## Usage
+
+Here is a basic example of how to use Hydrogram:
+
+```python
 from hydrogram import Client, filters
 
 app = Client("my_account")
@@ -40,39 +63,32 @@ async def hello(client, message):
 app.run()
 ```
 
-**Hydrogram** is a modern, elegant and asynchronous [MTProto API](https://hydrogram.amanoteam.com/docs/topics/mtproto-vs-botapi)
-framework. It enables you to easily interact with the main Telegram API through a user account (custom client) or a bot
-identity (bot API alternative) using Python.
+## Features
 
-### Support
+- Easy: Makes the Telegram API simple and intuitive, while still allowing advanced usages.
+- Elegant: Low-level details are abstracted and re-presented in a more convenient way.
+- Fast: Boosted up by [TgCrypto](https://github.com/pyrogram/tgcrypto), a high-performance cryptography library written in C.
+- Type-hinted: Types and methods are all type-hinted, enabling excellent editor support.
+- Async: Fully asynchronous (also usable synchronously if wanted, for convenience).
+- Powerful: Full access to Telegram's API to execute any official client action and more.
 
-If you'd like to support Hydrogram, you can consider:
+## Resources
 
-- [Become a LiberaPay patron](https://liberapay.com/hydrogram).
-- [Become an OpenCollective backer](https://opencollective.com/hydrogram).
+- The [documentation](https://hydrogram.amanoteam.com/docs) is the technical reference for Hydrogram. It includes detailed usage guides, API reference, and more.
+- The [homepage](https://hydrogram.amanoteam.com) is the official website for Hydrogram. It includes a quickstart guide, a list of features, and more.
+- Our [Telegram channel](https://t.me/HydrogramNews) is where we post news and updates about Hydrogram.
 
-### Key Features
+## Contributing
 
-- **Ready**: Install Hydrogram with pip and start building your applications right away.
-- **Easy**: Makes the Telegram API simple and intuitive, while still allowing advanced usages.
-- **Elegant**: Low-level details are abstracted and re-presented in a more convenient way.
-- **Fast**: Boosted up by [TgCrypto](https://github.com/pyrogram/tgcrypto), a high-performance cryptography library written in C.
-- **Type-hinted**: Types and methods are all type-hinted, enabling excellent editor support.
-- **Async**: Fully asynchronous (also usable synchronously if wanted, for convenience).
-- **Powerful**: Full access to Telegram's API to execute any official client action and more.
+Contributions of all sizes are welcome. Please review our [contribution guidelines](https://github.com/AmanoTeam/hydrogram/blob/main/CONTRIBUTING.rst) for more information. You can also help by [reporting bugs or feature requests](https://github.com/AmanoTeam/hydrogram/issues/new/choose).
 
-### Installing
+## Support
 
-``` bash
-pip3 install hydrogram
-```
+Hydrogram is an open source project. Your support helps us maintain and improve the library. You can support the development of Hydrogram through the following platforms:
 
-### Resources
+- [Liberapay](https://liberapay.com/hydrogram)
+- [OpenCollective](https://opencollective.com/hydrogram)
 
-- Check out the docs at <https://hydrogram.amanoteam.com/docs> to learn more about Hydrogram, get started right
-away and discover more in-depth material for building your client applications.
-- Join the official channel at <https://t.me/HydrogramNews> and stay tuned for news, updates and announcements.
+## License
 
-### Thanks
-
-- [Pyrogram](https://github.com/pyrogram/pyrogram) and all its contributors, for the inspiration and base code.
+You may copy, distribute and modify the software provided that modifications are described and licensed for free under [LGPL-3](https://www.gnu.org/licenses/lgpl-3.0.html). Derivatives works (including modifications or anything statically linked to the library) can only be redistributed under LGPL-3, but applications that use the library don't have to be.
