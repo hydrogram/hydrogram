@@ -1,0 +1,11 @@
+:root {
+    --color-green: green;
+    --color-red: red;
+}
+
+.usable-by {
+    border: 1px ;
+    border-radius: .2em;
+    padding: 2px 5px;
+    background-color: #1a1c1e;
+}

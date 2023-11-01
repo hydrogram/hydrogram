@@ -11,7 +11,7 @@ import re
 import sys
 
 project = "Hydrogram"
-copyright = "2023, Amano LLC"
+copyright = "2023-present, Amano LLC."
 author = "Amano LLC"
 
 docs_dir = os.path.dirname(os.path.dirname(__file__))
@@ -54,12 +54,8 @@ master_doc = "index"
 source_suffix = ".rst"
 autodoc_member_order = "bysource"
 
-templates_path = ["../resources/templates"]
-
 napoleon_use_rtype = False
 napoleon_use_param = False
-
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -67,14 +63,16 @@ pygments_style = "sphinx"
 # Decides the language used for syntax highlighting of code blocks.
 highlight_language = "python3"
 
-# If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = False
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "furo"
 html_title = f"{project} documentation v{release}"
+html_static_path = ["_static"]
+html_css_files = [
+    "css/all.min.css",
+    "css/custom.css",
+]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further. For a list of options available for each theme, see the documentation.
