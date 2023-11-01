@@ -17,7 +17,7 @@
         Releases
     </a>
     •
-    <a href="https://t.me/hydrogram">
+    <a href="https://t.me/HydrogramNews">
         News
     </a>
 </p>
@@ -71,7 +71,7 @@ pip3 install hydrogram
 
 - Check out the docs at https://hydrogram.amanoteam.com/docs to learn more about Hydrogram, get started right
 away and discover more in-depth material for building your client applications.
-- Join the official channel at https://t.me/hydrogram and stay tuned for news, updates and announcements.
+- Join the official channel at https://t.me/HydrogramNews and stay tuned for news, updates and announcements.
 
 ### Thanks
 

@@ -116,4 +116,4 @@ For example, given the ID *123456789*, here's how Hydrogram can tell entities ap
 So, every time you take a raw ID, make sure to translate it into the correct ID when you want to use it with an
 high-level method.
 
-.. _Community: https://t.me/Hydrogram
+.. _Community: https://t.me/HydrogramNews

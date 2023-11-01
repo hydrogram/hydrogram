@@ -47,7 +47,7 @@ like send_audio(), send_document(), send_location(), etc...
                             ),
                             InlineKeyboardButton(  # Opens a web URL
                                 "URL",
-                                url="https://docs.hydrogram.org"
+                                url="https://hydrogram.amanoteam.com/docs"
                             ),
                         ],
                         [  # Second row
