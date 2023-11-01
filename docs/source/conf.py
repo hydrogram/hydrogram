@@ -98,7 +98,3 @@ html_theme_options = {
         },
     ],
 }
-
-html_title = f"Hydrogram v{version}"
-
-autodoc_member_order = "bysource"
