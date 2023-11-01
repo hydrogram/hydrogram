@@ -27,7 +27,7 @@ from ..object import Object
 
 class MessageEntity(Object):
     """One special entity in a text message.
-    
+
     For example, hashtags, usernames, URLs, etc.
 
     Parameters:

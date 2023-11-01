@@ -24,11 +24,11 @@ from .inline_query_result import InlineQueryResult
 
 class InlineQueryResultContact(InlineQueryResult):
     """Contact with a phone number
-    
+
     By default, this contact will be sent by the user.
     Alternatively, you can use *input_message_content* to send a message with the specified content instead of the
     contact.
-    
+
     Parameters:
         phone_number (``str``):
             Contact's phone number.
@@ -48,7 +48,7 @@ class InlineQueryResultContact(InlineQueryResult):
 
         reply_markup (:obj:`~hydrogram.types.InlineKeyboardMarkup`, *optional*):
             Inline keyboard attached to the message.
-            
+
         input_message_content (:obj:`~hydrogram.types.InputMessageContent`, *optional*):
             Content of the message to be sent instead of the contact.
 

@@ -13,4 +13,3 @@ If you think your account was limited/deactivated by mistake, you can write to r
 .. _@SpamBot: https://t.me/spambot
 .. _this form: https://telegram.org/support
 .. _Telegram's ToS: https://telegram.org/tos
-

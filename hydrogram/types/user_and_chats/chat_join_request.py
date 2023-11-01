@@ -85,24 +85,24 @@ class ChatJoinRequest(Object, Update):
 
     async def approve(self) -> bool:
         """Bound method *approve* of :obj:`~hydrogram.types.ChatJoinRequest`.
-        
+
         Use as a shortcut for:
-        
+
         .. code-block:: python
 
             await client.approve_chat_join_request(
                 chat_id=request.chat.id,
                 user_id=request.from_user.id
             )
-            
+
         Example:
             .. code-block:: python
 
                 await request.approve()
-                
+
         Returns:
             ``bool``: True on success.
-        
+
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
@@ -113,24 +113,24 @@ class ChatJoinRequest(Object, Update):
 
     async def decline(self) -> bool:
         """Bound method *decline* of :obj:`~hydrogram.types.ChatJoinRequest`.
-        
+
         Use as a shortcut for:
-        
+
         .. code-block:: python
 
             await client.decline_chat_join_request(
                 chat_id=request.chat.id,
                 user_id=request.from_user.id
             )
-            
+
         Example:
             .. code-block:: python
 
                 await request.decline()
-                
+
         Returns:
             ``bool``: True on success.
-        
+
         Raises:
             RPCError: In case of a Telegram RPC error.
         """

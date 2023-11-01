@@ -3,5 +3,3 @@ class {sub_class}({super_class}):
     ID = {id}
     """``str``: RPC Error ID"""
     MESSAGE = __doc__
-
-

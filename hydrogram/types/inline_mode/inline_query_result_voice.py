@@ -26,38 +26,38 @@ from .inline_query_result import InlineQueryResult
 
 class InlineQueryResultVoice(InlineQueryResult):
     """Link to a voice recording in an .OGG container encoded with OPUS.
-    
+
     By default, this voice recording will be sent by the user.
     Alternatively, you can use *input_message_content* to send a message with the specified content instead of the
     voice message.
-    
+
     Parameters:
         voice_url (``str``):
             A valid URL for the voice recording.
-            
+
         title (``str``):
             Title for the result.
-            
+
         id (``str``, *optional*):
             Unique identifier for this result, 1-64 bytes.
             Defaults to a randomly generated UUID4.
-            
+
         voice_duration (``int``, *optional*):
             Recording duration in seconds.
 
         caption (``str``, *optional*):
             Caption of the audio to be sent, 0-1024 characters.
-            
+
         parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
             By default, texts are parsed using both Markdown and HTML styles.
             You can combine both syntaxes together.
 
         caption_entities (List of :obj:`~hydrogram.types.MessageEntity`):
             List of special entities that appear in the caption, which can be specified instead of *parse_mode*.
-            
+
         reply_markup (:obj:`~hydrogram.types.InlineKeyboardMarkup`, *optional*):
             Inline keyboard attached to the message.
-            
+
         input_message_content (:obj:`~hydrogram.types.InputMessageContent`, *optional*):
             Content of the message to be sent instead of the audio.
     """

@@ -44,13 +44,13 @@ class GetMediaGroup:
 
             message_id (``int``):
                 The id of one of the messages that belong to the media group.
-                
+
         Returns:
             List of :obj:`~hydrogram.types.Message`: On success, a list of messages of the media group is returned.
-            
+
         Raises:
-            ValueError: 
-                In case the passed message_id is negative or equal 0. 
+            ValueError:
+                In case the passed message_id is negative or equal 0.
                 In case target message doesn't belong to a media group.
         """
 

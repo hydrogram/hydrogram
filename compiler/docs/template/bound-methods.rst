@@ -100,4 +100,3 @@ ChatJoinRequest
     :hidden:
 
     {chat_join_request_toctree}
-
