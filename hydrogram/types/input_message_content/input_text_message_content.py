@@ -17,10 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, List
+from typing import List, Optional
 
 import hydrogram
-from hydrogram import raw, types, utils, enums
+from hydrogram import enums, raw, types, utils
+
 from .input_message_content import InputMessageContent
 
 
@@ -46,8 +47,8 @@ class InputTextMessageContent(InputMessageContent):
         self,
         message_text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: List["types.MessageEntity"] = None,
-        disable_web_page_preview: bool = None,
+        entities: Optional[List["types.MessageEntity"]] = None,
+        disable_web_page_preview: Optional[bool] = None,
     ):
         super().__init__()
 

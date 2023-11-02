@@ -26,11 +26,10 @@ from .msg_container import MsgContainer
 from .primitives.bool import Bool, BoolFalse, BoolTrue
 from .primitives.bytes import Bytes
 from .primitives.double import Double
-from .primitives.int import Int, Long, Int128, Int256
+from .primitives.int import Int, Int128, Int256, Long
 from .primitives.string import String
 from .primitives.vector import Vector
 from .tl_object import TLObject
-
 
 __all__ = [
     "FutureSalt",

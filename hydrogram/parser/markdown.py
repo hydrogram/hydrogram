@@ -23,6 +23,7 @@ from typing import Optional
 
 import hydrogram
 from hydrogram.enums import MessageEntityType
+
 from . import utils
 from .html import HTML
 
@@ -85,9 +86,7 @@ class Markdown:
                 continue
 
             if text_url:
-                text = utils.replace_once(
-                    text, full, URL_MARKUP.format(url, text_url), start
-                )
+                text = utils.replace_once(text, full, URL_MARKUP.format(url, text_url), start)
                 continue
 
             if delim == BOLD_DELIM:
@@ -179,11 +178,11 @@ class Markdown:
                 )
             )
 
-        entities_offsets = map(
-            lambda x: x[1],
-            sorted(
+        entities_offsets = (
+            x[1]
+            for x in sorted(
                 enumerate(entities_offsets), key=lambda x: (x[1][1], x[0]), reverse=True
-            ),
+            )
         )
 
         for entity, offset in entities_offsets:

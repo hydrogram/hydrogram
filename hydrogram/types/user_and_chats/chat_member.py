@@ -18,10 +18,11 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, Dict
+from typing import Dict, Optional, Union
 
 import hydrogram
-from hydrogram import raw, types, utils, enums
+from hydrogram import enums, raw, types, utils
+
 from ..object import Object
 
 
@@ -80,14 +81,14 @@ class ChatMember(Object):
         status: "enums.ChatMemberStatus",
         user: "types.User" = None,
         chat: "types.Chat" = None,
-        custom_title: str = None,
-        until_date: datetime = None,
-        joined_date: datetime = None,
+        custom_title: Optional[str] = None,
+        until_date: Optional[datetime] = None,
+        joined_date: Optional[datetime] = None,
         invited_by: "types.User" = None,
         promoted_by: "types.User" = None,
         restricted_by: "types.User" = None,
-        is_member: bool = None,
-        can_be_edited: bool = None,
+        is_member: Optional[bool] = None,
+        can_be_edited: Optional[bool] = None,
         permissions: "types.ChatPermissions" = None,
         privileges: "types.ChatPrivileges" = None,
     ):
@@ -228,3 +229,4 @@ class ChatMember(Object):
                 invited_by=types.User._parse(client, users[member.inviter_id]),
                 client=client,
             )
+        return None

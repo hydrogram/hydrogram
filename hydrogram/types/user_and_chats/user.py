@@ -22,9 +22,8 @@ from datetime import datetime
 from typing import List, Optional
 
 import hydrogram
-from hydrogram import enums, utils
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import enums, raw, types, utils
+
 from ..object import Object
 from ..update import Update
 
@@ -42,10 +41,7 @@ class Link(str):
 
     @staticmethod
     def format(url: str, text: str, style: enums.ParseMode):
-        if style == enums.ParseMode.MARKDOWN:
-            fmt = Link.MARKDOWN
-        else:
-            fmt = Link.HTML
+        fmt = Link.MARKDOWN if style == enums.ParseMode.MARKDOWN else Link.HTML
 
         return fmt.format(url=url, text=html.escape(text))
 
@@ -53,7 +49,7 @@ class Link(str):
     def __new__(cls, url, text, style):
         return str.__new__(cls, Link.format(url, text, style))
 
-    def __call__(self, other: str = None, *, style: str = None):
+    def __call__(self, other: Optional[str] = None, *, style: Optional[str] = None):
         return Link.format(self.url, other or self.text, style or self.style)
 
     def __str__(self):
@@ -153,29 +149,29 @@ class User(Object, Update):
         *,
         client: "hydrogram.Client" = None,
         id: int,
-        is_self: bool = None,
-        is_contact: bool = None,
-        is_mutual_contact: bool = None,
-        is_deleted: bool = None,
-        is_bot: bool = None,
-        is_verified: bool = None,
-        is_restricted: bool = None,
-        is_scam: bool = None,
-        is_fake: bool = None,
-        is_support: bool = None,
-        is_premium: bool = None,
-        first_name: str = None,
-        last_name: str = None,
+        is_self: Optional[bool] = None,
+        is_contact: Optional[bool] = None,
+        is_mutual_contact: Optional[bool] = None,
+        is_deleted: Optional[bool] = None,
+        is_bot: Optional[bool] = None,
+        is_verified: Optional[bool] = None,
+        is_restricted: Optional[bool] = None,
+        is_scam: Optional[bool] = None,
+        is_fake: Optional[bool] = None,
+        is_support: Optional[bool] = None,
+        is_premium: Optional[bool] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
         status: "enums.UserStatus" = None,
-        last_online_date: datetime = None,
-        next_offline_date: datetime = None,
-        username: str = None,
-        language_code: str = None,
+        last_online_date: Optional[datetime] = None,
+        next_offline_date: Optional[datetime] = None,
+        username: Optional[str] = None,
+        language_code: Optional[str] = None,
         emoji_status: Optional["types.EmojiStatus"] = None,
-        dc_id: int = None,
-        phone_number: str = None,
+        dc_id: Optional[int] = None,
+        phone_number: Optional[str] = None,
         photo: "types.ChatPhoto" = None,
-        restrictions: List["types.Restriction"] = None,
+        restrictions: Optional[List["types.Restriction"]] = None,
     ):
         super().__init__(client)
 
@@ -239,9 +235,7 @@ class User(Object, Update):
             dc_id=getattr(user.photo, "dc_id", None),
             phone_number=user.phone,
             photo=types.ChatPhoto._parse(client, user.photo, user.id, user.access_hash),
-            restrictions=types.List(
-                [types.Restriction._parse(r) for r in user.restriction_reason]
-            )
+            restrictions=types.List([types.Restriction._parse(r) for r in user.restriction_reason])
             or None,
             client=client,
         )

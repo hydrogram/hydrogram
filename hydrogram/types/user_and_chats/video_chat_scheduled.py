@@ -20,6 +20,7 @@
 from datetime import datetime
 
 from hydrogram import raw, utils
+
 from ..object import Object
 
 
@@ -37,9 +38,5 @@ class VideoChatScheduled(Object):
         self.start_date = start_date
 
     @staticmethod
-    def _parse(
-        action: "raw.types.MessageActionGroupCallScheduled"
-    ) -> "VideoChatScheduled":
-        return VideoChatScheduled(
-            start_date=utils.timestamp_to_datetime(action.schedule_date)
-        )
+    def _parse(action: "raw.types.MessageActionGroupCallScheduled") -> "VideoChatScheduled":
+        return VideoChatScheduled(start_date=utils.timestamp_to_datetime(action.schedule_date))

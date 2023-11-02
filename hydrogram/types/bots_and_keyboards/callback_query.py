@@ -17,14 +17,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List, Match, Optional
+from typing import List, Match, Optional, Union
 
 import hydrogram
-from hydrogram import raw, enums
-from hydrogram import types
+from hydrogram import enums, raw, types
+
+from ... import utils
 from ..object import Object
 from ..update import Update
-from ... import utils
 
 
 class CallbackQuery(Object, Update):
@@ -71,10 +71,10 @@ class CallbackQuery(Object, Update):
         from_user: "types.User",
         chat_instance: str,
         message: "types.Message" = None,
-        inline_message_id: str = None,
-        data: Union[str, bytes] = None,
-        game_short_name: str = None,
-        matches: List[Match] = None,
+        inline_message_id: Optional[str] = None,
+        data: Optional[Union[str, bytes]] = None,
+        game_short_name: Optional[str] = None,
+        matches: Optional[List[Match]] = None,
     ):
         super().__init__(client)
 
@@ -88,9 +88,7 @@ class CallbackQuery(Object, Update):
         self.matches = matches
 
     @staticmethod
-    async def _parse(
-        client: "hydrogram.Client", callback_query, users
-    ) -> "CallbackQuery":
+    async def _parse(client: "hydrogram.Client", callback_query, users) -> "CallbackQuery":
         message = None
         inline_message_id = None
 
@@ -125,9 +123,9 @@ class CallbackQuery(Object, Update):
 
     async def answer(
         self,
-        text: str = None,
-        show_alert: bool = None,
-        url: str = None,
+        text: Optional[str] = None,
+        show_alert: Optional[bool] = None,
+        url: Optional[str] = None,
         cache_time: int = 0,
     ):
         """Bound method *answer* of :obj:`~hydrogram.types.CallbackQuery`.
@@ -177,7 +175,7 @@ class CallbackQuery(Object, Update):
         self,
         text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        disable_web_page_preview: bool = None,
+        disable_web_page_preview: Optional[bool] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> Union["types.Message", bool]:
         """Edit the text of messages attached to callback queries.
@@ -251,9 +249,7 @@ class CallbackQuery(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
-        return await self.edit_message_text(
-            caption, parse_mode, reply_markup=reply_markup
-        )
+        return await self.edit_message_text(caption, parse_mode, reply_markup=reply_markup)
 
     async def edit_message_media(
         self,

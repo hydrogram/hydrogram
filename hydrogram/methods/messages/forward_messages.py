@@ -18,11 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, List, Iterable
+from typing import Iterable, List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
 
 
 class ForwardMessages:
@@ -31,9 +30,9 @@ class ForwardMessages:
         chat_id: Union[int, str],
         from_chat_id: Union[int, str],
         message_ids: Union[int, Iterable[int]],
-        disable_notification: bool = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        disable_notification: Optional[bool] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
     ) -> Union["types.Message", List["types.Message"]]:
         """Forward messages of any kind.
 

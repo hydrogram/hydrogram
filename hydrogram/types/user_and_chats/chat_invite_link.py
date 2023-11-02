@@ -18,12 +18,11 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict
-from typing import Optional
+from typing import Dict, Optional
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
+
 from ..object import Object
 
 
@@ -75,16 +74,16 @@ class ChatInviteLink(Object):
         *,
         invite_link: str,
         date: datetime,
-        is_primary: bool = None,
-        is_revoked: bool = None,
+        is_primary: Optional[bool] = None,
+        is_revoked: Optional[bool] = None,
         creator: "types.User" = None,
-        name: str = None,
-        creates_join_request: bool = None,
-        start_date: datetime = None,
-        expire_date: datetime = None,
-        member_limit: int = None,
-        member_count: int = None,
-        pending_join_request_count: int = None,
+        name: Optional[str] = None,
+        creates_join_request: Optional[bool] = None,
+        start_date: Optional[datetime] = None,
+        expire_date: Optional[datetime] = None,
+        member_limit: Optional[int] = None,
+        member_count: Optional[int] = None,
+        pending_join_request_count: Optional[int] = None,
     ):
         super().__init__()
 
@@ -105,16 +104,12 @@ class ChatInviteLink(Object):
     def _parse(
         client: "hydrogram.Client",
         invite: "raw.base.ExportedChatInvite",
-        users: Dict[int, "raw.types.User"] = None,
+        users: Optional[Dict[int, "raw.types.User"]] = None,
     ) -> Optional["ChatInviteLink"]:
         if not isinstance(invite, raw.types.ChatInviteExported):
             return None
 
-        creator = (
-            types.User._parse(client, users[invite.admin_id])
-            if users is not None
-            else None
-        )
+        creator = types.User._parse(client, users[invite.admin_id]) if users is not None else None
 
         return ChatInviteLink(
             invite_link=invite.link,

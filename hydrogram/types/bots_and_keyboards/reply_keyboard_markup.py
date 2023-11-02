@@ -17,11 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Union
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
+
 from ..object import Object
 
 
@@ -60,11 +60,11 @@ class ReplyKeyboardMarkup(Object):
     def __init__(
         self,
         keyboard: List[List[Union["types.KeyboardButton", str]]],
-        is_persistent: bool = None,
-        resize_keyboard: bool = None,
-        one_time_keyboard: bool = None,
-        selective: bool = None,
-        placeholder: str = None,
+        is_persistent: Optional[bool] = None,
+        resize_keyboard: Optional[bool] = None,
+        one_time_keyboard: Optional[bool] = None,
+        selective: Optional[bool] = None,
+        placeholder: Optional[str] = None,
     ):
         super().__init__()
 
@@ -101,9 +101,7 @@ class ReplyKeyboardMarkup(Object):
             rows=[
                 raw.types.KeyboardButtonRow(
                     buttons=[
-                        types.KeyboardButton(j).write()
-                        if isinstance(j, str)
-                        else j.write()
+                        types.KeyboardButton(j).write() if isinstance(j, str) else j.write()
                         for j in i
                     ]
                 )

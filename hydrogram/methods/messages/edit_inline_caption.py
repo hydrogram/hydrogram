@@ -20,7 +20,7 @@
 from typing import Optional
 
 import hydrogram
-from hydrogram import types, enums
+from hydrogram import enums, types
 
 
 class EditInlineCaption:

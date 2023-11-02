@@ -19,7 +19,7 @@
 
 from gzip import compress, decompress
 from io import BytesIO
-from typing import cast, Any
+from typing import Any, cast
 
 from .primitives.bytes import Bytes
 from .primitives.int import Int

@@ -17,10 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw, enums
+from hydrogram import enums, raw
 
 
 class SearchMessagesCount:
@@ -29,7 +29,7 @@ class SearchMessagesCount:
         chat_id: Union[int, str],
         query: str = "",
         filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
-        from_user: Union[int, str] = None,
+        from_user: Optional[Union[int, str]] = None,
     ) -> int:
         """Get the count of messages resulting from a search inside a chat.
 

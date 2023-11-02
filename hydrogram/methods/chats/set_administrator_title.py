@@ -62,9 +62,7 @@ class SetAdministratorTitle:
 
         r = (
             await self.invoke(
-                raw.functions.channels.GetParticipant(
-                    channel=chat_id, participant=user_id
-                )
+                raw.functions.channels.GetParticipant(channel=chat_id, participant=user_id)
             )
         ).participant
 

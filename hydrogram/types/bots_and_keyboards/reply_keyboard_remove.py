@@ -17,8 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import hydrogram
 from hydrogram import raw
+
 from ..object import Object
 
 
@@ -39,7 +42,7 @@ class ReplyKeyboardRemove(Object):
             keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
     """
 
-    def __init__(self, selective: bool = None):
+    def __init__(self, selective: Optional[bool] = None):
         super().__init__()
 
         self.selective = selective

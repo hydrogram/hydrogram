@@ -20,13 +20,10 @@
 import os
 import re
 from datetime import datetime
-from typing import Union, BinaryIO, List, Optional, Callable
+from typing import BinaryIO, Callable, List, Optional, Union
 
 import hydrogram
-from hydrogram import StopTransmission, enums
-from hydrogram import raw
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import StopTransmission, enums, raw, types, utils
 from hydrogram.errors import FilePartMissing
 from hydrogram.file_id import FileType
 
@@ -39,24 +36,24 @@ class SendAnimation:
         caption: str = "",
         unsave: bool = False,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        has_spoiler: bool = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        has_spoiler: Optional[bool] = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: Union[str, BinaryIO] = None,
-        file_name: str = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        thumb: Optional[Union[str, BinaryIO]] = None,
+        file_name: Optional[str] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> Optional["types.Message"]:
         """Send animation files (animation or H.264/MPEG-4 AVC video without sound).
@@ -206,17 +203,14 @@ class SendAnimation:
                         url=animation, spoiler=has_spoiler
                     )
                 else:
-                    media = utils.get_input_media_from_file_id(
-                        animation, FileType.ANIMATION
-                    )
+                    media = utils.get_input_media_from_file_id(animation, FileType.ANIMATION)
             else:
                 thumb = await self.save_file(thumb)
                 file = await self.save_file(
                     animation, progress=progress, progress_args=progress_args
                 )
                 media = raw.types.InputMediaUploadedDocument(
-                    mime_type=self.guess_mime_type(file_name or animation.name)
-                    or "video/mp4",
+                    mime_type=self.guess_mime_type(file_name or animation.name) or "video/mp4",
                     file=file,
                     thumb=thumb,
                     spoiler=has_spoiler,
@@ -227,9 +221,7 @@ class SendAnimation:
                             w=width,
                             h=height,
                         ),
-                        raw.types.DocumentAttributeFilename(
-                            file_name=file_name or animation.name
-                        ),
+                        raw.types.DocumentAttributeFilename(file_name=file_name or animation.name),
                         raw.types.DocumentAttributeAnimated(),
                     ],
                 )
@@ -245,9 +237,7 @@ class SendAnimation:
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,
-                            reply_markup=await reply_markup.write(self)
-                            if reply_markup
-                            else None,
+                            reply_markup=await reply_markup.write(self) if reply_markup else None,
                             **await utils.parse_text_entities(
                                 self, caption, parse_mode, caption_entities
                             ),
@@ -270,9 +260,7 @@ class SendAnimation:
                                 i.message,
                                 {i.id: i for i in r.users},
                                 {i.id: i for i in r.chats},
-                                is_scheduled=isinstance(
-                                    i, raw.types.UpdateNewScheduledMessage
-                                ),
+                                is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
                             )
 
                             if unsave:
@@ -282,9 +270,7 @@ class SendAnimation:
                                 ).id
 
                                 await self.invoke(
-                                    raw.functions.messages.SaveGif(
-                                        id=document_id, unsave=True
-                                    )
+                                    raw.functions.messages.SaveGif(id=document_id, unsave=True)
                                 )
 
                             return message

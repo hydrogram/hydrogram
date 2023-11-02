@@ -18,11 +18,11 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
+
 from ..object import Object
 from ..update import Update
 
@@ -54,7 +54,7 @@ class ChatJoinRequest(Object, Update):
         chat: "types.Chat",
         from_user: "types.User",
         date: datetime,
-        bio: str = None,
+        bio: Optional[str] = None,
         invite_link: "types.ChatInviteLink" = None,
     ):
         super().__init__(client)

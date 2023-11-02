@@ -17,9 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 from .inline_query_result import InlineQueryResult
 
@@ -61,11 +62,11 @@ class InlineQueryResultArticle(InlineQueryResult):
         self,
         title: str,
         input_message_content: "types.InputMessageContent",
-        id: str = None,
-        url: str = None,
-        description: str = None,
+        id: Optional[str] = None,
+        url: Optional[str] = None,
+        description: Optional[str] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
-        thumb_url: str = None,
+        thumb_url: Optional[str] = None,
         thumb_width: int = 0,
         thumb_height: int = 0,
     ):
@@ -82,9 +83,7 @@ class InlineQueryResultArticle(InlineQueryResult):
         return raw.types.InputBotInlineResult(
             id=self.id,
             type=self.type,
-            send_message=await self.input_message_content.write(
-                client, self.reply_markup
-            ),
+            send_message=await self.input_message_content.write(client, self.reply_markup),
             title=self.title,
             description=self.description,
             url=self.url,
@@ -93,9 +92,7 @@ class InlineQueryResultArticle(InlineQueryResult):
                 size=0,
                 mime_type="image/jpeg",
                 attributes=[
-                    raw.types.DocumentAttributeImageSize(
-                        w=self.thumb_width, h=self.thumb_height
-                    )
+                    raw.types.DocumentAttributeImageSize(w=self.thumb_width, h=self.thumb_height)
                 ],
             )
             if self.thumb_url

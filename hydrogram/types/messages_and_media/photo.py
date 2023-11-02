@@ -18,11 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
 from hydrogram.file_id import (
     FileId,
     FileType,
@@ -30,6 +29,7 @@ from hydrogram.file_id import (
     FileUniqueType,
     ThumbnailSource,
 )
+
 from ..object import Object
 
 
@@ -73,8 +73,8 @@ class Photo(Object):
         height: int,
         file_size: int,
         date: datetime,
-        ttl_seconds: int = None,
-        thumbs: List["types.Thumbnail"] = None,
+        ttl_seconds: Optional[int] = None,
+        thumbs: Optional[List["types.Thumbnail"]] = None,
     ):
         super().__init__(client)
 
@@ -88,7 +88,7 @@ class Photo(Object):
         self.thumbs = thumbs
 
     @staticmethod
-    def _parse(client, photo: "raw.types.Photo", ttl_seconds: int = None) -> "Photo":
+    def _parse(client, photo: "raw.types.Photo", ttl_seconds: Optional[int] = None) -> "Photo":
         if isinstance(photo, raw.types.Photo):
             photos: List[raw.types.PhotoSize] = []
 
@@ -98,9 +98,7 @@ class Photo(Object):
 
                 if isinstance(p, raw.types.PhotoSizeProgressive):
                     photos.append(
-                        raw.types.PhotoSize(
-                            type=p.type, w=p.w, h=p.h, size=max(p.sizes)
-                        )
+                        raw.types.PhotoSize(type=p.type, w=p.w, h=p.h, size=max(p.sizes))
                     )
 
             photos.sort(key=lambda p: p.size)
@@ -131,3 +129,4 @@ class Photo(Object):
                 thumbs=types.Thumbnail._parse(client, photo),
                 client=client,
             )
+        return None

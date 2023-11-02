@@ -20,7 +20,7 @@
 from typing import AsyncGenerator, Optional
 
 import hydrogram
-from hydrogram import types, raw, utils
+from hydrogram import raw, types, utils
 
 
 class GetDialogs:
@@ -76,9 +76,7 @@ class GetDialogs:
                     continue
 
                 chat_id = utils.get_peer_id(message.peer_id)
-                messages[chat_id] = await types.Message._parse(
-                    self, message, users, chats
-                )
+                messages[chat_id] = await types.Message._parse(self, message, users, chats)
 
             dialogs = []
 
@@ -86,9 +84,7 @@ class GetDialogs:
                 if not isinstance(dialog, raw.types.Dialog):
                     continue
 
-                dialogs.append(
-                    types.Dialog._parse(self, dialog, messages, users, chats)
-                )
+                dialogs.append(types.Dialog._parse(self, dialog, messages, users, chats))
 
             if not dialogs:
                 return

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw
@@ -29,8 +29,8 @@ class SendInlineBotResult:
         chat_id: Union[int, str],
         query_id: int,
         result_id: str,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
     ) -> "raw.base.Updates":
         """Send an inline bot result.
         Bot results can be retrieved using :meth:`~hydrogram.Client.get_inline_bot_results`

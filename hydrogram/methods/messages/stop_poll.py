@@ -20,8 +20,7 @@
 from typing import Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class StopPoll:
@@ -64,9 +63,7 @@ class StopPoll:
                 peer=await self.resolve_peer(chat_id),
                 id=message_id,
                 media=raw.types.InputMediaPoll(
-                    poll=raw.types.Poll(
-                        id=int(poll.id), closed=True, question="", answers=[]
-                    )
+                    poll=raw.types.Poll(id=int(poll.id), closed=True, question="", answers=[])
                 ),
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
             )

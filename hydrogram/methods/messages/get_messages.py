@@ -18,12 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from typing import Union, List, Iterable
+from typing import Iterable, List, Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import raw, types, utils
 
 log = logging.getLogger(__name__)
 
@@ -35,8 +33,8 @@ class GetMessages:
     async def get_messages(
         self: "hydrogram.Client",
         chat_id: Union[int, str],
-        message_ids: Union[int, Iterable[int]] = None,
-        reply_to_message_ids: Union[int, Iterable[int]] = None,
+        message_ids: Optional[Union[int, Iterable[int]]] = None,
+        reply_to_message_ids: Optional[Union[int, Iterable[int]]] = None,
         replies: int = 1,
     ) -> Union["types.Message", List["types.Message"]]:
         """Get one or more messages from a chat by using message identifiers.

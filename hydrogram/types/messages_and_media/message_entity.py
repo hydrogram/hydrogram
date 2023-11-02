@@ -20,8 +20,8 @@
 from typing import Optional
 
 import hydrogram
-from hydrogram import raw, enums
-from hydrogram import types
+from hydrogram import enums, raw, types
+
 from ..object import Object
 
 
@@ -61,10 +61,10 @@ class MessageEntity(Object):
         type: "enums.MessageEntityType",
         offset: int,
         length: int,
-        url: str = None,
+        url: Optional[str] = None,
         user: "types.User" = None,
-        language: str = None,
-        custom_emoji_id: int = None,
+        language: Optional[str] = None,
+        custom_emoji_id: Optional[int] = None,
     ):
         super().__init__(client)
 
@@ -77,9 +77,7 @@ class MessageEntity(Object):
         self.custom_emoji_id = custom_emoji_id
 
     @staticmethod
-    def _parse(
-        client, entity: "raw.base.MessageEntity", users: dict
-    ) -> Optional["MessageEntity"]:
+    def _parse(client, entity: "raw.base.MessageEntity", users: dict) -> Optional["MessageEntity"]:
         # Special case for InputMessageEntityMentionName -> MessageEntityType.TEXT_MENTION
         # This happens in case of UpdateShortSentMessage inside send_message() where entities are parsed from the input
         if isinstance(entity, raw.types.InputMessageEntityMentionName):

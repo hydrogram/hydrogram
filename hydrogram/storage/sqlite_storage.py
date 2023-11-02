@@ -20,11 +20,12 @@
 import inspect
 import sqlite3
 import time
-from typing import List, Tuple, Any
+from typing import Any, List, Tuple
 
 from hydrogram import raw
-from .storage import Storage
+
 from .. import utils
+from .storage import Storage
 
 # language=SQLite
 SCHEMA = """
@@ -201,3 +202,4 @@ class SQLiteStorage(Storage):
         else:
             with self.conn:
                 self.conn.execute("UPDATE version SET number = ?", (value,))
+                return None

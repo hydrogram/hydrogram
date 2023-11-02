@@ -118,11 +118,11 @@ async def test_with_args():
 
     m = Message("/start a b c")
     await f(c, m)
-    assert m.command == ["start"] + list("abc")
+    assert m.command == ["start", *list("abc")]
 
     m = Message("/start@username a b c")
     await f(c, m)
-    assert m.command == ["start"] + list("abc")
+    assert m.command == ["start", *list("abc")]
 
     m = Message("/start 'a b' c")
     await f(c, m)
@@ -130,7 +130,7 @@ async def test_with_args():
 
     m = Message('/start     a     b     "c     d"')
     await f(c, m)
-    assert m.command == ["start"] + list("ab") + ["c     d"]
+    assert m.command == ["start", *list("ab"), "c     d"]
 
 
 @pytest.mark.asyncio

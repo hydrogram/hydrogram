@@ -19,7 +19,7 @@
 
 import pytest
 
-from hydrogram.file_id import FileId, FileUniqueId, FileType, FileUniqueType
+from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
 
 
 def check(file_id: str, expected_file_type: FileType):
@@ -37,9 +37,7 @@ def check_unique(file_unique_id: str, expected_file_unique_type: FileUniqueType)
 
 
 def test_audio():
-    audio = (
-        "CQACAgIAAx0CAAGgr9AAAgmQX7b4XPBstC1fFUuJBooHTHFd7HMAAgUAA4GkuUnVOGG5P196yR4E"
-    )
+    audio = "CQACAgIAAx0CAAGgr9AAAgmQX7b4XPBstC1fFUuJBooHTHFd7HMAAgUAA4GkuUnVOGG5P196yR4E"
     audio_unique = "AgADBQADgaS5SQ"
     audio_thumb = "AAMCAgADHQIAAaCv0AACCZBftvhc8Gy0LV8VS4kGigdMcV3scwACBQADgaS5SdU4Ybk_X3rJIH3qihAAAwEAB20AA_OeAQABHgQ"
     audio_thumb_unique = "AQADIH3qihAAA_OeAQAB"
@@ -51,9 +49,7 @@ def test_audio():
 
 
 def test_video():
-    video = (
-        "BAACAgIAAx0CAAGgr9AAAgmRX7b4Xv9f-4BK5VR_5ppIOF6UIp0AAgYAA4GkuUmhnZz2xC37wR4E"
-    )
+    video = "BAACAgIAAx0CAAGgr9AAAgmRX7b4Xv9f-4BK5VR_5ppIOF6UIp0AAgYAA4GkuUmhnZz2xC37wR4E"
     video_unique = "AgADBgADgaS5SQ"
     video_thumb = "AAMCAgADHQIAAaCv0AACCZFftvhe_1_7gErlVH_mmkg4XpQinQACBgADgaS5SaGdnPbELfvBIH3qihAAAwEAB20AA_WeAQABHgQ"
     video_thumb_unique = "AQADIH3qihAAA_WeAQAB"
@@ -65,9 +61,7 @@ def test_video():
 
 
 def test_document():
-    document = (
-        "BQACAgIAAx0CAAGgr9AAAgmPX7b4UxbjNoFEO_L0I4s6wrXNJA8AAgQAA4GkuUm9FFvIaOhXWR4E"
-    )
+    document = "BQACAgIAAx0CAAGgr9AAAgmPX7b4UxbjNoFEO_L0I4s6wrXNJA8AAgQAA4GkuUm9FFvIaOhXWR4E"
     document_unique = "AgADBAADgaS5SQ"
     document_thumb = "AAMCAgADHQIAAaCv0AACCY9ftvhTFuM2gUQ78vQjizrCtc0kDwACBAADgaS5Sb0UW8ho6FdZIH3qihAAAwEAB3MAA_GeAQABHgQ"
     document_thumb_unique = "AQADIH3qihAAA_GeAQAB"
@@ -79,9 +73,7 @@ def test_document():
 
 
 def test_animation():
-    animation = (
-        "CgACAgIAAx0CAAGgr9AAAgmSX7b4Y2g8_QW2XFd49iUmRnHOyG8AAgcAA4GkuUnry9gWDzF_5R4E"
-    )
+    animation = "CgACAgIAAx0CAAGgr9AAAgmSX7b4Y2g8_QW2XFd49iUmRnHOyG8AAgcAA4GkuUnry9gWDzF_5R4E"
     animation_unique = "AgADBwADgaS5SQ"
 
     check(animation, FileType.ANIMATION)
@@ -89,9 +81,7 @@ def test_animation():
 
 
 def test_voice():
-    voice = (
-        "AwACAgIAAx0CAAGgr9AAAgmUX7b4c1KQyHVwzffxC2EnSYWsMAQAAgkAA4GkuUlsZUZ4_I97AR4E"
-    )
+    voice = "AwACAgIAAx0CAAGgr9AAAgmUX7b4c1KQyHVwzffxC2EnSYWsMAQAAgkAA4GkuUlsZUZ4_I97AR4E"
     voice_unique = "AgADCQADgaS5SQ"
 
     check(voice, FileType.VOICE)
@@ -99,9 +89,7 @@ def test_voice():
 
 
 def test_video_note():
-    video_note = (
-        "DQACAgIAAx0CAAGgr9AAAgmVX7b53qrRzCEO13BaLQJaYuFbdlwAAgoAA4GkuUmlqIzDy_PCsx4E"
-    )
+    video_note = "DQACAgIAAx0CAAGgr9AAAgmVX7b53qrRzCEO13BaLQJaYuFbdlwAAgoAA4GkuUmlqIzDy_PCsx4E"
     video_note_unique = "AgADCgADgaS5SQ"
     video_note_thumb = "AAMCAgADHQIAAaCv0AACCZVftvneqtHMIQ7XcFotAlpi4Vt2XAACCgADgaS5SaWojMPL88KzIH3qihAAAwEAB20AA_meAQABHgQ"
     video_note_thumb_unique = "AQADIH3qihAAA_meAQAB"
@@ -178,9 +166,7 @@ def test_old_file_id():
 
 
 def test_unknown_file_type():
-    unknown = (
-        "RQACAgIAAx0CAAGgr9AAAgmPX7b4UxbjNoFEO_L0I4s6wrXNJA8AAgQAA4GkuUm9FFvIaOhXWR4E"
-    )
+    unknown = "RQACAgIAAx0CAAGgr9AAAgmPX7b4UxbjNoFEO_L0I4s6wrXNJA8AAgQAA4GkuUm9FFvIaOhXWR4E"
 
     with pytest.raises(ValueError, match=r"Unknown file_type \d+ of file_id \w+"):
         check(unknown, FileType.DOCUMENT)
@@ -189,16 +175,12 @@ def test_unknown_file_type():
 def test_unknown_thumbnail_source():
     unknown = "AAMCAgADHQIAAaCv0AACCY9ftvhTFuM2gUQ78vQjizrCtc0kDwACBAADgaS5Sb0UW8ho6FdZIH3qihAAA6QBAAIeBA"
 
-    with pytest.raises(
-        ValueError, match=r"Unknown thumbnail_source \d+ of file_id \w+"
-    ):
+    with pytest.raises(ValueError, match=r"Unknown thumbnail_source \d+ of file_id \w+"):
         check(unknown, FileType.THUMBNAIL)
 
 
 def test_stringify_file_id():
-    file_id = (
-        "BQACAgIAAx0CAAGgr9AAAgmPX7b4UxbjNoFEO_L0I4s6wrXNJA8AAgQAA4GkuUm9FFvIaOhXWR4E"
-    )
+    file_id = "BQACAgIAAx0CAAGgr9AAAgmPX7b4UxbjNoFEO_L0I4s6wrXNJA8AAgQAA4GkuUm9FFvIaOhXWR4E"
     string = (
         "{'major': 4, 'minor': 30, 'file_type': <FileType.DOCUMENT: 5>, 'dc_id': 2, "
         "'file_reference': b'\\x02\\x00\\xa0\\xaf\\xd0\\x00\\x00\\t\\x8f_\\xb6\\xf8S\\x16\\xe36\\x81D;\\xf2\\xf4#\\x8b:\\xc2\\xb5\\xcd$\\x0f', "

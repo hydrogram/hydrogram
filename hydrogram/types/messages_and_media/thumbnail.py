@@ -28,6 +28,7 @@ from hydrogram.file_id import (
     FileUniqueType,
     ThumbnailSource,
 )
+
 from ..object import Object
 
 
@@ -84,7 +85,7 @@ class Thumbnail(Object):
             raw_thumbs = media.thumbs
             file_type = FileType.THUMBNAIL
         else:
-            return
+            return None
 
         parsed_thumbs = []
 

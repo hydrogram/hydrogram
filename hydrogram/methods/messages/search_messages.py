@@ -17,10 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List, AsyncGenerator, Optional
+from typing import AsyncGenerator, List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, types, utils, enums
+from hydrogram import enums, raw, types, utils
 
 
 # noinspection PyShadowingBuiltins
@@ -31,7 +31,7 @@ async def get_chunk(
     filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
     offset: int = 0,
     limit: int = 100,
-    from_user: Union[int, str] = None,
+    from_user: Optional[Union[int, str]] = None,
 ) -> List["types.Message"]:
     r = await client.invoke(
         raw.functions.messages.Search(
@@ -63,7 +63,7 @@ class SearchMessages:
         offset: int = 0,
         filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
         limit: int = 0,
-        from_user: Union[int, str] = None,
+        from_user: Optional[Union[int, str]] = None,
     ) -> Optional[AsyncGenerator["types.Message", None]]:
         """Search for text and media messages inside a specific chat.
 

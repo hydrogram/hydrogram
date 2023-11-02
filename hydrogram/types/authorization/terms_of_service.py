@@ -19,8 +19,8 @@
 
 from typing import List
 
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
+
 from ..object import Object
 
 

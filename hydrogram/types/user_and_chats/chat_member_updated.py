@@ -21,8 +21,8 @@ from datetime import datetime
 from typing import Dict, Union
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
+
 from ..object import Object
 from ..update import Update
 
@@ -73,9 +73,7 @@ class ChatMemberUpdated(Object, Update):
     @staticmethod
     def _parse(
         client: "hydrogram.Client",
-        update: Union[
-            "raw.types.UpdateChatParticipant", "raw.types.UpdateChannelParticipant"
-        ],
+        update: Union["raw.types.UpdateChatParticipant", "raw.types.UpdateChannelParticipant"],
         users: Dict[int, "raw.types.User"],
         chats: Dict[int, "raw.types.Chat"],
     ) -> "ChatMemberUpdated":
@@ -91,9 +89,7 @@ class ChatMemberUpdated(Object, Update):
             )
 
         if update.new_participant:
-            new_chat_member = types.ChatMember._parse(
-                client, update.new_participant, users, chats
-            )
+            new_chat_member = types.ChatMember._parse(client, update.new_participant, users, chats)
 
         if update.invite:
             invite_link = types.ChatInviteLink._parse(client, update.invite, users)

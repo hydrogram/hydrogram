@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from typing import Union, List
+from typing import List, Union
 
 import hydrogram
 from hydrogram import types
@@ -58,7 +58,7 @@ class GetMediaGroup:
         # Get messages with id from `id - 9` to `id + 10` to get all possible media group messages.
         messages = await self.get_messages(
             chat_id=chat_id,
-            message_ids=[msg_id for msg_id in range(message_id - 9, message_id + 10)],
+            message_ids=list(range(message_id - 9, message_id + 10)),
             replies=0,
         )
 
@@ -73,6 +73,4 @@ class GetMediaGroup:
         if media_group_id is None:
             raise ValueError("The message doesn't belong to a media group")
 
-        return types.List(
-            msg for msg in messages if msg.media_group_id == media_group_id
-        )
+        return types.List(msg for msg in messages if msg.media_group_id == media_group_id)

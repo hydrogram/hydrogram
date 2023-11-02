@@ -24,9 +24,7 @@ from hydrogram import raw
 
 
 class DeleteChatPhoto:
-    async def delete_chat_photo(
-        self: "hydrogram.Client", chat_id: Union[int, str]
-    ) -> bool:
+    async def delete_chat_photo(self: "hydrogram.Client", chat_id: Union[int, str]) -> bool:
         """Delete a chat photo.
 
         You must be an administrator in the chat for this to work and must have the appropriate admin rights.

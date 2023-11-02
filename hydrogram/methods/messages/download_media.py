@@ -20,11 +20,11 @@
 import asyncio
 import os
 from datetime import datetime
-from typing import Union, Optional, Callable, BinaryIO
+from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
 from hydrogram import types
-from hydrogram.file_id import FileId, FileType, PHOTO_TYPES
+from hydrogram.file_id import PHOTO_TYPES, FileId, FileType
 
 DEFAULT_DOWNLOAD_DIR = "downloads/"
 
@@ -36,7 +36,7 @@ class DownloadMedia:
         file_name: str = DEFAULT_DOWNLOAD_DIR,
         in_memory: bool = False,
         block: bool = True,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> Optional[Union[str, BinaryIO]]:
         """Download the media from a message.
@@ -143,10 +143,7 @@ class DownloadMedia:
         else:
             media = message
 
-        if isinstance(media, str):
-            file_id_str = media
-        else:
-            file_id_str = media.file_id
+        file_id_str = media if isinstance(media, str) else media.file_id
 
         file_id_obj = FileId.decode(file_id_str)
 
@@ -203,3 +200,4 @@ class DownloadMedia:
             return await downloader
         else:
             asyncio.get_event_loop().create_task(downloader)
+            return None

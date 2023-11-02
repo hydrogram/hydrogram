@@ -41,9 +41,7 @@ class OnDeletedMessages:
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, hydrogram.Client):
-                self.add_handler(
-                    hydrogram.handlers.DeletedMessagesHandler(func, filters), group
-                )
+                self.add_handler(hydrogram.handlers.DeletedMessagesHandler(func, filters), group)
             elif isinstance(self, Filter) or self is None:
                 if not hasattr(func, "handlers"):
                     func.handlers = []

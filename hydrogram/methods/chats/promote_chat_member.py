@@ -20,7 +20,7 @@
 from typing import Union
 
 import hydrogram
-from hydrogram import raw, types, errors
+from hydrogram import errors, raw, types
 
 
 class PromoteChatMember:
@@ -67,9 +67,7 @@ class PromoteChatMember:
         try:
             raw_chat_member = (
                 await self.invoke(
-                    raw.functions.channels.GetParticipant(
-                        channel=chat_id, participant=user_id
-                    )
+                    raw.functions.channels.GetParticipant(channel=chat_id, participant=user_id)
                 )
             ).participant
         except errors.RPCError:

@@ -17,13 +17,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+import contextlib
 import json
 import os
 import re
 import shutil
 from functools import partial
 from pathlib import Path
-from typing import NamedTuple, List, Tuple
+from typing import List, NamedTuple, Tuple
 
 # from autoflake import fix_code
 # from black import format_str, FileMode
@@ -34,9 +35,7 @@ NOTICE_PATH = "NOTICE"
 
 SECTION_RE = re.compile(r"---(\w+)---")
 LAYER_RE = re.compile(r"//\sLAYER\s(\d+)")
-COMBINATOR_RE = re.compile(
-    r"^([\w.]+)#([0-9a-f]+)\s(?:.*)=\s([\w<>.]+);$", re.MULTILINE
-)
+COMBINATOR_RE = re.compile(r"^([\w.]+)#([0-9a-f]+)\s(?:.*)=\s([\w<>.]+);$", re.MULTILINE)
 ARGS_RE = re.compile(r"[^{](\w+):([\w?!.<>#]+)")
 FLAGS_RE = re.compile(r"flags(\d?)\.(\d+)\?")
 FLAGS_RE_2 = re.compile(r"flags(\d?)\.(\d+)\?([\w<>.]+)")
@@ -138,7 +137,7 @@ def get_type_hint(type: str) -> str:
         return f"Optional[{type}] = None" if is_flag else type
     else:
         ns, name = type.split(".") if "." in type else ("", type)
-        type = f'"raw.base.' + ".".join([ns, name]).strip(".") + '"'
+        type = '"raw.base.' + ".".join([ns, name]).strip(".") + '"'
 
         return f'{type}{" = None" if is_flag else ""}'
 
@@ -264,7 +263,7 @@ def start(format: bool = False):
             qualtype = ".".join([typespace, type]).lstrip(".")
 
             # Pingu!
-            has_flags = not not FLAGS_RE_3.findall(line)
+            has_flags = bool(FLAGS_RE_3.findall(line))
 
             args = ARGS_RE.findall(line)
 
@@ -312,10 +311,8 @@ def start(format: bool = False):
 
     for k, v in types_to_constructors.items():
         for i in v:
-            try:
+            with contextlib.suppress(KeyError):
                 constructors_to_functions[i] = types_to_functions[k]
-            except KeyError:
-                pass
 
     # import json
     # print(json.dumps(namespaces_to_types, indent=2))
@@ -337,10 +334,7 @@ def start(format: bool = False):
 
         type_docs = docs["type"].get(qualtype, None)
 
-        if type_docs:
-            type_docs = type_docs["desc"]
-        else:
-            type_docs = "Telegram API base type."
+        type_docs = type_docs["desc"] if type_docs else "Telegram API base type."
 
         docstring = type_docs
 
@@ -373,7 +367,7 @@ def start(format: bool = False):
                     docstring=docstring,
                     name=type,
                     qualname=qualtype,
-                    types=", ".join([f"raw.types.{c}" for c in constructors]),
+                    types=", ".join([f'"raw.types.{c}"' for c in constructors]),
                     doc_name=snake(type).replace("_", "-"),
                 )
             )
@@ -396,29 +390,22 @@ def start(format: bool = False):
         docstring = ""
         docstring_args = []
 
-        if c.section == "functions":
-            combinator_docs = docs["method"]
-        else:
-            combinator_docs = docs["constructor"]
+        combinator_docs = docs["method"] if c.section == "functions" else docs["constructor"]
 
         for i, arg in enumerate(sorted_args):
             arg_name, arg_type = arg
             is_optional = FLAGS_RE.match(arg_type)
-            flag_number = is_optional.group(1) if is_optional else -1
             arg_type = arg_type.split("?")[-1]
 
             arg_docs = combinator_docs.get(c.qualname, None)
 
-            if arg_docs:
-                arg_docs = arg_docs["params"].get(arg_name, "N/A")
-            else:
-                arg_docs = "N/A"
+            arg_docs = arg_docs["params"].get(arg_name, "N/A") if arg_docs else "N/A"
 
             docstring_args.append(
                 "{} ({}{}):\n            {}\n".format(
                     arg_name,
                     get_docstring_arg_type(arg_type),
-                    ", *optional*".format(flag_number) if is_optional else "",
+                    ", *optional*" if is_optional else "",
                     arg_docs,
                 )
             )
@@ -432,22 +419,18 @@ def start(format: bool = False):
                 constructor_docs = "Telegram API type."
 
             docstring += constructor_docs + "\n"
-            docstring += (
-                f"\n    Constructor of :obj:`~hydrogram.raw.base.{c.qualtype}`."
-            )
+            docstring += f"\n    Constructor of :obj:`~hydrogram.raw.base.{c.qualtype}`."
         else:
             function_docs = docs["method"].get(c.qualname, None)
 
             if function_docs:
                 docstring += function_docs["desc"] + "\n"
             else:
-                docstring += f"Telegram API function."
+                docstring += "Telegram API function."
 
         docstring += f"\n\n    Details:\n        - Layer: ``{layer}``\n        - ID: ``{c.id[2:].upper()}``\n\n"
-        docstring += f"    Parameters:\n        " + (
-            f"\n        ".join(docstring_args)
-            if docstring_args
-            else "No parameters required.\n"
+        docstring += "    Parameters:\n        " + (
+            "\n        ".join(docstring_args) if docstring_args else "No parameters required.\n"
         )
 
         if c.section == "functions":
@@ -480,9 +463,7 @@ def start(format: bool = False):
                         if arg_name != f"flags{flag.group(1)}":
                             continue
 
-                        if flag.group(3) == "true" or flag.group(3).startswith(
-                            "Vector"
-                        ):
+                        if flag.group(3) == "true" or flag.group(3).startswith("Vector"):
                             write_flags.append(
                                 f"{arg_name} |= (1 << {flag.group(2)}) if self.{i[0]} else 0"
                             )
@@ -513,9 +494,7 @@ def start(format: bool = False):
                 elif flag_type in CORE_TYPES:
                     write_types += "\n        "
                     write_types += f"if self.{arg_name} is not None:\n            "
-                    write_types += (
-                        f"b.write({flag_type.title()}(self.{arg_name}))\n        "
-                    )
+                    write_types += f"b.write({flag_type.title()}(self.{arg_name}))\n        "
 
                     read_types += "\n        "
                     read_types += f"{arg_name} = {flag_type.title()}.read(b) if flags{number} & (1 << {index}) else None"
@@ -530,11 +509,13 @@ def start(format: bool = False):
                     )
 
                     read_types += "\n        "
-                    read_types += "{} = TLObject.read(b{}) if flags{} & (1 << {}) else []\n        ".format(
-                        arg_name,
-                        f", {sub_type.title()}" if sub_type in CORE_TYPES else "",
-                        number,
-                        index,
+                    read_types += (
+                        "{} = TLObject.read(b{}) if flags{} & (1 << {}) else []\n        ".format(
+                            arg_name,
+                            f", {sub_type.title()}" if sub_type in CORE_TYPES else "",
+                            number,
+                            index,
+                        )
                     )
                 else:
                     write_types += "\n        "
@@ -546,9 +527,7 @@ def start(format: bool = False):
             else:
                 if arg_type in CORE_TYPES:
                     write_types += "\n        "
-                    write_types += (
-                        f"b.write({arg_type.title()}(self.{arg_name}))\n        "
-                    )
+                    write_types += f"b.write({arg_type.title()}(self.{arg_name}))\n        "
 
                     read_types += "\n        "
                     read_types += f"{arg_name} = {arg_type.title()}.read(b)\n        "
@@ -605,11 +584,7 @@ def start(format: bool = False):
         with open(dir_path / f"{snake(module)}.py", "w") as f:
             f.write(compiled_combinator)
 
-        d = (
-            namespaces_to_constructors
-            if c.section == "types"
-            else namespaces_to_functions
-        )
+        d = namespaces_to_constructors if c.section == "types" else namespaces_to_functions
 
         if c.namespace not in d:
             d[c.namespace] = []
@@ -646,9 +621,7 @@ def start(format: bool = False):
                 f.write(f"from .{snake(module)} import {t}\n")
 
             if not namespace:
-                f.write(
-                    f"from . import {', '.join(filter(bool, namespaces_to_constructors))}\n"
-                )
+                f.write(f"from . import {', '.join(filter(bool, namespaces_to_constructors))}\n")
 
     for namespace, types in namespaces_to_functions.items():
         with open(DESTINATION_PATH / "functions" / namespace / "__init__.py", "w") as f:
@@ -664,9 +637,7 @@ def start(format: bool = False):
                 f.write(f"from .{snake(module)} import {t}\n")
 
             if not namespace:
-                f.write(
-                    f"from . import {', '.join(filter(bool, namespaces_to_functions))}"
-                )
+                f.write(f"from . import {', '.join(filter(bool, namespaces_to_functions))}")
 
     with open(DESTINATION_PATH / "all.py", "w", encoding="utf-8") as f:
         f.write(notice + "\n\n")
@@ -689,8 +660,8 @@ def start(format: bool = False):
         f.write("\n}\n")
 
 
-if "__main__" == __name__:
-    HOME_PATH = Path(".")
+if __name__ == "__main__":
+    HOME_PATH = Path()
     DESTINATION_PATH = Path("../../hydrogram/raw")
     NOTICE_PATH = Path("../../NOTICE")
 

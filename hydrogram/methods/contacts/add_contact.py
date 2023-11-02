@@ -20,8 +20,7 @@
 from typing import Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class AddContact:

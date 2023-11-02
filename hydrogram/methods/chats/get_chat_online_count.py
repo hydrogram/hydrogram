@@ -24,9 +24,7 @@ from hydrogram import raw
 
 
 class GetChatOnlineCount:
-    async def get_chat_online_count(
-        self: "hydrogram.Client", chat_id: Union[int, str]
-    ) -> int:
+    async def get_chat_online_count(self: "hydrogram.Client", chat_id: Union[int, str]) -> int:
         """Get the number of members that are currently online in a chat.
 
         .. include:: /_includes/usable-by/users.rst

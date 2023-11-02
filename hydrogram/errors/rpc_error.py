@@ -20,10 +20,11 @@
 import re
 from datetime import datetime
 from importlib import import_module
-from typing import Type, Union
+from typing import Optional, Type, Union
 
 from hydrogram import raw
 from hydrogram.raw.core import TLObject
+
 from .exceptions.all import exceptions
 
 
@@ -36,7 +37,7 @@ class RPCError(Exception):
     def __init__(
         self,
         value: Union[int, str, raw.types.RpcError] = None,
-        rpc_name: str = None,
+        rpc_name: Optional[str] = None,
         is_unknown: bool = False,
         is_signed: bool = False,
     ):
@@ -80,9 +81,7 @@ class RPCError(Exception):
         error_id = re.sub(r"_\d+", "_X", error_message)
 
         if error_id not in exceptions[error_code]:
-            raise getattr(
-                import_module("hydrogram.errors"), exceptions[error_code]["_"]
-            )(
+            raise getattr(import_module("hydrogram.errors"), exceptions[error_code]["_"])(
                 value=f"[{error_code} {error_message}]",
                 rpc_name=rpc_name,
                 is_unknown=True,
@@ -92,9 +91,9 @@ class RPCError(Exception):
         value = re.search(r"_(\d+)", error_message)
         value = value.group(1) if value is not None else value
 
-        raise getattr(
-            import_module("hydrogram.errors"), exceptions[error_code][error_id]
-        )(value=value, rpc_name=rpc_name, is_unknown=False, is_signed=is_signed)
+        raise getattr(import_module("hydrogram.errors"), exceptions[error_code][error_id])(
+            value=value, rpc_name=rpc_name, is_unknown=False, is_signed=is_signed
+        )
 
 
 class UnknownError(RPCError):

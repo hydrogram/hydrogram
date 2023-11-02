@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from hydrogram import raw
 
 from ..object import Object
@@ -61,10 +63,10 @@ class LoginUrl(Object):
         self,
         *,
         url: str,
-        forward_text: str = None,
-        bot_username: str = None,
-        request_write_access: str = None,
-        button_id: int = None,
+        forward_text: Optional[str] = None,
+        bot_username: Optional[str] = None,
+        request_write_access: Optional[str] = None,
+        button_id: Optional[int] = None,
     ):
         super().__init__()
 

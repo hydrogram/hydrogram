@@ -18,6 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from typing import Optional
 
 import hydrogram
 from hydrogram import raw
@@ -33,7 +34,7 @@ class Invoke:
         query: TLObject,
         retries: int = Session.MAX_RETRIES,
         timeout: float = Session.WAIT_TIMEOUT,
-        sleep_threshold: float = None,
+        sleep_threshold: Optional[float] = None,
     ):
         """Invoke raw Telegram functions.
 
@@ -75,9 +76,7 @@ class Invoke:
             query = raw.functions.InvokeWithoutUpdates(query=query)
 
         if self.takeout_id:
-            query = raw.functions.InvokeWithTakeout(
-                takeout_id=self.takeout_id, query=query
-            )
+            query = raw.functions.InvokeWithTakeout(takeout_id=self.takeout_id, query=query)
 
         r = await self.session.invoke(
             query,

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Union, BinaryIO
+from typing import BinaryIO, List, Optional, Union
 
 from ..messages_and_media import MessageEntity
 from ..object import Object
@@ -39,8 +39,8 @@ class InputMedia(Object):
         self,
         media: Union[str, BinaryIO],
         caption: str = "",
-        parse_mode: str = None,
-        caption_entities: List[MessageEntity] = None,
+        parse_mode: Optional[str] = None,
+        caption_entities: Optional[List[MessageEntity]] = None,
     ):
         super().__init__()
 

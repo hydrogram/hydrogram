@@ -20,8 +20,7 @@
 import logging
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 from hydrogram.utils import compute_password_check
 
 log = logging.getLogger(__name__)

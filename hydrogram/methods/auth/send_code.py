@@ -20,18 +20,15 @@
 import logging
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
-from hydrogram.errors import PhoneMigrate, NetworkMigrate
-from hydrogram.session import Session, Auth
+from hydrogram import raw, types
+from hydrogram.errors import NetworkMigrate, PhoneMigrate
+from hydrogram.session import Auth, Session
 
 log = logging.getLogger(__name__)
 
 
 class SendCode:
-    async def send_code(
-        self: "hydrogram.Client", phone_number: str
-    ) -> "types.SentCode":
+    async def send_code(self: "hydrogram.Client", phone_number: str) -> "types.SentCode":
         """Send the confirmation code to the given phone number.
 
         .. include:: /_includes/usable-by/users.rst

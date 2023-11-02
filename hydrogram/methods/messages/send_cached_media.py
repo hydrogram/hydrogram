@@ -18,12 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, enums
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import enums, raw, types, utils
 
 
 class SendCachedMedia:
@@ -33,11 +31,11 @@ class SendCachedMedia:
         file_id: str,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -109,9 +107,7 @@ class SendCachedMedia:
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
-                **await utils.parse_text_entities(
-                    self, caption, parse_mode, caption_entities
-                ),
+                **await utils.parse_text_entities(self, caption, parse_mode, caption_entities),
             )
         )
 
@@ -131,3 +127,4 @@ class SendCachedMedia:
                     {i.id: i for i in r.chats},
                     is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
                 )
+        return None

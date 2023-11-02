@@ -17,11 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, Optional, AsyncGenerator
+from typing import AsyncGenerator, Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class GetChatJoinRequests:

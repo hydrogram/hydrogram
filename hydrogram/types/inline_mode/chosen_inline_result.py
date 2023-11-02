@@ -19,10 +19,11 @@
 
 from base64 import b64encode
 from struct import pack
+from typing import Optional
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
+
 from ..object import Object
 from ..update import Update
 
@@ -62,7 +63,7 @@ class ChosenInlineResult(Object, Update):
         from_user: "types.User",
         query: str,
         location: "types.Location" = None,
-        inline_message_id: str = None,
+        inline_message_id: Optional[str] = None,
     ):
         super().__init__(client)
 

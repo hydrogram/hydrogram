@@ -20,10 +20,9 @@
 import logging
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 from hydrogram.errors import UserMigrate
-from hydrogram.session import Session, Auth
+from hydrogram.session import Auth, Session
 
 log = logging.getLogger(__name__)
 

@@ -20,7 +20,8 @@
 from typing import List, Optional
 
 import hydrogram
-from hydrogram import raw, types, utils, enums
+from hydrogram import enums, raw, types, utils
+
 from .inline_query_result import InlineQueryResult
 
 
@@ -66,11 +67,11 @@ class InlineQueryResultVoice(InlineQueryResult):
         self,
         voice_url: str,
         title: str,
-        id: str = None,
+        id: Optional[str] = None,
         voice_duration: int = 0,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
         input_message_content: "types.InputMessageContent" = None,
     ):

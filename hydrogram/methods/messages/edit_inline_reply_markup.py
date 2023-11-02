@@ -18,9 +18,8 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import raw, types, utils
+
 from .inline_session import get_session
 
 

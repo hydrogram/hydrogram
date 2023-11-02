@@ -17,7 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from hydrogram import raw
+
 from ..object import Object
 
 
@@ -59,14 +62,16 @@ class ChatPermissions(Object):
     def __init__(
         self,
         *,
-        can_send_messages: bool = None,  # Text, contacts, locations and venues
-        can_send_media_messages: bool = None,  # Audio files, documents, photos, videos, video notes and voice notes
-        can_send_other_messages: bool = None,  # Stickers, animations, games, inline bots
-        can_send_polls: bool = None,
-        can_add_web_page_previews: bool = None,
-        can_change_info: bool = None,
-        can_invite_users: bool = None,
-        can_pin_messages: bool = None,
+        can_send_messages: Optional[bool] = None,  # Text, contacts, locations and venues
+        can_send_media_messages: Optional[
+            bool
+        ] = None,  # Audio files, documents, photos, videos, video notes and voice notes
+        can_send_other_messages: Optional[bool] = None,  # Stickers, animations, games, inline bots
+        can_send_polls: Optional[bool] = None,
+        can_add_web_page_previews: Optional[bool] = None,
+        can_change_info: Optional[bool] = None,
+        can_invite_users: Optional[bool] = None,
+        can_pin_messages: Optional[bool] = None,
     ):
         super().__init__(None)
 
@@ -99,3 +104,4 @@ class ChatPermissions(Object):
                 can_invite_users=not denied_permissions.invite_users,
                 can_pin_messages=not denied_permissions.pin_messages,
             )
+        return None

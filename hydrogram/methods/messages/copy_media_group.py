@@ -18,10 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, List
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import types, utils, raw
+from hydrogram import raw, types, utils
 
 
 class CopyMediaGroup:
@@ -30,10 +30,10 @@ class CopyMediaGroup:
         chat_id: Union[int, str],
         from_chat_id: Union[int, str],
         message_id: int,
-        captions: Union[List[str], str] = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
+        captions: Optional[Union[List[str], str]] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
     ) -> List["types.Message"]:
         """Copy a media group by providing one of the message ids.
 
@@ -109,15 +109,13 @@ class CopyMediaGroup:
                     random_id=self.rnd_id(),
                     **await self.parser.parse(
                         captions[i]
-                        if isinstance(captions, list)
-                        and i < len(captions)
-                        and captions[i]
+                        if isinstance(captions, list) and i < len(captions) and captions[i]
                         else captions
                         if isinstance(captions, str) and i == 0
                         else message.caption
                         if message.caption
                         and message.caption != "None"
-                        and not type(captions) is str
+                        and type(captions) is not str
                         else ""
                     ),
                 )

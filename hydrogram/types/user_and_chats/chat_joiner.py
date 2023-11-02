@@ -18,10 +18,11 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
+
 from ..object import Object
 
 
@@ -50,9 +51,9 @@ class ChatJoiner(Object):
         *,
         client: "hydrogram.Client",
         user: "types.User",
-        date: datetime = None,
-        bio: str = None,
-        pending: bool = None,
+        date: Optional[datetime] = None,
+        bio: Optional[str] = None,
+        pending: Optional[bool] = None,
         approved_by: "types.User" = None,
     ):
         super().__init__(client)

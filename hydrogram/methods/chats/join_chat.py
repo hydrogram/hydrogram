@@ -20,14 +20,11 @@
 from typing import Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class JoinChat:
-    async def join_chat(
-        self: "hydrogram.Client", chat_id: Union[int, str]
-    ) -> "types.Chat":
+    async def join_chat(self: "hydrogram.Client", chat_id: Union[int, str]) -> "types.Chat":
         """Join a group chat or channel.
 
         .. include:: /_includes/usable-by/users.rst
@@ -55,18 +52,15 @@ class JoinChat:
         match = self.INVITE_LINK_RE.match(str(chat_id))
 
         if match:
-            chat = await self.invoke(
-                raw.functions.messages.ImportChatInvite(hash=match.group(1))
-            )
+            chat = await self.invoke(raw.functions.messages.ImportChatInvite(hash=match.group(1)))
             if isinstance(chat.chats[0], raw.types.Chat):
                 return types.Chat._parse_chat_chat(self, chat.chats[0])
             elif isinstance(chat.chats[0], raw.types.Channel):
                 return types.Chat._parse_channel_chat(self, chat.chats[0])
+            return None
         else:
             chat = await self.invoke(
-                raw.functions.channels.JoinChannel(
-                    channel=await self.resolve_peer(chat_id)
-                )
+                raw.functions.channels.JoinChannel(channel=await self.resolve_peer(chat_id))
             )
 
             return types.Chat._parse_channel_chat(self, chat.chats[0])

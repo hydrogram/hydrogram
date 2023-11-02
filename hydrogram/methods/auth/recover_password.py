@@ -20,16 +20,13 @@
 import logging
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 log = logging.getLogger(__name__)
 
 
 class RecoverPassword:
-    async def recover_password(
-        self: "hydrogram.Client", recovery_code: str
-    ) -> "types.User":
+    async def recover_password(self: "hydrogram.Client", recovery_code: str) -> "types.User":
         """Recover your password with a recovery code and log in.
 
         .. include:: /_includes/usable-by/users.rst

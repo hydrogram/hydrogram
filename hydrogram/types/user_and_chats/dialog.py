@@ -18,10 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
-from ..object import Object
+from hydrogram import raw, types
+
 from ... import utils
+from ..object import Object
 
 
 class Dialog(Object):

@@ -21,8 +21,7 @@ from datetime import datetime
 from typing import Union
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
 
 
 class RestrictChatMember:

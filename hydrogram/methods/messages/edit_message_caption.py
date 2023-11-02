@@ -17,10 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import types, enums
+from hydrogram import enums, types
 
 
 class EditMessageCaption:
@@ -30,7 +30,7 @@ class EditMessageCaption:
         message_id: int,
         caption: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> "types.Message":
         """Edit the caption of media messages.

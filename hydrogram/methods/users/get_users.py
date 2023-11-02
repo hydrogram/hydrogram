@@ -18,11 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
-from typing import Union, List, Iterable
+from typing import Iterable, List, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class GetUsers:

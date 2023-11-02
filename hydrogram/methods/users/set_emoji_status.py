@@ -48,9 +48,7 @@ class SetEmojiStatus:
         await self.invoke(
             raw.functions.account.UpdateEmojiStatus(
                 emoji_status=(
-                    emoji_status.write()
-                    if emoji_status
-                    else raw.types.EmojiStatusEmpty()
+                    emoji_status.write() if emoji_status else raw.types.EmojiStatusEmpty()
                 )
             )
         )

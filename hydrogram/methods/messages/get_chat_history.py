@@ -18,10 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, Optional, AsyncGenerator
+from typing import AsyncGenerator, Optional, Union
 
 import hydrogram
-from hydrogram import types, raw, utils
+from hydrogram import raw, types, utils
 
 
 async def get_chunk(

@@ -18,6 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import hydrogram
+
 from ..object import Object
 
 

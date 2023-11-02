@@ -17,10 +17,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import hydrogram
 from hydrogram import raw, types
-from .inline_query_result import InlineQueryResult
+
 from ...file_id import FileId
+from .inline_query_result import InlineQueryResult
 
 
 class InlineQueryResultCachedSticker(InlineQueryResult):
@@ -47,7 +50,7 @@ class InlineQueryResultCachedSticker(InlineQueryResult):
     def __init__(
         self,
         sticker_file_id: str,
-        id: str = None,
+        id: Optional[str] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
         input_message_content: "types.InputMessageContent" = None,
     ):

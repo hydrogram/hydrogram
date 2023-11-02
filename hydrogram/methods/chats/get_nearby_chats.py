@@ -20,9 +20,7 @@
 from typing import List
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import raw, types, utils
 
 
 class GetNearbyChats:

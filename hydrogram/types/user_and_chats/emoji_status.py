@@ -21,8 +21,8 @@ from datetime import datetime
 from typing import Optional
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import utils
+from hydrogram import raw, utils
+
 from ..object import Object
 
 

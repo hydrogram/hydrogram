@@ -18,12 +18,11 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, List, Optional, AsyncGenerator, BinaryIO
+from typing import AsyncGenerator, BinaryIO, List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, enums
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import enums, raw, types, utils
+
 from ..object import Object
 
 
@@ -138,29 +137,29 @@ class Chat(Object):
         client: "hydrogram.Client" = None,
         id: int,
         type: "enums.ChatType",
-        is_verified: bool = None,
-        is_restricted: bool = None,
-        is_creator: bool = None,
-        is_scam: bool = None,
-        is_fake: bool = None,
-        is_support: bool = None,
-        title: str = None,
-        username: str = None,
-        first_name: str = None,
-        last_name: str = None,
+        is_verified: Optional[bool] = None,
+        is_restricted: Optional[bool] = None,
+        is_creator: Optional[bool] = None,
+        is_scam: Optional[bool] = None,
+        is_fake: Optional[bool] = None,
+        is_support: Optional[bool] = None,
+        title: Optional[str] = None,
+        username: Optional[str] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
         photo: "types.ChatPhoto" = None,
-        bio: str = None,
-        description: str = None,
-        dc_id: int = None,
-        has_protected_content: bool = None,
-        invite_link: str = None,
+        bio: Optional[str] = None,
+        description: Optional[str] = None,
+        dc_id: Optional[int] = None,
+        has_protected_content: Optional[bool] = None,
+        invite_link: Optional[str] = None,
         pinned_message=None,
-        sticker_set_name: str = None,
-        can_set_sticker_set: bool = None,
-        members_count: int = None,
-        restrictions: List["types.Restriction"] = None,
+        sticker_set_name: Optional[str] = None,
+        can_set_sticker_set: Optional[bool] = None,
+        members_count: Optional[int] = None,
+        restrictions: Optional[List["types.Restriction"]] = None,
         permissions: "types.ChatPermissions" = None,
-        distance: int = None,
+        distance: Optional[int] = None,
         linked_chat: "types.Chat" = None,
         send_as_chat: "types.Chat" = None,
         available_reactions: Optional["types.ChatReactions"] = None,
@@ -212,9 +211,7 @@ class Chat(Object):
             first_name=user.first_name,
             last_name=user.last_name,
             photo=types.ChatPhoto._parse(client, user.photo, peer_id, user.access_hash),
-            restrictions=types.List(
-                [types.Restriction._parse(r) for r in user.restriction_reason]
-            )
+            restrictions=types.List([types.Restriction._parse(r) for r in user.restriction_reason])
             or None,
             dc_id=getattr(getattr(user, "photo", None), "dc_id", None),
             client=client,
@@ -229,12 +226,8 @@ class Chat(Object):
             type=enums.ChatType.GROUP,
             title=chat.title,
             is_creator=getattr(chat, "creator", None),
-            photo=types.ChatPhoto._parse(
-                client, getattr(chat, "photo", None), peer_id, 0
-            ),
-            permissions=types.ChatPermissions._parse(
-                getattr(chat, "default_banned_rights", None)
-            ),
+            photo=types.ChatPhoto._parse(client, getattr(chat, "photo", None), peer_id, 0),
+            permissions=types.ChatPermissions._parse(getattr(chat, "default_banned_rights", None)),
             members_count=getattr(chat, "participants_count", None),
             dc_id=getattr(getattr(chat, "photo", None), "dc_id", None),
             has_protected_content=getattr(chat, "noforwards", None),
@@ -264,9 +257,7 @@ class Chat(Object):
                 peer_id,
                 getattr(channel, "access_hash", 0),
             ),
-            restrictions=types.List(
-                [types.Restriction._parse(r) for r in restriction_reason]
-            )
+            restrictions=types.List([types.Restriction._parse(r) for r in restriction_reason])
             or None,
             permissions=types.ChatPermissions._parse(
                 getattr(channel, "default_banned_rights", None)
@@ -339,16 +330,12 @@ class Chat(Object):
                 parsed_chat.description = full_chat.about or None
                 # TODO: Add StickerSet type
                 parsed_chat.can_set_sticker_set = full_chat.can_set_stickers
-                parsed_chat.sticker_set_name = getattr(
-                    full_chat.stickerset, "short_name", None
-                )
+                parsed_chat.sticker_set_name = getattr(full_chat.stickerset, "short_name", None)
 
                 linked_chat_raw = chats.get(full_chat.linked_chat_id, None)
 
                 if linked_chat_raw:
-                    parsed_chat.linked_chat = Chat._parse_channel_chat(
-                        client, linked_chat_raw
-                    )
+                    parsed_chat.linked_chat = Chat._parse_channel_chat(client, linked_chat_raw)
 
                 default_send_as = full_chat.default_send_as
 
@@ -496,16 +483,14 @@ class Chat(Object):
             ValueError: If a chat_id doesn't belong to a supergroup or a channel.
         """
 
-        return await self._client.set_chat_description(
-            chat_id=self.id, description=description
-        )
+        return await self._client.set_chat_description(chat_id=self.id, description=description)
 
     async def set_photo(
         self,
         *,
-        photo: Union[str, BinaryIO] = None,
-        video: Union[str, BinaryIO] = None,
-        video_start_ts: float = None,
+        photo: Optional[Union[str, BinaryIO]] = None,
+        video: Optional[Union[str, BinaryIO]] = None,
+        video_start_ts: Optional[float] = None,
     ) -> bool:
         """Bound method *set_photo* of :obj:`~hydrogram.types.Chat`.
 
@@ -866,9 +851,7 @@ class Chat(Object):
             ``Generator``: On success, a generator yielding :obj:`~hydrogram.types.ChatMember` objects is returned.
         """
 
-        return self._client.get_chat_members(
-            self.id, query=query, limit=limit, filter=filter
-        )
+        return self._client.get_chat_members(self.id, query=query, limit=limit, filter=filter)
 
     async def add_members(
         self,

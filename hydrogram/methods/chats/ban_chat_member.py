@@ -21,8 +21,7 @@ from datetime import datetime
 from typing import Union
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
 
 
 class BanChatMember:
@@ -95,15 +94,11 @@ class BanChatMember:
             )
         else:
             r = await self.invoke(
-                raw.functions.messages.DeleteChatUser(
-                    chat_id=abs(chat_id), user_id=user_peer
-                )
+                raw.functions.messages.DeleteChatUser(chat_id=abs(chat_id), user_id=user_peer)
             )
 
         for i in r.updates:
-            if isinstance(
-                i, (raw.types.UpdateNewMessage, raw.types.UpdateNewChannelMessage)
-            ):
+            if isinstance(i, (raw.types.UpdateNewMessage, raw.types.UpdateNewChannelMessage)):
                 return await types.Message._parse(
                     self,
                     i.message,

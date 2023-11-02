@@ -17,17 +17,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class SetChatMenuButton:
     async def set_chat_menu_button(
         self: "hydrogram.Client",
-        chat_id: Union[int, str] = None,
+        chat_id: Optional[Union[int, str]] = None,
         menu_button: "types.MenuButton" = None,
     ) -> bool:
         """Change the bot's menu button in a private chat, or the default menu button.

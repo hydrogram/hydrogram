@@ -65,11 +65,7 @@ class RequestCallbackAnswer:
         """
 
         # Telegram only wants bytes, but we are allowed to pass strings too.
-        data = (
-            bytes(callback_data, "utf-8")
-            if isinstance(callback_data, str)
-            else callback_data
-        )
+        data = bytes(callback_data, "utf-8") if isinstance(callback_data, str) else callback_data
 
         return await self.invoke(
             raw.functions.messages.GetBotCallbackAnswer(

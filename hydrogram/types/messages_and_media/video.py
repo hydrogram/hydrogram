@@ -18,12 +18,12 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
+
 from ..object import Object
 
 
@@ -78,13 +78,13 @@ class Video(Object):
         width: int,
         height: int,
         duration: int,
-        file_name: str = None,
-        mime_type: str = None,
-        file_size: int = None,
-        supports_streaming: bool = None,
-        ttl_seconds: int = None,
-        date: datetime = None,
-        thumbs: List["types.Thumbnail"] = None,
+        file_name: Optional[str] = None,
+        mime_type: Optional[str] = None,
+        file_size: Optional[int] = None,
+        supports_streaming: Optional[bool] = None,
+        ttl_seconds: Optional[int] = None,
+        date: Optional[datetime] = None,
+        thumbs: Optional[List["types.Thumbnail"]] = None,
     ):
         super().__init__(client)
 
@@ -107,7 +107,7 @@ class Video(Object):
         video: "raw.types.Document",
         video_attributes: "raw.types.DocumentAttributeVideo",
         file_name: str,
-        ttl_seconds: int = None,
+        ttl_seconds: Optional[int] = None,
     ) -> "Video":
         return Video(
             file_id=FileId(

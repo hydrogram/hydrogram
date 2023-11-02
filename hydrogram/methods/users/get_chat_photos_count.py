@@ -24,9 +24,7 @@ from hydrogram import raw
 
 
 class GetChatPhotosCount:
-    async def get_chat_photos_count(
-        self: "hydrogram.Client", chat_id: Union[int, str]
-    ) -> int:
+    async def get_chat_photos_count(self: "hydrogram.Client", chat_id: Union[int, str]) -> int:
         """Get the total count of photos for a chat.
 
         .. include:: /_includes/usable-by/users-bots.rst
@@ -60,9 +58,7 @@ class GetChatPhotosCount:
             return r[0].count
         else:
             r = await self.invoke(
-                raw.functions.photos.GetUserPhotos(
-                    user_id=peer_id, offset=0, max_id=0, limit=1
-                )
+                raw.functions.photos.GetUserPhotos(user_id=peer_id, offset=0, max_id=0, limit=1)
             )
 
             if isinstance(r, raw.types.photos.Photos):

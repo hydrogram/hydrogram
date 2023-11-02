@@ -19,15 +19,15 @@
 
 import inspect
 import re
-from typing import Callable, Union, List, Pattern
+from typing import Callable, List, Optional, Pattern, Union
 
 import hydrogram
 from hydrogram import enums
 from hydrogram.types import (
-    Message,
     CallbackQuery,
-    InlineQuery,
     InlineKeyboardMarkup,
+    InlineQuery,
+    Message,
     ReplyKeyboardMarkup,
     Update,
 )
@@ -55,9 +55,7 @@ class InvertFilter(Filter):
         if inspect.iscoroutinefunction(self.base.__call__):
             x = await self.base(client, update)
         else:
-            x = await client.loop.run_in_executor(
-                client.executor, self.base, client, update
-            )
+            x = await client.loop.run_in_executor(client.executor, self.base, client, update)
 
         return not x
 
@@ -71,9 +69,7 @@ class AndFilter(Filter):
         if inspect.iscoroutinefunction(self.base.__call__):
             x = await self.base(client, update)
         else:
-            x = await client.loop.run_in_executor(
-                client.executor, self.base, client, update
-            )
+            x = await client.loop.run_in_executor(client.executor, self.base, client, update)
 
         # short circuit
         if not x:
@@ -82,9 +78,7 @@ class AndFilter(Filter):
         if inspect.iscoroutinefunction(self.other.__call__):
             y = await self.other(client, update)
         else:
-            y = await client.loop.run_in_executor(
-                client.executor, self.other, client, update
-            )
+            y = await client.loop.run_in_executor(client.executor, self.other, client, update)
 
         return x and y
 
@@ -98,9 +92,7 @@ class OrFilter(Filter):
         if inspect.iscoroutinefunction(self.base.__call__):
             x = await self.base(client, update)
         else:
-            x = await client.loop.run_in_executor(
-                client.executor, self.base, client, update
-            )
+            x = await client.loop.run_in_executor(client.executor, self.base, client, update)
 
         # short circuit
         if x:
@@ -109,9 +101,7 @@ class OrFilter(Filter):
         if inspect.iscoroutinefunction(self.other.__call__):
             y = await self.other(client, update)
         else:
-            y = await client.loop.run_in_executor(
-                client.executor, self.other, client, update
-            )
+            y = await client.loop.run_in_executor(client.executor, self.other, client, update)
 
         return x or y
 
@@ -119,7 +109,7 @@ class OrFilter(Filter):
 CUSTOM_FILTER_NAME = "CustomFilter"
 
 
-def create(func: Callable, name: str = None, **kwargs) -> Filter:
+def create(func: Callable, name: Optional[str] = None, **kwargs) -> Filter:
     """Easily create a custom filter.
 
     Custom filters give you extra control over which updates are allowed or not to be processed by your handlers.
@@ -475,9 +465,7 @@ private = create(private_filter)
 
 # region group_filter
 async def group_filter(_, __, m: Message):
-    return bool(
-        m.chat and m.chat.type in {enums.ChatType.GROUP, enums.ChatType.SUPERGROUP}
-    )
+    return bool(m.chat and m.chat.type in {enums.ChatType.GROUP, enums.ChatType.SUPERGROUP})
 
 
 group = create(group_filter)
@@ -941,25 +929,18 @@ class user(Filter, set):
             Defaults to None (no users).
     """
 
-    def __init__(self, users: Union[int, str, List[Union[int, str]]] = None):
+    def __init__(self, users: Optional[Union[int, str, List[Union[int, str]]]] = None):
         users = [] if users is None else users if isinstance(users, list) else [users]
 
         super().__init__(
-            "me"
-            if u in ["me", "self"]
-            else u.lower().strip("@")
-            if isinstance(u, str)
-            else u
+            "me" if u in ["me", "self"] else u.lower().strip("@") if isinstance(u, str) else u
             for u in users
         )
 
     async def __call__(self, _, message: Message):
         return message.from_user and (
             message.from_user.id in self
-            or (
-                message.from_user.username
-                and message.from_user.username.lower() in self
-            )
+            or (message.from_user.username and message.from_user.username.lower() in self)
             or ("me" in self and message.from_user.is_self)
         )
 
@@ -978,15 +959,11 @@ class chat(Filter, set):
             Defaults to None (no chats).
     """
 
-    def __init__(self, chats: Union[int, str, List[Union[int, str]]] = None):
+    def __init__(self, chats: Optional[Union[int, str, List[Union[int, str]]]] = None):
         chats = [] if chats is None else chats if isinstance(chats, list) else [chats]
 
         super().__init__(
-            "me"
-            if c in ["me", "self"]
-            else c.lower().strip("@")
-            if isinstance(c, str)
-            else c
+            "me" if c in ["me", "self"] else c.lower().strip("@") if isinstance(c, str) else c
             for c in chats
         )
 

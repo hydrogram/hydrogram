@@ -21,7 +21,7 @@ import os
 
 import hydrogram
 from hydrogram import raw
-from hydrogram.utils import compute_password_hash, compute_password_check, btoi, itob
+from hydrogram.utils import btoi, compute_password_check, compute_password_hash, itob
 
 
 class ChangeCloudPassword:

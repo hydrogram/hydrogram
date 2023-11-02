@@ -20,8 +20,7 @@
 from typing import List, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import utils
+from hydrogram import raw, utils
 from hydrogram.file_id import FileType
 
 
@@ -58,6 +57,4 @@ class DeleteProfilePhotos:
             utils.get_input_media_from_file_id(i, FileType.PHOTO).id for i in photo_ids
         ]
 
-        return bool(
-            await self.invoke(raw.functions.photos.DeletePhotos(id=input_photos))
-        )
+        return bool(await self.invoke(raw.functions.photos.DeletePhotos(id=input_photos)))

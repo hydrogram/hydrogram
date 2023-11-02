@@ -30,7 +30,6 @@ from .poll_handler import PollHandler
 from .raw_update_handler import RawUpdateHandler
 from .user_status_handler import UserStatusHandler
 
-
 __all__ = [
     "CallbackQueryHandler",
     "ChatJoinRequestHandler",

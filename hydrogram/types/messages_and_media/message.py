@@ -20,14 +20,14 @@
 import logging
 from datetime import datetime
 from functools import partial
-from typing import List, Match, Union, BinaryIO, Optional, Callable
+from typing import BinaryIO, Callable, List, Match, Optional, Union
 
 import hydrogram
-from hydrogram import raw, enums
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import enums, raw, types, utils
 from hydrogram.errors import MessageIdsEmpty, PeerIdInvalid
-from hydrogram.parser import utils as parser_utils, Parser
+from hydrogram.parser import Parser
+from hydrogram.parser import utils as parser_utils
+
 from ..object import Object
 from ..update import Update
 
@@ -315,31 +315,31 @@ class Message(Object, Update):
         id: int,
         from_user: "types.User" = None,
         sender_chat: "types.Chat" = None,
-        date: datetime = None,
+        date: Optional[datetime] = None,
         chat: "types.Chat" = None,
         forward_from: "types.User" = None,
-        forward_sender_name: str = None,
+        forward_sender_name: Optional[str] = None,
         forward_from_chat: "types.Chat" = None,
-        forward_from_message_id: int = None,
-        forward_signature: str = None,
-        forward_date: datetime = None,
-        reply_to_message_id: int = None,
-        reply_to_top_message_id: int = None,
+        forward_from_message_id: Optional[int] = None,
+        forward_signature: Optional[str] = None,
+        forward_date: Optional[datetime] = None,
+        reply_to_message_id: Optional[int] = None,
+        reply_to_top_message_id: Optional[int] = None,
         reply_to_message: "Message" = None,
-        mentioned: bool = None,
-        empty: bool = None,
+        mentioned: Optional[bool] = None,
+        empty: Optional[bool] = None,
         service: "enums.MessageServiceType" = None,
-        scheduled: bool = None,
-        from_scheduled: bool = None,
+        scheduled: Optional[bool] = None,
+        from_scheduled: Optional[bool] = None,
         media: "enums.MessageMediaType" = None,
-        edit_date: datetime = None,
-        media_group_id: str = None,
-        author_signature: str = None,
-        has_protected_content: bool = None,
-        has_media_spoiler: bool = None,
+        edit_date: Optional[datetime] = None,
+        media_group_id: Optional[str] = None,
+        author_signature: Optional[str] = None,
+        has_protected_content: Optional[bool] = None,
+        has_media_spoiler: Optional[bool] = None,
         text: Str = None,
-        entities: List["types.MessageEntity"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         audio: "types.Audio" = None,
         document: "types.Document" = None,
         photo: "types.Photo" = None,
@@ -356,24 +356,24 @@ class Message(Object, Update):
         web_page: "types.WebPage" = None,
         poll: "types.Poll" = None,
         dice: "types.Dice" = None,
-        new_chat_members: List["types.User"] = None,
+        new_chat_members: Optional[List["types.User"]] = None,
         left_chat_member: "types.User" = None,
-        new_chat_title: str = None,
+        new_chat_title: Optional[str] = None,
         new_chat_photo: "types.Photo" = None,
-        delete_chat_photo: bool = None,
-        group_chat_created: bool = None,
-        supergroup_chat_created: bool = None,
-        channel_chat_created: bool = None,
-        migrate_to_chat_id: int = None,
-        migrate_from_chat_id: int = None,
+        delete_chat_photo: Optional[bool] = None,
+        group_chat_created: Optional[bool] = None,
+        supergroup_chat_created: Optional[bool] = None,
+        channel_chat_created: Optional[bool] = None,
+        migrate_to_chat_id: Optional[int] = None,
+        migrate_from_chat_id: Optional[int] = None,
         pinned_message: "Message" = None,
-        game_high_score: int = None,
-        views: int = None,
-        forwards: int = None,
+        game_high_score: Optional[int] = None,
+        views: Optional[int] = None,
+        forwards: Optional[int] = None,
         via_bot: "types.User" = None,
-        outgoing: bool = None,
-        matches: List[Match] = None,
-        command: List[str] = None,
+        outgoing: Optional[bool] = None,
+        matches: Optional[List[Match]] = None,
+        command: Optional[List[str]] = None,
         video_chat_scheduled: "types.VideoChatScheduled" = None,
         video_chat_started: "types.VideoChatStarted" = None,
         video_chat_ended: "types.VideoChatEnded" = None,
@@ -385,7 +385,7 @@ class Message(Object, Update):
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        reactions: List["types.Reaction"] = None,
+        reactions: Optional[List["types.Reaction"]] = None,
     ):
         super().__init__(client)
 
@@ -475,23 +475,24 @@ class Message(Object, Update):
         peer_id = utils.get_raw_peer_id(message.peer_id)
         user_id = from_id or peer_id
 
-        if isinstance(message.from_id, raw.types.PeerUser) and isinstance(
-            message.peer_id, raw.types.PeerUser
+        if (
+            isinstance(message.from_id, raw.types.PeerUser)
+            and isinstance(message.peer_id, raw.types.PeerUser)
+            and (from_id not in users or peer_id not in users)
         ):
-            if from_id not in users or peer_id not in users:
-                try:
-                    r = await client.invoke(
-                        raw.functions.users.GetUsers(
-                            id=[
-                                await client.resolve_peer(from_id),
-                                await client.resolve_peer(peer_id),
-                            ]
-                        )
+            try:
+                r = await client.invoke(
+                    raw.functions.users.GetUsers(
+                        id=[
+                            await client.resolve_peer(from_id),
+                            await client.resolve_peer(peer_id),
+                        ]
                     )
-                except PeerIdInvalid:
-                    pass
-                else:
-                    users.update({i.id: i for i in r})
+                )
+            except PeerIdInvalid:
+                pass
+            else:
+                users.update({i.id: i for i in r})
 
         if isinstance(message, raw.types.MessageService):
             action = message.action
@@ -514,15 +515,11 @@ class Message(Object, Update):
             service_type = None
 
             if isinstance(action, raw.types.MessageActionChatAddUser):
-                new_chat_members = [
-                    types.User._parse(client, users[i]) for i in action.users
-                ]
+                new_chat_members = [types.User._parse(client, users[i]) for i in action.users]
                 service_type = enums.MessageServiceType.NEW_CHAT_MEMBERS
             elif isinstance(action, raw.types.MessageActionChatJoinedByLink):
                 new_chat_members = [
-                    types.User._parse(
-                        client, users[utils.get_raw_peer_id(message.from_id)]
-                    )
+                    types.User._parse(client, users[utils.get_raw_peer_id(message.from_id)])
                 ]
                 service_type = enums.MessageServiceType.NEW_CHAT_MEMBERS
             elif isinstance(action, raw.types.MessageActionChatDeleteUser):
@@ -590,9 +587,7 @@ class Message(Object, Update):
                 migrate_to_chat_id=utils.get_channel_id(migrate_to_chat_id)
                 if migrate_to_chat_id
                 else None,
-                migrate_from_chat_id=-migrate_from_chat_id
-                if migrate_from_chat_id
-                else None,
+                migrate_from_chat_id=-migrate_from_chat_id if migrate_from_chat_id else None,
                 group_chat_created=group_chat_created,
                 channel_chat_created=channel_chat_created,
                 video_chat_scheduled=video_chat_scheduled,
@@ -629,22 +624,17 @@ class Message(Object, Update):
                             replies=0,
                         )
 
-                        parsed_message.service = (
-                            enums.MessageServiceType.GAME_HIGH_SCORE
-                        )
+                        parsed_message.service = enums.MessageServiceType.GAME_HIGH_SCORE
                     except MessageIdsEmpty:
                         pass
 
-            client.message_cache[
-                (parsed_message.chat.id, parsed_message.id)
-            ] = parsed_message
+            client.message_cache[(parsed_message.chat.id, parsed_message.id)] = parsed_message
 
             return parsed_message
 
         if isinstance(message, raw.types.Message):
             entities = [
-                types.MessageEntity._parse(client, entity, users)
-                for entity in message.entities
+                types.MessageEntity._parse(client, entity, users) for entity in message.entities
             ]
             entities = types.List(filter(lambda x: x is not None, entities))
 
@@ -734,19 +724,13 @@ class Message(Object, Update):
                             media_type = enums.MessageMediaType.ANIMATION
                             has_media_spoiler = media.spoiler
                         elif raw.types.DocumentAttributeSticker in attributes:
-                            sticker = await types.Sticker._parse(
-                                client, doc, attributes
-                            )
+                            sticker = await types.Sticker._parse(client, doc, attributes)
                             media_type = enums.MessageMediaType.STICKER
                         elif raw.types.DocumentAttributeVideo in attributes:
-                            video_attributes = attributes[
-                                raw.types.DocumentAttributeVideo
-                            ]
+                            video_attributes = attributes[raw.types.DocumentAttributeVideo]
 
                             if video_attributes.round_message:
-                                video_note = types.VideoNote._parse(
-                                    client, doc, video_attributes
-                                )
+                                video_note = types.VideoNote._parse(client, doc, video_attributes)
                                 media_type = enums.MessageMediaType.VIDEO_NOTE
                             else:
                                 video = types.Video._parse(
@@ -759,14 +743,10 @@ class Message(Object, Update):
                                 media_type = enums.MessageMediaType.VIDEO
                                 has_media_spoiler = media.spoiler
                         elif raw.types.DocumentAttributeAudio in attributes:
-                            audio_attributes = attributes[
-                                raw.types.DocumentAttributeAudio
-                            ]
+                            audio_attributes = attributes[raw.types.DocumentAttributeAudio]
 
                             if audio_attributes.voice:
-                                voice = types.Voice._parse(
-                                    client, doc, audio_attributes
-                                )
+                                voice = types.Voice._parse(client, doc, audio_attributes)
                                 media_type = enums.MessageMediaType.VOICE
                             else:
                                 audio = types.Audio._parse(
@@ -830,9 +810,7 @@ class Message(Object, Update):
                     if media is not None and web_page is None
                     else None
                 ),
-                entities=(
-                    entities or None if media is None or web_page is not None else None
-                ),
+                entities=(entities or None if media is None or web_page is not None else None),
                 caption_entities=(
                     entities or None if media is not None and web_page is None else None
                 ),
@@ -877,9 +855,7 @@ class Message(Object, Update):
 
             if message.reply_to:
                 parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
-                parsed_message.reply_to_top_message_id = (
-                    message.reply_to.reply_to_top_id
-                )
+                parsed_message.reply_to_top_message_id = message.reply_to.reply_to_top_id
 
                 if replies:
                     try:
@@ -901,11 +877,10 @@ class Message(Object, Update):
                         pass
 
             if not parsed_message.poll:  # Do not cache poll messages
-                client.message_cache[
-                    (parsed_message.chat.id, parsed_message.id)
-                ] = parsed_message
+                client.message_cache[(parsed_message.chat.id, parsed_message.id)] = parsed_message
 
             return parsed_message
+        return None
 
     @property
     def link(self) -> str:
@@ -942,21 +917,19 @@ class Message(Object, Update):
             ValueError: In case the passed message id doesn't belong to a media group.
         """
 
-        return await self._client.get_media_group(
-            chat_id=self.chat.id, message_id=self.id
-        )
+        return await self._client.get_media_group(chat_id=self.chat.id, message_id=self.id)
 
     async def reply_text(
         self,
         text: str,
-        quote: bool = None,
+        quote: Optional[bool] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: List["types.MessageEntity"] = None,
-        disable_web_page_preview: bool = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        entities: Optional[List["types.MessageEntity"]] = None,
+        disable_web_page_preview: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         reply_markup=None,
     ) -> "Message":
         """Bound method *reply_text* of :obj:`~hydrogram.types.Message`.
@@ -1044,24 +1017,24 @@ class Message(Object, Update):
     async def reply_animation(
         self,
         animation: Union[str, BinaryIO],
-        quote: bool = None,
+        quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        has_spoiler: bool = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        has_spoiler: Optional[bool] = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: str = None,
-        disable_notification: bool = None,
+        thumb: Optional[str] = None,
+        disable_notification: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        reply_to_message_id: int = None,
-        progress: Callable = None,
+        reply_to_message_id: Optional[int] = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> "Message":
         """Bound method *reply_animation* :obj:`~hydrogram.types.Message`.
@@ -1188,23 +1161,23 @@ class Message(Object, Update):
     async def reply_audio(
         self,
         audio: Union[str, BinaryIO],
-        quote: bool = None,
+        quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         duration: int = 0,
-        performer: str = None,
-        title: str = None,
-        thumb: str = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        performer: Optional[str] = None,
+        title: Optional[str] = None,
+        thumb: Optional[str] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> "Message":
         """Bound method *reply_audio* of :obj:`~hydrogram.types.Message`.
@@ -1327,12 +1300,12 @@ class Message(Object, Update):
     async def reply_cached_media(
         self,
         file_id: str,
-        quote: bool = None,
+        quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -1448,11 +1421,11 @@ class Message(Object, Update):
         self,
         phone_number: str,
         first_name: str,
-        quote: bool = None,
+        quote: Optional[bool] = None,
         last_name: str = "",
         vcard: str = "",
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -1532,23 +1505,23 @@ class Message(Object, Update):
     async def reply_document(
         self,
         document: Union[str, BinaryIO],
-        quote: bool = None,
-        thumb: str = None,
+        quote: Optional[bool] = None,
+        thumb: Optional[str] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        file_name: str = None,
-        force_document: bool = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        file_name: Optional[str] = None,
+        force_document: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> "Message":
         """Bound method *reply_document* of :obj:`~hydrogram.types.Message`.
@@ -1674,9 +1647,9 @@ class Message(Object, Update):
     async def reply_game(
         self,
         game_short_name: str,
-        quote: bool = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        quote: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -1744,9 +1717,9 @@ class Message(Object, Update):
         self,
         query_id: int,
         result_id: str,
-        quote: bool = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        quote: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
     ) -> "Message":
         """Bound method *reply_inline_bot_result* of :obj:`~hydrogram.types.Message`.
 
@@ -1808,9 +1781,9 @@ class Message(Object, Update):
         self,
         latitude: float,
         longitude: float,
-        quote: bool = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        quote: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -1882,9 +1855,9 @@ class Message(Object, Update):
     async def reply_media_group(
         self,
         media: List[Union["types.InputMediaPhoto", "types.InputMediaVideo"]],
-        quote: bool = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        quote: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
     ) -> List["types.Message"]:
         """Bound method *reply_media_group* of :obj:`~hydrogram.types.Message`.
 
@@ -1943,21 +1916,21 @@ class Message(Object, Update):
     async def reply_photo(
         self,
         photo: Union[str, BinaryIO],
-        quote: bool = None,
+        quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        has_spoiler: bool = None,
-        ttl_seconds: int = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        has_spoiler: Optional[bool] = None,
+        ttl_seconds: Optional[int] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> "Message":
         """Bound method *reply_photo* of :obj:`~hydrogram.types.Message`.
@@ -2074,19 +2047,19 @@ class Message(Object, Update):
         options: List[str],
         is_anonymous: bool = True,
         type: "enums.PollType" = enums.PollType.REGULAR,
-        allows_multiple_answers: bool = None,
-        correct_option_id: int = None,
-        explanation: str = None,
+        allows_multiple_answers: Optional[bool] = None,
+        correct_option_id: Optional[int] = None,
+        explanation: Optional[str] = None,
         explanation_parse_mode: "enums.ParseMode" = None,
-        explanation_entities: List["types.MessageEntity"] = None,
-        open_period: int = None,
-        close_date: datetime = None,
-        is_closed: bool = None,
-        quote: bool = None,
-        disable_notification: bool = None,
-        protect_content: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
+        explanation_entities: Optional[List["types.MessageEntity"]] = None,
+        open_period: Optional[int] = None,
+        close_date: Optional[datetime] = None,
+        is_closed: Optional[bool] = None,
+        quote: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        protect_content: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -2216,16 +2189,16 @@ class Message(Object, Update):
     async def reply_sticker(
         self,
         sticker: Union[str, BinaryIO],
-        quote: bool = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        quote: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> "Message":
         """Bound method *reply_sticker* of :obj:`~hydrogram.types.Message`.
@@ -2319,11 +2292,11 @@ class Message(Object, Update):
         longitude: float,
         title: str,
         address: str,
-        quote: bool = None,
+        quote: Optional[bool] = None,
         foursquare_id: str = "",
         foursquare_type: str = "",
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -2414,26 +2387,26 @@ class Message(Object, Update):
     async def reply_video(
         self,
         video: Union[str, BinaryIO],
-        quote: bool = None,
+        quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        has_spoiler: bool = None,
-        ttl_seconds: int = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        has_spoiler: Optional[bool] = None,
+        ttl_seconds: Optional[int] = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: str = None,
+        thumb: Optional[str] = None,
         supports_streaming: bool = True,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> "Message":
         """Bound method *reply_video* of :obj:`~hydrogram.types.Message`.
@@ -2570,19 +2543,19 @@ class Message(Object, Update):
     async def reply_video_note(
         self,
         video_note: Union[str, BinaryIO],
-        quote: bool = None,
+        quote: Optional[bool] = None,
         duration: int = 0,
         length: int = 1,
-        thumb: str = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        thumb: Optional[str] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> "Message":
         """Bound method *reply_video_note* of :obj:`~hydrogram.types.Message`.
@@ -2688,20 +2661,20 @@ class Message(Object, Update):
     async def reply_voice(
         self,
         voice: Union[str, BinaryIO],
-        quote: bool = None,
+        quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         duration: int = 0,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> "Message":
         """Bound method *reply_voice* of :obj:`~hydrogram.types.Message`.
@@ -2810,8 +2783,8 @@ class Message(Object, Update):
         self,
         text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: List["types.MessageEntity"] = None,
-        disable_web_page_preview: bool = None,
+        entities: Optional[List["types.MessageEntity"]] = None,
+        disable_web_page_preview: Optional[bool] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> "Message":
         """Bound method *edit_text* of :obj:`~hydrogram.types.Message`.
@@ -2872,7 +2845,7 @@ class Message(Object, Update):
         self,
         caption: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> "Message":
         """Bound method *edit_caption* of :obj:`~hydrogram.types.Message`.
@@ -3001,8 +2974,8 @@ class Message(Object, Update):
     async def forward(
         self,
         chat_id: Union[int, str],
-        disable_notification: bool = None,
-        schedule_date: datetime = None,
+        disable_notification: Optional[bool] = None,
+        schedule_date: Optional[datetime] = None,
     ) -> Union["types.Message", List["types.Message"]]:
         """Bound method *forward* of :obj:`~hydrogram.types.Message`.
 
@@ -3051,13 +3024,13 @@ class Message(Object, Update):
     async def copy(
         self,
         chat_id: Union[int, str],
-        caption: str = None,
+        caption: Optional[str] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -3131,14 +3104,17 @@ class Message(Object, Update):
                 self.chat.id,
                 self.id,
             )
+            return None
         elif self.game and not await self._client.storage.is_bot():
             log.warning(
                 "Users cannot send messages with Game media type. chat_id: %s, message_id: %s",
                 self.chat.id,
                 self.id,
             )
+            return None
         elif self.empty:
             log.warning("Empty messages cannot be copied.")
+            return None
         elif self.text:
             return await self._client.send_message(
                 chat_id,
@@ -3150,9 +3126,7 @@ class Message(Object, Update):
                 reply_to_message_id=reply_to_message_id,
                 schedule_date=schedule_date,
                 protect_content=protect_content,
-                reply_markup=self.reply_markup
-                if reply_markup is object
-                else reply_markup,
+                reply_markup=self.reply_markup if reply_markup is object else reply_markup,
             )
         elif self.media:
             send_media = partial(
@@ -3162,9 +3136,7 @@ class Message(Object, Update):
                 reply_to_message_id=reply_to_message_id,
                 schedule_date=schedule_date,
                 protect_content=protect_content,
-                reply_markup=self.reply_markup
-                if reply_markup is object
-                else reply_markup,
+                reply_markup=self.reply_markup if reply_markup is object else reply_markup,
             )
 
             if self.photo:
@@ -3230,9 +3202,7 @@ class Message(Object, Update):
             else:
                 raise ValueError("Unknown media type")
 
-            if (
-                self.sticker or self.video_note
-            ):  # Sticker and VideoNote should have no caption
+            if self.sticker or self.video_note:  # Sticker and VideoNote should have no caption
                 return await send_media(file_id=file_id)
             else:
                 if caption is None:
@@ -3285,8 +3255,8 @@ class Message(Object, Update):
     async def click(
         self,
         x: Union[int, str] = 0,
-        y: int = None,
-        quote: bool = None,
+        y: Optional[int] = None,
+        quote: Optional[bool] = None,
         timeout: int = 10,
     ):
         """Bound method *click* of :obj:`~hydrogram.types.Message`.
@@ -3375,9 +3345,7 @@ class Message(Object, Update):
             label = x.encode("utf-16", "surrogatepass").decode("utf-16")
 
             try:
-                button = [
-                    button for row in keyboard for button in row if label == button.text
-                ][0]
+                button = next(button for row in keyboard for button in row if label == button.text)
             except IndexError:
                 raise ValueError(f"The button with label '{x}' doesn't exists")
         else:
@@ -3401,6 +3369,7 @@ class Message(Object, Update):
                 raise ValueError("This button is not supported yet")
         else:
             await self.reply(button, quote=quote)
+            return None
 
     async def react(self, emoji: str = "", big: bool = False) -> bool:
         """Bound method *react* of :obj:`~hydrogram.types.Message`.
@@ -3473,7 +3442,7 @@ class Message(Object, Update):
         file_name: str = "",
         in_memory: bool = False,
         block: bool = True,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> str:
         """Bound method *download* of :obj:`~hydrogram.types.Message`.
@@ -3643,6 +3612,4 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
-        return await self._client.unpin_chat_message(
-            chat_id=self.chat.id, message_id=self.id
-        )
+        return await self._client.unpin_chat_message(chat_id=self.chat.id, message_id=self.id)

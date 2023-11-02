@@ -20,14 +20,11 @@
 from typing import List
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class ImportContacts:
-    async def import_contacts(
-        self: "hydrogram.Client", contacts: List["types.InputPhoneContact"]
-    ):
+    async def import_contacts(self: "hydrogram.Client", contacts: List["types.InputPhoneContact"]):
         """Import contacts to your Telegram address book.
 
         .. include:: /_includes/usable-by/users.rst
@@ -49,8 +46,4 @@ class ImportContacts:
                     InputPhoneContact("+1-456-789-0123", "Bar"),
                     InputPhoneContact("+1-789-012-3456", "Baz")])
         """
-        imported_contacts = await self.invoke(
-            raw.functions.contacts.ImportContacts(contacts=contacts)
-        )
-
-        return imported_contacts
+        return await self.invoke(raw.functions.contacts.ImportContacts(contacts=contacts))

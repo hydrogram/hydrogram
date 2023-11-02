@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import hydrogram
-from hydrogram import raw, enums
+from hydrogram import enums, raw
 
 
 class SearchGlobalCount:

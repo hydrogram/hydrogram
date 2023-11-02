@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from io import BytesIO
-from typing import List, Any
+from typing import Any, List
 
 from .message import Message
 from .primitives.int import Int

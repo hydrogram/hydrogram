@@ -17,7 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from hydrogram import raw, enums
+from typing import Optional
+
+from hydrogram import enums, raw
+
 from ..object import Object
 
 
@@ -45,7 +48,7 @@ class SentCode(Object):
         type: "enums.SentCodeType",
         phone_code_hash: str,
         next_type: "enums.NextCodeType" = None,
-        timeout: int = None,
+        timeout: Optional[int] = None,
     ):
         super().__init__()
 

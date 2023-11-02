@@ -20,8 +20,7 @@
 from typing import Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class EditMessageReplyMarkup:
@@ -70,12 +69,11 @@ class EditMessageReplyMarkup:
         )
 
         for i in r.updates:
-            if isinstance(
-                i, (raw.types.UpdateEditMessage, raw.types.UpdateEditChannelMessage)
-            ):
+            if isinstance(i, (raw.types.UpdateEditMessage, raw.types.UpdateEditChannelMessage)):
                 return await types.Message._parse(
                     self,
                     i.message,
                     {i.id: i for i in r.users},
                     {i.id: i for i in r.chats},
                 )
+        return None

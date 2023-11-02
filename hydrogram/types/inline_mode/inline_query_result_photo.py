@@ -17,10 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, List
+from typing import List, Optional
 
 import hydrogram
-from hydrogram import raw, types, utils, enums
+from hydrogram import enums, raw, types, utils
+
 from .inline_query_result import InlineQueryResult
 
 
@@ -76,15 +77,15 @@ class InlineQueryResultPhoto(InlineQueryResult):
     def __init__(
         self,
         photo_url: str,
-        thumb_url: str = None,
+        thumb_url: Optional[str] = None,
         photo_width: int = 0,
         photo_height: int = 0,
-        id: str = None,
-        title: str = None,
-        description: str = None,
+        id: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
         input_message_content: "types.InputMessageContent" = None,
     ):
@@ -108,9 +109,7 @@ class InlineQueryResultPhoto(InlineQueryResult):
             size=0,
             mime_type="image/jpeg",
             attributes=[
-                raw.types.DocumentAttributeImageSize(
-                    w=self.photo_width, h=self.photo_height
-                )
+                raw.types.DocumentAttributeImageSize(w=self.photo_width, h=self.photo_height)
             ],
         )
 

@@ -18,10 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from typing import Union, Optional, AsyncGenerator
+from typing import AsyncGenerator, Optional, Union
 
 import hydrogram
-from hydrogram import raw, types, enums
+from hydrogram import enums, raw, types
 
 log = logging.getLogger(__name__)
 
@@ -118,9 +118,7 @@ class GetChatMembers:
         peer = await self.resolve_peer(chat_id)
 
         if isinstance(peer, raw.types.InputPeerChat):
-            r = await self.invoke(
-                raw.functions.messages.GetFullChat(chat_id=peer.chat_id)
-            )
+            r = await self.invoke(raw.functions.messages.GetFullChat(chat_id=peer.chat_id))
 
             members = getattr(r.full_chat.participants, "participants", [])
             users = {i.id: i for i in r.users}

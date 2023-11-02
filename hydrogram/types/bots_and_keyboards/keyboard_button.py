@@ -17,7 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from hydrogram import raw, types
+
 from ..object import Object
 
 
@@ -49,8 +52,8 @@ class KeyboardButton(Object):
     def __init__(
         self,
         text: str,
-        request_contact: bool = None,
-        request_location: bool = None,
+        request_contact: Optional[bool] = None,
+        request_location: Optional[bool] = None,
         web_app: "types.WebAppInfo" = None,
     ):
         super().__init__()
@@ -73,6 +76,7 @@ class KeyboardButton(Object):
 
         if isinstance(b, raw.types.KeyboardButtonSimpleWebView):
             return KeyboardButton(text=b.text, web_app=types.WebAppInfo(url=b.url))
+        return None
 
     def write(self):
         if self.request_contact:
@@ -80,8 +84,6 @@ class KeyboardButton(Object):
         elif self.request_location:
             return raw.types.KeyboardButtonRequestGeoLocation(text=self.text)
         elif self.web_app:
-            return raw.types.KeyboardButtonSimpleWebView(
-                text=self.text, url=self.web_app.url
-            )
+            return raw.types.KeyboardButtonSimpleWebView(text=self.text, url=self.web_app.url)
         else:
             return raw.types.KeyboardButton(text=self.text)

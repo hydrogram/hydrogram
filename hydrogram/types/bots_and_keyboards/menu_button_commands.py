@@ -19,6 +19,7 @@
 
 import hydrogram
 from hydrogram import raw
+
 from .menu_button import MenuButton
 
 
@@ -28,7 +29,5 @@ class MenuButtonCommands(MenuButton):
     def __init__(self):
         super().__init__("commands")
 
-    async def write(
-        self, client: "hydrogram.Client"
-    ) -> "raw.types.BotMenuButtonCommands":
+    async def write(self, client: "hydrogram.Client") -> "raw.types.BotMenuButtonCommands":
         return raw.types.BotMenuButtonCommands()

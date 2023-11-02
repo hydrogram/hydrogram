@@ -17,17 +17,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class GetChatMenuButton:
     async def get_chat_menu_button(
         self: "hydrogram.Client",
-        chat_id: Union[int, str] = None,
+        chat_id: Optional[Union[int, str]] = None,
     ) -> "types.MenuButton":
         """Get the current value of the bot's menu button in a private chat, or the default menu button.
 
@@ -47,9 +46,7 @@ class GetChatMenuButton:
             )
         else:
             r = (
-                await self.invoke(
-                    raw.functions.users.GetFullUser(id=raw.types.InputUserSelf())
-                )
+                await self.invoke(raw.functions.users.GetFullUser(id=raw.types.InputUserSelf()))
             ).full_user.bot_info.menu_button
 
         if isinstance(r, raw.types.BotMenuButtonCommands):
@@ -59,6 +56,5 @@ class GetChatMenuButton:
             return types.MenuButtonDefault()
 
         if isinstance(r, raw.types.BotMenuButton):
-            return types.MenuButtonWebApp(
-                text=r.text, web_app=types.WebAppInfo(url=r.url)
-            )
+            return types.MenuButtonWebApp(text=r.text, web_app=types.WebAppInfo(url=r.url))
+        return None

@@ -17,11 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class SendGame:
@@ -29,9 +28,9 @@ class SendGame:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         game_short_name: str,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        protect_content: bool = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        protect_content: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -92,12 +91,11 @@ class SendGame:
         )
 
         for i in r.updates:
-            if isinstance(
-                i, (raw.types.UpdateNewMessage, raw.types.UpdateNewChannelMessage)
-            ):
+            if isinstance(i, (raw.types.UpdateNewMessage, raw.types.UpdateNewChannelMessage)):
                 return await types.Message._parse(
                     self,
                     i.message,
                     {i.id: i for i in r.users},
                     {i.id: i for i in r.chats},
                 )
+        return None

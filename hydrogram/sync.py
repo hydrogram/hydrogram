@@ -24,7 +24,8 @@ import threading
 
 from hydrogram import types
 from hydrogram.methods import Methods
-from hydrogram.methods.utilities import idle as idle_module, compose as compose_module
+from hydrogram.methods.utilities import compose as compose_module
+from hydrogram.methods.utilities import idle as idle_module
 
 
 def async_to_sync(obj, name):
@@ -42,9 +43,7 @@ def async_to_sync(obj, name):
             if is_main_thread:
                 item, done = loop.run_until_complete(anext(agen))
             else:
-                item, done = asyncio.run_coroutine_threadsafe(
-                    anext(agen), loop
-                ).result()
+                item, done = asyncio.run_coroutine_threadsafe(anext(agen), loop).result()
 
             if done:
                 break
@@ -61,10 +60,7 @@ def async_to_sync(obj, name):
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
 
-        if (
-            threading.current_thread() is threading.main_thread()
-            or not main_loop.is_running()
-        ):
+        if threading.current_thread() is threading.main_thread() or not main_loop.is_running():
             if loop.is_running():
                 return coroutine
             else:
@@ -73,6 +69,7 @@ def async_to_sync(obj, name):
 
                 if inspect.isasyncgen(coroutine):
                     return async_to_sync_gen(coroutine, loop, True)
+                return None
         else:
             if inspect.iscoroutine(coroutine):
                 if loop.is_running():
@@ -84,15 +81,14 @@ def async_to_sync(obj, name):
 
                     return coro_wrapper()
                 else:
-                    return asyncio.run_coroutine_threadsafe(
-                        coroutine, main_loop
-                    ).result()
+                    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
 
             if inspect.isasyncgen(coroutine):
                 if loop.is_running():
                     return coroutine
                 else:
                     return async_to_sync_gen(coroutine, main_loop, False)
+            return None
 
     setattr(obj, name, async_to_sync_wrap)
 
@@ -102,9 +98,7 @@ def wrap(source):
         method = getattr(source, name)
 
         if not name.startswith("_"):
-            if inspect.iscoroutinefunction(method) or inspect.isasyncgenfunction(
-                method
-            ):
+            if inspect.iscoroutinefunction(method) or inspect.isasyncgenfunction(method):
                 async_to_sync(source, name)
 
 

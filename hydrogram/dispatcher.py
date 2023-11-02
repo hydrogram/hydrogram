@@ -26,34 +26,34 @@ import hydrogram
 from hydrogram import utils
 from hydrogram.handlers import (
     CallbackQueryHandler,
-    MessageHandler,
-    EditedMessageHandler,
-    DeletedMessagesHandler,
-    UserStatusHandler,
-    RawUpdateHandler,
-    InlineQueryHandler,
-    PollHandler,
-    ChosenInlineResultHandler,
-    ChatMemberUpdatedHandler,
     ChatJoinRequestHandler,
+    ChatMemberUpdatedHandler,
+    ChosenInlineResultHandler,
+    DeletedMessagesHandler,
+    EditedMessageHandler,
+    InlineQueryHandler,
+    MessageHandler,
+    PollHandler,
+    RawUpdateHandler,
+    UserStatusHandler,
 )
 from hydrogram.raw.types import (
-    UpdateNewMessage,
-    UpdateNewChannelMessage,
-    UpdateNewScheduledMessage,
-    UpdateEditMessage,
-    UpdateEditChannelMessage,
-    UpdateDeleteMessages,
-    UpdateDeleteChannelMessages,
     UpdateBotCallbackQuery,
-    UpdateInlineBotCallbackQuery,
-    UpdateUserStatus,
-    UpdateBotInlineQuery,
-    UpdateMessagePoll,
-    UpdateBotInlineSend,
-    UpdateChatParticipant,
-    UpdateChannelParticipant,
     UpdateBotChatInviteRequester,
+    UpdateBotInlineQuery,
+    UpdateBotInlineSend,
+    UpdateChannelParticipant,
+    UpdateChatParticipant,
+    UpdateDeleteChannelMessages,
+    UpdateDeleteMessages,
+    UpdateEditChannelMessage,
+    UpdateEditMessage,
+    UpdateInlineBotCallbackQuery,
+    UpdateMessagePoll,
+    UpdateNewChannelMessage,
+    UpdateNewMessage,
+    UpdateNewScheduledMessage,
+    UpdateUserStatus,
 )
 
 log = logging.getLogger(__name__)
@@ -141,17 +141,13 @@ class Dispatcher:
 
         async def chat_member_updated_parser(update, users, chats):
             return (
-                hydrogram.types.ChatMemberUpdated._parse(
-                    self.client, update, users, chats
-                ),
+                hydrogram.types.ChatMemberUpdated._parse(self.client, update, users, chats),
                 ChatMemberUpdatedHandler,
             )
 
         async def chat_join_request_parser(update, users, chats):
             return (
-                hydrogram.types.ChatJoinRequest._parse(
-                    self.client, update, users, chats
-                ),
+                hydrogram.types.ChatJoinRequest._parse(self.client, update, users, chats),
                 ChatJoinRequestHandler,
             )
 
@@ -169,9 +165,7 @@ class Dispatcher:
         }
 
         self.update_parsers = {
-            key: value
-            for key_tuple, value in self.update_parsers.items()
-            for key in key_tuple
+            key: value for key_tuple, value in self.update_parsers.items() for key in key_tuple
         }
 
     async def start(self):
@@ -222,9 +216,7 @@ class Dispatcher:
 
             try:
                 if group not in self.groups:
-                    raise ValueError(
-                        f"Group {group} does not exist. Handler was not removed."
-                    )
+                    raise ValueError(f"Group {group} does not exist. Handler was not removed.")
 
                 self.groups[group].remove(handler)
             finally:

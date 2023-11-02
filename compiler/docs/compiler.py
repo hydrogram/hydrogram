@@ -60,9 +60,7 @@ def generate(source_path, base):
                 else:
                     continue
 
-                full_path = (
-                    os.path.basename(path) + "/" + snek(name).replace("_", "-") + ".rst"
-                )
+                full_path = os.path.basename(path) + "/" + snek(name).replace("_", "-") + ".rst"
 
                 if level:
                     full_path = base + "/" + full_path
@@ -73,9 +71,7 @@ def generate(source_path, base):
 
                 full_name = f"{(namespace + '.') if namespace else ''}{name}"
 
-                os.makedirs(
-                    os.path.dirname(DESTINATION + "/" + full_path), exist_ok=True
-                )
+                os.makedirs(os.path.dirname(DESTINATION + "/" + full_path), exist_ok=True)
 
                 with open(DESTINATION + "/" + full_path, "w", encoding="utf-8") as f:
                     f.write(
@@ -104,14 +100,14 @@ def generate(source_path, base):
 
         if k != base:
             inner_path = base + "/" + k + "/index" + ".rst"
-            module = "hydrogram.raw.{}.{}".format(base, k)
+            module = f"hydrogram.raw.{base}.{k}"
         else:
-            for i in sorted(list(all_entities), reverse=True):
+            for i in sorted(all_entities, reverse=True):
                 if i != base:
-                    entities.insert(0, "{0}/index".format(i))
+                    entities.insert(0, f"{i}/index")
 
             inner_path = base + "/index" + ".rst"
-            module = "hydrogram.raw.{}".format(base)
+            module = f"hydrogram.raw.{base}"
 
         with open(DESTINATION + "/" + inner_path, "w", encoding="utf-8") as f:
             if k == base:
@@ -136,8 +132,8 @@ def hydrogram_api():
 
     # Methods
 
-    categories = dict(
-        utilities="""
+    categories = {
+        "utilities": """
         Utilities
             start
             stop
@@ -149,7 +145,7 @@ def hydrogram_api():
             export_session_string
             set_parse_mode
         """,
-        messages="""
+        "messages": """
         Messages
             send_message
             forward_messages
@@ -200,7 +196,7 @@ def hydrogram_api():
             get_discussion_replies_count
             get_custom_emoji_stickers
         """,
-        chats="""
+        "chats": """
         Chats
             join_chat
             leave_chat
@@ -242,7 +238,7 @@ def hydrogram_api():
             set_send_as_chat
             set_chat_protected_content
         """,
-        users="""
+        "users": """
         Users
             get_me
             get_users
@@ -258,7 +254,7 @@ def hydrogram_api():
             get_default_emoji_statuses
             set_emoji_status
         """,
-        invite_links="""
+        "invite_links": """
         Invite Links
             get_chat_invite_link
             export_chat_invite_link
@@ -278,7 +274,7 @@ def hydrogram_api():
             decline_chat_join_request
             decline_all_chat_join_requests
         """,
-        contacts="""
+        "contacts": """
         Contacts
             add_contact
             delete_contacts
@@ -286,13 +282,13 @@ def hydrogram_api():
             get_contacts
             get_contacts_count
         """,
-        password="""
+        "password": """
         Password
             enable_cloud_password
             change_cloud_password
             remove_cloud_password
         """,
-        bots="""
+        "bots": """
         Bots
             get_inline_bot_results
             send_inline_bot_result
@@ -311,7 +307,7 @@ def hydrogram_api():
             get_chat_menu_button
             answer_web_app_query
         """,
-        authorization="""
+        "authorization": """
         Authorization
             connect
             disconnect
@@ -329,13 +325,13 @@ def hydrogram_api():
             accept_terms_of_service
             log_out
         """,
-        advanced="""
+        "advanced": """
         Advanced
             invoke
             resolve_peer
             save_file
         """,
-    )
+    }
 
     root = HYDROGRAM_API_DEST + "/methods"
 
@@ -350,30 +346,30 @@ def hydrogram_api():
 
         for k, v in categories.items():
             name, *methods = get_title_list(v)
-            fmt_keys.update({k: "\n    ".join("{0} <{0}>".format(m) for m in methods)})
+            fmt_keys.update({k: "\n    ".join(f"{m} <{m}>" for m in methods)})
 
             for method in methods:
-                with open(root + "/{}.rst".format(method), "w") as f2:
-                    title = "{}()".format(method)
+                with open(root + f"/{method}.rst", "w") as f2:
+                    title = f"{method}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
-                    f2.write(".. automethod:: hydrogram.Client.{}()".format(method))
+                    f2.write(f".. automethod:: hydrogram.Client.{method}()")
 
             functions = ["idle", "compose"]
 
             for func in functions:
-                with open(root + "/{}.rst".format(func), "w") as f2:
-                    title = "{}()".format(func)
+                with open(root + f"/{func}.rst", "w") as f2:
+                    title = f"{func}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
-                    f2.write(".. autofunction:: hydrogram.{}()".format(func))
+                    f2.write(f".. autofunction:: hydrogram.{func}()")
 
         f.write(template.format(**fmt_keys))
 
     # Types
 
-    categories = dict(
-        users_chats="""
+    categories = {
+        "users_chats": """
         Users & Chats
             User
             Chat
@@ -393,7 +389,7 @@ def hydrogram_api():
             Restriction
             EmojiStatus
         """,
-        messages_media="""
+        "messages_media": """
         Messages & Media
             Message
             MessageEntity
@@ -423,7 +419,7 @@ def hydrogram_api():
             MessageReactions
             ChatReactions
         """,
-        bot_keyboards="""
+        "bot_keyboards": """
         Bot keyboards
             ReplyKeyboardMarkup
             KeyboardButton
@@ -442,7 +438,7 @@ def hydrogram_api():
             MenuButtonDefault
             SentWebAppMessage
         """,
-        bot_commands="""
+        "bot_commands": """
         Bot commands
             BotCommand
             BotCommandScope
@@ -454,7 +450,7 @@ def hydrogram_api():
             BotCommandScopeChatAdministrators
             BotCommandScopeChatMember
         """,
-        input_media="""
+        "input_media": """
         Input Media
             InputMedia
             InputMediaPhoto
@@ -464,7 +460,7 @@ def hydrogram_api():
             InputMediaDocument
             InputPhoneContact
         """,
-        inline_mode="""
+        "inline_mode": """
         Inline Mode
             InlineQuery
             InlineQueryResult
@@ -487,17 +483,17 @@ def hydrogram_api():
             InlineQueryResultVoice
             ChosenInlineResult
         """,
-        input_message_content="""
+        "input_message_content": """
         InputMessageContent
             InputMessageContent
             InputTextMessageContent
         """,
-        authorization="""
+        "authorization": """
         Authorization
             SentCode
             TermsOfService
         """,
-    )
+    }
 
     root = HYDROGRAM_API_DEST + "/types"
 
@@ -517,18 +513,18 @@ def hydrogram_api():
 
             # noinspection PyShadowingBuiltins
             for type in types:
-                with open(root + "/{}.rst".format(type), "w") as f2:
-                    title = "{}".format(type)
+                with open(root + f"/{type}.rst", "w") as f2:
+                    title = f"{type}"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
-                    f2.write(".. autoclass:: hydrogram.types.{}()\n".format(type))
+                    f2.write(f".. autoclass:: hydrogram.types.{type}()\n")
 
         f.write(template.format(**fmt_keys))
 
     # Bound Methods
 
-    categories = dict(
-        message="""
+    categories = {
+        "message": """
         Message
             Message.click
             Message.delete
@@ -564,7 +560,7 @@ def hydrogram_api():
             Message.get_media_group
             Message.react
         """,
-        chat="""
+        "chat": """
         Chat
             Chat.archive
             Chat.unarchive
@@ -584,14 +580,14 @@ def hydrogram_api():
             Chat.set_protected_content
             Chat.unpin_all_messages
         """,
-        user="""
+        "user": """
         User
             User.archive
             User.unarchive
             User.block
             User.unblock
         """,
-        callback_query="""
+        "callback_query": """
         Callback Query
             CallbackQuery.answer
             CallbackQuery.edit_message_text
@@ -599,16 +595,16 @@ def hydrogram_api():
             CallbackQuery.edit_message_media
             CallbackQuery.edit_message_reply_markup
         """,
-        inline_query="""
+        "inline_query": """
         InlineQuery
             InlineQuery.answer
         """,
-        chat_join_request="""
+        "chat_join_request": """
         ChatJoinRequest
             ChatJoinRequest.approve
             ChatJoinRequest.decline
         """,
-    )
+    }
 
     root = HYDROGRAM_API_DEST + "/bound-methods"
 
@@ -625,16 +621,12 @@ def hydrogram_api():
             name, *bound_methods = get_title_list(v)
 
             fmt_keys.update(
-                {
-                    "{}_hlist".format(k): "\n    ".join(
-                        "- :meth:`~{}`".format(bm) for bm in bound_methods
-                    )
-                }
+                {f"{k}_hlist": "\n    ".join(f"- :meth:`~{bm}`" for bm in bound_methods)}
             )
 
             fmt_keys.update(
                 {
-                    "{}_toctree".format(k): "\n    ".join(
+                    f"{k}_toctree": "\n    ".join(
                         "{} <{}>".format(bm.split(".")[1], bm) for bm in bound_methods
                     )
                 }
@@ -642,11 +634,11 @@ def hydrogram_api():
 
             # noinspection PyShadowingBuiltins
             for bm in bound_methods:
-                with open(root + "/{}.rst".format(bm), "w") as f2:
-                    title = "{}()".format(bm)
+                with open(root + f"/{bm}.rst", "w") as f2:
+                    title = f"{bm}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
-                    f2.write(".. automethod:: hydrogram.types.{}()".format(bm))
+                    f2.write(f".. automethod:: hydrogram.types.{bm}()")
 
         f.write(template.format(**fmt_keys))
 
@@ -669,7 +661,7 @@ def start():
     hydrogram_api()
 
 
-if "__main__" == __name__:
+if __name__ == "__main__":
     FUNCTIONS_PATH = "../../hydrogram/raw/functions"
     TYPES_PATH = "../../hydrogram/raw/types"
     BASE_PATH = "../../hydrogram/raw/base"

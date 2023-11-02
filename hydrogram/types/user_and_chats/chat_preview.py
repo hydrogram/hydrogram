@@ -17,11 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
+from typing import List, Optional
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
+
 from ..object import Object
 
 
@@ -53,7 +53,7 @@ class ChatPreview(Object):
         type: str,
         members_count: int,
         photo: "types.Photo" = None,
-        members: List["types.User"] = None,
+        members: Optional[List["types.User"]] = None,
     ):
         super().__init__(client)
 
@@ -76,10 +76,7 @@ class ChatPreview(Object):
             ),
             members_count=chat_invite.participants_count,
             photo=types.Photo._parse(client, chat_invite.photo),
-            members=[
-                types.User._parse(client, user) for user in chat_invite.participants
-            ]
-            or None,
+            members=[types.User._parse(client, user) for user in chat_invite.participants] or None,
             client=client,
         )
 

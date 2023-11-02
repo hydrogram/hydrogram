@@ -20,7 +20,7 @@
 from typing import Union
 
 import hydrogram
-from hydrogram import raw, enums
+from hydrogram import enums, raw
 
 
 class SendChatAction:
@@ -72,7 +72,5 @@ class SendChatAction:
             action = action.value()
 
         return await self.invoke(
-            raw.functions.messages.SetTyping(
-                peer=await self.resolve_peer(chat_id), action=action
-            )
+            raw.functions.messages.SetTyping(peer=await self.resolve_peer(chat_id), action=action)
         )

@@ -17,9 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
+
 from ..object import Object
 
 
@@ -43,7 +45,7 @@ class GameHighScore(Object):
         client: "hydrogram.Client" = None,
         user: "types.User",
         score: int,
-        position: int = None,
+        position: Optional[int] = None,
     ):
         super().__init__(client)
 
@@ -52,9 +54,7 @@ class GameHighScore(Object):
         self.position = position
 
     @staticmethod
-    def _parse(
-        client, game_high_score: raw.types.HighScore, users: dict
-    ) -> "GameHighScore":
+    def _parse(client, game_high_score: raw.types.HighScore, users: dict) -> "GameHighScore":
         users = {i.id: i for i in users}
 
         return GameHighScore(

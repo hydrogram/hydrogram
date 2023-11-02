@@ -17,11 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class GetGameHighScores:
@@ -29,7 +28,7 @@ class GetGameHighScores:
         self: "hydrogram.Client",
         user_id: Union[int, str],
         chat_id: Union[int, str],
-        message_id: int = None,
+        message_id: Optional[int] = None,
     ) -> List["types.GameHighScore"]:
         """Get data for high score tables.
 
@@ -70,6 +69,4 @@ class GetGameHighScores:
             )
         )
 
-        return types.List(
-            types.GameHighScore._parse(self, score, r.users) for score in r.scores
-        )
+        return types.List(types.GameHighScore._parse(self, score, r.users) for score in r.scores)

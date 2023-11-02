@@ -17,12 +17,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, List
+from typing import List, Optional
 
 import hydrogram
-from hydrogram import raw, types, utils, enums
-from .inline_query_result import InlineQueryResult
+from hydrogram import enums, raw, types, utils
+
 from ...file_id import FileId
+from .inline_query_result import InlineQueryResult
 
 
 class InlineQueryResultCachedPhoto(InlineQueryResult):
@@ -65,12 +66,12 @@ class InlineQueryResultCachedPhoto(InlineQueryResult):
     def __init__(
         self,
         photo_file_id: str,
-        id: str = None,
-        title: str = None,
-        description: str = None,
+        id: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
         input_message_content: "types.InputMessageContent" = None,
     ):

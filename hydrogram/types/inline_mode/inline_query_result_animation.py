@@ -17,10 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, List
+from typing import List, Optional
 
 import hydrogram
-from hydrogram import raw, types, utils, enums
+from hydrogram import enums, raw, types, utils
+
 from .inline_query_result import InlineQueryResult
 
 
@@ -83,14 +84,14 @@ class InlineQueryResultAnimation(InlineQueryResult):
         animation_width: int = 0,
         animation_height: int = 0,
         animation_duration: int = 0,
-        thumb_url: str = None,
+        thumb_url: Optional[str] = None,
         thumb_mime_type: str = "image/jpeg",
-        id: str = None,
-        title: str = None,
-        description: str = None,
+        id: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
         input_message_content: "types.InputMessageContent" = None,
     ):

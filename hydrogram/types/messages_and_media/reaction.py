@@ -21,6 +21,7 @@ from typing import Optional
 
 import hydrogram
 from hydrogram import raw
+
 from ..object import Object
 
 
@@ -65,6 +66,7 @@ class Reaction(Object):
 
         if isinstance(reaction, raw.types.ReactionCustomEmoji):
             return Reaction(client=client, custom_emoji_id=reaction.document_id)
+        return None
 
     @staticmethod
     def _parse_count(

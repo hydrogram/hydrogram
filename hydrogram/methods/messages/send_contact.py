@@ -18,11 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
 
 
 class SendContact:
@@ -31,12 +30,12 @@ class SendContact:
         chat_id: Union[int, str],
         phone_number: str,
         first_name: str,
-        last_name: str = None,
-        vcard: str = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        last_name: Optional[str] = None,
+        vcard: Optional[str] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -126,3 +125,4 @@ class SendContact:
                     {i.id: i for i in r.chats},
                     is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
                 )
+        return None

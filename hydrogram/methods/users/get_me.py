@@ -18,8 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class GetMe:
@@ -37,9 +36,7 @@ class GetMe:
                 me = await app.get_me()
                 print(me)
         """
-        r = await self.invoke(
-            raw.functions.users.GetFullUser(id=raw.types.InputUserSelf())
-        )
+        r = await self.invoke(raw.functions.users.GetFullUser(id=raw.types.InputUserSelf()))
 
         users = {u.id: u for u in r.users}
 

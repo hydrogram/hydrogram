@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List
+from typing import List, Union
 
 import hydrogram
 from hydrogram import raw
@@ -57,13 +57,9 @@ class UnarchiveChats:
 
         for chat in chat_ids:
             folder_peers.append(
-                raw.types.InputFolderPeer(
-                    peer=await self.resolve_peer(chat), folder_id=0
-                )
+                raw.types.InputFolderPeer(peer=await self.resolve_peer(chat), folder_id=0)
             )
 
-        await self.invoke(
-            raw.functions.folders.EditPeerFolders(folder_peers=folder_peers)
-        )
+        await self.invoke(raw.functions.folders.EditPeerFolders(folder_peers=folder_peers))
 
         return True

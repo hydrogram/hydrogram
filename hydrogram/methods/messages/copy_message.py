@@ -19,10 +19,10 @@
 
 import logging
 from datetime import datetime
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import types, enums
+from hydrogram import enums, types
 
 log = logging.getLogger(__name__)
 
@@ -33,13 +33,13 @@ class CopyMessage:
         chat_id: Union[int, str],
         from_chat_id: Union[int, str],
         message_id: int,
-        caption: str = None,
+        caption: Optional[str] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",

@@ -22,9 +22,7 @@ from hydrogram import raw
 
 
 class AcceptTermsOfService:
-    async def accept_terms_of_service(
-        self: "hydrogram.Client", terms_of_service_id: str
-    ) -> bool:
+    async def accept_terms_of_service(self: "hydrogram.Client", terms_of_service_id: str) -> bool:
         """Accept the given terms of service.
 
         .. include:: /_includes/usable-by/users.rst

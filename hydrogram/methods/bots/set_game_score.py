@@ -17,11 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class SetGameScore:
@@ -29,10 +28,10 @@ class SetGameScore:
         self: "hydrogram.Client",
         user_id: Union[int, str],
         score: int,
-        force: bool = None,
-        disable_edit_message: bool = None,
-        chat_id: Union[int, str] = None,
-        message_id: int = None,
+        force: Optional[bool] = None,
+        disable_edit_message: Optional[bool] = None,
+        chat_id: Optional[Union[int, str]] = None,
+        message_id: Optional[int] = None,
     ) -> Union["types.Message", bool]:
         # inline_message_id: str = None):  TODO Add inline_message_id
         """Set the score of the specified user in a game.
@@ -90,9 +89,7 @@ class SetGameScore:
         )
 
         for i in r.updates:
-            if isinstance(
-                i, (raw.types.UpdateEditMessage, raw.types.UpdateEditChannelMessage)
-            ):
+            if isinstance(i, (raw.types.UpdateEditMessage, raw.types.UpdateEditChannelMessage)):
                 return await types.Message._parse(
                     self,
                     i.message,

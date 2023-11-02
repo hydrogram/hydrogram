@@ -37,6 +37,4 @@ class GetContactsCount:
                 print(count)
         """
 
-        return len(
-            (await self.invoke(raw.functions.contacts.GetContacts(hash=0))).contacts
-        )
+        return len((await self.invoke(raw.functions.contacts.GetContacts(hash=0))).contacts)

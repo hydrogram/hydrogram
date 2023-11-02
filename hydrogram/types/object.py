@@ -77,7 +77,7 @@ class Object:
         return "hydrogram.types.{}({})".format(
             self.__class__.__name__,
             ", ".join(
-                f"{attr}={repr(getattr(self, attr))}"
+                f"{attr}={getattr(self, attr)!r}"
                 for attr in filter(lambda x: not x.startswith("_"), self.__dict__)
                 if getattr(self, attr) is not None
             ),

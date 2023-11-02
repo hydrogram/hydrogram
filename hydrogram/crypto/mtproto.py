@@ -22,7 +22,8 @@ from io import BytesIO
 from os import urandom
 
 from hydrogram.errors import SecurityCheckMismatch
-from hydrogram.raw.core import Message, Long
+from hydrogram.raw.core import Long, Message
+
 from . import aes
 
 
@@ -53,9 +54,7 @@ def pack(
     return auth_key_id + msg_key + aes.ige256_encrypt(data + padding, aes_key, aes_iv)
 
 
-def unpack(
-    b: BytesIO, session_id: bytes, auth_key: bytes, auth_key_id: bytes
-) -> Message:
+def unpack(b: BytesIO, session_id: bytes, auth_key: bytes, auth_key_id: bytes) -> Message:
     SecurityCheckMismatch.check(b.read(8) == auth_key_id, "b.read(8) == auth_key_id")
 
     msg_key = b.read(16)
@@ -64,17 +63,13 @@ def unpack(
     data.read(8)  # Salt
 
     # https://core.telegram.org/mtproto/security_guidelines#checking-session-id
-    SecurityCheckMismatch.check(
-        data.read(8) == session_id, "data.read(8) == session_id"
-    )
+    SecurityCheckMismatch.check(data.read(8) == session_id, "data.read(8) == session_id")
 
     try:
         message = Message.read(data)
     except KeyError as e:
         if e.args[0] == 0:
-            raise ConnectionError(
-                f"Received empty data. Check your internet connection."
-            )
+            raise ConnectionError("Received empty data. Check your internet connection.")
 
         left = data.read().hex()
 
@@ -82,9 +77,7 @@ def unpack(
         left = [[left[i : i + 8] for i in range(0, len(left), 8)] for left in left]
         left = "\n".join(" ".join(x for x in left) for left in left)
 
-        raise ValueError(
-            f"The server sent an unknown constructor: {hex(e.args[0])}\n{left}"
-        )
+        raise ValueError(f"The server sent an unknown constructor: {hex(e.args[0])}\n{left}")
 
     # https://core.telegram.org/mtproto/security_guidelines#checking-sha256-hash-value-of-msg-key
     # 96 = 88 + 8 (incoming message)
@@ -99,9 +92,7 @@ def unpack(
     )  # Get to the payload, skip salt (8) + session_id (8) + msg_id (8) + seq_no (4) + length (4)
     payload = data.read()
     padding = payload[message.length :]
-    SecurityCheckMismatch.check(
-        12 <= len(padding) <= 1024, "12 <= len(padding) <= 1024"
-    )
+    SecurityCheckMismatch.check(12 <= len(padding) <= 1024, "12 <= len(padding) <= 1024")
     SecurityCheckMismatch.check(len(payload) % 4 == 0, "len(payload) % 4 == 0")
 
     # https://core.telegram.org/mtproto/security_guidelines#checking-msg-id

@@ -19,6 +19,7 @@
 
 import hydrogram
 from hydrogram import raw
+
 from .menu_button import MenuButton
 
 
@@ -28,7 +29,5 @@ class MenuButtonDefault(MenuButton):
     def __init__(self):
         super().__init__("default")
 
-    async def write(
-        self, client: "hydrogram.Client"
-    ) -> "raw.types.BotMenuButtonDefault":
+    async def write(self, client: "hydrogram.Client") -> "raw.types.BotMenuButtonDefault":
         return raw.types.BotMenuButtonDefault()

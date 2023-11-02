@@ -111,9 +111,7 @@ class TCP:
 
         while len(data) < length:
             try:
-                chunk = await asyncio.wait_for(
-                    self.reader.read(length - len(data)), TCP.TIMEOUT
-                )
+                chunk = await asyncio.wait_for(self.reader.read(length - len(data)), TCP.TIMEOUT)
             except (OSError, asyncio.TimeoutError):
                 return None
             else:

@@ -18,10 +18,12 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
+from typing import Optional
 
 import hydrogram
 from hydrogram import raw, utils
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
+
 from ..object import Object
 
 
@@ -59,10 +61,10 @@ class Voice(Object):
         file_id: str,
         file_unique_id: str,
         duration: int,
-        waveform: bytes = None,
-        mime_type: str = None,
-        file_size: int = None,
-        date: datetime = None,
+        waveform: Optional[bytes] = None,
+        mime_type: Optional[str] = None,
+        file_size: Optional[int] = None,
+        date: Optional[datetime] = None,
     ):
         super().__init__(client)
 

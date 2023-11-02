@@ -28,6 +28,7 @@ from hydrogram.file_id import (
     FileUniqueType,
     ThumbnailSource,
 )
+
 from ..object import Object
 
 
@@ -75,9 +76,7 @@ class ChatPhoto(Object):
         peer_id: int,
         peer_access_hash: int,
     ):
-        if not isinstance(
-            chat_photo, (raw.types.UserProfilePhoto, raw.types.ChatPhoto)
-        ):
+        if not isinstance(chat_photo, (raw.types.UserProfilePhoto, raw.types.ChatPhoto)):
             return None
 
         return ChatPhoto(

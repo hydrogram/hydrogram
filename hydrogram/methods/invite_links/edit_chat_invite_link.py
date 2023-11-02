@@ -18,11 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
 
 
 class EditChatInviteLink:
@@ -30,10 +29,10 @@ class EditChatInviteLink:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         invite_link: str,
-        name: str = None,
-        expire_date: datetime = None,
-        member_limit: int = None,
-        creates_join_request: bool = None,
+        name: Optional[str] = None,
+        expire_date: Optional[datetime] = None,
+        member_limit: Optional[int] = None,
+        creates_join_request: Optional[bool] = None,
     ) -> "types.ChatInviteLink":
         """Edit a non-primary invite link.
 

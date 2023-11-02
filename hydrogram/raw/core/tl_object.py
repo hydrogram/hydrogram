@@ -19,7 +19,7 @@
 
 from io import BytesIO
 from json import dumps
-from typing import cast, List, Any, Union, Dict
+from typing import Any, Dict, List, Union, cast
 
 from ..all import objects
 
@@ -31,9 +31,7 @@ class TLObject:
 
     @classmethod
     def read(cls, b: BytesIO, *args: Any) -> Any:
-        return cast(TLObject, objects[int.from_bytes(b.read(4), "little")]).read(
-            b, *args
-        )
+        return cast(TLObject, objects[int.from_bytes(b.read(4), "little")]).read(b, *args)
 
     def write(self, *args: Any) -> bytes:
         pass
@@ -62,7 +60,7 @@ class TLObject:
         return "hydrogram.raw.{}({})".format(
             self.QUALNAME,
             ", ".join(
-                f"{attr}={repr(getattr(self, attr))}"
+                f"{attr}={getattr(self, attr)!r}"
                 for attr in self.__slots__
                 if getattr(self, attr) is not None
             ),

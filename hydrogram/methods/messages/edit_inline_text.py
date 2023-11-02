@@ -20,9 +20,8 @@
 from typing import Optional
 
 import hydrogram
-from hydrogram import raw, enums
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import enums, raw, types, utils
+
 from .inline_session import get_session
 
 
@@ -32,7 +31,7 @@ class EditInlineText:
         inline_message_id: str,
         text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        disable_web_page_preview: bool = None,
+        disable_web_page_preview: Optional[bool] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> bool:
         """Edit the text of inline messages.

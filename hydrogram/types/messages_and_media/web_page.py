@@ -17,9 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
+
 from ..object import Object
 
 
@@ -92,21 +94,21 @@ class WebPage(Object):
         id: str,
         url: str,
         display_url: str,
-        type: str = None,
-        site_name: str = None,
-        title: str = None,
-        description: str = None,
+        type: Optional[str] = None,
+        site_name: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
         audio: "types.Audio" = None,
         document: "types.Document" = None,
         photo: "types.Photo" = None,
         animation: "types.Animation" = None,
         video: "types.Video" = None,
-        embed_url: str = None,
-        embed_type: str = None,
-        embed_width: int = None,
-        embed_height: int = None,
-        duration: int = None,
-        author: str = None,
+        embed_url: Optional[str] = None,
+        embed_type: Optional[str] = None,
+        embed_width: Optional[int] = None,
+        embed_height: Optional[int] = None,
+        duration: Optional[int] = None,
+        author: Optional[str] = None,
     ):
         super().__init__(client)
 
@@ -156,12 +158,8 @@ class WebPage(Object):
                 audio = types.Audio._parse(client, doc, audio_attributes, file_name)
 
             elif raw.types.DocumentAttributeAnimated in attributes:
-                video_attributes = attributes.get(
-                    raw.types.DocumentAttributeVideo, None
-                )
-                animation = types.Animation._parse(
-                    client, doc, video_attributes, file_name
-                )
+                video_attributes = attributes.get(raw.types.DocumentAttributeVideo, None)
+                animation = types.Animation._parse(client, doc, video_attributes, file_name)
 
             elif raw.types.DocumentAttributeVideo in attributes:
                 video_attributes = attributes[raw.types.DocumentAttributeVideo]

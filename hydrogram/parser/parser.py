@@ -21,6 +21,7 @@ from typing import Optional
 
 import hydrogram
 from hydrogram import enums
+
 from .html import HTML
 from .markdown import Markdown
 
@@ -35,10 +36,7 @@ class Parser:
         text = str(text if text else "").strip()
 
         if mode is None:
-            if self.client:
-                mode = self.client.parse_mode
-            else:
-                mode = enums.ParseMode.DEFAULT
+            mode = self.client.parse_mode if self.client else enums.ParseMode.DEFAULT
 
         if mode == enums.ParseMode.DEFAULT:
             return await self.markdown.parse(text)

@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import hydrogram
 from hydrogram import raw
 
@@ -42,7 +44,7 @@ class ForceReply(Object):
             The placeholder to be shown in the input field when the reply is active; 1-64 characters.
     """
 
-    def __init__(self, selective: bool = None, placeholder: str = None):
+    def __init__(self, selective: Optional[bool] = None, placeholder: Optional[str] = None):
         super().__init__()
 
         self.selective = selective

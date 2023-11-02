@@ -26,11 +26,10 @@ import math
 import os
 from hashlib import md5
 from pathlib import PurePath
-from typing import Union, BinaryIO, Callable
+from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
-from hydrogram import StopTransmission
-from hydrogram import raw
+from hydrogram import StopTransmission, raw
 from hydrogram.session import Session
 
 log = logging.getLogger(__name__)
@@ -40,9 +39,9 @@ class SaveFile:
     async def save_file(
         self: "hydrogram.Client",
         path: Union[str, BinaryIO],
-        file_id: int = None,
+        file_id: Optional[int] = None,
         file_part: int = 0,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ):
         """Upload a file onto Telegram servers, without actually sending the message to anyone.
@@ -134,9 +133,7 @@ class SaveFile:
             file_size_limit_mib = 4000 if self.me.is_premium else 2000
 
             if file_size > file_size_limit_mib * 1024 * 1024:
-                raise ValueError(
-                    f"Can't upload files bigger than {file_size_limit_mib} MiB"
-                )
+                raise ValueError(f"Can't upload files bigger than {file_size_limit_mib} MiB")
 
             file_total_parts = int(math.ceil(file_size / part_size))
             is_big = file_size > 10 * 1024 * 1024
@@ -151,9 +148,7 @@ class SaveFile:
                 await self.storage.test_mode(),
                 is_media=True,
             )
-            workers = [
-                self.loop.create_task(worker(session)) for _ in range(workers_count)
-            ]
+            workers = [self.loop.create_task(worker(session)) for _ in range(workers_count)]
             queue = asyncio.Queue(1)
 
             try:
@@ -166,9 +161,7 @@ class SaveFile:
 
                     if not chunk:
                         if not is_big and not is_missing_part:
-                            md5_sum = "".join(
-                                [hex(i)[2:].zfill(2) for i in md5_sum.digest()]
-                            )
+                            md5_sum = "".join([hex(i)[2:].zfill(2) for i in md5_sum.digest()])
                         break
 
                     if is_big:
@@ -186,7 +179,7 @@ class SaveFile:
                     await queue.put(rpc)
 
                     if is_missing_part:
-                        return
+                        return None
 
                     if not is_big and not is_missing_part:
                         md5_sum.update(chunk)

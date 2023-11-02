@@ -19,13 +19,10 @@
 
 import os
 from datetime import datetime
-from typing import Union, BinaryIO, Optional, Callable
+from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
-from hydrogram import StopTransmission
-from hydrogram import raw
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import StopTransmission, raw, types, utils
 from hydrogram.errors import FilePartMissing
 from hydrogram.file_id import FileType
 
@@ -37,18 +34,18 @@ class SendVideoNote:
         video_note: Union[str, BinaryIO],
         duration: int = 0,
         length: int = 1,
-        thumb: Union[str, BinaryIO] = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        thumb: Optional[Union[str, BinaryIO]] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        progress: Callable = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
     ) -> Optional["types.Message"]:
         """Send video messages.
@@ -156,9 +153,7 @@ class SendVideoNote:
                         ],
                     )
                 else:
-                    media = utils.get_input_media_from_file_id(
-                        video_note, FileType.VIDEO_NOTE
-                    )
+                    media = utils.get_input_media_from_file_id(video_note, FileType.VIDEO_NOTE)
             else:
                 thumb = await self.save_file(thumb)
                 file = await self.save_file(
@@ -186,9 +181,7 @@ class SendVideoNote:
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,
-                            reply_markup=await reply_markup.write(self)
-                            if reply_markup
-                            else None,
+                            reply_markup=await reply_markup.write(self) if reply_markup else None,
                             message="",
                         )
                     )
@@ -209,9 +202,7 @@ class SendVideoNote:
                                 i.message,
                                 {i.id: i for i in r.users},
                                 {i.id: i for i in r.chats},
-                                is_scheduled=isinstance(
-                                    i, raw.types.UpdateNewScheduledMessage
-                                ),
+                                is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
                             )
         except StopTransmission:
             return None

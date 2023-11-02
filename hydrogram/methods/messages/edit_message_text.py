@@ -17,12 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, enums
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import enums, raw, types, utils
 
 
 class EditMessageText:
@@ -32,8 +30,8 @@ class EditMessageText:
         message_id: int,
         text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: List["types.MessageEntity"] = None,
-        disable_web_page_preview: bool = None,
+        entities: Optional[List["types.MessageEntity"]] = None,
+        disable_web_page_preview: Optional[bool] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> "types.Message":
         """Edit the text of messages.
@@ -91,12 +89,11 @@ class EditMessageText:
         )
 
         for i in r.updates:
-            if isinstance(
-                i, (raw.types.UpdateEditMessage, raw.types.UpdateEditChannelMessage)
-            ):
+            if isinstance(i, (raw.types.UpdateEditMessage, raw.types.UpdateEditChannelMessage)):
                 return await types.Message._parse(
                     self,
                     i.message,
                     {i.id: i for i in r.users},
                     {i.id: i for i in r.chats},
                 )
+        return None

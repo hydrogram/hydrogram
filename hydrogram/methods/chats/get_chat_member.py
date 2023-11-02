@@ -20,8 +20,7 @@
 from typing import Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 from hydrogram.errors import UserNotParticipant
 
 
@@ -55,9 +54,7 @@ class GetChatMember:
         user = await self.resolve_peer(user_id)
 
         if isinstance(chat, raw.types.InputPeerChat):
-            r = await self.invoke(
-                raw.functions.messages.GetFullChat(chat_id=chat.chat_id)
-            )
+            r = await self.invoke(raw.functions.messages.GetFullChat(chat_id=chat.chat_id))
 
             members = getattr(r.full_chat.participants, "participants", [])
             users = {i.id: i for i in r.users}

@@ -21,8 +21,7 @@ import logging
 from typing import Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 log = logging.getLogger(__name__)
 

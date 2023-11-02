@@ -82,3 +82,26 @@ exclude = [
 [tool.hatch.build.targets.wheel]
 ignore-vcs = true
 package = "hydrogram"
+
+[tool.ruff]
+line-length = 99
+target-version = "py38"
+select = [
+  "I",    # isort
+  "E",    # pycodestyle
+  "W",    # pycodestyle
+  "UP",   # pyupgrade
+  "F",    # pyflakes
+  "SIM",  # flake8-simplify
+  "RET",  # flake8-return
+  "C4",   # flake8-comprehensions
+  "PTH",  # flake8-use-pathlib
+  "PERF", # perflint
+  "N",    # pep8-naming
+  "RUF",  # ruff
+]
+ignore = ["RUF001", "RUF002", "RUF003", "E203"]
+preview = true
+
+[tool.ruff.isort]
+known-first-party = ["hydrogram"]

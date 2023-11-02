@@ -17,11 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List, AsyncGenerator, Optional
+from typing import AsyncGenerator, List, Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
 
 
 class GetChatEventLog:
@@ -32,7 +31,7 @@ class GetChatEventLog:
         offset_id: int = 0,
         limit: int = 0,
         filters: "types.ChatEventFilter" = None,
-        user_ids: List[Union[int, str]] = None,
+        user_ids: Optional[List[Union[int, str]]] = None,
     ) -> Optional[AsyncGenerator["types.ChatEvent", None]]:
         """Get the actions taken by chat members and administrators in the last 48h.
 

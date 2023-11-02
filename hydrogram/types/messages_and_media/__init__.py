@@ -26,6 +26,7 @@ from .game import Game
 from .location import Location
 from .message import Message
 from .message_entity import MessageEntity
+from .message_reactions import MessageReactions
 from .photo import Photo
 from .poll import Poll
 from .poll_option import PollOption
@@ -39,7 +40,6 @@ from .video_note import VideoNote
 from .voice import Voice
 from .web_app_data import WebAppData
 from .web_page import WebPage
-from .message_reactions import MessageReactions
 
 __all__ = [
     "Animation",

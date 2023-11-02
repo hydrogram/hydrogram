@@ -18,11 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, utils, enums
-from hydrogram import types
+from hydrogram import enums, raw, types, utils
 
 
 class SendMessage:
@@ -31,12 +30,12 @@ class SendMessage:
         chat_id: Union[int, str],
         text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: List["types.MessageEntity"] = None,
-        disable_web_page_preview: bool = None,
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        entities: Optional[List["types.MessageEntity"]] = None,
+        disable_web_page_preview: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -144,11 +143,7 @@ class SendMessage:
         if isinstance(r, raw.types.UpdateShortSentMessage):
             peer = await self.resolve_peer(chat_id)
 
-            peer_id = (
-                peer.user_id
-                if isinstance(peer, raw.types.InputPeerUser)
-                else -peer.chat_id
-            )
+            peer_id = peer.user_id if isinstance(peer, raw.types.InputPeerUser) else -peer.chat_id
 
             return types.Message(
                 id=r.id,
@@ -157,9 +152,7 @@ class SendMessage:
                 date=utils.timestamp_to_datetime(r.date),
                 outgoing=r.out,
                 reply_markup=reply_markup,
-                entities=[
-                    types.MessageEntity._parse(None, entity, {}) for entity in entities
-                ]
+                entities=[types.MessageEntity._parse(None, entity, {}) for entity in entities]
                 if entities
                 else None,
                 client=self,
@@ -181,3 +174,4 @@ class SendMessage:
                     {i.id: i for i in r.chats},
                     is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
                 )
+        return None

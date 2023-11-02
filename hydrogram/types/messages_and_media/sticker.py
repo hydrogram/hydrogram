@@ -18,13 +18,13 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Dict, Type
+from typing import Dict, List, Optional, Type
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types
+from hydrogram import raw, types, utils
 from hydrogram.errors import StickersetInvalid
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
+
 from ..object import Object
 
 
@@ -85,13 +85,13 @@ class Sticker(Object):
         height: int,
         is_animated: bool,
         is_video: bool,
-        file_name: str = None,
-        mime_type: str = None,
-        file_size: int = None,
-        date: datetime = None,
-        emoji: str = None,
-        set_name: str = None,
-        thumbs: List["types.Thumbnail"] = None,
+        file_name: Optional[str] = None,
+        mime_type: Optional[str] = None,
+        file_size: Optional[int] = None,
+        date: Optional[datetime] = None,
+        emoji: Optional[str] = None,
+        set_name: Optional[str] = None,
+        thumbs: Optional[List["types.Thumbnail"]] = None,
     ):
         super().__init__(client)
 
@@ -158,25 +158,19 @@ class Sticker(Object):
             else document_attributes[raw.types.DocumentAttributeCustomEmoji]
         )
 
-        image_size_attributes = document_attributes.get(
-            raw.types.DocumentAttributeImageSize, None
-        )
+        image_size_attributes = document_attributes.get(raw.types.DocumentAttributeImageSize, None)
         file_name = getattr(
             document_attributes.get(raw.types.DocumentAttributeFilename, None),
             "file_name",
             None,
         )
-        video_attributes = document_attributes.get(
-            raw.types.DocumentAttributeVideo, None
-        )
+        video_attributes = document_attributes.get(raw.types.DocumentAttributeVideo, None)
 
         sticker_set = sticker_attributes.stickerset
 
         if isinstance(sticker_set, raw.types.InputStickerSetID):
             input_sticker_set_id = (sticker_set.id, sticker_set.access_hash)
-            set_name = await Sticker._get_sticker_set_name(
-                client.invoke, input_sticker_set_id
-            )
+            set_name = await Sticker._get_sticker_set_name(client.invoke, input_sticker_set_id)
         else:
             set_name = None
 

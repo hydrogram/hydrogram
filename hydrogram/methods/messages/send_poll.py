@@ -18,11 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, List
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, utils
-from hydrogram import types, enums
+from hydrogram import enums, raw, types, utils
 
 
 class SendPoll:
@@ -33,18 +32,18 @@ class SendPoll:
         options: List[str],
         is_anonymous: bool = True,
         type: "enums.PollType" = enums.PollType.REGULAR,
-        allows_multiple_answers: bool = None,
-        correct_option_id: int = None,
-        explanation: str = None,
+        allows_multiple_answers: Optional[bool] = None,
+        correct_option_id: Optional[int] = None,
+        explanation: Optional[str] = None,
         explanation_parse_mode: "enums.ParseMode" = None,
-        explanation_entities: List["types.MessageEntity"] = None,
-        open_period: int = None,
-        close_date: datetime = None,
-        is_closed: bool = None,
-        disable_notification: bool = None,
-        protect_content: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
+        explanation_entities: Optional[List["types.MessageEntity"]] = None,
+        open_period: Optional[int] = None,
+        close_date: Optional[datetime] = None,
+        is_closed: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        protect_content: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -190,3 +189,4 @@ class SendPoll:
                     {i.id: i for i in r.chats},
                     is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
                 )
+        return None

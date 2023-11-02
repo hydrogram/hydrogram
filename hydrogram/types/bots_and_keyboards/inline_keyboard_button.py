@@ -17,11 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
+from hydrogram import raw, types
+
 from ..object import Object
 
 
@@ -75,13 +75,13 @@ class InlineKeyboardButton(Object):
     def __init__(
         self,
         text: str,
-        callback_data: Union[str, bytes] = None,
-        url: str = None,
+        callback_data: Optional[Union[str, bytes]] = None,
+        url: Optional[str] = None,
         web_app: "types.WebAppInfo" = None,
         login_url: "types.LoginUrl" = None,
-        user_id: int = None,
-        switch_inline_query: str = None,
-        switch_inline_query_current_chat: str = None,
+        user_id: Optional[int] = None,
+        switch_inline_query: Optional[str] = None,
+        switch_inline_query_current_chat: Optional[str] = None,
         callback_game: "types.CallbackGame" = None,
     ):
         super().__init__()
@@ -120,9 +120,7 @@ class InlineKeyboardButton(Object):
 
         if isinstance(b, raw.types.KeyboardButtonSwitchInline):
             if b.same_peer:
-                return InlineKeyboardButton(
-                    text=b.text, switch_inline_query_current_chat=b.query
-                )
+                return InlineKeyboardButton(text=b.text, switch_inline_query_current_chat=b.query)
             else:
                 return InlineKeyboardButton(text=b.text, switch_inline_query=b.query)
 
@@ -130,9 +128,8 @@ class InlineKeyboardButton(Object):
             return InlineKeyboardButton(text=b.text, callback_game=types.CallbackGame())
 
         if isinstance(b, raw.types.KeyboardButtonWebView):
-            return InlineKeyboardButton(
-                text=b.text, web_app=types.WebAppInfo(url=b.url)
-            )
+            return InlineKeyboardButton(text=b.text, web_app=types.WebAppInfo(url=b.url))
+        return None
 
     async def write(self, client: "hydrogram.Client"):
         if self.callback_data is not None:
@@ -176,3 +173,4 @@ class InlineKeyboardButton(Object):
 
         if self.web_app is not None:
             return raw.types.KeyboardButtonWebView(text=self.text, url=self.web_app.url)
+        return None

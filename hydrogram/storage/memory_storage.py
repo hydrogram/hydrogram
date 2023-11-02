@@ -21,6 +21,7 @@ import base64
 import logging
 import sqlite3
 import struct
+from typing import Optional
 
 from .sqlite_storage import SQLiteStorage
 
@@ -28,7 +29,7 @@ log = logging.getLogger(__name__)
 
 
 class MemoryStorage(SQLiteStorage):
-    def __init__(self, name: str, session_string: str = None):
+    def __init__(self, name: str, session_string: Optional[str] = None):
         super().__init__(name)
 
         self.session_string = session_string

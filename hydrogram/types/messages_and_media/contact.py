@@ -17,8 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import hydrogram
 from hydrogram import raw
+
 from ..object import Object
 
 
@@ -48,9 +51,9 @@ class Contact(Object):
         client: "hydrogram.Client" = None,
         phone_number: str,
         first_name: str,
-        last_name: str = None,
-        user_id: int = None,
-        vcard: str = None,
+        last_name: Optional[str] = None,
+        user_id: Optional[int] = None,
+        vcard: Optional[str] = None,
     ):
         super().__init__(client)
 
@@ -61,9 +64,7 @@ class Contact(Object):
         self.vcard = vcard
 
     @staticmethod
-    def _parse(
-        client: "hydrogram.Client", contact: "raw.types.MessageMediaContact"
-    ) -> "Contact":
+    def _parse(client: "hydrogram.Client", contact: "raw.types.MessageMediaContact") -> "Contact":
         return Contact(
             phone_number=contact.phone_number,
             first_name=contact.first_name,

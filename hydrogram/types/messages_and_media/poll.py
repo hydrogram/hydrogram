@@ -18,11 +18,11 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Union, Optional
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, enums, utils
-from hydrogram import types
+from hydrogram import enums, raw, types, utils
+
 from ..object import Object
 from ..update import Update
 
@@ -86,9 +86,9 @@ class Poll(Object, Update):
         options: List["types.PollOption"],
         total_voter_count: int,
         is_closed: bool,
-        is_anonymous: bool = None,
+        is_anonymous: Optional[bool] = None,
         type: "enums.PollType" = None,
-        allows_multiple_answers: bool = None,
+        allows_multiple_answers: Optional[bool] = None,
         chosen_option_id: Optional[int] = None,
         correct_option_id: Optional[int] = None,
         explanation: Optional[str] = None,
@@ -161,8 +161,7 @@ class Poll(Object, Update):
             correct_option_id=correct_option_id,
             explanation=poll_results.solution,
             explanation_entities=[
-                types.MessageEntity._parse(client, i, {})
-                for i in poll_results.solution_entities
+                types.MessageEntity._parse(client, i, {}) for i in poll_results.solution_entities
             ]
             if poll_results.solution_entities
             else None,

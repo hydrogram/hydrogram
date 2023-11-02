@@ -26,12 +26,11 @@ import struct
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timezone
 from getpass import getpass
-from typing import Union, List, Dict, Optional
+from typing import Dict, List, Optional, Union
 
 import hydrogram
-from hydrogram import raw, enums
-from hydrogram import types
-from hydrogram.file_id import FileId, FileType, PHOTO_TYPES, DOCUMENT_TYPES
+from hydrogram import enums, raw, types
+from hydrogram.file_id import DOCUMENT_TYPES, PHOTO_TYPES, FileId, FileType
 
 
 async def ainput(prompt: str = "", *, hide: bool = False):
@@ -42,7 +41,7 @@ async def ainput(prompt: str = "", *, hide: bool = False):
 
 
 def get_input_media_from_file_id(
-    file_id: str, expected_file_type: FileType = None, ttl_seconds: int = None
+    file_id: str, expected_file_type: FileType = None, ttl_seconds: Optional[int] = None
 ) -> Union["raw.types.InputMediaPhoto", "raw.types.InputMediaDocument"]:
     try:
         decoded = FileId.decode(file_id)
@@ -160,9 +159,7 @@ def parse_deleted_messages(client, update) -> List["types.Message"]:
 
 def pack_inline_message_id(msg_id: "raw.base.InputBotInlineMessageID"):
     if isinstance(msg_id, raw.types.InputBotInlineMessageID):
-        inline_message_id_packed = struct.pack(
-            "<iqq", msg_id.dc_id, msg_id.id, msg_id.access_hash
-        )
+        inline_message_id_packed = struct.pack("<iqq", msg_id.dc_id, msg_id.id, msg_id.access_hash)
     else:
         inline_message_id_packed = struct.pack(
             "<iqiq", msg_id.dc_id, msg_id.owner_id, msg_id.id, msg_id.access_hash
@@ -171,9 +168,7 @@ def pack_inline_message_id(msg_id: "raw.base.InputBotInlineMessageID"):
     return base64.urlsafe_b64encode(inline_message_id_packed).decode().rstrip("=")
 
 
-def unpack_inline_message_id(
-    inline_message_id: str
-) -> "raw.base.InputBotInlineMessageID":
+def unpack_inline_message_id(inline_message_id: str) -> "raw.base.InputBotInlineMessageID":
     padded = inline_message_id + "=" * (-len(inline_message_id) % 4)
     decoded = base64.urlsafe_b64decode(padded)
 
@@ -231,7 +226,7 @@ def get_peer_id(peer: raw.base.Peer) -> int:
 
 def get_peer_type(peer_id: int) -> str:
     if peer_id < 0:
-        if MIN_CHAT_ID <= peer_id:
+        if peer_id >= MIN_CHAT_ID:
             return "chat"
 
         if MIN_CHANNEL_ID <= peer_id < MAX_CHANNEL_ID:

@@ -22,7 +22,7 @@ import logging
 import struct
 from enum import IntEnum
 from io import BytesIO
-from typing import List
+from typing import List, Optional
 
 from hydrogram.raw.core import Bytes, String
 
@@ -172,19 +172,19 @@ class FileId:
         file_type: FileType,
         dc_id: int,
         file_reference: bytes = b"",
-        url: str = None,
-        media_id: int = None,
-        access_hash: int = None,
-        volume_id: int = None,
+        url: Optional[str] = None,
+        media_id: Optional[int] = None,
+        access_hash: Optional[int] = None,
+        volume_id: Optional[int] = None,
         thumbnail_source: ThumbnailSource = None,
         thumbnail_file_type: FileType = None,
         thumbnail_size: str = "",
-        secret: int = None,
-        local_id: int = None,
-        chat_id: int = None,
-        chat_access_hash: int = None,
-        sticker_set_id: int = None,
-        sticker_set_access_hash: int = None,
+        secret: Optional[int] = None,
+        local_id: Optional[int] = None,
+        chat_id: Optional[int] = None,
+        chat_access_hash: Optional[int] = None,
+        sticker_set_id: Optional[int] = None,
+        sticker_set_access_hash: Optional[int] = None,
     ):
         self.major = major
         self.minor = minor
@@ -256,9 +256,7 @@ class FileId:
 
         if file_type in PHOTO_TYPES:
             (volume_id,) = struct.unpack("<q", buffer.read(8))
-            (thumbnail_source,) = (
-                (0,) if major < 4 else struct.unpack("<i", buffer.read(4))
-            )
+            (thumbnail_source,) = (0,) if major < 4 else struct.unpack("<i", buffer.read(4))
 
             try:
                 thumbnail_source = ThumbnailSource(thumbnail_source)
@@ -309,9 +307,7 @@ class FileId:
                 ThumbnailSource.CHAT_PHOTO_SMALL,
                 ThumbnailSource.CHAT_PHOTO_BIG,
             ):
-                chat_id, chat_access_hash, local_id = struct.unpack(
-                    "<qqi", buffer.read(20)
-                )
+                chat_id, chat_access_hash, local_id = struct.unpack("<qqi", buffer.read(20))
 
                 return FileId(
                     major=major,
@@ -358,8 +354,9 @@ class FileId:
                 media_id=media_id,
                 access_hash=access_hash,
             )
+        return None
 
-    def encode(self, *, major: int = None, minor: int = None):
+    def encode(self, *, major: Optional[int] = None, minor: Optional[int] = None):
         major = major if major is not None else self.major
         minor = minor if minor is not None else self.minor
 
@@ -405,9 +402,7 @@ class FileId:
                 ThumbnailSource.CHAT_PHOTO_BIG,
             ):
                 buffer.write(
-                    struct.pack(
-                        "<qqi", self.chat_id, self.chat_access_hash, self.local_id
-                    )
+                    struct.pack("<qqi", self.chat_id, self.chat_access_hash, self.local_id)
                 )
             elif self.thumbnail_source == ThumbnailSource.STICKER_SET_THUMBNAIL:
                 buffer.write(
@@ -445,10 +440,10 @@ class FileUniqueId:
         self,
         *,
         file_unique_type: FileUniqueType,
-        url: str = None,
-        media_id: int = None,
-        volume_id: int = None,
-        local_id: int = None,
+        url: Optional[str] = None,
+        media_id: Optional[int] = None,
+        volume_id: Optional[int] = None,
+        local_id: Optional[int] = None,
     ):
         self.file_unique_type = file_unique_type
         self.url = url
@@ -496,16 +491,12 @@ class FileUniqueId:
         if self.file_unique_type == FileUniqueType.WEB:
             string = struct.pack("<is", self.file_unique_type, String(self.url))
         elif self.file_unique_type == FileUniqueType.PHOTO:
-            string = struct.pack(
-                "<iqi", self.file_unique_type, self.volume_id, self.local_id
-            )
+            string = struct.pack("<iqi", self.file_unique_type, self.volume_id, self.local_id)
         elif self.file_unique_type == FileUniqueType.DOCUMENT:
             string = struct.pack("<iq", self.file_unique_type, self.media_id)
         else:
             # TODO: Missing encoder for SECURE, ENCRYPTED and TEMP
-            raise ValueError(
-                f"Unknown encoder for file_unique_type {self.file_unique_type}"
-            )
+            raise ValueError(f"Unknown encoder for file_unique_type {self.file_unique_type}")
 
         return b64_encode(rle_encode(string))
 

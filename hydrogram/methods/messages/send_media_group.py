@@ -21,12 +21,10 @@ import logging
 import os
 import re
 from datetime import datetime
-from typing import Union, List
+from typing import List, Optional, Union
 
 import hydrogram
-from hydrogram import raw
-from hydrogram import types
-from hydrogram import utils
+from hydrogram import raw, types, utils
 from hydrogram.file_id import FileType
 
 log = logging.getLogger(__name__)
@@ -45,10 +43,10 @@ class SendMediaGroup:
                 "types.InputMediaDocument",
             ]
         ],
-        disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        disable_notification: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
     ) -> List["types.Message"]:
         """Send a group of photos or videos as an album.
 
@@ -136,9 +134,7 @@ class SendMediaGroup:
                             spoiler=i.has_spoiler,
                         )
                     else:
-                        media = utils.get_input_media_from_file_id(
-                            i.media, FileType.PHOTO
-                        )
+                        media = utils.get_input_media_from_file_id(i.media, FileType.PHOTO)
                 else:
                     media = await self.invoke(
                         raw.functions.messages.UploadMedia(
@@ -168,12 +164,10 @@ class SendMediaGroup:
                                     file=await self.save_file(i.media),
                                     thumb=await self.save_file(i.thumb),
                                     spoiler=i.has_spoiler,
-                                    mime_type=self.guess_mime_type(i.media)
-                                    or "video/mp4",
+                                    mime_type=self.guess_mime_type(i.media) or "video/mp4",
                                     attributes=[
                                         raw.types.DocumentAttributeVideo(
-                                            supports_streaming=i.supports_streaming
-                                            or None,
+                                            supports_streaming=i.supports_streaming or None,
                                             duration=i.duration,
                                             w=i.width,
                                             h=i.height,
@@ -213,9 +207,7 @@ class SendMediaGroup:
                             spoiler=i.has_spoiler,
                         )
                     else:
-                        media = utils.get_input_media_from_file_id(
-                            i.media, FileType.VIDEO
-                        )
+                        media = utils.get_input_media_from_file_id(i.media, FileType.VIDEO)
                 else:
                     media = await self.invoke(
                         raw.functions.messages.UploadMedia(
@@ -258,8 +250,7 @@ class SendMediaGroup:
                             raw.functions.messages.UploadMedia(
                                 peer=await self.resolve_peer(chat_id),
                                 media=raw.types.InputMediaUploadedDocument(
-                                    mime_type=self.guess_mime_type(i.media)
-                                    or "audio/mpeg",
+                                    mime_type=self.guess_mime_type(i.media) or "audio/mpeg",
                                     file=await self.save_file(i.media),
                                     thumb=await self.save_file(i.thumb),
                                     attributes=[
@@ -299,9 +290,7 @@ class SendMediaGroup:
                             )
                         )
                     else:
-                        media = utils.get_input_media_from_file_id(
-                            i.media, FileType.AUDIO
-                        )
+                        media = utils.get_input_media_from_file_id(i.media, FileType.AUDIO)
                 else:
                     media = await self.invoke(
                         raw.functions.messages.UploadMedia(
@@ -341,8 +330,7 @@ class SendMediaGroup:
                             raw.functions.messages.UploadMedia(
                                 peer=await self.resolve_peer(chat_id),
                                 media=raw.types.InputMediaUploadedDocument(
-                                    mime_type=self.guess_mime_type(i.media)
-                                    or "application/zip",
+                                    mime_type=self.guess_mime_type(i.media) or "application/zip",
                                     file=await self.save_file(i.media),
                                     thumb=await self.save_file(i.thumb),
                                     attributes=[
@@ -377,9 +365,7 @@ class SendMediaGroup:
                             )
                         )
                     else:
-                        media = utils.get_input_media_from_file_id(
-                            i.media, FileType.DOCUMENT
-                        )
+                        media = utils.get_input_media_from_file_id(i.media, FileType.DOCUMENT)
                 else:
                     media = await self.invoke(
                         raw.functions.messages.UploadMedia(
