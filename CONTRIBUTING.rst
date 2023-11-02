@@ -4,16 +4,6 @@ Contributing to Hydrogram
 
 Contributions to Hydrogram are always welcome! Whether you're reporting a bug, adding a feature, or improving documentation, your help is appreciated.
 
-.. toctree::
-  :maxdepth: 2
-  :caption: Contents:
-
-  code-of-conduct
-  reporting-issues
-  submitting-pull-requests
-  development-setup
-  code-style
-
 ===============
 Code of Conduct
 ===============
