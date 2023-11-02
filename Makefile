@@ -5,7 +5,7 @@ TAG = v$(shell grep -E '__version__ = ".*"' hydrogram/__init__.py | cut -d\" -f2
 
 RM := rm -rf
 
-.PHONY: venv clean-build clean-api clean api build clean-docs docs
+.PHONY: venv clean-build clean-api clean api build clean-docs docs towncrier-build towncrier-draft
 
 venv:
 	$(RM) $(VENV)
@@ -50,3 +50,9 @@ tag:
 dtag:
 	git tag -d $(TAG)
 	git push origin -d $(TAG)
+
+towncrier-build:
+	towncrier build --yes
+
+towncrier-draft:
+	towncrier build --draft

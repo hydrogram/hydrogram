@@ -43,6 +43,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
+    "sphinxcontrib.towncrier.ext",
 ]
 
 intersphinx_mapping = {
@@ -55,6 +56,9 @@ autodoc_member_order = "bysource"
 
 napoleon_use_rtype = False
 napoleon_use_param = False
+
+towncrier_draft_autoversion_mode = "draft"
+towncrier_draft_include_empty = True
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"

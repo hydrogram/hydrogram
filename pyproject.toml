@@ -66,6 +66,7 @@ docs = [
     "sphinx-copybutton>=0.5.2",
     "pygments>=2.16.1",
     "towncrier>=23.6.0",
+    "sphinxcontrib-towncrier>=0.3.2a0",
 ]
 
 [tool.hatch.metadata]

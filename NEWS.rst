@@ -11,9 +11,6 @@ Changelog
     we named the news folder "news".
     WARNING: Don't drop the next directive!
 
+.. towncrier-draft-entries:: |release| [UNRELEASED DRAFT]
+
 .. towncrier release notes start
-
-0.1.0 (2023-11-01)
-===================
-
-No significant changes.
