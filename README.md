@@ -92,3 +92,7 @@ Hydrogram is an open source project. Your support helps us maintain and improve 
 ## License
 
 You may copy, distribute and modify the software provided that modifications are described and licensed for free under [LGPL-3](https://www.gnu.org/licenses/lgpl-3.0.html). Derivatives works (including modifications or anything statically linked to the library) can only be redistributed under LGPL-3, but applications that use the library don't have to be.
+
+## Thanks
+
+- [Pyrogram](https://github.com/pyrogram/pyrogram) and its contributors for the inspiration and base code.
