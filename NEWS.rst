@@ -1,0 +1,19 @@
+=========
+Changelog
+=========
+
+..
+    You should *NOT* be adding new change log entries to this file, this
+    file is managed by towncrier. You *may* edit previous change logs to
+    fix problems like typo corrections or such.
+    To add a new change log entry, please see
+    https://pip.pypa.io/en/latest/development/#adding-a-news-entry
+    we named the news folder "news".
+    WARNING: Don't drop the next directive!
+
+.. towncrier release notes start
+
+0.1.0 (2023-11-01)
+===================
+
+No significant changes.

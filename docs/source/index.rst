@@ -98,7 +98,7 @@ Meta
 
     - :doc:`Hydrogram FAQ <faq/index>`: Answers to common Hydrogram questions.
     - :doc:`Support Hydrogram <support>`: Ways to show your appreciation.
-    - :doc:`Release Notes <releases/index>`: Release notes for Hydrogram releases.
+    - :doc:`Release Notes <releases>`: Release notes for Hydrogram releases.
 
 .. toctree::
     :hidden:
@@ -160,7 +160,7 @@ Meta
 
     faq/index
     support
-    releases/index
+    releases
 
 .. toctree::
     :hidden:

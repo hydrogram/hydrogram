@@ -65,6 +65,7 @@ docs = [
     "sphinx-autobuild>=2021.3.14",
     "sphinx-copybutton>=0.5.2",
     "pygments>=2.16.1",
+    "towncrier>=23.6.0",
 ]
 
 [tool.hatch.metadata]
@@ -87,21 +88,56 @@ package = "hydrogram"
 line-length = 99
 target-version = "py38"
 select = [
-  "I",    # isort
-  "E",    # pycodestyle
-  "W",    # pycodestyle
-  "UP",   # pyupgrade
-  "F",    # pyflakes
-  "SIM",  # flake8-simplify
-  "RET",  # flake8-return
-  "C4",   # flake8-comprehensions
-  "PTH",  # flake8-use-pathlib
-  "PERF", # perflint
-  "N",    # pep8-naming
-  "RUF",  # ruff
+    "I",    # isort
+    "E",    # pycodestyle
+    "W",    # pycodestyle
+    "UP",   # pyupgrade
+    "F",    # pyflakes
+    "SIM",  # flake8-simplify
+    "RET",  # flake8-return
+    "C4",   # flake8-comprehensions
+    "PTH",  # flake8-use-pathlib
+    "PERF", # perflint
+    "N",    # pep8-naming
+    "RUF",  # ruff
 ]
 ignore = ["RUF001", "RUF002", "RUF003", "E203"]
 preview = true
 
 [tool.ruff.isort]
 known-first-party = ["hydrogram"]
+
+[tool.towncrier]
+package = "hydrogram"
+filename = "NEWS.rst"
+directory = "news/"
+template = "news/.template.rst.jinja2"
+issue_format = "`#{issue} <https://github.com/AmanoTeam/hydrogram/issues/{issue}>`_"
+
+[[tool.towncrier.section]]
+path = ""
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "Features"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bugfixes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "doc"
+name = "Improved Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removal"
+name = "Deprecations and Removals"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "misc"
+name = "Misc"
+showcontent = true

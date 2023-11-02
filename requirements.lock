@@ -12,11 +12,13 @@ babel==2.13.1
 beautifulsoup4==4.12.2
 certifi==2023.7.22
 charset-normalizer==3.3.2
+click==8.1.7
 colorama==0.4.6
 docutils==0.20.1
 furo==2023.9.10
 idna==3.4
 imagesize==1.4.1
+incremental==22.10.0
 jinja2==3.1.2
 livereload==2.6.3
 markupsafe==2.1.3
@@ -39,6 +41,7 @@ sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.6
 sphinxcontrib-serializinghtml==1.1.9
 tornado==6.3.3
+towncrier==23.10.0
 urllib3==2.0.7
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==68.2.2

@@ -13,6 +13,7 @@ beautifulsoup4==4.12.2
 certifi==2023.7.22
 cffi==1.16.0
 charset-normalizer==3.3.2
+click==8.1.7
 colorama==0.4.6
 coverage==7.3.2
 cryptography==41.0.5
@@ -21,6 +22,7 @@ furo==2023.9.10
 idna==3.4
 imagesize==1.4.1
 importlib-metadata==6.8.0
+incremental==22.10.0
 iniconfig==2.0.0
 jaraco-classes==3.3.0
 jeepney==0.8.0
@@ -63,6 +65,7 @@ sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.6
 sphinxcontrib-serializinghtml==1.1.9
 tornado==6.3.3
+towncrier==23.10.0
 twine==4.0.2
 urllib3==2.0.7
 zipp==3.17.0

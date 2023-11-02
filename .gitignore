@@ -16,10 +16,6 @@ docs/source/api/methods/
 docs/source/api/bound-methods/
 docs/source/api/types/
 
-# Sphinx documentation
-docs/build/
-docs/source/_build/
-
 # PyCharm stuff
 .idea/
 
@@ -92,6 +88,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
+docs/build/
 docs/_build/
 docs/source/_build
 
