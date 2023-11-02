@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Any, Optional, Union
 
 import hydrogram
 from hydrogram import enums
@@ -32,8 +32,8 @@ class Parser:
         self.html = HTML(client)
         self.markdown = Markdown(client)
 
-    async def parse(self, text: str, mode: Optional[enums.ParseMode] = None):
-        text = (text or "").strip()
+    async def parse(self, text: Union[str, Any], mode: Optional[enums.ParseMode] = None):
+        text = text if isinstance(text, str) else str(text)
 
         if mode is None:
             mode = self.client.parse_mode if self.client else enums.ParseMode.DEFAULT

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Any, Optional, Union
 
 from hydrogram import raw, types
 
@@ -51,14 +51,14 @@ class KeyboardButton(Object):
 
     def __init__(
         self,
-        text: str,
+        text: Union[str, Any],
         request_contact: Optional[bool] = None,
         request_location: Optional[bool] = None,
         web_app: "types.WebAppInfo" = None,
     ):
         super().__init__()
 
-        self.text = text
+        self.text = text if isinstance(text, str) else str(text)
         self.request_contact = request_contact
         self.request_location = request_location
         self.web_app = web_app

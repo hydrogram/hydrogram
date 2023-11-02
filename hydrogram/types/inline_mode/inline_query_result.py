@@ -17,6 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any, Optional, Union
 from uuid import uuid4
 
 import hydrogram
@@ -50,14 +51,14 @@ class InlineQueryResult(Object):
     def __init__(
         self,
         type: str,
-        id: str,
+        id: Optional[Union[str, Any]],
         input_message_content: "types.InputMessageContent",
         reply_markup: "types.InlineKeyboardMarkup",
     ):
         super().__init__()
 
         self.type = type
-        self.id = str(uuid4()) if id is None else id
+        self.id = str(uuid4()) if id is None else str(id)
         self.input_message_content = input_message_content
         self.reply_markup = reply_markup
 

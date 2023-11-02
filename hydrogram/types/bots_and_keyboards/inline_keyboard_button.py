@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 import hydrogram
 from hydrogram import raw, types
@@ -74,7 +74,7 @@ class InlineKeyboardButton(Object):
 
     def __init__(
         self,
-        text: str,
+        text: Union[str, Any],
         callback_data: Optional[Union[str, bytes]] = None,
         url: Optional[str] = None,
         web_app: "types.WebAppInfo" = None,
@@ -86,7 +86,7 @@ class InlineKeyboardButton(Object):
     ):
         super().__init__()
 
-        self.text = text
+        self.text = text if isinstance(text, str) else str(text)
         self.callback_data = callback_data
         self.url = url
         self.web_app = web_app
