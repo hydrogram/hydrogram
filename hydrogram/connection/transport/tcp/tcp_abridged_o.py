@@ -55,7 +55,7 @@ class TCPAbridgedO(TCP):
         temp = bytearray(nonce[55:7:-1])
 
         self.encrypt = (nonce[8:40], nonce[40:56], bytearray(1))
-        self.decrypt = (temp[0:32], temp[32:48], bytearray(1))
+        self.decrypt = temp[:32], temp[32:48], bytearray(1)
 
         nonce[56:64] = aes.ctr256_encrypt(nonce, *self.encrypt)[56:64]
 

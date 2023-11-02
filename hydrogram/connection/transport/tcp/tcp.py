@@ -58,9 +58,9 @@ class TCP:
             self.socket.set_proxy(
                 proxy_type=getattr(socks, proxy.get("scheme").upper()),
                 addr=hostname,
-                port=proxy.get("port", None),
-                username=proxy.get("username", None),
-                password=proxy.get("password", None),
+                port=proxy.get("port"),
+                username=proxy.get("username"),
+                password=proxy.get("password"),
             )
 
             self.socket.settimeout(TCP.TIMEOUT)
@@ -83,8 +83,8 @@ class TCP:
                 )
             except (
                 asyncio.TimeoutError
-            ):  # Re-raise as TimeoutError. asyncio.TimeoutError is deprecated in 3.11
-                raise TimeoutError("Connection timed out")
+            ) as e:  # Re-raise as TimeoutError. asyncio.TimeoutError is deprecated in 3.11
+                raise TimeoutError("Connection timed out") from e
 
         self.reader, self.writer = await asyncio.open_connection(sock=self.socket)
 
@@ -104,7 +104,7 @@ class TCP:
                     await self.writer.drain()
             except Exception as e:
                 log.info("Send exception: %s %s", type(e).__name__, e)
-                raise OSError(e)
+                raise OSError(e) from e
 
     async def recv(self, length: int = 0):
         data = b""

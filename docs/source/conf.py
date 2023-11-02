@@ -23,9 +23,8 @@ sys.path.insert(0, os.path.abspath("../.."))
 file_with_version = os.path.join(docs_dir, "..", "hydrogram", "__init__.py")
 with open(file_with_version) as f:
     for line in f:
-        m = re.match(r'__version__ = "(.*)"', line)
-        if m:
-            __version__ = m.group(1)
+        if m := re.match(r'__version__ = "(.*)"', line):
+            __version__ = m[1]
             # The short X.Y version.
             version = ".".join(__version__.split(".")[:2])
             # The full version, including alpha/beta/rc tags.

@@ -56,7 +56,7 @@ class VotePoll:
         """
 
         poll = (await self.get_messages(chat_id, message_id)).poll
-        options = [options] if not isinstance(options, list) else options
+        options = options if isinstance(options, list) else [options]
 
         r = await self.invoke(
             raw.functions.messages.SendVote(

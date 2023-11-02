@@ -87,34 +87,29 @@ class Thumbnail(Object):
         else:
             return None
 
-        parsed_thumbs = []
-
-        for thumb in raw_thumbs:
-            if not isinstance(thumb, raw.types.PhotoSize):
-                continue
-
-            parsed_thumbs.append(
-                Thumbnail(
-                    file_id=FileId(
-                        file_type=file_type,
-                        dc_id=media.dc_id,
-                        media_id=media.id,
-                        access_hash=media.access_hash,
-                        file_reference=media.file_reference,
-                        thumbnail_file_type=file_type,
-                        thumbnail_source=ThumbnailSource.THUMBNAIL,
-                        thumbnail_size=thumb.type,
-                        volume_id=0,
-                        local_id=0,
-                    ).encode(),
-                    file_unique_id=FileUniqueId(
-                        file_unique_type=FileUniqueType.DOCUMENT, media_id=media.id
-                    ).encode(),
-                    width=thumb.w,
-                    height=thumb.h,
-                    file_size=thumb.size,
-                    client=client,
-                )
+        parsed_thumbs = [
+            Thumbnail(
+                file_id=FileId(
+                    file_type=file_type,
+                    dc_id=media.dc_id,
+                    media_id=media.id,
+                    access_hash=media.access_hash,
+                    file_reference=media.file_reference,
+                    thumbnail_file_type=file_type,
+                    thumbnail_source=ThumbnailSource.THUMBNAIL,
+                    thumbnail_size=thumb.type,
+                    volume_id=0,
+                    local_id=0,
+                ).encode(),
+                file_unique_id=FileUniqueId(
+                    file_unique_type=FileUniqueType.DOCUMENT, media_id=media.id
+                ).encode(),
+                width=thumb.w,
+                height=thumb.h,
+                file_size=thumb.size,
+                client=client,
             )
-
+            for thumb in raw_thumbs
+            if isinstance(thumb, raw.types.PhotoSize)
+        ]
         return parsed_thumbs or None

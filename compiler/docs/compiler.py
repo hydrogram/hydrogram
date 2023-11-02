@@ -50,7 +50,7 @@ def generate(source_path, base):
                 if not i.startswith("__"):
                     build("/".join([path, i]), level=level + 1)
             except NotADirectoryError:
-                with open(path + "/" + i, encoding="utf-8") as f:
+                with open(f"{path}/{i}", encoding="utf-8") as f:
                     p = ast.parse(f.read())
 
                 for node in ast.walk(p):
@@ -60,20 +60,20 @@ def generate(source_path, base):
                 else:
                     continue
 
-                full_path = os.path.basename(path) + "/" + snek(name).replace("_", "-") + ".rst"
+                full_path = f"{os.path.basename(path)}/" + snek(name).replace("_", "-") + ".rst"
 
                 if level:
-                    full_path = base + "/" + full_path
+                    full_path = f"{base}/{full_path}"
 
                 namespace = path.split("/")[-1]
                 if namespace in ["base", "types", "functions"]:
                     namespace = ""
 
-                full_name = f"{(namespace + '.') if namespace else ''}{name}"
+                full_name = f"{f'{namespace}.' if namespace else ''}{name}"
 
-                os.makedirs(os.path.dirname(DESTINATION + "/" + full_path), exist_ok=True)
+                os.makedirs(os.path.dirname(f"{DESTINATION}/{full_path}"), exist_ok=True)
 
-                with open(DESTINATION + "/" + full_path, "w", encoding="utf-8") as f:
+                with open(f"{DESTINATION}/{full_path}", "w", encoding="utf-8") as f:
                     f.write(
                         page_template.format(
                             title=full_name,
@@ -99,20 +99,20 @@ def generate(source_path, base):
             entities.append(f'{i} <{snek(i).replace("_", "-")}>')
 
         if k != base:
-            inner_path = base + "/" + k + "/index" + ".rst"
+            inner_path = f"{base}/{k}/index.rst"
             module = f"hydrogram.raw.{base}.{k}"
         else:
             for i in sorted(all_entities, reverse=True):
                 if i != base:
                     entities.insert(0, f"{i}/index")
 
-            inner_path = base + "/index" + ".rst"
+            inner_path = f"{base}/index.rst"
             module = f"hydrogram.raw.{base}"
 
-        with open(DESTINATION + "/" + inner_path, "w", encoding="utf-8") as f:
+        with open(f"{DESTINATION}/{inner_path}", "w", encoding="utf-8") as f:
             if k == base:
                 f.write(":tocdepth: 1\n\n")
-                k = "Raw " + k
+                k = f"Raw {k}"
 
             f.write(
                 toctree.format(
@@ -333,23 +333,23 @@ def hydrogram_api():
         """,
     }
 
-    root = HYDROGRAM_API_DEST + "/methods"
+    root = f"{HYDROGRAM_API_DEST}/methods"
 
     shutil.rmtree(root, ignore_errors=True)
     os.mkdir(root)
 
-    with open(HOME + "/template/methods.rst") as f:
+    with open(f"{HOME}/template/methods.rst") as f:
         template = f.read()
 
-    with open(root + "/index.rst", "w") as f:
+    with open(f"{root}/index.rst", "w") as f:
         fmt_keys = {}
 
         for k, v in categories.items():
             name, *methods = get_title_list(v)
-            fmt_keys.update({k: "\n    ".join(f"{m} <{m}>" for m in methods)})
+            fmt_keys[k] = "\n    ".join(f"{m} <{m}>" for m in methods)
 
             for method in methods:
-                with open(root + f"/{method}.rst", "w") as f2:
+                with open(f"{root}/{method}.rst", "w") as f2:
                     title = f"{method}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
@@ -358,7 +358,7 @@ def hydrogram_api():
             functions = ["idle", "compose"]
 
             for func in functions:
-                with open(root + f"/{func}.rst", "w") as f2:
+                with open(f"{root}/{func}.rst", "w") as f2:
                     title = f"{func}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
@@ -495,25 +495,25 @@ def hydrogram_api():
         """,
     }
 
-    root = HYDROGRAM_API_DEST + "/types"
+    root = f"{HYDROGRAM_API_DEST}/types"
 
     shutil.rmtree(root, ignore_errors=True)
     os.mkdir(root)
 
-    with open(HOME + "/template/types.rst") as f:
+    with open(f"{HOME}/template/types.rst") as f:
         template = f.read()
 
-    with open(root + "/index.rst", "w") as f:
+    with open(f"{root}/index.rst", "w") as f:
         fmt_keys = {}
 
         for k, v in categories.items():
             name, *types = get_title_list(v)
 
-            fmt_keys.update({k: "\n    ".join(types)})
+            fmt_keys[k] = "\n    ".join(types)
 
             # noinspection PyShadowingBuiltins
             for type in types:
-                with open(root + f"/{type}.rst", "w") as f2:
+                with open(f"{root}/{type}.rst", "w") as f2:
                     title = f"{type}"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
@@ -606,35 +606,29 @@ def hydrogram_api():
         """,
     }
 
-    root = HYDROGRAM_API_DEST + "/bound-methods"
+    root = f"{HYDROGRAM_API_DEST}/bound-methods"
 
     shutil.rmtree(root, ignore_errors=True)
     os.mkdir(root)
 
-    with open(HOME + "/template/bound-methods.rst") as f:
+    with open(f"{HOME}/template/bound-methods.rst") as f:
         template = f.read()
 
-    with open(root + "/index.rst", "w") as f:
+    with open(f"{root}/index.rst", "w") as f:
         fmt_keys = {}
 
         for k, v in categories.items():
             name, *bound_methods = get_title_list(v)
 
-            fmt_keys.update(
-                {f"{k}_hlist": "\n    ".join(f"- :meth:`~{bm}`" for bm in bound_methods)}
-            )
+            fmt_keys[f"{k}_hlist"] = "\n    ".join(f"- :meth:`~{bm}`" for bm in bound_methods)
 
-            fmt_keys.update(
-                {
-                    f"{k}_toctree": "\n    ".join(
-                        "{} <{}>".format(bm.split(".")[1], bm) for bm in bound_methods
-                    )
-                }
+            fmt_keys[f"{k}_toctree"] = "\n    ".join(
+                "{} <{}>".format(bm.split(".")[1], bm) for bm in bound_methods
             )
 
             # noinspection PyShadowingBuiltins
             for bm in bound_methods:
-                with open(root + f"/{bm}.rst", "w") as f2:
+                with open(f"{root}/{bm}.rst", "w") as f2:
                     title = f"{bm}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
@@ -649,10 +643,10 @@ def start():
 
     shutil.rmtree(DESTINATION, ignore_errors=True)
 
-    with open(HOME + "/template/page.txt", encoding="utf-8") as f:
+    with open(f"{HOME}/template/page.txt", encoding="utf-8") as f:
         page_template = f.read()
 
-    with open(HOME + "/template/toctree.txt", encoding="utf-8") as f:
+    with open(f"{HOME}/template/toctree.txt", encoding="utf-8") as f:
         toctree = f.read()
 
     generate(TYPES_PATH, TYPES_BASE)

@@ -77,7 +77,7 @@ class Game(Object):
             attributes = {type(i): i for i in game.document.attributes}
 
             file_name = getattr(
-                attributes.get(raw.types.DocumentAttributeFilename, None),
+                attributes.get(raw.types.DocumentAttributeFilename),
                 "file_name",
                 None,
             )
@@ -85,7 +85,7 @@ class Game(Object):
             animation = types.Animation._parse(
                 client,
                 game.document,
-                attributes.get(raw.types.DocumentAttributeVideo, None),
+                attributes.get(raw.types.DocumentAttributeVideo),
                 file_name,
             )
 

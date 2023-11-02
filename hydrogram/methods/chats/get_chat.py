@@ -53,9 +53,7 @@ class GetChat:
                 chat = await app.get_chat("hydrogram")
                 print(chat)
         """
-        match = self.INVITE_LINK_RE.match(str(chat_id))
-
-        if match:
+        if match := self.INVITE_LINK_RE.match(str(chat_id)):
             r = await self.invoke(raw.functions.messages.CheckChatInvite(hash=match.group(1)))
 
             if isinstance(r, raw.types.ChatInvite):

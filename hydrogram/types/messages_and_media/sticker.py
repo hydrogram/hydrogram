@@ -137,7 +137,7 @@ class Sticker(Object):
             Sticker.cache[(set_id, set_access_hash)] = name
 
             if len(Sticker.cache) > 250:
-                for i in range(50):
+                for _ in range(50):
                     Sticker.cache.pop(next(iter(Sticker.cache)))
 
             return name
@@ -152,19 +152,18 @@ class Sticker(Object):
             Type["raw.base.DocumentAttribute"], "raw.base.DocumentAttribute"
         ],
     ) -> "Sticker":
-        sticker_attributes = (
-            document_attributes[raw.types.DocumentAttributeSticker]
-            if raw.types.DocumentAttributeSticker in document_attributes
-            else document_attributes[raw.types.DocumentAttributeCustomEmoji]
+        sticker_attributes = document_attributes.get(
+            raw.types.DocumentAttributeSticker,
+            document_attributes[raw.types.DocumentAttributeCustomEmoji],
         )
 
-        image_size_attributes = document_attributes.get(raw.types.DocumentAttributeImageSize, None)
+        image_size_attributes = document_attributes.get(raw.types.DocumentAttributeImageSize)
         file_name = getattr(
-            document_attributes.get(raw.types.DocumentAttributeFilename, None),
+            document_attributes.get(raw.types.DocumentAttributeFilename),
             "file_name",
             None,
         )
-        video_attributes = document_attributes.get(raw.types.DocumentAttributeVideo, None)
+        video_attributes = document_attributes.get(raw.types.DocumentAttributeVideo)
 
         sticker_set = sticker_attributes.stickerset
 

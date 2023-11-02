@@ -404,27 +404,26 @@ class Client(Methods):
                         )
 
                     try:
-                        if not self.password:
-                            confirm = await ainput("Confirm password recovery (y/n): ")
-
-                            if confirm == "y":
-                                email_pattern = await self.send_recovery_code()
-                                print(f"The recovery code has been sent to {email_pattern}")
-
-                                while True:
-                                    recovery_code = await ainput("Enter recovery code: ")
-
-                                    try:
-                                        return await self.recover_password(recovery_code)
-                                    except BadRequest as e:
-                                        print(e.MESSAGE)
-                                    except Exception as e:
-                                        log.exception(e)
-                                        raise
-                            else:
-                                self.password = None
-                        else:
+                        if self.password:
                             return await self.check_password(self.password)
+                        confirm = await ainput("Confirm password recovery (y/n): ")
+
+                        if confirm == "y":
+                            email_pattern = await self.send_recovery_code()
+                            print(f"The recovery code has been sent to {email_pattern}")
+
+                            while True:
+                                recovery_code = await ainput("Enter recovery code: ")
+
+                                try:
+                                    return await self.recover_password(recovery_code)
+                                except BadRequest as e:
+                                    print(e.MESSAGE)
+                                except Exception as e:
+                                    log.exception(e)
+                                    raise
+                        else:
+                            self.password = None
                     except BadRequest as e:
                         print(e.MESSAGE)
                         self.password = None
@@ -621,9 +620,8 @@ class Client(Methods):
                         {c.id: c for c in diff.chats},
                     )
                 )
-            else:
-                if diff.other_updates:  # The other_updates list can be empty
-                    self.dispatcher.updates_queue.put_nowait((diff.other_updates[0], {}, {}))
+            elif diff.other_updates:  # The other_updates list can be empty
+                self.dispatcher.updates_queue.put_nowait((diff.other_updates[0], {}, {}))
         elif isinstance(updates, raw.types.UpdateShort):
             self.dispatcher.updates_queue.put_nowait((updates.update, {}, {}))
         elif isinstance(updates, raw.types.UpdatesTooLong):
@@ -661,40 +659,37 @@ class Client(Methods):
             )
             await self.storage.user_id(None)
             await self.storage.is_bot(None)
-        else:
-            # Needed for migration from storage v2 to v3
-            if not await self.storage.api_id():
-                if self.api_id:
-                    await self.storage.api_id(self.api_id)
-                else:
-                    while True:
-                        try:
-                            value = int(await ainput("Enter the api_id part of the API key: "))
+        elif not await self.storage.api_id():
+            if self.api_id:
+                await self.storage.api_id(self.api_id)
+            else:
+                while True:
+                    try:
+                        value = int(await ainput("Enter the api_id part of the API key: "))
 
-                            if value <= 0:
-                                print("Invalid value")
-                                continue
+                        if value <= 0:
+                            print("Invalid value")
+                            continue
 
-                            confirm = (await ainput(f'Is "{value}" correct? (y/N): ')).lower()
+                        confirm = (await ainput(f'Is "{value}" correct? (y/N): ')).lower()
 
-                            if confirm == "y":
-                                await self.storage.api_id(value)
-                                break
-                        except Exception as e:
-                            print(e)
+                        if confirm == "y":
+                            await self.storage.api_id(value)
+                            break
+                    except Exception as e:
+                        print(e)
 
     def load_plugins(self):
-        if self.plugins:
-            plugins = self.plugins.copy()
-
-            for option in ["include", "exclude"]:
-                if plugins.get(option, []):
-                    plugins[option] = [
-                        (i.split()[0], i.split()[1:] or None) for i in self.plugins[option]
-                    ]
-        else:
+        if not self.plugins:
             return
 
+        plugins = self.plugins.copy()
+
+        for option in ["include", "exclude"]:
+            if plugins.get(option, []):
+                plugins[option] = [
+                    (i.split()[0], i.split()[1:] or None) for i in self.plugins[option]
+                ]
         if plugins.get("enabled", True):
             root = plugins["root"]
             include = plugins.get("include", [])
@@ -709,27 +704,19 @@ class Client(Methods):
 
                     for name in vars(module):
                         # noinspection PyBroadException
-                        try:
+                        with contextlib.suppress(Exception):
                             for handler, group in getattr(module, name).handlers:
                                 if isinstance(handler, Handler) and isinstance(group, int):
                                     self.add_handler(handler, group)
 
                                     log.info(
-                                        '[{}] [LOAD] {}("{}") in group {} from "{}"'.format(
-                                            self.name,
-                                            type(handler).__name__,
-                                            name,
-                                            group,
-                                            module_path,
-                                        )
+                                        f'[{self.name}] [LOAD] {type(handler).__name__}("{name}") in group {group} from "{module_path}"'
                                     )
 
                                     count += 1
-                        except Exception:
-                            pass
             else:
                 for path, handlers in include:
-                    module_path = root + "." + path
+                    module_path = f"{root}.{path}"
                     warn_non_existent_functions = True
 
                     try:
@@ -762,27 +749,19 @@ class Client(Methods):
                                     self.add_handler(handler, group)
 
                                     log.info(
-                                        '[{}] [LOAD] {}("{}") in group {} from "{}"'.format(
-                                            self.name,
-                                            type(handler).__name__,
-                                            name,
-                                            group,
-                                            module_path,
-                                        )
+                                        f'[{self.name}] [LOAD] {type(handler).__name__}("{name}") in group {group} from "{module_path}"'
                                     )
 
                                     count += 1
                         except Exception:
                             if warn_non_existent_functions:
                                 log.warning(
-                                    '[{}] [LOAD] Ignoring non-existent function "{}" from "{}"'.format(
-                                        self.name, name, module_path
-                                    )
+                                    f'[{self.name}] [LOAD] Ignoring non-existent function "{name}" from "{module_path}"'
                                 )
 
             if exclude:
                 for path, handlers in exclude:
-                    module_path = root + "." + path
+                    module_path = f"{root}.{path}"
                     warn_non_existent_functions = True
 
                     try:
@@ -815,29 +794,19 @@ class Client(Methods):
                                     self.remove_handler(handler, group)
 
                                     log.info(
-                                        '[{}] [UNLOAD] {}("{}") from group {} in "{}"'.format(
-                                            self.name,
-                                            type(handler).__name__,
-                                            name,
-                                            group,
-                                            module_path,
-                                        )
+                                        f'[{self.name}] [UNLOAD] {type(handler).__name__}("{name}") from group {group} in "{module_path}"'
                                     )
 
                                     count -= 1
                         except Exception:
                             if warn_non_existent_functions:
                                 log.warning(
-                                    '[{}] [UNLOAD] Ignoring non-existent function "{}" from "{}"'.format(
-                                        self.name, name, module_path
-                                    )
+                                    f'[{self.name}] [UNLOAD] Ignoring non-existent function "{name}" from "{module_path}"'
                                 )
 
             if count > 0:
                 log.info(
-                    '[{}] Successfully loaded {} plugin{} from "{}"'.format(
-                        self.name, count, "s" if count > 1 else "", root
-                    )
+                    f'[{self.name}] Successfully loaded {count} plugin{"s" if count > 1 else ""} from "{root}"'
                 )
             else:
                 log.warning('[%s] No plugin loaded from "%s"', self.name, root)
@@ -853,7 +822,7 @@ class Client(Methods):
             progress_args,
         ) = packet
 
-        os.makedirs(directory, exist_ok=True) if not in_memory else None
+        None if in_memory else os.makedirs(directory, exist_ok=True)
         temp_file_path = (
             os.path.abspath(re.sub("\\\\", "/", os.path.join(directory, file_name))) + ".temp"
         )

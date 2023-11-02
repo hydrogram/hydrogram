@@ -57,7 +57,7 @@ class InlineQueryResult(Object):
         super().__init__()
 
         self.type = type
-        self.id = str(uuid4()) if id is None else str(id)
+        self.id = str(uuid4()) if id is None else id
         self.input_message_content = input_message_content
         self.reply_markup = reply_markup
 

@@ -92,7 +92,7 @@ class MessageEntity(Object):
             offset=entity.offset,
             length=entity.length,
             url=getattr(entity, "url", None),
-            user=types.User._parse(client, users.get(user_id, None)),
+            user=types.User._parse(client, users.get(user_id)),
             language=getattr(entity, "language", None),
             custom_emoji_id=getattr(entity, "document_id", None),
             client=client,

@@ -86,7 +86,7 @@ class InlineKeyboardButton(Object):
     ):
         super().__init__()
 
-        self.text = str(text)
+        self.text = text
         self.callback_data = callback_data
         self.url = url
         self.web_app = web_app

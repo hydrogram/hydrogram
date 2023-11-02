@@ -61,7 +61,4 @@ class GetChatPhotosCount:
                 raw.functions.photos.GetUserPhotos(user_id=peer_id, offset=0, max_id=0, limit=1)
             )
 
-            if isinstance(r, raw.types.photos.Photos):
-                return len(r.photos)
-            else:
-                return r.count
+            return len(r.photos) if isinstance(r, raw.types.photos.Photos) else r.count

@@ -58,7 +58,7 @@ class KeyboardButton(Object):
     ):
         super().__init__()
 
-        self.text = str(text)
+        self.text = text
         self.request_contact = request_contact
         self.request_location = request_location
         self.web_app = web_app

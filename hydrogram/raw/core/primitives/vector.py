@@ -35,10 +35,7 @@ class Vector(bytes, TLObject):
         if size == 4:
             return Int.read(b)
 
-        if size == 8:
-            return Long.read(b)
-
-        return TLObject.read(b)
+        return Long.read(b) if size == 8 else TLObject.read(b)
 
     @classmethod
     def read(cls, data: BytesIO, t: Any = None, *args: Any) -> List:

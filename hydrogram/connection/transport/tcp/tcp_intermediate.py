@@ -40,7 +40,4 @@ class TCPIntermediate(TCP):
     async def recv(self, length: int = 0) -> Optional[bytes]:
         length = await super().recv(4)
 
-        if length is None:
-            return None
-
-        return await super().recv(unpack("<i", length)[0])
+        return None if length is None else await super().recv(unpack("<i", length)[0])

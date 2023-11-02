@@ -65,7 +65,7 @@ class DeleteMessages:
                 await app.delete_messages(chat_id, message_id, revoke=False)
         """
         peer = await self.resolve_peer(chat_id)
-        message_ids = list(message_ids) if not isinstance(message_ids, int) else [message_ids]
+        message_ids = [message_ids] if isinstance(message_ids, int) else list(message_ids)
 
         if isinstance(peer, raw.types.InputPeerChannel):
             r = await self.invoke(

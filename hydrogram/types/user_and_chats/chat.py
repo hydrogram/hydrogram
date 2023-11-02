@@ -320,32 +320,27 @@ class Chat(Object):
 
             if isinstance(full_chat, raw.types.ChatFull):
                 parsed_chat = Chat._parse_chat_chat(client, chat_raw)
-                parsed_chat.description = full_chat.about or None
-
                 if isinstance(full_chat.participants, raw.types.ChatParticipants):
                     parsed_chat.members_count = len(full_chat.participants.participants)
             else:
                 parsed_chat = Chat._parse_channel_chat(client, chat_raw)
                 parsed_chat.members_count = full_chat.participants_count
-                parsed_chat.description = full_chat.about or None
                 # TODO: Add StickerSet type
                 parsed_chat.can_set_sticker_set = full_chat.can_set_stickers
                 parsed_chat.sticker_set_name = getattr(full_chat.stickerset, "short_name", None)
 
-                linked_chat_raw = chats.get(full_chat.linked_chat_id, None)
-
-                if linked_chat_raw:
+                if linked_chat_raw := chats.get(full_chat.linked_chat_id):
                     parsed_chat.linked_chat = Chat._parse_channel_chat(client, linked_chat_raw)
 
-                default_send_as = full_chat.default_send_as
-
-                if default_send_as:
+                if default_send_as := full_chat.default_send_as:
                     if isinstance(default_send_as, raw.types.PeerUser):
                         send_as_raw = users[default_send_as.user_id]
                     else:
                         send_as_raw = chats[default_send_as.channel_id]
 
                     parsed_chat.send_as_chat = Chat._parse_chat(client, send_as_raw)
+
+            parsed_chat.description = full_chat.about or None
 
             if full_chat.pinned_msg_id:
                 parsed_chat.pinned_message = await client.get_messages(

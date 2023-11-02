@@ -54,16 +54,10 @@ class TLObject:
         return dumps(self, indent=4, default=TLObject.default, ensure_ascii=False)
 
     def __repr__(self) -> str:
-        if not hasattr(self, "QUALNAME"):
-            return repr(self)
-
-        return "hydrogram.raw.{}({})".format(
-            self.QUALNAME,
-            ", ".join(
-                f"{attr}={getattr(self, attr)!r}"
-                for attr in self.__slots__
-                if getattr(self, attr) is not None
-            ),
+        return (
+            f'hydrogram.raw.{self.QUALNAME}({", ".join(f"{attr}={getattr(self, attr)!r}" for attr in self.__slots__ if getattr(self, attr) is not None)})'
+            if hasattr(self, "QUALNAME")
+            else repr(self)
         )
 
     def __eq__(self, other: Any) -> bool:

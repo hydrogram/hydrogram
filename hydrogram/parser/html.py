@@ -69,9 +69,7 @@ class Parser(HTMLParser):
         elif tag == "a":
             url = attrs.get("href", "")
 
-            mention = Parser.MENTION_RE.match(url)
-
-            if mention:
+            if mention := Parser.MENTION_RE.match(url):
                 entity = raw.types.InputMessageEntityMentionName
                 extra["user_id"] = int(mention.group(1))
             else:

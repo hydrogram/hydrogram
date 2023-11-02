@@ -59,7 +59,4 @@ class TCPFull(TCP):
         checksum = packet[-4:]
         packet = packet[:-4]
 
-        if crc32(packet) != unpack("<I", checksum)[0]:
-            return None
-
-        return packet[8:]
+        return None if crc32(packet) != unpack("<I", checksum)[0] else packet[8:]

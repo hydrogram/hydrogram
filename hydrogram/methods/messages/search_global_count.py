@@ -57,7 +57,4 @@ class SearchGlobalCount:
             )
         )
 
-        if hasattr(r, "count"):
-            return r.count
-        else:
-            return len(r.messages)
+        return r.count if hasattr(r, "count") else len(r.messages)

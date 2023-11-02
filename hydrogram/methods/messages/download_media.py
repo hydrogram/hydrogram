@@ -177,12 +177,7 @@ class DownloadMedia:
             else:
                 extension = ".unknown"
 
-            file_name = "{}_{}_{}{}".format(
-                FileType(file_id_obj.file_type).name.lower(),
-                (date or datetime.now()).strftime("%Y-%m-%d_%H-%M-%S"),
-                self.rnd_id(),
-                extension,
-            )
+            file_name = f'{FileType(file_id_obj.file_type).name.lower()}_{(date or datetime.now()).strftime("%Y-%m-%d_%H-%M-%S")}_{self.rnd_id()}{extension}'
 
         downloader = self.handle_download(
             (
@@ -198,6 +193,5 @@ class DownloadMedia:
 
         if block:
             return await downloader
-        else:
-            asyncio.get_event_loop().create_task(downloader)
-            return None
+        asyncio.get_event_loop().create_task(downloader)
+        return None

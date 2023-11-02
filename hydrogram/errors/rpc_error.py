@@ -89,7 +89,7 @@ class RPCError(Exception):
             )
 
         value = re.search(r"_(\d+)", error_message)
-        value = value.group(1) if value is not None else value
+        value = value[1] if value is not None else value
 
         raise getattr(import_module("hydrogram.errors"), exceptions[error_code][error_id])(
             value=value, rpc_name=rpc_name, is_unknown=False, is_signed=is_signed

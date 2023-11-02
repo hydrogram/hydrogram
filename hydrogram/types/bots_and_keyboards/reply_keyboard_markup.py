@@ -80,11 +80,7 @@ class ReplyKeyboardMarkup(Object):
         keyboard = []
 
         for i in kb.rows:
-            row = []
-
-            for j in i.buttons:
-                row.append(types.KeyboardButton.read(j))
-
+            row = [types.KeyboardButton.read(j) for j in i.buttons]
             keyboard.append(row)
 
         return ReplyKeyboardMarkup(

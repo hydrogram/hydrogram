@@ -45,11 +45,7 @@ def start():
     files = os.listdir(f"{HOME}/source")
 
     with open(NOTICE_PATH, encoding="utf-8") as f:
-        notice = []
-
-        for line in f.readlines():
-            notice.append(f"# {line}".strip())
-
+        notice = [f"# {line}".strip() for line in f]
         notice = "\n".join(notice)
 
     with open(f"{DEST}/all.py", "w", encoding="utf-8") as f_all:

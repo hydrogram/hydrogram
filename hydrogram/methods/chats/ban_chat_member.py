@@ -105,5 +105,4 @@ class BanChatMember:
                     {i.id: i for i in r.users},
                     {i.id: i for i in r.chats},
                 )
-        else:
-            return True
+        return True

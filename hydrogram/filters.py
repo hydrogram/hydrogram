@@ -829,7 +829,7 @@ def command(
                 if not re.match(
                     rf"^(?:{cmd}(?:@?{username})?)(?:\s|$)",
                     without_prefix,
-                    flags=re.IGNORECASE if not flt.case_sensitive else 0,
+                    flags=0 if flt.case_sensitive else re.IGNORECASE,
                 ):
                     continue
 
@@ -838,7 +838,7 @@ def command(
                     "",
                     without_prefix,
                     count=1,
-                    flags=re.IGNORECASE if not flt.case_sensitive else 0,
+                    flags=0 if flt.case_sensitive else re.IGNORECASE,
                 )
 
                 # match.groups are 1-indexed, group(1) is the quote, group(2) is the text
