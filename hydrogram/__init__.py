@@ -23,10 +23,6 @@ __copyright__ = "Copyright (C) 2023-present Amano LLC <https://amanoteam.com>"
 
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from . import emoji, enums, errors, filters, handlers, raw, types
-from .client import Client
-from .sync import compose, idle
-
 
 class StopTransmission(Exception):  # noqa: N818
     pass
@@ -41,6 +37,10 @@ class ContinuePropagation(StopAsyncIteration):
 
 crypto_executor = ThreadPoolExecutor(1, thread_name_prefix="CryptoWorker")
 
+# ruff: noqa: E402
+from . import emoji, enums, errors, filters, handlers, raw, types
+from .client import Client
+from .sync import compose, idle
 
 __all__ = [
     "Client",
