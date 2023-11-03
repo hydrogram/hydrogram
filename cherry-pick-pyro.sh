@@ -171,9 +171,6 @@ main() {
     # Get the date of the changes
     CHANGES_DATE=$(git log -1 --pretty=format:"%aD")
 
-    # Get the commit hash of the changes
-    COMMIT=$(git log -1 --pretty=format:"%H")
-
     # Hydrogramify the code (with the changes applied)
     hydrogramify
 
@@ -182,6 +179,9 @@ main() {
 
     # Apply the patch to the formatted branch
     apply_patch_to_formatted
+
+    # Get the commit hash of the changes
+    COMMIT=$(git log -1 --pretty=format:"%H")
 
     cd "$CWD"
 
