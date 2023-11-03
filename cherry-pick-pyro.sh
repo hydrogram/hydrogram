@@ -60,12 +60,13 @@ checkout_code() {
         echo "Checking out branch code…"
 
         git switch --quiet -c "$TARGET_BRANCH" "$ORIGIN_BRANCH"
-        git cherry-pick --quiet "$CP_DATA" > /dev/null 2>&1
+        git fetch --quiet "$CWD" "$CP_DATA"
+        git merge --quiet --no-edit --no-ff FETCH_HEAD > /dev/null
     elif [ "$CP_TYPE" == "commit" ]; then
         echo "Checking out commit code…"
 
         git switch --quiet -c "$TARGET_BRANCH" "$ORIGIN_BRANCH"
-        git cherry-pick --quiet "$CP_DATA" > /dev/null 2>&1
+        git cherry-pick --quiet "$CP_DATA" > /dev/null
     fi
 }
 
@@ -158,18 +159,24 @@ main() {
     # Checkout the code
     checkout_code
 
+    if [ "$CP_TYPE" == "branch" ]; then
+        TARGET_COMMIT=$(git log -2 --pretty=format:"%H" | sed -n '2 p')
+    else
+        TARGET_COMMIT=HEAD
+    fi
+
     # Get the commit message of the changes
     if [ "$CP_TYPE" == "pr" ]; then
-        CHANGES_MESSAGE=$(curl -s "https://api.github.com/repos/$ORIGIN_REPO/pulls/$CP_DATA" | jq -r '.title' || git log -1 --pretty=format:"%s")
+        CHANGES_MESSAGE=$(curl -s "https://api.github.com/repos/$ORIGIN_REPO/pulls/$CP_DATA" | jq -r '.title' || git log -1 --pretty=format:"%s" "$TARGET_COMMIT")
     else
-        CHANGES_MESSAGE=$(git log -1 --pretty=format:"%s")
+        CHANGES_MESSAGE=$(git log -1 --pretty=format:"%s" "$TARGET_COMMIT")
     fi
 
     # Get the author of the changes
-    CHANGES_AUTHOR=$(git log -1 --pretty=format:"%an <%ae>")
+    CHANGES_AUTHOR=$(git log -1 --pretty=format:"%an <%ae>" "$TARGET_COMMIT")
 
     # Get the date of the changes
-    CHANGES_DATE=$(git log -1 --pretty=format:"%aD")
+    CHANGES_DATE=$(git log -1 --pretty=format:"%aD" "$TARGET_COMMIT")
 
     # Hydrogramify the code (with the changes applied)
     hydrogramify
