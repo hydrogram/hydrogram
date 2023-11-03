@@ -27,9 +27,8 @@ from hydrogram import enums, raw, types, utils
 from hydrogram.errors import MessageIdsEmpty, PeerIdInvalid
 from hydrogram.parser import Parser
 from hydrogram.parser import utils as parser_utils
-
-from ..object import Object
-from ..update import Update
+from hydrogram.types.object import Object
+from hydrogram.types.update import Update
 
 log = logging.getLogger(__name__)
 

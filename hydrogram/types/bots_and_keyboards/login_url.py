@@ -20,8 +20,7 @@
 from typing import Optional
 
 from hydrogram import raw
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class LoginUrl(Object):

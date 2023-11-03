@@ -22,8 +22,7 @@ from typing import Dict, Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class ChatJoiner(Object):

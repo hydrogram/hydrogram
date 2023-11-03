@@ -20,8 +20,7 @@
 from typing import Dict, List
 
 from hydrogram import raw, types
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class VideoChatMembersInvited(Object):

@@ -20,8 +20,7 @@
 from typing import Any, Optional, Union
 
 from hydrogram import raw, types
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class KeyboardButton(Object):

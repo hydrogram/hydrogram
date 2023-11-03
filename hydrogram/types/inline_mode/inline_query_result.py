@@ -22,8 +22,7 @@ from uuid import uuid4
 
 import hydrogram
 from hydrogram import types
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class InlineQueryResult(Object):

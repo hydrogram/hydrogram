@@ -23,9 +23,8 @@ from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types
-
-from ..object import Object
-from ..update import Update
+from hydrogram.types.object import Object
+from hydrogram.types.update import Update
 
 
 class ChosenInlineResult(Object, Update):

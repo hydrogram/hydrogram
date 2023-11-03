@@ -21,7 +21,7 @@ from io import BytesIO
 from struct import pack, unpack
 from typing import Any, cast
 
-from ..tl_object import TLObject
+from hydrogram.raw.core.tl_object import TLObject
 
 
 class Double(bytes, TLObject):

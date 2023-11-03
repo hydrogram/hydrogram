@@ -24,8 +24,7 @@ import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.errors import StickersetInvalid
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class Sticker(Object):

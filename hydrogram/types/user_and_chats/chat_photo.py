@@ -28,8 +28,7 @@ from hydrogram.file_id import (
     FileUniqueType,
     ThumbnailSource,
 )
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class ChatPhoto(Object):

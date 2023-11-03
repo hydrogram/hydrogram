@@ -19,8 +19,7 @@
 
 from hydrogram import raw
 from hydrogram.session.internals import MsgId
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class InputPhoneContact(Object):

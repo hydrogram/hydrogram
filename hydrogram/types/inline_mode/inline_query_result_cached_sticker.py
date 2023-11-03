@@ -21,8 +21,8 @@ from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types
+from hydrogram.file_id import FileId
 
-from ...file_id import FileId
 from .inline_query_result import InlineQueryResult
 
 

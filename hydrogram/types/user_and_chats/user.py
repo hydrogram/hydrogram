@@ -23,9 +23,8 @@ from typing import List, Optional
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
-
-from ..object import Object
-from ..update import Update
+from hydrogram.types.object import Object
+from hydrogram.types.update import Update
 
 
 class Link(str):

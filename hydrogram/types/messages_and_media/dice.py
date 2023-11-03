@@ -19,8 +19,7 @@
 
 import hydrogram
 from hydrogram import raw
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class Dice(Object):

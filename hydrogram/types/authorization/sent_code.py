@@ -20,8 +20,7 @@
 from typing import Optional
 
 from hydrogram import enums, raw
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class SentCode(Object):

@@ -21,7 +21,7 @@ from io import BytesIO
 from json import dumps
 from typing import Any, Dict, List, Union, cast
 
-from ..all import objects
+from hydrogram.raw.all import objects
 
 
 class TLObject:

@@ -21,8 +21,7 @@ from typing import List
 
 import hydrogram
 from hydrogram import raw, types
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class InlineKeyboardMarkup(Object):

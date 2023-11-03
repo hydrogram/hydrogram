@@ -20,11 +20,9 @@
 from typing import List, Match, Optional, Union
 
 import hydrogram
-from hydrogram import enums, raw, types
-
-from ... import utils
-from ..object import Object
-from ..update import Update
+from hydrogram import enums, raw, types, utils
+from hydrogram.types.object import Object
+from hydrogram.types.update import Update
 
 
 class CallbackQuery(Object, Update):

@@ -19,8 +19,9 @@
 
 from typing import BinaryIO, List, Optional, Union
 
-from ... import enums
-from ..messages_and_media import MessageEntity
+from hydrogram import enums
+from hydrogram.types.messages_and_media import MessageEntity
+
 from .input_media import InputMedia
 
 

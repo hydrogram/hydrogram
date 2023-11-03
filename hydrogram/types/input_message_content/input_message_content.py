@@ -18,8 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import hydrogram
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 """- :obj:`~hydrogram.types.InputLocationMessageContent`
     - :obj:`~hydrogram.types.InputVenueMessageContent`

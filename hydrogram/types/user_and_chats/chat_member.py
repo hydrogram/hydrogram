@@ -22,8 +22,7 @@ from typing import Dict, Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class ChatMember(Object):

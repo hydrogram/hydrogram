@@ -22,9 +22,8 @@ import sqlite3
 import time
 from typing import Any, List, Tuple
 
-from hydrogram import raw
+from hydrogram import raw, utils
 
-from .. import utils
 from .storage import Storage
 
 # language=SQLite

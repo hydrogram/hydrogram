@@ -20,8 +20,9 @@
 from io import BytesIO
 from typing import Any, Union, cast
 
-from ..list import List
-from ..tl_object import TLObject
+from hydrogram.raw.core.list import List
+from hydrogram.raw.core.tl_object import TLObject
+
 from .int import Int, Long
 
 

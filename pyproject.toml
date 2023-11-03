@@ -109,6 +109,7 @@ select = [
     "N",    # pep8-naming
     "RUF",  # ruff
     "G",    # flake8-logging-format
+    "TID",  # flake8-tidy-imports
 ]
 ignore = ["RUF001", "RUF002", "RUF003", "E203", "PERF203"]
 preview = true

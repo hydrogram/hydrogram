@@ -18,8 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from hydrogram import raw
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class VideoChatEnded(Object):

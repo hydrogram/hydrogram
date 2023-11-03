@@ -21,8 +21,7 @@ from typing import List, Optional
 
 import hydrogram
 from hydrogram import raw, types
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class ChatReactions(Object):

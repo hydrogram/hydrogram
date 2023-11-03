@@ -23,8 +23,7 @@ from typing import List, Optional
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class Video(Object):

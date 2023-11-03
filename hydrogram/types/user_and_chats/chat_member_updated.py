@@ -22,9 +22,8 @@ from typing import Dict, Union
 
 import hydrogram
 from hydrogram import raw, types, utils
-
-from ..object import Object
-from ..update import Update
+from hydrogram.types.object import Object
+from hydrogram.types.update import Update
 
 
 class ChatMemberUpdated(Object, Update):

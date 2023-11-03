@@ -21,8 +21,7 @@ from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
-
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class GameHighScore(Object):

@@ -20,7 +20,7 @@
 from io import BytesIO
 from typing import Any
 
-from ..tl_object import TLObject
+from hydrogram.raw.core.tl_object import TLObject
 
 
 class BoolFalse(bytes, TLObject):

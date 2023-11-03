@@ -19,8 +19,8 @@
 
 from typing import BinaryIO, List, Optional, Union
 
-from ..messages_and_media import MessageEntity
-from ..object import Object
+from hydrogram.types.messages_and_media import MessageEntity
+from hydrogram.types.object import Object
 
 
 class InputMedia(Object):

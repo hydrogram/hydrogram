@@ -21,7 +21,8 @@ import asyncio
 import logging
 from typing import Optional
 
-from ..session.internals import DataCenter
+from hydrogram.session.internals import DataCenter
+
 from .transport import TCP, TCPAbridged
 
 log = logging.getLogger(__name__)
