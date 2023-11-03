@@ -85,7 +85,8 @@ apply_patch_to_formatted() {
     git apply "/tmp/$TARGET_BRANCH.patch"
 
     # Commit the changes
-    git commit --quiet --allow-empty -am "patch"
+    git add -- . ':!pyproject.toml'
+    git commit --quiet --allow-empty -m "patch"
 }
 
 fetch_commit() {
