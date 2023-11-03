@@ -28,8 +28,6 @@ to give you a basic idea.
     :doc:`bot_keyboards`, "Send normal and inline keyboards using regular bots"
     :doc:`raw_updates`, "Handle raw updates (old, should be avoided)"
 
-For more advanced examples, see https://snippets.hydrogram.org.
-
 .. toctree::
     :hidden:
 

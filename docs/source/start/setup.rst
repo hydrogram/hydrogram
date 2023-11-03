@@ -9,16 +9,14 @@ project with the framework.
 API Key
 -------
 
-The first step requires you to obtain a valid Telegram API key (api_id and api_hash pair):
+The first step requires you to obtain a Telegram API key.
 
-#. Visit https://my.telegram.org/apps and log in with your Telegram account.
-#. Fill out the form with your details and register a new Telegram application.
-#. Done. The API key consists of two parts: **api_id** and **api_hash**. Keep it secret.
+In order to do so, follow Telegram's instructions at https://core.telegram.org/api/obtaining_api_id
+and make sure you understand and abide to the rules for third-party clients and libraries explained there.
 
 .. note::
 
-    The API key defines a token for a Telegram *application* you are going to build.
-    This means that you are able to authorize multiple users or bots with a single API key.
+    The API key consists of two parts: api_id and api_hash. Keep it secret.
 
 Configuration
 -------------

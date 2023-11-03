@@ -152,7 +152,6 @@ Meta
     topics/debugging
     topics/test-servers
     topics/advanced-usage
-    topics/voice-calls
 
 .. toctree::
     :hidden:

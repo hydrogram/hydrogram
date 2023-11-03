@@ -101,6 +101,10 @@ target/
 # pyenv
 .python-version
 
+# Rye
+requirements.lock
+requirements-dev.lock
+
 # celery beat schedule file
 celerybeat-schedule
 

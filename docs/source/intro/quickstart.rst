@@ -8,7 +8,11 @@ Get Hydrogram Real Fast
 
 1. Install Hydrogram with ``pip3 install -U hydrogram``.
 
-2. Get your own Telegram API key from https://my.telegram.org/apps.
+2. Obtain the API key by following Telegram's instructions and rules at https://core.telegram.org/api/obtaining_api_id.
+
+.. note::
+
+    Make sure you understand and abide to the rules for third-party clients and libraries explained in the link above.
 
 3.  Open the text editor of your choice and paste the following:
 
