@@ -72,13 +72,20 @@ docs = [
 [tool.hatch.metadata]
 allow-direct-references = true
 
-[tool.hatch.build]
+[tool.hatch.build.targets.sdist]
 exclude = [
-    "tests",
+    ".github/",
+    "docs/",
+    "news/",
+    "tests/",
+    ".editorconfig",
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    "CODE_OF_CONDUCT.rst",
+    "CONTRIBUTING.rst",
+    "NEWS.rst",
     "requirements.lock",
     "requirements-dev.lock",
-    ".github",
-    ".gitignore",
 ]
 
 [tool.hatch.build.targets.wheel]

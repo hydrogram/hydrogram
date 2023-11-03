@@ -35,6 +35,7 @@ class StopPropagation(StopAsyncIteration):
 class ContinuePropagation(StopAsyncIteration):
     pass
 
+
 crypto_executor = ThreadPoolExecutor(1, thread_name_prefix="CryptoWorker")
 
 # ruff: noqa: E402
