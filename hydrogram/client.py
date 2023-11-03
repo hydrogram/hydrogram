@@ -708,7 +708,12 @@ class Client(Methods):
                                     self.add_handler(handler, group)
 
                                     log.info(
-                                        f'[{self.name}] [LOAD] {type(handler).__name__}("{name}") in group {group} from "{module_path}"'
+                                        "[%s] [LOAD] %s('%s') in group %s from '%s'",
+                                        self.name,
+                                        type(handler).__name__,
+                                        name,
+                                        group,
+                                        module_path,
                                     )
 
                                     count += 1
@@ -746,14 +751,22 @@ class Client(Methods):
                                     self.add_handler(handler, group)
 
                                     log.info(
-                                        f'[{self.name}] [LOAD] {type(handler).__name__}("{name}") in group {group} from "{module_path}"'
+                                        "[%s] [LOAD] %s('%s') in group %s from '%s'",
+                                        self.name,
+                                        type(handler).__name__,
+                                        name,
+                                        group,
+                                        module_path,
                                     )
 
                                     count += 1
                         except Exception:
                             if warn_non_existent_functions:
                                 log.warning(
-                                    f'[{self.name}] [LOAD] Ignoring non-existent function "{name}" from "{module_path}"'
+                                    "[%s] [LOAD] Ignoring non-existent function '%s' from '%s'",
+                                    self.name,
+                                    name,
+                                    module_path,
                                 )
 
             if exclude:
@@ -790,19 +803,31 @@ class Client(Methods):
                                     self.remove_handler(handler, group)
 
                                     log.info(
-                                        f'[{self.name}] [UNLOAD] {type(handler).__name__}("{name}") from group {group} in "{module_path}"'
+                                        "[%s] [UNLOAD] %s('%s') from group '%s' in '%s'",
+                                        self.name,
+                                        type(handler).__name__,
+                                        name,
+                                        group,
+                                        module_path,
                                     )
 
                                     count -= 1
                         except Exception:
                             if warn_non_existent_functions:
                                 log.warning(
-                                    f'[{self.name}] [UNLOAD] Ignoring non-existent function "{name}" from "{module_path}"'
+                                    "[%s] [UNLOAD] Ignoring non-existent function '%s' from '%s'",
+                                    self.name,
+                                    name,
+                                    module_path,
                                 )
 
             if count > 0:
                 log.info(
-                    f'[{self.name}] Successfully loaded {count} plugin{"s" if count > 1 else ""} from "{root}"'
+                    "[%s] Successfully loaded %s plugin%s from '%s'",
+                    self.name,
+                    count,
+                    "" if count == 1 else "s",
+                    root,
                 )
             else:
                 log.warning('[%s] No plugin loaded from "%s"', self.name, root)

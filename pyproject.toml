@@ -108,6 +108,7 @@ select = [
     "PERF", # perflint
     "N",    # pep8-naming
     "RUF",  # ruff
+    "G",    # flake8-logging-format
 ]
 ignore = ["RUF001", "RUF002", "RUF003", "E203", "PERF203"]
 preview = true
