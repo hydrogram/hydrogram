@@ -152,9 +152,9 @@ class Sticker(Object):
             Type["raw.base.DocumentAttribute"], "raw.base.DocumentAttribute"
         ],
     ) -> "Sticker":
-        sticker_attributes = document_attributes.get(
-            raw.types.DocumentAttributeSticker,
-            document_attributes[raw.types.DocumentAttributeCustomEmoji],
+        sticker_attributes = (
+            document_attributes.get(raw.types.DocumentAttributeSticker)
+            or document_attributes[raw.types.DocumentAttributeCustomEmoji]
         )
 
         image_size_attributes = document_attributes.get(raw.types.DocumentAttributeImageSize)
