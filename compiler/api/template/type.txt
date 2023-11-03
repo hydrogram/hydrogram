@@ -9,7 +9,6 @@ from hydrogram.raw.core import TLObject
 {name} = Union[{types}]
 
 
-# noinspection PyRedeclaration
 class {name}:  # type: ignore
     """{docstring}
     """

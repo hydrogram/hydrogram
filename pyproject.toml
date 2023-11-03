@@ -102,7 +102,7 @@ select = [
     "N",    # pep8-naming
     "RUF",  # ruff
 ]
-ignore = ["RUF001", "RUF002", "RUF003", "E203"]
+ignore = ["RUF001", "RUF002", "RUF003", "E203", "PERF203"]
 preview = true
 
 [tool.ruff.isort]

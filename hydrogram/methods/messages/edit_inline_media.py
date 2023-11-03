@@ -19,8 +19,8 @@
 
 import asyncio
 import io
-import os
 import re
+from pathlib import Path
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -80,7 +80,7 @@ class EditInlineMedia:
         parse_mode = media.parse_mode
 
         is_bytes_io = isinstance(media.media, io.BytesIO)
-        is_uploaded_file = is_bytes_io or os.path.isfile(media.media)
+        is_uploaded_file = is_bytes_io or Path(media.media).is_file()
 
         is_external_url = not is_uploaded_file and re.match("^https?://", media.media)
 
@@ -90,7 +90,7 @@ class EditInlineMedia:
         if is_uploaded_file:
             filename_attribute = [
                 raw.types.DocumentAttributeFilename(
-                    file_name=media.media.name if is_bytes_io else os.path.basename(media.media)
+                    file_name=media.media.name if is_bytes_io else Path(str(media.media)).name
                 )
             ]
         else:

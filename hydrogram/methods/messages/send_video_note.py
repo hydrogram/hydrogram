@@ -17,8 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 from datetime import datetime
+from pathlib import Path
 from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
@@ -134,7 +134,7 @@ class SendVideoNote:
 
         try:
             if isinstance(video_note, str):
-                if os.path.isfile(video_note):
+                if Path(video_note).is_file():
                     thumb = await self.save_file(thumb)
                     file = await self.save_file(
                         video_note, progress=progress, progress_args=progress_args

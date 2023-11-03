@@ -17,17 +17,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Tuple
+from typing import ClassVar, Tuple
 
 
 class DataCenter:
-    TEST = {
+    TEST: ClassVar = {
         1: "149.154.175.10",
         2: "149.154.167.40",
         3: "149.154.175.117",
     }
 
-    PROD = {
+    PROD: ClassVar = {
         1: "149.154.175.53",
         2: "149.154.167.51",
         3: "149.154.175.100",
@@ -36,15 +36,15 @@ class DataCenter:
         203: "91.105.192.100",
     }
 
-    PROD_MEDIA = {2: "149.154.167.151", 4: "149.154.164.250"}
+    PROD_MEDIA: ClassVar = {2: "149.154.167.151", 4: "149.154.164.250"}
 
-    TEST_IPV6 = {
+    TEST_IPV6: ClassVar = {
         1: "2001:b28:f23d:f001::e",
         2: "2001:67c:4e8:f002::e",
         3: "2001:b28:f23d:f003::e",
     }
 
-    PROD_IPV6 = {
+    PROD_IPV6: ClassVar = {
         1: "2001:b28:f23d:f001::a",
         2: "2001:67c:4e8:f002::a",
         3: "2001:b28:f23d:f003::a",
@@ -53,7 +53,7 @@ class DataCenter:
         203: "2a0a:f280:0203:000a:5000:0000:0000:0100",
     }
 
-    PROD_IPV6_MEDIA = {
+    PROD_IPV6_MEDIA: ClassVar = {
         2: "2001:067c:04e8:f002:0000:0000:0000:000b",
         4: "2001:067c:04e8:f004:0000:0000:0000:000b",
     }
@@ -63,13 +63,13 @@ class DataCenter:
             ip = cls.TEST_IPV6[dc_id] if ipv6 else cls.TEST[dc_id]
 
             return ip, 80
-        else:
-            if ipv6:
-                if media:
-                    ip = cls.PROD_IPV6_MEDIA.get(dc_id, cls.PROD_IPV6[dc_id])
-                else:
-                    ip = cls.PROD_IPV6[dc_id]
-            else:
-                ip = cls.PROD_MEDIA.get(dc_id, cls.PROD[dc_id]) if media else cls.PROD[dc_id]
 
-            return ip, 443
+        if ipv6:
+            if media:
+                ip = cls.PROD_IPV6_MEDIA.get(dc_id, cls.PROD_IPV6[dc_id])
+            else:
+                ip = cls.PROD_IPV6[dc_id]
+        else:
+            ip = cls.PROD_MEDIA.get(dc_id, cls.PROD[dc_id]) if media else cls.PROD[dc_id]
+
+        return ip, 443

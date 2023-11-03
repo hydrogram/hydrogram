@@ -17,9 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import BinaryIO, Callable, List, Optional, Union
 
 import hydrogram
@@ -147,7 +147,7 @@ class SendPhoto:
         file = None
 
         try:
-            if isinstance(photo, str) and os.path.isfile(photo) or not isinstance(photo, str):
+            if isinstance(photo, str) and Path(photo).is_file() or not isinstance(photo, str):
                 file = await self.save_file(photo, progress=progress, progress_args=progress_args)
                 media = raw.types.InputMediaUploadedPhoto(
                     file=file,
@@ -156,7 +156,7 @@ class SendPhoto:
                 )
             elif (
                 isinstance(photo, str)
-                and not os.path.isfile(photo)
+                and not Path(photo).is_file()
                 and re.match("^https?://", photo)
             ):
                 media = raw.types.InputMediaPhotoExternal(

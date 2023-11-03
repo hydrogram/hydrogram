@@ -358,8 +358,7 @@ class Client(Methods):
                     if ":" in value:
                         self.bot_token = value
                         return await self.sign_in_bot(value)
-                    else:
-                        self.phone_number = value
+                    self.phone_number = value
 
                 sent_code = await self.send_code(self.phone_number)
             except BadRequest as e:
@@ -703,7 +702,6 @@ class Client(Methods):
                     module = import_module(module_path)
 
                     for name in vars(module):
-                        # noinspection PyBroadException
                         with contextlib.suppress(Exception):
                             for handler, group in getattr(module, name).handlers:
                                 if isinstance(handler, Handler) and isinstance(group, int):
@@ -742,7 +740,6 @@ class Client(Methods):
                         warn_non_existent_functions = False
 
                     for name in handlers:
-                        # noinspection PyBroadException
                         try:
                             for handler, group in getattr(module, name).handlers:
                                 if isinstance(handler, Handler) and isinstance(group, int):
@@ -787,7 +784,6 @@ class Client(Methods):
                         warn_non_existent_functions = False
 
                     for name in handlers:
-                        # noinspection PyBroadException
                         try:
                             for handler, group in getattr(module, name).handlers:
                                 if isinstance(handler, Handler) and isinstance(group, int):
@@ -822,31 +818,29 @@ class Client(Methods):
             progress_args,
         ) = packet
 
-        None if in_memory else os.makedirs(directory, exist_ok=True)
-        temp_file_path = (
-            os.path.abspath(re.sub("\\\\", "/", os.path.join(directory, file_name))) + ".temp"
-        )
-        file = BytesIO() if in_memory else open(temp_file_path, "wb")
+        None if in_memory else Path(directory).mkdir(parents=True, exist_ok=True)
+        temp_file_path = Path(directory).resolve() / file_name + ".temp"
+        with BytesIO() if in_memory else Path(temp_file_path).open("wb") as file:
+            try:
+                async for chunk in self.get_file(
+                    file_id, file_size, 0, 0, progress, progress_args
+                ):
+                    file.write(chunk)
+            except BaseException as e:
+                if not in_memory:
+                    file.close()
+                    Path(temp_file_path).unlink()
 
-        try:
-            async for chunk in self.get_file(file_id, file_size, 0, 0, progress, progress_args):
-                file.write(chunk)
-        except BaseException as e:
-            if not in_memory:
-                file.close()
-                os.remove(temp_file_path)
+                if isinstance(e, asyncio.CancelledError):
+                    raise e
 
-            if isinstance(e, asyncio.CancelledError):
-                raise e
-
-            return None
-        else:
-            if in_memory:
-                file.name = file_name
-                return file
+                return None
             else:
+                if in_memory:
+                    file.name = file_name
+                    return file
                 file.close()
-                file_path = os.path.splitext(temp_file_path)[0]
+                file_path = Path(temp_file_path).suffix
                 shutil.move(temp_file_path, file_path)
                 return file_path
 

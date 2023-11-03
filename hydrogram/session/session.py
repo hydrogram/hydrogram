@@ -24,6 +24,7 @@ import logging
 import os
 from hashlib import sha1
 from io import BytesIO
+from typing import ClassVar
 
 import hydrogram
 from hydrogram import raw
@@ -61,7 +62,7 @@ class Session:
     PING_INTERVAL = 5
     STORED_MSG_IDS_MAX_SIZE = 1000 * 2
 
-    TRANSPORT_ERRORS = {
+    TRANSPORT_ERRORS: ClassVar = {
         404: "auth key not found",
         429: "transport flood",
         444: "invalid DC",
@@ -209,8 +210,7 @@ class Session:
             if msg.seq_no % 2 != 0:
                 if msg.msg_id in self.pending_acks:
                     continue
-                else:
-                    self.pending_acks.add(msg.msg_id)
+                self.pending_acks.add(msg.msg_id)
 
             try:
                 if len(self.stored_msg_ids) > Session.STORED_MSG_IDS_MAX_SIZE:

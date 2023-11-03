@@ -61,7 +61,7 @@ class ResolvePeer:
             return await self.storage.get_peer_by_id(peer_id)
         except KeyError:
             if isinstance(peer_id, str):
-                if peer_id in ("self", "me"):
+                if peer_id in {"self", "me"}:
                     return raw.types.InputPeerSelf()
 
                 peer_id = re.sub(r"[@+\s]", "", peer_id.lower())

@@ -19,7 +19,6 @@
 
 import contextlib
 import json
-import os
 import re
 import shutil
 from functools import partial
@@ -62,7 +61,6 @@ WARNING = """
 # # # # # # # # # # # # # # # # # # # # # # # #
 """.strip()
 
-# noinspection PyShadowingBuiltins
 open = partial(open, encoding="utf-8")
 
 types_to_constructors = {}
@@ -102,7 +100,6 @@ def camel(s: str):
     return "".join([i[0].upper() + i[1:] for i in s.split("_")])
 
 
-# noinspection PyShadowingBuiltins, PyShadowingNames
 def get_type_hint(type: str) -> str:
     is_flag = FLAGS_RE.match(type)
     is_core = False
@@ -119,12 +116,12 @@ def get_type_hint(type: str) -> str:
             type = "float"
         elif type == "string":
             type = "str"
-        elif type in ["Bool", "true"]:
+        elif type in {"Bool", "true"}:
             type = "bool"
         else:  # bytes and object
             type = "bytes"
 
-    if type in ["Object", "!X"]:
+    if type in {"Object", "!X"}:
         return "TLObject"
 
     if re.match("^vector", type, re.I):
@@ -171,25 +168,23 @@ def get_docstring_arg_type(t: str):
     if t in CORE_TYPES:
         if t == "long":
             return "``int`` ``64-bit``"
-        elif "int" in t:
+        if "int" in t:
             size = INT_RE.match(t)
             return f"``int`` ``{size.group(1)}-bit``" if size else "``int`` ``32-bit``"
-        elif t == "double":
+        if t == "double":
             return "``float`` ``64-bit``"
-        elif t == "string":
+        if t == "string":
             return "``str``"
-        elif t == "true":
+        if t == "true":
             return "``bool``"
-        else:
-            return f"``{t.lower()}``"
-    elif t in {"TLObject", "X"}:
+        return f"``{t.lower()}``"
+    if t in {"TLObject", "X"}:
         return "Any object from :obj:`~hydrogram.raw.types`"
-    elif t == "!X":
+    if t == "!X":
         return "Any function from :obj:`~hydrogram.raw.functions`"
-    elif t.lower().startswith("vector"):
+    if t.lower().startswith("vector"):
         return "List of " + get_docstring_arg_type(t.split("<", 1)[1][:-1])
-    else:
-        return f":obj:`{t} <hydrogram.raw.base.{t}>`"
+    return f":obj:`{t} <hydrogram.raw.base.{t}>`"
 
 
 def get_references(t: str, kind: str):
@@ -203,7 +198,6 @@ def get_references(t: str, kind: str):
     return ("\n            ".join(t), len(t)) if t else (None, 0)
 
 
-# noinspection PyShadowingBuiltins
 def start(format: bool = False):
     shutil.rmtree(DESTINATION_PATH / "types", ignore_errors=True)
     shutil.rmtree(DESTINATION_PATH / "functions", ignore_errors=True)
@@ -238,7 +232,6 @@ def start(format: bool = False):
             continue
 
         if combinator_match := COMBINATOR_RE.match(line):
-            # noinspection PyShadowingBuiltins
             qualname, id, qualtype = combinator_match.groups()
 
             namespace, name = qualname.split(".") if "." in qualname else ("", qualname)
@@ -313,7 +306,7 @@ def start(format: bool = False):
         if module == "Updates":
             module = "UpdatesT"
 
-        os.makedirs(dir_path, exist_ok=True)
+        Path(dir_path).mkdir(parents=True, exist_ok=True)
 
         constructors = sorted(types_to_constructors[qualtype])
         constr_count = len(constructors)
@@ -519,7 +512,7 @@ def start(format: bool = False):
 
         dir_path = DESTINATION_PATH / directory / c.namespace
 
-        os.makedirs(dir_path, exist_ok=True)
+        Path(dir_path).mkdir(exist_ok=True, parents=True)
 
         module = c.name
 

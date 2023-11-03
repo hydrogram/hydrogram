@@ -17,9 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import BinaryIO, Callable, List, Optional, Union
 
 import hydrogram
@@ -180,7 +180,7 @@ class SendVideo:
 
         try:
             if isinstance(video, str):
-                if os.path.isfile(video):
+                if Path(video).is_file():
                     thumb = await self.save_file(thumb)
                     file = await self.save_file(
                         video, progress=progress, progress_args=progress_args
@@ -199,7 +199,7 @@ class SendVideo:
                                 h=height,
                             ),
                             raw.types.DocumentAttributeFilename(
-                                file_name=file_name or os.path.basename(video)
+                                file_name=file_name or Path(video).name
                             ),
                         ],
                     )

@@ -17,9 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import BinaryIO, Callable, List, Optional, Union
 
 import hydrogram
@@ -156,7 +156,7 @@ class SendDocument:
 
         try:
             if isinstance(document, str):
-                if os.path.isfile(document):
+                if Path(document).is_file():
                     thumb = await self.save_file(thumb)
                     file = await self.save_file(
                         document, progress=progress, progress_args=progress_args
@@ -168,7 +168,7 @@ class SendDocument:
                         thumb=thumb,
                         attributes=[
                             raw.types.DocumentAttributeFilename(
-                                file_name=file_name or os.path.basename(document)
+                                file_name=file_name or Path(document).name
                             )
                         ],
                     )

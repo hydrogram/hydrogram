@@ -9,3 +9,10 @@ repos:
       - id: mixed-line-ending
       - id: check-toml
       - id: check-yaml
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.3
+    hooks:
+      - id: ruff-format
+      - id: ruff
+        args: [--fix, --ignore=E501, --exit-non-zero-on-fix]

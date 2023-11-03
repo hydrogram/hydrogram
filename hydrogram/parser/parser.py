@@ -56,5 +56,4 @@ class Parser:
     def unparse(text: str, entities: list, is_html: bool):
         if is_html:
             return HTML.unparse(text, entities)
-        else:
-            return Markdown.unparse(text, entities)
+        return Markdown.unparse(text, entities)

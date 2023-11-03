@@ -66,5 +66,4 @@ class GetChatHistoryCount:
 
         if isinstance(r, raw.types.messages.Messages):
             return len(r.messages)
-        else:
-            return r.count
+        return r.count

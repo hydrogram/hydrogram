@@ -17,9 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import BinaryIO, Callable, List, Optional, Union
 
 import hydrogram
@@ -139,7 +139,7 @@ class SendVoice:
 
         try:
             if isinstance(voice, str):
-                if os.path.isfile(voice):
+                if Path(voice).is_file():
                     file = await self.save_file(
                         voice, progress=progress, progress_args=progress_args
                     )

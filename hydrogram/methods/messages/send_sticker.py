@@ -17,9 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
@@ -120,7 +120,7 @@ class SendSticker:
 
         try:
             if isinstance(sticker, str):
-                if os.path.isfile(sticker):
+                if Path(sticker).is_file():
                     file = await self.save_file(
                         sticker, progress=progress, progress_args=progress_args
                     )
@@ -128,9 +128,7 @@ class SendSticker:
                         mime_type=self.guess_mime_type(sticker) or "image/webp",
                         file=file,
                         attributes=[
-                            raw.types.DocumentAttributeFilename(
-                                file_name=os.path.basename(sticker)
-                            )
+                            raw.types.DocumentAttributeFilename(file_name=Path(sticker).name)
                         ],
                     )
                 elif re.match("^https?://", sticker):

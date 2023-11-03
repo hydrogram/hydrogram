@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict, List, Optional, Type
+from typing import ClassVar, Dict, List, Optional, Type
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -110,7 +110,7 @@ class Sticker(Object):
         self.thumbs = thumbs
         # self.mask_position = mask_position
 
-    cache = {}
+    cache: ClassVar = {}
 
     @staticmethod
     async def _get_sticker_set_name(invoke, input_sticker_set_id):

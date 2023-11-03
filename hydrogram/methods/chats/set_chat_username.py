@@ -60,5 +60,4 @@ class SetChatUsername:
                     raw.functions.channels.UpdateUsername(channel=peer, username=username or "")
                 )
             )
-        else:
-            raise ValueError(f'The chat_id "{chat_id}" belongs to a user or chat')
+        raise ValueError(f'The chat_id "{chat_id}" belongs to a user or chat')

@@ -17,9 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import BinaryIO, Callable, List, Optional, Union
 
 import hydrogram
@@ -175,7 +175,7 @@ class SendAnimation:
 
         try:
             if isinstance(animation, str):
-                if os.path.isfile(animation):
+                if Path(animation).is_file():
                     thumb = await self.save_file(thumb)
                     file = await self.save_file(
                         animation, progress=progress, progress_args=progress_args
@@ -193,7 +193,7 @@ class SendAnimation:
                                 h=height,
                             ),
                             raw.types.DocumentAttributeFilename(
-                                file_name=file_name or os.path.basename(animation)
+                                file_name=file_name or Path(animation).name
                             ),
                             raw.types.DocumentAttributeAnimated(),
                         ],

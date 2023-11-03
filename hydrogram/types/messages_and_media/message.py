@@ -879,12 +879,11 @@ class Message(Object, Update):
     def link(self) -> str:
         if (
             self.chat.type
-            in (enums.ChatType.GROUP, enums.ChatType.SUPERGROUP, enums.ChatType.CHANNEL)
+            in {enums.ChatType.GROUP, enums.ChatType.SUPERGROUP, enums.ChatType.CHANNEL}
             and self.chat.username
         ):
             return f"https://t.me/{self.chat.username}/{self.id}"
-        else:
-            return f"https://t.me/c/{utils.get_channel_id(self.chat.id)}/{self.id}"
+        return f"https://t.me/c/{utils.get_channel_id(self.chat.id)}/{self.id}"
 
     async def get_media_group(self) -> List["types.Message"]:
         """Bound method *get_media_group* of :obj:`~hydrogram.types.Message`.
@@ -3098,17 +3097,17 @@ class Message(Object, Update):
                 self.id,
             )
             return None
-        elif self.game and not await self._client.storage.is_bot():
+        if self.game and not await self._client.storage.is_bot():
             log.warning(
                 "Users cannot send messages with Game media type. chat_id: %s, message_id: %s",
                 self.chat.id,
                 self.id,
             )
             return None
-        elif self.empty:
+        if self.empty:
             log.warning("Empty messages cannot be copied.")
             return None
-        elif self.text:
+        if self.text:
             return await self._client.send_message(
                 chat_id,
                 text=self.text,
@@ -3121,7 +3120,7 @@ class Message(Object, Update):
                 protect_content=protect_content,
                 reply_markup=self.reply_markup if reply_markup is object else reply_markup,
             )
-        elif self.media:
+        if self.media:
             send_media = partial(
                 self._client.send_cached_media,
                 chat_id=chat_id,
@@ -3207,8 +3206,7 @@ class Message(Object, Update):
                 parse_mode=parse_mode,
                 caption_entities=caption_entities,
             )
-        else:
-            raise ValueError("Can't copy this message")
+        raise ValueError("Can't copy this message")
 
     async def delete(self, revoke: bool = True):
         """Bound method *delete* of :obj:`~hydrogram.types.Message`.
@@ -3351,17 +3349,15 @@ class Message(Object, Update):
                     callback_data=button.callback_data,
                     timeout=timeout,
                 )
-            elif button.url:
+            if button.url:
                 return button.url
-            elif button.switch_inline_query:
+            if button.switch_inline_query:
                 return button.switch_inline_query
-            elif button.switch_inline_query_current_chat:
+            if button.switch_inline_query_current_chat:
                 return button.switch_inline_query_current_chat
-            else:
-                raise ValueError("This button is not supported yet")
-        else:
-            await self.reply(button, quote=quote)
-            return None
+            raise ValueError("This button is not supported yet")
+        await self.reply(button, quote=quote)
+        return None
 
     async def react(self, emoji: str = "", big: bool = False) -> bool:
         """Bound method *react* of :obj:`~hydrogram.types.Message`.

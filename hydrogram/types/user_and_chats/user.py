@@ -45,7 +45,6 @@ class Link(str):
 
         return fmt.format(url=url, text=html.escape(text))
 
-    # noinspection PyArgumentList
     def __new__(cls, url, text, style):
         return str.__new__(cls, Link.format(url, text, style))
 

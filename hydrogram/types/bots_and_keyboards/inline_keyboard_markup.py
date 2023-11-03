@@ -52,10 +52,7 @@ class InlineKeyboardMarkup(Object):
         rows = []
 
         for r in self.inline_keyboard:
-            buttons = []
-
-            for b in r:
-                buttons.append(await b.write(client))
+            buttons = [await b.write(client) for b in r]
 
             rows.append(raw.types.KeyboardButtonRow(buttons=buttons))
 

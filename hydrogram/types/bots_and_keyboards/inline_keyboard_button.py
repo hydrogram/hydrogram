@@ -121,8 +121,7 @@ class InlineKeyboardButton(Object):
         if isinstance(b, raw.types.KeyboardButtonSwitchInline):
             if b.same_peer:
                 return InlineKeyboardButton(text=b.text, switch_inline_query_current_chat=b.query)
-            else:
-                return InlineKeyboardButton(text=b.text, switch_inline_query=b.query)
+            return InlineKeyboardButton(text=b.text, switch_inline_query=b.query)
 
         if isinstance(b, raw.types.KeyboardButtonGame):
             return InlineKeyboardButton(text=b.text, callback_game=types.CallbackGame())

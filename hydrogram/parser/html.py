@@ -49,13 +49,13 @@ class Parser(HTMLParser):
         attrs = dict(attrs)
         extra = {}
 
-        if tag in ["b", "strong"]:
+        if tag in {"b", "strong"}:
             entity = raw.types.MessageEntityBold
-        elif tag in ["i", "em"]:
+        elif tag in {"i", "em"}:
             entity = raw.types.MessageEntityItalic
         elif tag == "u":
             entity = raw.types.MessageEntityUnderline
-        elif tag in ["s", "del", "strike"]:
+        elif tag in {"s", "del", "strike"}:
             entity = raw.types.MessageEntityStrike
         elif tag == "blockquote":
             entity = raw.types.MessageEntityBlockquote
@@ -163,12 +163,12 @@ class HTML:
             start = entity.offset
             end = start + entity.length
 
-            if entity_type in (
+            if entity_type in {
                 MessageEntityType.BOLD,
                 MessageEntityType.ITALIC,
                 MessageEntityType.UNDERLINE,
                 MessageEntityType.STRIKETHROUGH,
-            ):
+            }:
                 name = entity_type.name[0].lower()
                 start_tag = f"<{name}>"
                 end_tag = f"</{name}>"
@@ -177,11 +177,11 @@ class HTML:
                 language = getattr(entity, "language", "") or ""
                 start_tag = f'<{name} language="{language}">' if language else f"<{name}>"
                 end_tag = f"</{name}>"
-            elif entity_type in (
+            elif entity_type in {
                 MessageEntityType.CODE,
                 MessageEntityType.BLOCKQUOTE,
                 MessageEntityType.SPOILER,
-            ):
+            }:
                 name = entity_type.name.lower()
                 start_tag = f"<{name}>"
                 end_tag = f"</{name}>"

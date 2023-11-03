@@ -69,25 +69,22 @@ def async_to_sync(obj, name):
             if inspect.isasyncgen(coroutine):
                 return async_to_sync_gen(coroutine, loop, True)
             return None
-        else:
-            if inspect.iscoroutine(coroutine):
-                if loop.is_running():
+        if inspect.iscoroutine(coroutine):
+            if loop.is_running():
 
-                    async def coro_wrapper():
-                        return await asyncio.wrap_future(
-                            asyncio.run_coroutine_threadsafe(coroutine, main_loop)
-                        )
+                async def coro_wrapper():
+                    return await asyncio.wrap_future(
+                        asyncio.run_coroutine_threadsafe(coroutine, main_loop)
+                    )
 
-                    return coro_wrapper()
-                else:
-                    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
+                return coro_wrapper()
+            return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
 
-            if inspect.isasyncgen(coroutine):
-                if loop.is_running():
-                    return coroutine
-                else:
-                    return async_to_sync_gen(coroutine, main_loop, False)
-            return None
+        if inspect.isasyncgen(coroutine):
+            if loop.is_running():
+                return coroutine
+            return async_to_sync_gen(coroutine, main_loop, False)
+        return None
 
     setattr(obj, name, async_to_sync_wrap)
 

@@ -17,4 +17,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .tcp import *
+from .tcp import TCP, TCPAbridged, TCPAbridgedO, TCPFull, TCPIntermediate, TCPIntermediateO
+
+__all__ = [
+    "TCP",
+    "TCPAbridged",
+    "TCPAbridgedO",
+    "TCPFull",
+    "TCPIntermediate",
+    "TCPIntermediateO",
+]

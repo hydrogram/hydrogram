@@ -20,6 +20,7 @@
 import re
 from datetime import datetime
 from importlib import import_module
+from pathlib import Path
 from typing import Optional, Type, Union
 
 from hydrogram import raw
@@ -57,7 +58,7 @@ class RPCError(Exception):
             self.value = value
 
         if is_unknown:
-            with open("unknown_errors.txt", "a", encoding="utf-8") as f:
+            with Path("unknown_errors.txt").open("a", encoding="utf-8") as f:
                 f.write(f"{datetime.now()}\t{value}\t{rpc_name}\n")
 
     @staticmethod

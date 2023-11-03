@@ -40,10 +40,10 @@ class MemoryStorage(SQLiteStorage):
 
         if self.session_string:
             # Old format
-            if len(self.session_string) in [
+            if len(self.session_string) in {
                 self.SESSION_STRING_SIZE,
                 self.SESSION_STRING_SIZE_64,
-            ]:
+            }:
                 dc_id, test_mode, auth_key, user_id, is_bot = struct.unpack(
                     (
                         self.OLD_SESSION_STRING_FORMAT

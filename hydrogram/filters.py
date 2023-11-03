@@ -153,7 +153,7 @@ all = create(all_filter)
 
 # region me_filter
 async def me_filter(_, __, m: Message):
-    return bool(m.from_user and m.from_user.is_self or getattr(m, "outgoing", False))
+    return bool(m.from_user.is_self if m.from_user else getattr(m, "outgoing", False))
 
 
 me = create(me_filter)
@@ -915,8 +915,7 @@ def regex(pattern: Union[str, Pattern], flags: int = 0):
     )
 
 
-# noinspection PyPep8Naming
-class user(Filter, set):
+class user(Filter, set):  # noqa: N801
     """Filter messages coming from one or more users.
 
     You can use `set bound methods <https://docs.python.org/3/library/stdtypes.html#set>`_ to manipulate the
@@ -933,7 +932,7 @@ class user(Filter, set):
         users = [] if users is None else users if isinstance(users, list) else [users]
 
         super().__init__(
-            "me" if u in ["me", "self"] else u.lower().strip("@") if isinstance(u, str) else u
+            "me" if u in {"me", "self"} else u.lower().strip("@") if isinstance(u, str) else u
             for u in users
         )
 
@@ -945,8 +944,7 @@ class user(Filter, set):
         )
 
 
-# noinspection PyPep8Naming
-class chat(Filter, set):
+class chat(Filter, set):  # noqa: N801
     """Filter messages coming from one or more chats.
 
     You can use `set bound methods <https://docs.python.org/3/library/stdtypes.html#set>`_ to manipulate the
@@ -963,7 +961,7 @@ class chat(Filter, set):
         chats = [] if chats is None else chats if isinstance(chats, list) else [chats]
 
         super().__init__(
-            "me" if c in ["me", "self"] else c.lower().strip("@") if isinstance(c, str) else c
+            "me" if c in {"me", "self"} else c.lower().strip("@") if isinstance(c, str) else c
             for c in chats
         )
 

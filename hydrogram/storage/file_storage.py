@@ -18,7 +18,6 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import os
 import sqlite3
 from pathlib import Path
 
@@ -67,4 +66,4 @@ class FileStorage(SQLiteStorage):
             self.conn.execute("VACUUM")
 
     async def delete(self):
-        os.remove(self.database)
+        Path(self.database).unlink()

@@ -21,6 +21,7 @@ import csv
 import os
 import re
 import shutil
+from pathlib import Path
 
 HOME = "compiler/errors"
 DEST = "hydrogram/errors/exceptions"
@@ -40,15 +41,15 @@ def caml(s):
 
 def start():
     shutil.rmtree(DEST, ignore_errors=True)
-    os.makedirs(DEST)
+    Path(DEST).mkdir(parents=True)
 
     files = os.listdir(f"{HOME}/source")
 
-    with open(NOTICE_PATH, encoding="utf-8") as f:
+    with Path(NOTICE_PATH).open(encoding="utf-8") as f:
         notice = [f"# {line}".strip() for line in f]
         notice = "\n".join(notice)
 
-    with open(f"{DEST}/all.py", "w", encoding="utf-8") as f_all:
+    with Path(f"{DEST}/all.py").open("w", encoding="utf-8") as f_all:
         f_all.write(notice + "\n\n")
         f_all.write("count = {count}\n\n")
         f_all.write("exceptions = {\n")
@@ -62,16 +63,16 @@ def start():
 
             init = f"{DEST}/__init__.py"
 
-            if not os.path.exists(init):
-                with open(init, "w", encoding="utf-8") as f_init:
+            if not Path(init).exists():
+                with Path(init).open("w", encoding="utf-8") as f_init:
                     f_init.write(notice + "\n\n")
 
-            with open(init, "a", encoding="utf-8") as f_init:
+            with Path(init).open("a", encoding="utf-8") as f_init:
                 f_init.write(f"from .{name.lower()}_{code} import *\n")
 
-            with open(f"{HOME}/source/{i}", encoding="utf-8") as f_csv, open(
-                f"{DEST}/{name.lower()}_{code}.py", "w", encoding="utf-8"
-            ) as f_class:
+            with Path(f"{HOME}/source/{i}").open(encoding="utf-8") as f_csv, Path(
+                f"{DEST}/{name.lower()}_{code}.py"
+            ).open("w", encoding="utf-8") as f_class:
                 reader = csv.reader(f_csv, delimiter="\t")
 
                 super_class = caml(name)
@@ -102,11 +103,11 @@ def start():
 
                     sub_classes.append((sub_class, error_id, error_message))
 
-                with open(f"{HOME}/template/class.txt", encoding="utf-8") as f_class_template:
+                with Path(f"{HOME}/template/class.txt").open(encoding="utf-8") as f_class_template:
                     class_template = f_class_template.read()
 
-                    with open(
-                        f"{HOME}/template/sub_class.txt", encoding="utf-8"
+                    with Path(f"{HOME}/template/sub_class.txt").open(
+                        encoding="utf-8"
                     ) as f_sub_class_template:
                         sub_class_template = f_sub_class_template.read()
 
@@ -134,10 +135,10 @@ def start():
 
         f_all.write("}\n")
 
-    with open(f"{DEST}/all.py", encoding="utf-8") as f:
+    with Path(f"{DEST}/all.py").open(encoding="utf-8") as f:
         content = f.read()
 
-    with open(f"{DEST}/all.py", "w", encoding="utf-8") as f:
+    with Path(f"{DEST}/all.py").open("w", encoding="utf-8") as f:
         f.write(re.sub("{count}", str(count), content))
 
 

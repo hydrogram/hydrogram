@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+from pathlib import Path
 from typing import BinaryIO, Optional, Union
 
 import hydrogram
@@ -84,7 +84,7 @@ class SetChatPhoto:
         """
         peer = await self.resolve_peer(chat_id)
 
-        if isinstance(photo, str) and os.path.isfile(photo) or not isinstance(photo, str):
+        if isinstance(photo, str) and Path(photo).is_file() or not isinstance(photo, str):
             photo = raw.types.InputChatUploadedPhoto(
                 file=await self.save_file(photo),
                 video=await self.save_file(video),

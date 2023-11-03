@@ -58,7 +58,7 @@ def get_input_media_from_file_id(
             f"Expected {expected_file_type.name}, got {file_type.name} file id instead"
         )
 
-    if file_type in (FileType.THUMBNAIL, FileType.CHAT_PHOTO):
+    if file_type in {FileType.THUMBNAIL, FileType.CHAT_PHOTO}:
         raise ValueError(f"This file id can only be used for download: {file_id}")
 
     if file_type in PHOTO_TYPES:
@@ -95,32 +95,34 @@ async def parse_messages(
 
     parsed_messages = []
 
-    for message in messages.messages:
-        parsed_messages.append(
-            await types.Message._parse(client, message, users, chats, replies=0)
+    parsed_messages = [
+        await types.Message._parse(client, message, users, chats, replies=0)
+        for message in messages.messages
+    ]
+
+    if (
+        messages_with_replies := {
+            i.id: i.reply_to.reply_to_msg_id
+            for i in messages.messages
+            if not isinstance(i, raw.types.MessageEmpty) and i.reply_to
+        }
+        and replies
+    ):
+        # We need a chat id, but some messages might be empty (no chat attribute available)
+        # Scan until we find a message with a chat available (there must be one, because we are fetching replies)
+        chat_id = next((m.chat.id for m in parsed_messages if m.chat), 0)
+        reply_messages = await client.get_messages(
+            chat_id,
+            reply_to_message_ids=messages_with_replies.keys(),
+            replies=replies - 1,
         )
 
-    if messages_with_replies := {
-        i.id: i.reply_to.reply_to_msg_id
-        for i in messages.messages
-        if not isinstance(i, raw.types.MessageEmpty) and i.reply_to
-    }:
-        if replies:
-            # We need a chat id, but some messages might be empty (no chat attribute available)
-            # Scan until we find a message with a chat available (there must be one, because we are fetching replies)
-            chat_id = next((m.chat.id for m in parsed_messages if m.chat), 0)
-            reply_messages = await client.get_messages(
-                chat_id,
-                reply_to_message_ids=messages_with_replies.keys(),
-                replies=replies - 1,
-            )
+        for message in parsed_messages:
+            reply_id = messages_with_replies.get(message.id)
 
-            for message in parsed_messages:
-                reply_id = messages_with_replies.get(message.id)
-
-                for reply in reply_messages:
-                    if reply.id == reply_id:
-                        message.reply_to_message = reply
+            for reply in reply_messages:
+                if reply.id == reply_id:
+                    message.reply_to_message = reply
 
     return types.List(parsed_messages)
 
@@ -167,15 +169,15 @@ def unpack_inline_message_id(inline_message_id: str) -> "raw.base.InputBotInline
         return raw.types.InputBotInlineMessageID(
             dc_id=unpacked[0], id=unpacked[1], access_hash=unpacked[2]
         )
-    else:
-        unpacked = struct.unpack("<iqiq", decoded)
 
-        return raw.types.InputBotInlineMessageID64(
-            dc_id=unpacked[0],
-            owner_id=unpacked[1],
-            id=unpacked[2],
-            access_hash=unpacked[3],
-        )
+    unpacked = struct.unpack("<iqiq", decoded)
+
+    return raw.types.InputBotInlineMessageID64(
+        dc_id=unpacked[0],
+        owner_id=unpacked[1],
+        id=unpacked[2],
+        access_hash=unpacked[3],
+    )
 
 
 MIN_CHANNEL_ID = -1002147483647
@@ -254,7 +256,7 @@ def compute_password_hash(
     return sha256(algo.salt2 + hash3 + algo.salt2)
 
 
-# noinspection PyPep8Naming
+# ruff: noqa: N806
 def compute_password_check(
     r: raw.types.account.Password, password: str
 ) -> raw.types.InputCheckPasswordSRP:

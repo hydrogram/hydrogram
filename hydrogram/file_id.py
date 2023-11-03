@@ -303,10 +303,10 @@ class FileId:
                     local_id=local_id,
                 )
 
-            if thumbnail_source in (
+            if thumbnail_source in {
                 ThumbnailSource.CHAT_PHOTO_SMALL,
                 ThumbnailSource.CHAT_PHOTO_BIG,
-            ):
+            }:
                 chat_id, chat_access_hash, local_id = struct.unpack("<qqi", buffer.read(20))
 
                 return FileId(
@@ -397,10 +397,10 @@ class FileId:
                         self.local_id,
                     )
                 )
-            elif self.thumbnail_source in (
+            elif self.thumbnail_source in {
                 ThumbnailSource.CHAT_PHOTO_SMALL,
                 ThumbnailSource.CHAT_PHOTO_BIG,
-            ):
+            }:
                 buffer.write(
                     struct.pack("<qqi", self.chat_id, self.chat_access_hash, self.local_id)
                 )

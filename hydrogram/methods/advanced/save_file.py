@@ -25,7 +25,7 @@ import logging
 import math
 import os
 from hashlib import md5
-from pathlib import PurePath
+from pathlib import Path, PurePath
 from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
@@ -113,17 +113,22 @@ class SaveFile:
             part_size = 512 * 1024
 
             if isinstance(path, (str, PurePath)):
-                fp = open(path, "rb")
+                with Path(path).open("rb") as fp:
+                    file_size = fp.tell()
+                    fp.seek(0)
+
+                    if file_size == 0:
+                        raise ValueError("File size equals to 0 B")
             elif isinstance(path, io.IOBase):
                 fp = path
+                file_name = getattr(fp, "name", "file.jpg")
+                fp.seek(0, os.SEEK_END)
+                file_size = fp.tell()
+                fp.seek(0)
             else:
                 raise ValueError(
                     "Invalid file. Expected a file path as string or a binary (not text) file pointer"
                 )
-
-            file_name = getattr(fp, "name", "file.jpg")
-
-            fp.seek(0, os.SEEK_END)
             file_size = fp.tell()
             fp.seek(0)
 
@@ -209,13 +214,12 @@ class SaveFile:
                         parts=file_total_parts,
                         name=file_name,
                     )
-                else:
-                    return raw.types.InputFile(
-                        id=file_id,
-                        parts=file_total_parts,
-                        name=file_name,
-                        md5_checksum=md5_sum,
-                    )
+                return raw.types.InputFile(
+                    id=file_id,
+                    parts=file_total_parts,
+                    name=file_name,
+                    md5_checksum=md5_sum,
+                )
             finally:
                 for _ in workers:
                     await queue.put(None)

@@ -6,22 +6,22 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import os
 import re
 import sys
+from pathlib import Path
 
 project = "Hydrogram"
 copyright = "2023-present, Amano LLC."
 author = "Amano LLC"
 
-docs_dir = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, os.path.abspath("../.."))
+docs_dir = Path(__file__).parent.parent
+sys.path.insert(0, docs_dir.resolve().as_posix())
 
 # Find the version and release information.
 # We have a single source of truth for our version number: pip's __init__.py file.
 # This next bit of code reads from it.
-file_with_version = os.path.join(docs_dir, "..", "hydrogram", "__init__.py")
-with open(file_with_version) as f:
+file_with_version = Path(docs_dir / ".." / "hydrogram" / "__init__.py")
+with Path(file_with_version).open() as f:
     for line in f:
         if m := re.match(r'__version__ = "(.*)"', line):
             __version__ = m[1]

@@ -20,6 +20,7 @@
 import asyncio
 import os
 from datetime import datetime
+from pathlib import Path
 from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
@@ -156,7 +157,7 @@ class DownloadMedia:
         directory, file_name = os.path.split(file_name)
         file_name = file_name or media_file_name or ""
 
-        if not os.path.isabs(file_name):
+        if not Path(file_name).is_absolute():
             directory = self.PARENT_DIR / (directory or DEFAULT_DOWNLOAD_DIR)
 
         if not file_name:
@@ -166,7 +167,7 @@ class DownloadMedia:
                 extension = ".jpg"
             elif file_type == FileType.VOICE:
                 extension = guessed_extension or ".ogg"
-            elif file_type in (FileType.VIDEO, FileType.ANIMATION, FileType.VIDEO_NOTE):
+            elif file_type in {FileType.VIDEO, FileType.ANIMATION, FileType.VIDEO_NOTE}:
                 extension = guessed_extension or ".mp4"
             elif file_type == FileType.DOCUMENT:
                 extension = guessed_extension or ".zip"

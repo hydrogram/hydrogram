@@ -18,8 +18,8 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import io
-import os
 import re
+from pathlib import Path
 from typing import Optional, Union
 
 import hydrogram
@@ -91,7 +91,7 @@ class EditMessageMedia:
             message, entities = (await self.parser.parse(caption, parse_mode)).values()
 
         if isinstance(media, types.InputMediaPhoto):
-            if isinstance(media.media, io.BytesIO) or os.path.isfile(media.media):
+            if isinstance(media.media, io.BytesIO) or Path(media.media).is_file():
                 uploaded_media = await self.invoke(
                     raw.functions.messages.UploadMedia(
                         peer=await self.resolve_peer(chat_id),
@@ -117,7 +117,7 @@ class EditMessageMedia:
             else:
                 media = utils.get_input_media_from_file_id(media.media, FileType.PHOTO)
         elif isinstance(media, types.InputMediaVideo):
-            if isinstance(media.media, io.BytesIO) or os.path.isfile(media.media):
+            if isinstance(media.media, io.BytesIO) or Path(media.media).is_file():
                 uploaded_media = await self.invoke(
                     raw.functions.messages.UploadMedia(
                         peer=await self.resolve_peer(chat_id),
@@ -134,7 +134,7 @@ class EditMessageMedia:
                                     h=media.height,
                                 ),
                                 raw.types.DocumentAttributeFilename(
-                                    file_name=file_name or os.path.basename(media.media)
+                                    file_name=file_name or Path(media.media).name
                                 ),
                             ],
                         ),
@@ -156,7 +156,7 @@ class EditMessageMedia:
             else:
                 media = utils.get_input_media_from_file_id(media.media, FileType.VIDEO)
         elif isinstance(media, types.InputMediaAudio):
-            if isinstance(media.media, io.BytesIO) or os.path.isfile(media.media):
+            if isinstance(media.media, io.BytesIO) or Path(media.media).is_file():
                 media = await self.invoke(
                     raw.functions.messages.UploadMedia(
                         peer=await self.resolve_peer(chat_id),
@@ -171,7 +171,7 @@ class EditMessageMedia:
                                     title=media.title,
                                 ),
                                 raw.types.DocumentAttributeFilename(
-                                    file_name=file_name or os.path.basename(media.media)
+                                    file_name=file_name or Path(media.media).name
                                 ),
                             ],
                         ),
@@ -190,7 +190,7 @@ class EditMessageMedia:
             else:
                 media = utils.get_input_media_from_file_id(media.media, FileType.AUDIO)
         elif isinstance(media, types.InputMediaAnimation):
-            if isinstance(media.media, io.BytesIO) or os.path.isfile(media.media):
+            if isinstance(media.media, io.BytesIO) or Path(str(media.media)).is_file():
                 uploaded_media = await self.invoke(
                     raw.functions.messages.UploadMedia(
                         peer=await self.resolve_peer(chat_id),
@@ -207,7 +207,7 @@ class EditMessageMedia:
                                     h=media.height,
                                 ),
                                 raw.types.DocumentAttributeFilename(
-                                    file_name=file_name or os.path.basename(media.media)
+                                    file_name=file_name or Path(media.media).name
                                 ),
                                 raw.types.DocumentAttributeAnimated(),
                             ],
@@ -230,7 +230,7 @@ class EditMessageMedia:
             else:
                 media = utils.get_input_media_from_file_id(media.media, FileType.ANIMATION)
         elif isinstance(media, types.InputMediaDocument):
-            if isinstance(media.media, io.BytesIO) or os.path.isfile(media.media):
+            if isinstance(media.media, io.BytesIO) or Path(media.media).is_file():
                 media = await self.invoke(
                     raw.functions.messages.UploadMedia(
                         peer=await self.resolve_peer(chat_id),
@@ -240,7 +240,7 @@ class EditMessageMedia:
                             file=await self.save_file(media.media),
                             attributes=[
                                 raw.types.DocumentAttributeFilename(
-                                    file_name=file_name or os.path.basename(media.media)
+                                    file_name=file_name or Path(media.media).name
                                 )
                             ],
                         ),
