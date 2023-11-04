@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/AmanoTeam/hydrogram">
-        <img src="https://hydrogram.amanoteam.com/docs/_static/hydrogram.png" alt="Hydrogram" width="128">
+        <img src="docs/source/_static/hydrogram-dark.png#gh-dark-mode-only" alt="Hydrogram" width="128">
     </a>
     <br>
     <b>Python Framework for the Telegram MTProto API</b>

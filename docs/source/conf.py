@@ -89,6 +89,8 @@ html_theme_options = {
         "admonition-title-font-size": "0.95rem",
         "admonition-font-size": "0.92rem",
     },
+    "light_logo": "hydrogram-light.png",
+    "dark_logo": "hydrogram-dark.png",
     "footer_icons": [
         {
             # Telegram channel logo
@@ -159,4 +161,9 @@ html_theme_options = {
             "class": "",
         },
     ],
+}
+
+latex_theme_options = {
+    "light_logo": "hydrogram-light.png",
+    "dark_logo": "hydrogram-dark.png",
 }

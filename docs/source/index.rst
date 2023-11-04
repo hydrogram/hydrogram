@@ -5,7 +5,10 @@ Welcome to Hydrogram
 
     <div align="center">
         <a href="/">
-            <div class="hydrogram-logo-index"><img src="_static/hydrogram.png" alt="Hydrogram"></div>
+            <div class="hydrogram-logo-index">
+                <img class="only-dark" src="_static/hydrogram-dark.png" alt="Hydrogram">
+                <img class="only-light" src="_static/hydrogram-light.png" alt="Hydrogram">
+            </div>
             <div class="hydrogram-text hydrogram-text-index">Hydrogram</div>
         </a>
     </div>
