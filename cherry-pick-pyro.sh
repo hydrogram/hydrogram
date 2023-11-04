@@ -22,8 +22,10 @@ select = [
     "PERF", # perflint
     "N",    # pep8-naming
     "RUF",  # ruff
+    "G",    # flake8-logging-format
+    "TID",  # flake8-tidy-imports
 ]
-ignore = ["RUF001", "RUF002", "RUF003", "E203", "F401", "F403"]
+ignore = ["RUF001", "RUF002", "RUF003", "E203", "PERF203", "F401", "F403"]
 preview = true
 
 [tool.ruff.isort]
