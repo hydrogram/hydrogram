@@ -29,6 +29,7 @@ class SendDice:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         emoji: str = "🎲",
+        message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         schedule_date: Optional[datetime] = None,
@@ -56,6 +57,10 @@ class SendDice:
                 Dice can have values 1-6 for "🎲", "🎯" and "🎳", values 1-5 for "🏀" and "⚽", and
                 values 1-64 for "🎰".
                 Defaults to "🎲".
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
@@ -90,12 +95,14 @@ class SendDice:
                 await app.send_dice(chat_id, "🏀")
         """
 
+        reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
         r = await self.invoke(
             raw.functions.messages.SendMedia(
                 peer=await self.resolve_peer(chat_id),
                 media=raw.types.InputMediaDice(emoticon=emoji),
                 silent=disable_notification or None,
-                reply_to_msg_id=reply_to_message_id,
+                reply_to=reply_to,
                 random_id=self.rnd_id(),
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,

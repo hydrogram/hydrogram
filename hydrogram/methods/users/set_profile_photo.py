@@ -26,7 +26,6 @@ from hydrogram import raw
 class SetProfilePhoto:
     async def set_profile_photo(
         self: "hydrogram.Client",
-        *,
         photo: Optional[Union[str, BinaryIO]] = None,
         video: Optional[Union[str, BinaryIO]] = None,
     ) -> bool:

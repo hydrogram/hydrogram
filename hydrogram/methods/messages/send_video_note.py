@@ -32,6 +32,7 @@ class SendVideoNote:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         video_note: Union[str, BinaryIO],
+        message_thread_id: Optional[int] = None,
         duration: int = 0,
         length: int = 1,
         thumb: Optional[Union[str, BinaryIO]] = None,
@@ -65,6 +66,10 @@ class SendVideoNote:
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
                 Sending video notes by a URL is currently unsupported.
 
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
+
             duration (``int``, *optional*):
                 Duration of sent video in seconds.
 
@@ -82,7 +87,7 @@ class SendVideoNote:
                 Users will receive a notification with no sound.
 
             reply_to_message_id (``int``, *optional*):
-                If the message is a reply, ID of the original message
+                If the message is a reply, ID of the original message.
 
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
@@ -170,6 +175,8 @@ class SendVideoNote:
                     ],
                 )
 
+            reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
             while True:
                 try:
                     r = await self.invoke(
@@ -177,7 +184,7 @@ class SendVideoNote:
                             peer=await self.resolve_peer(chat_id),
                             media=media,
                             silent=disable_notification or None,
-                            reply_to_msg_id=reply_to_message_id,
+                            reply_to=reply_to,
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,

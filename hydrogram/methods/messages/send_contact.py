@@ -31,6 +31,7 @@ class SendContact:
         phone_number: str,
         first_name: str,
         last_name: Optional[str] = None,
+        message_thread_id: Optional[int] = None,
         vcard: Optional[str] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
@@ -62,6 +63,10 @@ class SendContact:
             last_name (``str``, *optional*):
                 Contact's last name.
 
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
+
             vcard (``str``, *optional*):
                 Additional data about the contact in the form of a vCard, 0-2048 bytes
 
@@ -90,6 +95,9 @@ class SendContact:
 
                 await app.send_contact("me", "+1-123-456-7890", "Name")
         """
+
+        reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
         r = await self.invoke(
             raw.functions.messages.SendMedia(
                 peer=await self.resolve_peer(chat_id),
@@ -101,7 +109,7 @@ class SendContact:
                 ),
                 message="",
                 silent=disable_notification or None,
-                reply_to_msg_id=reply_to_message_id,
+                reply_to=reply_to,
                 random_id=self.rnd_id(),
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,

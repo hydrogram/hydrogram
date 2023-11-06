@@ -63,6 +63,10 @@ class Message(Object, Update):
         id (``int``):
             Unique message identifier inside this chat.
 
+        message_thread_id (``int``, *optional*):
+            Unique identifier of a message thread to which the message belongs.
+            for supergroups only
+
         from_user (:obj:`~hydrogram.types.User`, *optional*):
             Sender, empty for messages sent to channels.
 
@@ -77,6 +81,9 @@ class Message(Object, Update):
 
         chat (:obj:`~hydrogram.types.Chat`, *optional*):
             Conversation the message belongs to.
+
+        topics (:obj:`~hydrogram.types.ForumTopic`, *optional*):
+            Topic the message belongs to.
 
         forward_from (:obj:`~hydrogram.types.User`, *optional*):
             For forwarded messages, sender of the original message.
@@ -95,6 +102,9 @@ class Message(Object, Update):
 
         forward_date (:py:obj:`~datetime.datetime`, *optional*):
             For forwarded messages, date the original message was sent.
+
+        is_topic_message (``bool``, *optional*):
+            True, if the message is sent to a forum topic
 
         reply_to_message_id (``int``, *optional*):
             The id of the message which this message directly replied to.
@@ -279,6 +289,24 @@ class Message(Object, Update):
             E.g.: "/start 1 2 3" would produce ["start", "1", "2", "3"].
             Only applicable when using :obj:`~hydrogram.filters.command`.
 
+        forum_topic_created (:obj:`~hydrogram.types.ForumTopicCreated`, *optional*):
+            Service message: forum topic created
+
+        forum_topic_closed (:obj:`~hydrogram.types.ForumTopicClosed`, *optional*):
+            Service message: forum topic closed
+
+        forum_topic_reopened (:obj:`~hydrogram.types.ForumTopicReopened`, *optional*):
+            Service message: forum topic reopened
+
+        forum_topic_edited (:obj:`~hydrogram.types.ForumTopicEdited`, *optional*):
+            Service message: forum topic edited
+
+        general_topic_hidden (:obj:`~hydrogram.types.GeneralTopicHidden`, *optional*):
+            Service message: forum general topic hidden
+
+        general_topic_unhidden (:obj:`~hydrogram.types.GeneralTopicUnhidden`, *optional*):
+            Service message: forum general topic unhidden
+
         video_chat_scheduled (:obj:`~hydrogram.types.VideoChatScheduled`, *optional*):
             Service message: voice chat scheduled.
 
@@ -312,16 +340,19 @@ class Message(Object, Update):
         *,
         client: "hydrogram.Client" = None,
         id: int,
+        message_thread_id: Optional[int] = None,
         from_user: "types.User" = None,
         sender_chat: "types.Chat" = None,
         date: Optional[datetime] = None,
         chat: "types.Chat" = None,
+        topics: "types.ForumTopic" = None,
         forward_from: "types.User" = None,
         forward_sender_name: Optional[str] = None,
         forward_from_chat: "types.Chat" = None,
         forward_from_message_id: Optional[int] = None,
         forward_signature: Optional[str] = None,
         forward_date: Optional[datetime] = None,
+        is_topic_message: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         reply_to_top_message_id: Optional[int] = None,
         reply_to_message: "Message" = None,
@@ -373,6 +404,12 @@ class Message(Object, Update):
         outgoing: Optional[bool] = None,
         matches: Optional[List[Match]] = None,
         command: Optional[List[str]] = None,
+        forum_topic_created: "types.ForumTopicCreated" = None,
+        forum_topic_closed: "types.ForumTopicClosed" = None,
+        forum_topic_reopened: "types.ForumTopicReopened" = None,
+        forum_topic_edited: "types.ForumTopicEdited" = None,
+        general_topic_hidden: "types.GeneralTopicHidden" = None,
+        general_topic_unhidden: "types.GeneralTopicUnhidden" = None,
         video_chat_scheduled: "types.VideoChatScheduled" = None,
         video_chat_started: "types.VideoChatStarted" = None,
         video_chat_ended: "types.VideoChatEnded" = None,
@@ -389,16 +426,19 @@ class Message(Object, Update):
         super().__init__(client)
 
         self.id = id
+        self.message_thread_id = message_thread_id
         self.from_user = from_user
         self.sender_chat = sender_chat
         self.date = date
         self.chat = chat
+        self.topics = topics
         self.forward_from = forward_from
         self.forward_sender_name = forward_sender_name
         self.forward_from_chat = forward_from_chat
         self.forward_from_message_id = forward_from_message_id
         self.forward_signature = forward_signature
         self.forward_date = forward_date
+        self.is_topic_message = is_topic_message
         self.reply_to_message_id = reply_to_message_id
         self.reply_to_top_message_id = reply_to_top_message_id
         self.reply_to_message = reply_to_message
@@ -451,6 +491,12 @@ class Message(Object, Update):
         self.matches = matches
         self.command = command
         self.reply_markup = reply_markup
+        self.forum_topic_created = forum_topic_created
+        self.forum_topic_closed = forum_topic_closed
+        self.forum_topic_reopened = forum_topic_reopened
+        self.forum_topic_edited = forum_topic_edited
+        self.general_topic_hidden = general_topic_hidden
+        self.general_topic_unhidden = general_topic_unhidden
         self.video_chat_scheduled = video_chat_scheduled
         self.video_chat_started = video_chat_started
         self.video_chat_ended = video_chat_ended
@@ -464,6 +510,7 @@ class Message(Object, Update):
         message: raw.base.Message,
         users: dict,
         chats: dict,
+        topics: Optional[dict] = None,
         is_scheduled: bool = False,
         replies: int = 1,
     ):
@@ -494,6 +541,7 @@ class Message(Object, Update):
                 users.update({i.id: i for i in r})
 
         if isinstance(message, raw.types.MessageService):
+            message_thread_id = None
             action = message.action
 
             new_chat_members = None
@@ -505,6 +553,13 @@ class Message(Object, Update):
             group_chat_created = None
             channel_chat_created = None
             new_chat_photo = None
+            is_topic_message = None
+            forum_topic_created = None
+            forum_topic_closed = None
+            forum_topic_reopened = None
+            forum_topic_edited = None
+            general_topic_hidden = None
+            general_topic_unhidden = None
             video_chat_scheduled = None
             video_chat_started = None
             video_chat_ended = None
@@ -545,6 +600,26 @@ class Message(Object, Update):
             elif isinstance(action, raw.types.MessageActionChatEditPhoto):
                 new_chat_photo = types.Photo._parse(client, action.photo)
                 service_type = enums.MessageServiceType.NEW_CHAT_PHOTO
+            elif isinstance(action, raw.types.MessageActionTopicCreate):
+                forum_topic_created = types.ForumTopicCreated._parse(action)
+                service_type = enums.MessageServiceType.FORUM_TOPIC_CREATED
+            elif isinstance(action, raw.types.MessageActionTopicEdit):
+                if action.title:
+                    forum_topic_edited = types.ForumTopicEdited._parse(action)
+                    service_type = enums.MessageServiceType.FORUM_TOPIC_EDITED
+                elif action.hidden:
+                    general_topic_hidden = types.GeneralTopicHidden()
+                    service_type = enums.MessageServiceType.GENERAL_TOPIC_HIDDEN
+                elif action.closed:
+                    forum_topic_closed = types.ForumTopicClosed()
+                    service_type = enums.MessageServiceType.FORUM_TOPIC_CLOSED
+                else:
+                    if hasattr(action, "hidden"):
+                        general_topic_unhidden = types.GeneralTopicUnhidden()
+                        service_type = enums.MessageServiceType.GENERAL_TOPIC_UNHIDDEN
+                    else:
+                        forum_topic_reopened = types.ForumTopicReopened()
+                        service_type = enums.MessageServiceType.FORUM_TOPIC_REOPENED
             elif isinstance(action, raw.types.MessageActionGroupCallScheduled):
                 video_chat_scheduled = types.VideoChatScheduled._parse(action)
                 service_type = enums.MessageServiceType.VIDEO_CHAT_SCHEDULED
@@ -573,8 +648,10 @@ class Message(Object, Update):
 
             parsed_message = Message(
                 id=message.id,
+                message_thread_id=message_thread_id,
                 date=utils.timestamp_to_datetime(message.date),
                 chat=types.Chat._parse(client, message, users, chats, is_chat=True),
+                topics=None,
                 from_user=from_user,
                 sender_chat=sender_chat,
                 service=service_type,
@@ -589,6 +666,13 @@ class Message(Object, Update):
                 migrate_from_chat_id=-migrate_from_chat_id if migrate_from_chat_id else None,
                 group_chat_created=group_chat_created,
                 channel_chat_created=channel_chat_created,
+                is_topic_message=is_topic_message,
+                forum_topic_created=forum_topic_created,
+                forum_topic_closed=forum_topic_closed,
+                forum_topic_reopened=forum_topic_reopened,
+                forum_topic_edited=forum_topic_edited,
+                general_topic_hidden=general_topic_hidden,
+                general_topic_unhidden=general_topic_unhidden,
                 video_chat_scheduled=video_chat_scheduled,
                 video_chat_started=video_chat_started,
                 video_chat_ended=video_chat_ended,
@@ -629,9 +713,17 @@ class Message(Object, Update):
 
             client.message_cache[(parsed_message.chat.id, parsed_message.id)] = parsed_message
 
+            if message.reply_to and message.reply_to.forum_topic:
+                if message.reply_to.reply_to_top_id:
+                    parsed_message.message_thread_id = message.reply_to.reply_to_top_id
+                else:
+                    parsed_message.message_thread_id = message.reply_to.reply_to_msg_id
+                parsed_message.is_topic_message = True
+
             return parsed_message
 
         if isinstance(message, raw.types.Message):
+            message_thread_id = None
             entities = [
                 types.MessageEntity._parse(client, entity, users) for entity in message.entities
             ]
@@ -643,6 +735,7 @@ class Message(Object, Update):
             forward_from_message_id = None
             forward_signature = None
             forward_date = None
+            is_topic_message = None
 
             if forward_header := message.fwd_from:
                 forward_date = utils.timestamp_to_datetime(forward_header.date)
@@ -791,8 +884,10 @@ class Message(Object, Update):
 
             parsed_message = Message(
                 id=message.id,
+                message_thread_id=message_thread_id,
                 date=utils.timestamp_to_datetime(message.date),
                 chat=types.Chat._parse(client, message, users, chats, is_chat=True),
+                topics=None,
                 from_user=from_user,
                 sender_chat=sender_chat,
                 text=(
@@ -818,6 +913,7 @@ class Message(Object, Update):
                 forward_from_message_id=forward_from_message_id,
                 forward_signature=forward_signature,
                 forward_date=forward_date,
+                is_topic_message=is_topic_message,
                 mentioned=message.mentioned,
                 scheduled=is_scheduled,
                 from_scheduled=message.from_scheduled,
@@ -849,8 +945,28 @@ class Message(Object, Update):
             )
 
             if message.reply_to:
-                parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
-                parsed_message.reply_to_top_message_id = message.reply_to.reply_to_top_id
+                if message.reply_to.forum_topic:
+                    if message.reply_to.reply_to_top_id:
+                        thread_id = message.reply_to.reply_to_top_id
+                        parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
+                    else:
+                        thread_id = message.reply_to.reply_to_msg_id
+                    parsed_message.message_thread_id = thread_id
+                    parsed_message.is_topic_message = True
+                    if topics:
+                        parsed_message.topics = types.ForumTopic._parse(topics[thread_id])
+                    else:
+                        try:
+                            msg = await client.get_messages(parsed_message.chat.id, message.id)
+                            if getattr(msg, "topics"):
+                                parsed_message.topics = msg.topics
+                        except Exception:
+                            pass
+                else:
+                    parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
+                    parsed_message.reply_to_top_message_id = message.reply_to.reply_to_top_id
+                    if isinstance(message.reply_to, raw.types.MessageReplyStoryHeader):
+                        parsed_message.reply_to_message_id = message.reply_to.story_id
 
                 if replies:
                     try:
@@ -863,8 +979,8 @@ class Message(Object, Update):
                             reply_to_message_ids=message.id,
                             replies=replies - 1,
                         )
-
-                        parsed_message.reply_to_message = reply_to_message
+                        if reply_to_message and not reply_to_message.forum_topic_created:
+                            parsed_message.reply_to_message = reply_to_message
                     except MessageIdsEmpty:
                         pass
 
@@ -933,6 +1049,7 @@ class Message(Object, Update):
 
             await client.send_message(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 text="hello",
                 reply_to_message_id=message.id
             )
@@ -992,6 +1109,7 @@ class Message(Object, Update):
 
         return await self._client.send_message(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             text=text,
             parse_mode=parse_mode,
             entities=entities,
@@ -1036,6 +1154,7 @@ class Message(Object, Update):
 
             await client.send_animation(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 animation=animation
             )
 
@@ -1133,6 +1252,7 @@ class Message(Object, Update):
 
         return await self._client.send_animation(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             animation=animation,
             caption=caption,
             parse_mode=parse_mode,
@@ -1179,6 +1299,7 @@ class Message(Object, Update):
 
             await client.send_audio(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 audio=audio
             )
 
@@ -1273,6 +1394,7 @@ class Message(Object, Update):
 
         return await self._client.send_audio(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             audio=audio,
             caption=caption,
             parse_mode=parse_mode,
@@ -1312,6 +1434,7 @@ class Message(Object, Update):
 
             await client.send_cached_media(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 file_id=file_id
             )
 
@@ -1365,6 +1488,7 @@ class Message(Object, Update):
 
         return await self._client.send_cached_media(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             file_id=file_id,
             caption=caption,
             parse_mode=parse_mode,
@@ -1385,6 +1509,7 @@ class Message(Object, Update):
 
             await client.send_chat_action(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 action=enums.ChatAction.TYPING
             )
 
@@ -1406,7 +1531,9 @@ class Message(Object, Update):
             RPCError: In case of a Telegram RPC error.
             ValueError: In case the provided string is not a valid chat action.
         """
-        return await self._client.send_chat_action(chat_id=self.chat.id, action=action)
+        return await self._client.send_chat_action(
+            chat_id=self.chat.id, message_thread_id=self.message_thread_id, action=action
+        )
 
     async def reply_contact(
         self,
@@ -1432,6 +1559,7 @@ class Message(Object, Update):
 
             await client.send_contact(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 phone_number=phone_number,
                 first_name=first_name
             )
@@ -1484,6 +1612,7 @@ class Message(Object, Update):
 
         return await self._client.send_contact(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             phone_number=phone_number,
             first_name=first_name,
             last_name=last_name,
@@ -1523,6 +1652,7 @@ class Message(Object, Update):
 
             await client.send_document(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 document=document
             )
 
@@ -1620,6 +1750,7 @@ class Message(Object, Update):
 
         return await self._client.send_document(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             document=document,
             thumb=thumb,
             caption=caption,
@@ -1656,6 +1787,7 @@ class Message(Object, Update):
 
             await client.send_game(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 game_short_name="lumberjack"
             )
 
@@ -1698,6 +1830,7 @@ class Message(Object, Update):
 
         return await self._client.send_game(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             game_short_name=game_short_name,
             disable_notification=disable_notification,
             reply_to_message_id=reply_to_message_id,
@@ -1720,6 +1853,7 @@ class Message(Object, Update):
 
             await client.send_inline_bot_result(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 query_id=query_id,
                 result_id=result_id
             )
@@ -1745,7 +1879,7 @@ class Message(Object, Update):
                 Sends the message silently.
                 Users will receive a notification with no sound.
 
-            reply_to_message_id (``bool``, *optional*):
+            reply_to_message_id (``int``, *optional*):
                 If the message is a reply, ID of the original message.
 
         Returns:
@@ -1762,6 +1896,7 @@ class Message(Object, Update):
 
         return await self._client.send_inline_bot_result(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             query_id=query_id,
             result_id=result_id,
             disable_notification=disable_notification,
@@ -1790,6 +1925,7 @@ class Message(Object, Update):
 
             await client.send_location(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 latitude=latitude,
                 longitude=longitude
             )
@@ -1836,6 +1972,7 @@ class Message(Object, Update):
 
         return await self._client.send_location(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             latitude=latitude,
             longitude=longitude,
             disable_notification=disable_notification,
@@ -1858,6 +1995,7 @@ class Message(Object, Update):
 
             await client.send_media_group(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 media=list_of_media
             )
 
@@ -1899,6 +2037,7 @@ class Message(Object, Update):
 
         return await self._client.send_media_group(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             media=media,
             disable_notification=disable_notification,
             reply_to_message_id=reply_to_message_id,
@@ -1932,6 +2071,7 @@ class Message(Object, Update):
 
             await client.send_photo(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 photo=photo
             )
 
@@ -2019,6 +2159,7 @@ class Message(Object, Update):
 
         return await self._client.send_photo(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             photo=photo,
             caption=caption,
             parse_mode=parse_mode,
@@ -2066,6 +2207,7 @@ class Message(Object, Update):
 
             await client.send_poll(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 question="This is a poll",
                 options=["A", "B", "C]
             )
@@ -2158,6 +2300,7 @@ class Message(Object, Update):
 
         return await self._client.send_poll(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             question=question,
             options=options,
             is_anonymous=is_anonymous,
@@ -2200,6 +2343,7 @@ class Message(Object, Update):
 
             await client.send_sticker(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 sticker=sticker
             )
 
@@ -2269,6 +2413,7 @@ class Message(Object, Update):
 
         return await self._client.send_sticker(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             sticker=sticker,
             disable_notification=disable_notification,
             reply_to_message_id=reply_to_message_id,
@@ -2303,6 +2448,7 @@ class Message(Object, Update):
 
             await client.send_venue(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 latitude=latitude,
                 longitude=longitude,
                 title="Venue title",
@@ -2364,6 +2510,7 @@ class Message(Object, Update):
 
         return await self._client.send_venue(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             latitude=latitude,
             longitude=longitude,
             title=title,
@@ -2408,6 +2555,7 @@ class Message(Object, Update):
 
             await client.send_video(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 video=video
             )
 
@@ -2513,6 +2661,7 @@ class Message(Object, Update):
 
         return await self._client.send_video(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             video=video,
             caption=caption,
             parse_mode=parse_mode,
@@ -2557,6 +2706,7 @@ class Message(Object, Update):
 
             await client.send_video_note(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 video_note=video_note
             )
 
@@ -2638,6 +2788,7 @@ class Message(Object, Update):
 
         return await self._client.send_video_note(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             video_note=video_note,
             duration=duration,
             length=length,
@@ -2676,6 +2827,7 @@ class Message(Object, Update):
 
             await client.send_voice(
                 chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
                 voice=voice
             )
 
@@ -2758,6 +2910,7 @@ class Message(Object, Update):
 
         return await self._client.send_voice(
             chat_id=self.chat.id,
+            message_thread_id=self.message_thread_id,
             voice=voice,
             caption=caption,
             parse_mode=parse_mode,
@@ -2965,6 +3118,7 @@ class Message(Object, Update):
     async def forward(
         self,
         chat_id: Union[int, str],
+        message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         schedule_date: Optional[datetime] = None,
     ) -> Union["types.Message", List["types.Message"]]:
@@ -2991,6 +3145,9 @@ class Message(Object, Update):
                 For your personal cloud (Saved Messages) you can simply use "me" or "self".
                 For a contact that exists in your Telegram address book you can use his phone number (str).
 
+            message_thread_id (``int``, *optional*):
+                Unique identifier of a message thread to which the message belongs; for supergroups only
+
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
                 Users will receive a notification with no sound.
@@ -3006,6 +3163,7 @@ class Message(Object, Update):
         """
         return await self._client.forward_messages(
             chat_id=chat_id,
+            message_thread_id=message_thread_id,
             from_chat_id=self.chat.id,
             message_ids=self.id,
             disable_notification=disable_notification,
@@ -3016,6 +3174,7 @@ class Message(Object, Update):
         self,
         chat_id: Union[int, str],
         caption: Optional[str] = None,
+        message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         disable_notification: Optional[bool] = None,
@@ -3056,6 +3215,10 @@ class Message(Object, Update):
                 New caption for media, 0-1024 characters after entities parsing.
                 If not specified, the original caption is kept.
                 Pass "" (empty string) to remove the caption.
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
                 By default, texts are parsed using both Markdown and HTML styles.
@@ -3114,6 +3277,7 @@ class Message(Object, Update):
                 parse_mode=enums.ParseMode.DISABLED,
                 disable_web_page_preview=not self.web_page,
                 disable_notification=disable_notification,
+                message_thread_id=message_thread_id,
                 reply_to_message_id=reply_to_message_id,
                 schedule_date=schedule_date,
                 protect_content=protect_content,
@@ -3124,6 +3288,7 @@ class Message(Object, Update):
                 self._client.send_cached_media,
                 chat_id=chat_id,
                 disable_notification=disable_notification,
+                message_thread_id=message_thread_id,
                 reply_to_message_id=reply_to_message_id,
                 schedule_date=schedule_date,
                 protect_content=protect_content,
@@ -3154,6 +3319,7 @@ class Message(Object, Update):
                     last_name=self.contact.last_name,
                     vcard=self.contact.vcard,
                     disable_notification=disable_notification,
+                    message_thread_id=message_thread_id,
                     schedule_date=schedule_date,
                 )
             elif self.location:
@@ -3162,6 +3328,7 @@ class Message(Object, Update):
                     latitude=self.location.latitude,
                     longitude=self.location.longitude,
                     disable_notification=disable_notification,
+                    message_thread_id=message_thread_id,
                     schedule_date=schedule_date,
                 )
             elif self.venue:
@@ -3174,6 +3341,7 @@ class Message(Object, Update):
                     foursquare_id=self.venue.foursquare_id,
                     foursquare_type=self.venue.foursquare_type,
                     disable_notification=disable_notification,
+                    message_thread_id=message_thread_id,
                     schedule_date=schedule_date,
                 )
             elif self.poll:
@@ -3182,6 +3350,7 @@ class Message(Object, Update):
                     question=self.poll.question,
                     options=[opt.text for opt in self.poll.options],
                     disable_notification=disable_notification,
+                    message_thread_id=message_thread_id,
                     schedule_date=schedule_date,
                 )
             elif self.game:
@@ -3189,12 +3358,14 @@ class Message(Object, Update):
                     chat_id,
                     game_short_name=self.game.short_name,
                     disable_notification=disable_notification,
+                    message_thread_id=message_thread_id,
                 )
             else:
                 raise ValueError("Unknown media type")
 
             if self.sticker or self.video_note:
-                return await send_media(file_id=file_id)
+                return await send_media(file_id=file_id, message_thread_id=message_thread_id)
+
             if caption is None:
                 caption = self.caption or ""
                 caption_entities = self.caption_entities
@@ -3204,6 +3375,7 @@ class Message(Object, Update):
                 caption=caption,
                 parse_mode=parse_mode,
                 caption_entities=caption_entities,
+                message_thread_id=message_thread_id,
             )
         raise ValueError("Can't copy this message")
 

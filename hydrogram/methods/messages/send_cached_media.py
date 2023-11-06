@@ -30,6 +30,7 @@ class SendCachedMedia:
         chat_id: Union[int, str],
         file_id: str,
         caption: str = "",
+        message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         disable_notification: Optional[bool] = None,
@@ -64,6 +65,10 @@ class SendCachedMedia:
             caption (``str``, *optional*):
                 Media caption, 0-1024 characters.
 
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
+
             parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
                 By default, texts are parsed using both Markdown and HTML styles.
                 You can combine both syntaxes together.
@@ -97,12 +102,14 @@ class SendCachedMedia:
                 await app.send_cached_media("me", file_id)
         """
 
+        reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
         r = await self.invoke(
             raw.functions.messages.SendMedia(
                 peer=await self.resolve_peer(chat_id),
                 media=utils.get_input_media_from_file_id(file_id),
                 silent=disable_notification or None,
-                reply_to_msg_id=reply_to_message_id,
+                reply_to=reply_to,
                 random_id=self.rnd_id(),
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,

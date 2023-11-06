@@ -34,6 +34,7 @@ class SendVideo:
         chat_id: Union[int, str],
         video: Union[str, BinaryIO],
         caption: str = "",
+        message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         has_spoiler: Optional[bool] = None,
@@ -76,6 +77,10 @@ class SendVideo:
 
             caption (``str``, *optional*):
                 Video caption, 0-1024 characters.
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
                 By default, texts are parsed using both Markdown and HTML styles.
@@ -231,6 +236,8 @@ class SendVideo:
                     ],
                 )
 
+            reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
             while True:
                 try:
                     r = await self.invoke(
@@ -238,7 +245,7 @@ class SendVideo:
                             peer=await self.resolve_peer(chat_id),
                             media=media,
                             silent=disable_notification or None,
-                            reply_to_msg_id=reply_to_message_id,
+                            reply_to=reply_to,
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,

@@ -31,6 +31,7 @@ class CopyMediaGroup:
         from_chat_id: Union[int, str],
         message_id: int,
         captions: Optional[Union[List[str], str]] = None,
+        message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         schedule_date: Optional[datetime] = None,
@@ -61,6 +62,10 @@ class CopyMediaGroup:
                 If a ``string`` is passed, it becomes a caption only for the first media.
                 If a list of ``string`` passed, each element becomes caption for each media element.
                 You can pass ``None`` in list to keep the original caption (see examples below).
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
@@ -121,12 +126,14 @@ class CopyMediaGroup:
                 )
             )
 
+        reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
         r = await self.invoke(
             raw.functions.messages.SendMultiMedia(
                 peer=await self.resolve_peer(chat_id),
                 multi_media=multi_media,
                 silent=disable_notification or None,
-                reply_to_msg_id=reply_to_message_id,
+                reply_to=reply_to,
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
             ),
             sleep_threshold=60,

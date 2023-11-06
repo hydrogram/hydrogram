@@ -33,6 +33,7 @@ class SendSticker:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         sticker: Union[str, BinaryIO],
+        message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         schedule_date: Optional[datetime] = None,
@@ -62,6 +63,10 @@ class SendSticker:
                 pass an HTTP URL as a string for Telegram to get a .webp sticker file from the Internet,
                 pass a file path as string to upload a new sticker that exists on your local machine, or
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
@@ -145,6 +150,8 @@ class SendSticker:
                     attributes=[raw.types.DocumentAttributeFilename(file_name=sticker.name)],
                 )
 
+            reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
             while True:
                 try:
                     r = await self.invoke(
@@ -152,7 +159,7 @@ class SendSticker:
                             peer=await self.resolve_peer(chat_id),
                             media=media,
                             silent=disable_notification or None,
-                            reply_to_msg_id=reply_to_message_id,
+                            reply_to=reply_to,
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,

@@ -89,14 +89,14 @@ async def parse_messages(
 ) -> List["types.Message"]:
     users = {i.id: i for i in messages.users}
     chats = {i.id: i for i in messages.chats}
-
+    topics = {i.id: i for i in messages.topics} if hasattr(messages, "topics") else None
     if not messages.messages:
         return types.List()
 
     parsed_messages = []
 
     parsed_messages = [
-        await types.Message._parse(client, message, users, chats, replies=0)
+        await types.Message._parse(client, message, users, chats, topics, replies=0)
         for message in messages.messages
     ]
 
@@ -121,7 +121,7 @@ async def parse_messages(
             reply_id = messages_with_replies.get(message.id)
 
             for reply in reply_messages:
-                if reply.id == reply_id:
+                if reply.id == reply_id and not reply.forum_topic_created:
                     message.reply_to_message = reply
 
     return types.List(parsed_messages)
@@ -344,3 +344,19 @@ def timestamp_to_datetime(ts: Optional[int]) -> Optional[datetime]:
 
 def datetime_to_timestamp(dt: Optional[datetime]) -> Optional[int]:
     return int(dt.timestamp()) if dt else None
+
+
+def get_reply_head_fm(
+    message_thread_id: int, reply_to_message_id: int
+) -> raw.types.InputReplyToMessage:
+    reply_to = None
+    if reply_to_message_id or message_thread_id:
+        if not reply_to_message_id:
+            reply_to = raw.types.InputReplyToMessage(
+                reply_to_msg_id=message_thread_id, top_msg_id=message_thread_id
+            )
+        else:
+            reply_to = raw.types.InputReplyToMessage(
+                reply_to_msg_id=reply_to_message_id, top_msg_id=message_thread_id
+            )
+    return reply_to

@@ -30,6 +30,7 @@ class SendPoll:
         chat_id: Union[int, str],
         question: str,
         options: List[str],
+        message_thread_id: Optional[int] = None,
         is_anonymous: bool = True,
         type: "enums.PollType" = enums.PollType.REGULAR,
         allows_multiple_answers: Optional[bool] = None,
@@ -66,6 +67,10 @@ class SendPoll:
 
             options (List of ``str``):
                 List of answer options, 2-10 strings 1-100 characters each.
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             is_anonymous (``bool``, *optional*):
                 True, if the poll needs to be anonymous.
@@ -139,6 +144,8 @@ class SendPoll:
             )
         ).values()
 
+        reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
         r = await self.invoke(
             raw.functions.messages.SendMedia(
                 peer=await self.resolve_peer(chat_id),
@@ -165,7 +172,7 @@ class SendPoll:
                 ),
                 message="",
                 silent=disable_notification,
-                reply_to_msg_id=reply_to_message_id,
+                reply_to=reply_to,
                 random_id=self.rnd_id(),
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,

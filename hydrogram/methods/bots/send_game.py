@@ -20,7 +20,7 @@
 from typing import Optional, Union
 
 import hydrogram
-from hydrogram import raw, types
+from hydrogram import raw, types, utils
 
 
 class SendGame:
@@ -28,6 +28,7 @@ class SendGame:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         game_short_name: str,
+        message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         protect_content: Optional[bool] = None,
@@ -51,6 +52,10 @@ class SendGame:
             game_short_name (``str``):
                 Short name of the game, serves as the unique identifier for the game. Set up your games via Botfather.
 
+            message_thread_id (``int``, *optional*):
+                Unique identifier of a message thread to which the message belongs.
+                for supergroups only
+
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
                 Users will receive a notification with no sound.
@@ -73,6 +78,8 @@ class SendGame:
 
                 await app.send_game(chat_id, "gamename")
         """
+        reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
         r = await self.invoke(
             raw.functions.messages.SendMedia(
                 peer=await self.resolve_peer(chat_id),
@@ -83,7 +90,7 @@ class SendGame:
                 ),
                 message="",
                 silent=disable_notification or None,
-                reply_to_msg_id=reply_to_message_id,
+                reply_to=reply_to,
                 random_id=self.rnd_id(),
                 noforwards=protect_content,
                 reply_markup=await reply_markup.write(self) if reply_markup else None,

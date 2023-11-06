@@ -24,7 +24,11 @@ from hydrogram import raw
 
 
 class UnblockUser:
-    async def unblock_user(self: "hydrogram.Client", user_id: Union[int, str]) -> bool:
+    async def unblock_user(
+        self: "hydrogram.Client",
+        user_id: Union[int, str],
+        my_stories_from: Union[bool, None] = None,
+    ) -> bool:
         """Unblock a user.
 
         .. include:: /_includes/usable-by/users.rst
@@ -44,5 +48,9 @@ class UnblockUser:
                 await app.unblock_user(user_id)
         """
         return bool(
-            await self.invoke(raw.functions.contacts.Unblock(id=await self.resolve_peer(user_id)))
+            await self.invoke(
+                raw.functions.contacts.Unblock(
+                    id=await self.resolve_peer(user_id), my_stories_from=my_stories_from
+                )
+            )
         )

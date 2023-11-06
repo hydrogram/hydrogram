@@ -34,6 +34,7 @@ class SendAnimation:
         chat_id: Union[int, str],
         animation: Union[str, BinaryIO],
         caption: str = "",
+        message_thread_id: Optional[int] = None,
         unsave: bool = False,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
@@ -75,6 +76,10 @@ class SendAnimation:
 
             caption (``str``, *optional*):
                 Animation caption, 0-1024 characters.
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             unsave (``bool``, *optional*):
                 By default, the server will save into your own collection any new animation you send.
@@ -226,6 +231,8 @@ class SendAnimation:
                     ],
                 )
 
+            reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
             while True:
                 try:
                     r = await self.invoke(
@@ -233,7 +240,7 @@ class SendAnimation:
                             peer=await self.resolve_peer(chat_id),
                             media=media,
                             silent=disable_notification or None,
-                            reply_to_msg_id=reply_to_message_id,
+                            reply_to=reply_to,
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,

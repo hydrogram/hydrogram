@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw
@@ -25,7 +25,10 @@ from hydrogram import enums, raw
 
 class SendChatAction:
     async def send_chat_action(
-        self: "hydrogram.Client", chat_id: Union[int, str], action: "enums.ChatAction"
+        self: "hydrogram.Client",
+        chat_id: Union[int, str],
+        action: "enums.ChatAction",
+        message_thread_id: Optional[int] = None,
     ) -> bool:
         """Tell the other party that something is happening on your side.
 
@@ -39,6 +42,10 @@ class SendChatAction:
 
             action (:obj:`~hydrogram.enums.ChatAction`):
                 Type of action to broadcast.
+
+            message_thread_id (```int```, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
         Returns:
             ``bool``: On success, True is returned.
@@ -72,5 +79,7 @@ class SendChatAction:
             action = action.value()
 
         return await self.invoke(
-            raw.functions.messages.SetTyping(peer=await self.resolve_peer(chat_id), action=action)
+            raw.functions.messages.SetTyping(
+                peer=await self.resolve_peer(chat_id), action=action, top_msg_id=message_thread_id
+            )
         )

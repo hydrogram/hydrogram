@@ -43,6 +43,7 @@ class SendMediaGroup:
                 "types.InputMediaDocument",
             ]
         ],
+        message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         schedule_date: Optional[datetime] = None,
@@ -60,6 +61,10 @@ class SendMediaGroup:
 
             media (List of :obj:`~hydrogram.types.InputMediaPhoto`, :obj:`~hydrogram.types.InputMediaVideo`, :obj:`~hydrogram.types.InputMediaAudio` and :obj:`~hydrogram.types.InputMediaDocument`):
                 A list describing photos and videos to be sent, must include 2–10 items.
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
@@ -406,12 +411,14 @@ class SendMediaGroup:
                 )
             )
 
+        reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
         r = await self.invoke(
             raw.functions.messages.SendMultiMedia(
                 peer=await self.resolve_peer(chat_id),
                 multi_media=multi_media,
                 silent=disable_notification or None,
-                reply_to_msg_id=reply_to_message_id,
+                reply_to=reply_to,
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,
             ),

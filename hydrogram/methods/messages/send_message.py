@@ -29,6 +29,7 @@ class SendMessage:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         text: str,
+        message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         entities: Optional[List["types.MessageEntity"]] = None,
         disable_web_page_preview: Optional[bool] = None,
@@ -55,6 +56,10 @@ class SendMessage:
 
             text (``str``):
                 Text of the message to be sent.
+
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
 
             parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
                 By default, texts are parsed using both Markdown and HTML styles.
@@ -125,12 +130,14 @@ class SendMessage:
             await utils.parse_text_entities(self, text, parse_mode, entities)
         ).values()
 
+        reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
         r = await self.invoke(
             raw.functions.messages.SendMessage(
                 peer=await self.resolve_peer(chat_id),
                 no_webpage=disable_web_page_preview or None,
                 silent=disable_notification or None,
-                reply_to_msg_id=reply_to_message_id,
+                reply_to=reply_to,
                 random_id=self.rnd_id(),
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 reply_markup=await reply_markup.write(self) if reply_markup else None,

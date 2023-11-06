@@ -34,6 +34,7 @@ class SendVoice:
         chat_id: Union[int, str],
         voice: Union[str, BinaryIO],
         caption: str = "",
+        message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         duration: int = 0,
@@ -70,6 +71,10 @@ class SendVoice:
             caption (``str``, *optional*):
                 Voice message caption, 0-1024 characters.
 
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
+
             parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
                 By default, texts are parsed using both Markdown and HTML styles.
                 You can combine both syntaxes together.
@@ -85,7 +90,7 @@ class SendVoice:
                 Users will receive a notification with no sound.
 
             reply_to_message_id (``int``, *optional*):
-                If the message is a reply, ID of the original message
+                If the message is a reply, ID of the original message.
 
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
@@ -162,6 +167,8 @@ class SendVoice:
                     attributes=[raw.types.DocumentAttributeAudio(voice=True, duration=duration)],
                 )
 
+            reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
+
             while True:
                 try:
                     r = await self.invoke(
@@ -169,7 +176,7 @@ class SendVoice:
                             peer=await self.resolve_peer(chat_id),
                             media=media,
                             silent=disable_notification or None,
-                            reply_to_msg_id=reply_to_message_id,
+                            reply_to=reply_to,
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,
