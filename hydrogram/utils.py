@@ -106,8 +106,7 @@ async def parse_messages(
             for i in messages.messages
             if not isinstance(i, raw.types.MessageEmpty) and i.reply_to
         }
-        and replies
-    ):
+    ) and replies:
         # We need a chat id, but some messages might be empty (no chat attribute available)
         # Scan until we find a message with a chat available (there must be one, because we are fetching replies)
         chat_id = next((m.chat.id for m in parsed_messages if m.chat), 0)
