@@ -69,12 +69,12 @@ app.run()
 
 ## Features
 
-- Easy: Makes the Telegram API simple and intuitive, while still allowing advanced usages.
-- Elegant: Low-level details are abstracted and re-presented in a more convenient way.
-- Fast: Boosted up by [TgCrypto](https://github.com/pyrogram/tgcrypto), a high-performance cryptography library written in C.
-- Type-hinted: Types and methods are all type-hinted, enabling excellent editor support.
-- Async: Fully asynchronous (also usable synchronously if wanted, for convenience).
-- Powerful: Full access to Telegram's API to execute any official client action and more.
+- **Easy to use:** Hydrogram provides a simple and intuitive interface for developers to leverage the power of Telegram's API in their Python applications, while still allowing advanced usages.
+- **Elegant:** Low-level details are abstracted and re-presented in a more convenient way, making the Telegram API more accessible.
+- **Fast:** Hydrogram is boosted by [TgCrypto](https://github.com/pyrogram/tgcrypto), a high-performance cryptography library written in C, which makes it faster than other Python Telegram libraries.
+- **Type-hinted:** Types and methods are all type-hinted, enabling excellent editor support and making it easier to write and maintain code.
+- **Async:** Hydrogram is fully asynchronous, which means it can handle multiple requests at the same time, making it faster and more efficient (also usable synchronously if wanted, for convenience).
+- **Powerful:** Hydrogram provides full access to Telegram's API to execute any official client action and more, giving developers the flexibility to build powerful applications.
 
 ## Resources
 
@@ -84,7 +84,20 @@ app.run()
 
 ## Contributing
 
-Contributions of all sizes are welcome. Please review our [contribution guidelines](https://github.com/AmanoTeam/hydrogram/blob/main/CONTRIBUTING.rst) for more information. You can also help by [reporting bugs or feature requests](https://github.com/AmanoTeam/hydrogram/issues/new/choose).
+Hydrogram is an open source project and we welcome contributions from the community. We appreciate all types of contributions, including bug reports, feature requests, documentation improvements, and code contributions.
+
+To get started, please review our [contribution guidelines](https://github.com/AmanoTeam/hydrogram/blob/main/CONTRIBUTING.rst) for more information. You can also help by [reporting bugs or feature requests](https://github.com/AmanoTeam/hydrogram/issues/new/choose).
+
+If you're interested in contributing code, you'll need to set up the development environment. Here are the steps:
+
+1. Clone the repository: `git clone https://github.com/AmanoTeam/hydrogram.git`
+2. Install the dependencies: `pip install .[dev]`
+3. Run the tests: `pytest`
+4. Make your changes and submit a pull request.
+
+All contributors are expected to adhere to the [Code of Conduct](https://github.com/AmanoTeam/hydrogram/blob/main/CODE_OF_CONDUCT.rst). Please read it before contributing.
+
+We appreciate your help in making Hydrogram better!
 
 ## Support
 
@@ -93,10 +106,10 @@ Hydrogram is an open source project. Your support helps us maintain and improve 
 - [Liberapay](https://liberapay.com/hydrogram)
 - [OpenCollective](https://opencollective.com/hydrogram)
 
-## License
-
-You may copy, distribute and modify the software provided that modifications are described and licensed for free under [LGPL-3](https://www.gnu.org/licenses/lgpl-3.0.html). Derivatives works (including modifications or anything statically linked to the library) can only be redistributed under LGPL-3, but applications that use the library don't have to be.
-
 ## Thanks
 
 - [Pyrogram](https://github.com/pyrogram/pyrogram) and its contributors for the inspiration and base code.
+
+## License
+
+You may copy, distribute and modify the software provided that modifications are described and licensed for free under [LGPL-3](https://www.gnu.org/licenses/lgpl-3.0.html). Derivatives works (including modifications or anything statically linked to the library) can only be redistributed under LGPL-3, but applications that use the library don't have to be.
