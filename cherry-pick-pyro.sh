@@ -58,6 +58,7 @@ checkout_code() {
 
         git fetch --quiet origin "pull/$CP_DATA/head:$TARGET_BRANCH"
         git switch --quiet "$TARGET_BRANCH"
+        git rebase --quiet "$ORIGIN_BRANCH"
     elif [ "$CP_TYPE" == "branch" ]; then
         echo "Checking out branch code…"
 
