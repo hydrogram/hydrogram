@@ -226,7 +226,7 @@ class Client(Methods):
         phone_code: Optional[str] = None,
         password: Optional[str] = None,
         workers: int = WORKERS,
-        workdir: str = WORKDIR,
+        workdir: str = str(WORKDIR),
         plugins: Optional[dict] = None,
         parse_mode: "enums.ParseMode" = enums.ParseMode.DEFAULT,
         no_updates: Optional[bool] = None,
