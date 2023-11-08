@@ -23,7 +23,6 @@ import inspect
 import io
 import logging
 import math
-import os
 from hashlib import md5
 from pathlib import Path, PurePath
 from typing import BinaryIO, Callable, Optional, Union
@@ -113,27 +112,21 @@ class SaveFile:
             part_size = 512 * 1024
 
             if isinstance(path, (str, PurePath)):
-                with Path(path).open("rb") as fp:
-                    file_size = fp.tell()
-                    fp.seek(0)
-
-                    if file_size == 0:
-                        raise ValueError("File size equals to 0 B")
+                fp = Path(path).open("rb")  # noqa: SIM115
             elif isinstance(path, io.IOBase):
                 fp = path
-                file_name = getattr(fp, "name", "file.jpg")
-                fp.seek(0, os.SEEK_END)
-                file_size = fp.tell()
-                fp.seek(0)
             else:
                 raise ValueError(
                     "Invalid file. Expected a file path as string or a binary (not text) file pointer"
                 )
+
             file_size = fp.tell()
-            fp.seek(0)
 
             if file_size == 0:
                 raise ValueError("File size equals to 0 B")
+
+            file_name = getattr(fp, "name", "file.jpg")
+            fp.seek(0)
 
             file_size_limit_mib = 4000 if self.me.is_premium else 2000
 
