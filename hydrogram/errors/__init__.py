@@ -493,6 +493,7 @@ from .exceptions import (
     service_unavailable_503,
     unauthorized_401,
 )
+from .pyromod import ListenerStopped, ListenerTimeout
 from .rpc_error import UnknownError
 
 
@@ -955,6 +956,8 @@ __all__ = [
     "TypesEmpty",
     "Unauthorized",
     "UnknownError",
+    "ListenerStopped",
+    "ListenerTimeout",
     "UnknownMethod",
     "UntilDateInvalid",
     "UploadNoVolume",
