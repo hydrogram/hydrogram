@@ -17,15 +17,18 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+import base64
 import inspect
+import struct
 import time
-from typing import Any, List, Tuple
+from pathlib import Path
+from typing import Any, List, Optional, Tuple
 
 import aiosqlite
 
 from hydrogram import raw, utils
 
-from .storage import Storage
+from .base import BaseStorage
 
 # language=SQLite
 SCHEMA = """
@@ -85,14 +88,45 @@ def get_input_peer(peer_id: int, access_hash: int, peer_type: str):
     raise ValueError(f"Invalid peer type: {peer_type}")
 
 
-class SQLiteStorage(Storage):
+class SQLiteStorage(BaseStorage):
     VERSION = 3
     USERNAME_TTL = 8 * 60 * 60
+    FILE_EXTENSION = ".session"
 
-    def __init__(self, name: str):
+    def __init__(
+        self,
+        name: str,
+        workdir: Optional[Path] = None,
+        session_string: Optional[str] = None,
+        use_memory: bool = False,
+    ):
         super().__init__(name)
 
         self.conn: aiosqlite.Connection = None
+
+        if workdir and not use_memory:
+            self.database = workdir / (self.name + self.FILE_EXTENSION)
+        else:
+            self.database = ":memory:"
+
+        self.session_string = session_string
+
+    async def update(self):
+        version = await self.version()
+
+        if version == 1:
+            await self.conn.execute("DELETE FROM peers")
+            await self.conn.commit()
+
+            version += 1
+
+        if version == 2:
+            await self.conn.execute("ALTER TABLE sessions ADD api_id INTEGER")
+            await self.conn.commit()
+
+            version += 1
+
+        await self.version(version)
 
     async def create(self):
         await self.conn.executescript(SCHEMA)
@@ -104,7 +138,36 @@ class SQLiteStorage(Storage):
         await self.conn.commit()
 
     async def open(self):
-        raise NotImplementedError
+        path = self.database
+        file_exists = isinstance(path, Path) and path.is_file()
+
+        self.conn = await aiosqlite.connect(self.database)
+
+        await self.conn.execute("PRAGMA journal_mode=WAL")
+
+        if file_exists:
+            await self.update()
+
+            await self.conn.execute("VACUUM")
+            await self.conn.commit()
+        else:
+            await self.create()
+
+        if self.session_string:
+            dc_id, api_id, test_mode, auth_key, user_id, is_bot = struct.unpack(
+                self.SESSION_STRING_FORMAT,
+                base64.urlsafe_b64decode(
+                    self.session_string + "=" * (-len(self.session_string) % 4)
+                ),
+            )
+
+            await self.dc_id(dc_id)
+            await self.api_id(api_id)
+            await self.test_mode(test_mode)
+            await self.auth_key(auth_key)
+            await self.user_id(user_id)
+            await self.is_bot(is_bot)
+            await self.date(0)
 
     async def save(self):
         await self.date(int(time.time()))
@@ -114,7 +177,8 @@ class SQLiteStorage(Storage):
         await self.conn.close()
 
     async def delete(self):
-        raise NotImplementedError
+        if self.database != ":memory:":
+            Path(self.database).unlink()
 
     async def update_peers(self, peers: List[Tuple[int, int, str, str, str]]):
         await self.conn.executemany(

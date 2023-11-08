@@ -22,7 +22,7 @@ import struct
 from typing import List, Tuple
 
 
-class Storage:
+class BaseStorage:
     OLD_SESSION_STRING_FORMAT = ">B?256sI?"
     OLD_SESSION_STRING_FORMAT_64 = ">B?256sQ?"
     SESSION_STRING_SIZE = 351
