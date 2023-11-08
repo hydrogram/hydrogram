@@ -116,6 +116,12 @@ class User(Object, Update):
         username (``str``, *optional*):
             User's or bot's username.
 
+        active_usernames (List of ``str``, *optional*):
+            If non-empty, the list of all active chat usernames; for private chats, supergroups and channels.
+
+        usernames (List of :obj:`~hydrogram.types.Username`, *optional*):
+            The list of user's collectible (and basic) usernames if availables.
+
         language_code (``str``, *optional*):
             IETF language tag of the user's language.
 
@@ -167,6 +173,8 @@ class User(Object, Update):
         last_online_date: Optional[datetime] = None,
         next_offline_date: Optional[datetime] = None,
         username: Optional[str] = None,
+        active_usernames: Optional[str] = None,
+        usernames: Optional[List["types.Username"]] = None,
         language_code: Optional[str] = None,
         emoji_status: Optional["types.EmojiStatus"] = None,
         dc_id: Optional[int] = None,
@@ -194,6 +202,8 @@ class User(Object, Update):
         self.last_online_date = last_online_date
         self.next_offline_date = next_offline_date
         self.username = username
+        self.active_usernames = active_usernames
+        self.usernames = usernames
         self.language_code = language_code
         self.emoji_status = emoji_status
         self.dc_id = dc_id
@@ -234,7 +244,12 @@ class User(Object, Update):
             first_name=user.first_name,
             last_name=user.last_name,
             **User._parse_status(user.status, user.bot),
-            username=user.username,
+            username=user.usernames[0].username if user.usernames else user.username,
+            active_usernames=types.List(
+                [username.username for username in user.usernames if username.active]
+            )
+            or None,
+            usernames=types.List([types.Username._parse(r) for r in user.usernames]) or None,
             language_code=user.lang_code,
             emoji_status=types.EmojiStatus._parse(client, user.emoji_status),
             dc_id=getattr(user.photo, "dc_id", None),

@@ -63,6 +63,12 @@ class Chat(Object):
         username (``str``, *optional*):
             Username, for private chats, bots, supergroups and channels if available.
 
+        active_usernames (List of ``str``, *optional*):
+            If non-empty, the list of all active chat usernames; for private chats, supergroups and channels.
+
+        usernames (List of :obj:`~hydrogram.types.Username`, *optional*):
+            The list of chat's collectible (and basic) usernames if availables.
+
         first_name (``str``, *optional*):
             First name of the other party in a private chat, for private chats and bots.
 
@@ -151,6 +157,8 @@ class Chat(Object):
         is_forum: Optional[bool] = None,
         title: Optional[str] = None,
         username: Optional[str] = None,
+        active_usernames: Optional[str] = None,
+        usernames: Optional[List["types.Username"]] = None,
         first_name: Optional[str] = None,
         last_name: Optional[str] = None,
         photo: "types.ChatPhoto" = None,
@@ -183,6 +191,8 @@ class Chat(Object):
         self.is_forum = is_forum
         self.title = title
         self.username = username
+        self.active_usernames = active_usernames
+        self.usernames = usernames
         self.first_name = first_name
         self.last_name = last_name
         self.photo = photo
@@ -218,7 +228,12 @@ class Chat(Object):
             is_scam=getattr(user, "scam", None),
             is_fake=getattr(user, "fake", None),
             is_support=getattr(user, "support", None),
-            username=user.username,
+            username=user.usernames[0].username if user.usernames else user.username,
+            active_usernames=types.List(
+                [username.username for username in user.usernames if username.active]
+            )
+            or None,
+            usernames=types.List([types.Username._parse(r) for r in user.usernames]) or None,
             first_name=user.first_name,
             last_name=user.last_name,
             photo=types.ChatPhoto._parse(client, user.photo, peer_id, user.access_hash),
@@ -231,6 +246,7 @@ class Chat(Object):
     @staticmethod
     def _parse_chat_chat(client, chat: raw.types.Chat) -> "Chat":
         peer_id = -chat.id
+        usernames = getattr(chat, "usernames", [])
 
         return Chat(
             id=peer_id,
@@ -242,6 +258,7 @@ class Chat(Object):
             members_count=getattr(chat, "participants_count", None),
             dc_id=getattr(getattr(chat, "photo", None), "dc_id", None),
             has_protected_content=getattr(chat, "noforwards", None),
+            usernames=types.List([types.Username._parse(r) for r in usernames]) or None,
             client=client,
         )
 
@@ -249,6 +266,7 @@ class Chat(Object):
     def _parse_channel_chat(client, channel: raw.types.Channel) -> "Chat":
         peer_id = utils.get_channel_id(channel.id)
         restriction_reason = getattr(channel, "restriction_reason", [])
+        usernames = getattr(channel, "usernames", [])
 
         return Chat(
             id=peer_id,
@@ -277,6 +295,7 @@ class Chat(Object):
             members_count=getattr(channel, "participants_count", None),
             dc_id=getattr(getattr(channel, "photo", None), "dc_id", None),
             has_protected_content=getattr(channel, "noforwards", None),
+            usernames=types.List([types.Username._parse(r) for r in usernames]) or None,
             client=client,
         )
 
