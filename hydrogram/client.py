@@ -115,7 +115,7 @@ class Client(Methods):
             Pass a session string to load the session in-memory.
             Implies ``in_memory=True``.
 
-        session_storage_engine (:obj:`~pyrogram.storage.BaseStorage`, *optional*):
+        session_storage_engine (:obj:`~hydrogram.storage.BaseStorage`, *optional*):
             Pass an instance of your own implementation of session storage engine.
             Useful when you want to store your session in databases like Mongo, Redis, etc.
 

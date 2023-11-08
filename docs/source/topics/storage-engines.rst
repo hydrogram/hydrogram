@@ -83,3 +83,20 @@ login using the same session; the storage used will still be in-memory:
 
 Session strings are useful when you want to run authorized Hydrogram clients on platforms where their ephemeral
 filesystems makes it harder for a file-based storage engine to properly work as intended.
+
+Custom Storages
+---------------
+
+If you want to use a custom storage engine, you can do so by implementing the :class:`~hydrogram.storage.BaseStorage` class.
+This class is an abstract base class that defines the interface that all storage engines must implement.
+
+An abstract base class is a class that cannot be instantiated, but can be used to define a common interface for its
+subclasses. In this case, the :class:`~hydrogram.storage.BaseStorage` class defines the interface that all storage
+engines must implement.
+
+Custom Storage can be defined in :class:`~hydrogram.Client` by passing ``session_storage_engine`` parameter with a
+:class:`~hydrogram.storage.BaseStorage` subclass.
+
+.. automodule:: hydrogram.storage.base
+    :members:
+    :noindex:

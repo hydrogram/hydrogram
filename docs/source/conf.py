@@ -162,8 +162,3 @@ html_theme_options = {
         },
     ],
 }
-
-latex_theme_options = {
-    "light_logo": "hydrogram-light.png",
-    "dark_logo": "hydrogram-dark.png",
-}
