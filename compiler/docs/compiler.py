@@ -348,7 +348,7 @@ def hydrogram_api():
         fmt_keys = {}
 
         for k, v in categories.items():
-            name, *methods = get_title_list(v)
+            _, *methods = get_title_list(v)
             fmt_keys[k] = "\n    ".join(f"{m} <{m}>" for m in methods)
 
             for method in methods:
@@ -510,7 +510,7 @@ def hydrogram_api():
         fmt_keys = {}
 
         for k, v in categories.items():
-            name, *types = get_title_list(v)
+            _, *types = get_title_list(v)
 
             fmt_keys[k] = "\n    ".join(types)
 
@@ -620,7 +620,7 @@ def hydrogram_api():
         fmt_keys = {}
 
         for k, v in categories.items():
-            name, *bound_methods = get_title_list(v)
+            _, *bound_methods = get_title_list(v)
 
             fmt_keys[f"{k}_hlist"] = "\n    ".join(f"- :meth:`~{bm}`" for bm in bound_methods)
 

@@ -37,7 +37,7 @@ class GetForumTopicsByID:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
 
-            topic_ids (``int`` | Iterable of ``int``, *optional*):
+            topic_ids (``int`` | Iterable of ``int``):
                 Pass a single topic identifier or an iterable of topic ids (as integers) to get the information of the
                 topic themselves.
 
@@ -57,18 +57,13 @@ class GetForumTopicsByID:
         Raises:
             ValueError: In case of invalid arguments.
         """
-        ids, ids_type = (topic_ids, int) if topic_ids else (None, None)
-
-        if ids is None:
-            raise ValueError("No argument supplied. Either pass topic_ids")
 
         peer = await self.resolve_peer(chat_id)
 
-        is_iterable = not isinstance(ids, int)
-        ids = list(ids) if is_iterable else [ids]
-        ids = list(ids)
+        is_iterable = not isinstance(topic_ids, int)
+        topic_ids = list(topic_ids) if is_iterable else [topic_ids]
 
-        rpc = raw.functions.channels.GetForumTopicsByID(channel=peer, topics=ids)
+        rpc = raw.functions.channels.GetForumTopicsByID(channel=peer, topics=topic_ids)
 
         r = await self.invoke(rpc, sleep_threshold=-1)
 
