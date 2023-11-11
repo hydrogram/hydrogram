@@ -148,7 +148,7 @@ class User(Object, Update):
             Generate a text mention for this user.
             You can use ``user.mention()`` to mention the user using their first name (styled using html), or
             ``user.mention("another name")`` for a custom name. To choose a different style
-            ("html" or "md"/"markdown") use ``user.mention(style="md")``.
+            ("HTML" or "MARKDOWN") use ``user.mention(style=ParseMode.MARKDOWN)``.
     """
 
     def __init__(
