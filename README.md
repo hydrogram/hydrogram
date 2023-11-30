@@ -33,7 +33,7 @@
 [![PyPI license](https://img.shields.io/pypi/l/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram)
 [![PyPI python versions](https://img.shields.io/pypi/pyversions/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram)
 [![PyPI download month](https://img.shields.io/pypi/dm/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram/)
-[![GitHub Actions status](https://github.com/AmanoTeam/hydrogram/workflows/CI/badge.svg)](https://github.com/AmanoTeam/hydrogram/actions)
+[![GitHub Actions status](https://github.com/AmanoTeam/hydrogram/actions/workflows/python.yml/badge.svg)](https://github.com/AmanoTeam/hydrogram/actions)
 
 ## Description
 
