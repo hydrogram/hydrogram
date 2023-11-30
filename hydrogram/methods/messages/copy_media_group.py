@@ -31,6 +31,7 @@ class CopyMediaGroup:
         from_chat_id: Union[int, str],
         message_id: int,
         captions: Optional[Union[List[str], str]] = None,
+        *,
         message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,

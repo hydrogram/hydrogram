@@ -32,6 +32,7 @@ class SendVideoNote:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         video_note: Union[str, BinaryIO],
+        *,
         message_thread_id: Optional[int] = None,
         duration: int = 0,
         length: int = 1,

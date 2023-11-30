@@ -28,6 +28,7 @@ class SendGame:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         game_short_name: str,
+        *,
         message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,

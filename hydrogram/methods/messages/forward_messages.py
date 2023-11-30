@@ -30,6 +30,7 @@ class ForwardMessages:
         chat_id: Union[int, str],
         from_chat_id: Union[int, str],
         message_ids: Union[int, Iterable[int]],
+        *,
         message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         schedule_date: Optional[datetime] = None,

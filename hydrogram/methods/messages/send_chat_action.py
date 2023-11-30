@@ -28,6 +28,7 @@ class SendChatAction:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         action: "enums.ChatAction",
+        *,
         message_thread_id: Optional[int] = None,
     ) -> bool:
         """Tell the other party that something is happening on your side.

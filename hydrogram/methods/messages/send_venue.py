@@ -32,6 +32,7 @@ class SendVenue:
         longitude: float,
         title: str,
         address: str,
+        *,
         message_thread_id: Optional[int] = None,
         foursquare_id: str = "",
         foursquare_type: str = "",

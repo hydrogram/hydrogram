@@ -35,6 +35,7 @@ class SendDocument:
         document: Union[str, BinaryIO],
         thumb: Optional[Union[str, BinaryIO]] = None,
         caption: str = "",
+        *,
         message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,

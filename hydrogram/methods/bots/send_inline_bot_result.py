@@ -29,6 +29,7 @@ class SendInlineBotResult:
         chat_id: Union[int, str],
         query_id: int,
         result_id: str,
+        *,
         message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,

@@ -34,6 +34,7 @@ class SendAnimation:
         chat_id: Union[int, str],
         animation: Union[str, BinaryIO],
         caption: str = "",
+        *,
         message_thread_id: Optional[int] = None,
         unsave: bool = False,
         parse_mode: Optional["enums.ParseMode"] = None,

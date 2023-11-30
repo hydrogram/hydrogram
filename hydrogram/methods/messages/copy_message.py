@@ -34,6 +34,7 @@ class CopyMessage:
         from_chat_id: Union[int, str],
         message_id: int,
         caption: Optional[str] = None,
+        *,
         message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,

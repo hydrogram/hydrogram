@@ -30,6 +30,7 @@ class SendPoll:
         chat_id: Union[int, str],
         question: str,
         options: List[str],
+        *,
         message_thread_id: Optional[int] = None,
         is_anonymous: bool = True,
         type: "enums.PollType" = enums.PollType.REGULAR,

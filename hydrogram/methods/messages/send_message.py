@@ -29,6 +29,7 @@ class SendMessage:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         text: str,
+        *,
         message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         entities: Optional[List["types.MessageEntity"]] = None,

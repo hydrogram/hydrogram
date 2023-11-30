@@ -30,6 +30,7 @@ class SendCachedMedia:
         chat_id: Union[int, str],
         file_id: str,
         caption: str = "",
+        *,
         message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
