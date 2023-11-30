@@ -114,6 +114,7 @@ Meta
     :hidden:
     :caption: Getting Started
 
+    start/migration-guide
     start/setup
     start/auth
     start/invoking
