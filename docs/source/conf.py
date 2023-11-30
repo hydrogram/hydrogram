@@ -59,6 +59,7 @@ napoleon_use_param = False
 
 towncrier_draft_autoversion_mode = "draft"
 towncrier_draft_include_empty = True
+towncrier_draft_working_directory = Path(__file__).parent.parent.parent
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
