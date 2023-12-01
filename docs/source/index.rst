@@ -76,6 +76,7 @@ First Steps
 .. hlist::
     :columns: 1
 
+    - :doc:`Migration Guide <start/migration-guide>`: Migration guide from Pyrogram.
     - :doc:`Quick Start <intro/quickstart>`: Overview to get you started quickly.
     - :doc:`Invoking Methods <start/invoking>`: How to call Hydrogram's methods.
     - :doc:`Handling Updates <start/updates>`: How to handle Telegram updates.
@@ -102,6 +103,7 @@ Meta
     - :doc:`Hydrogram FAQ <faq/index>`: Answers to common Hydrogram questions.
     - :doc:`Support Hydrogram <support>`: Ways to show your appreciation.
     - :doc:`Release Notes <releases>`: Release notes for Hydrogram releases.
+    - :doc:`Hydrogram vs Pyrogram <hydrogram-vs-pyrogram>`: Comparison between Hydrogram and Pyrogram.
 
 .. toctree::
     :hidden:
@@ -164,6 +166,7 @@ Meta
     faq/index
     support
     releases
+    hydrogram-vs-pyrogram
 
 .. toctree::
     :hidden:

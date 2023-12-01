@@ -14,3 +14,8 @@ Changelog
 .. towncrier-draft-entries:: |release| [UNRELEASED DRAFT]
 
 .. towncrier release notes start
+
+0.1.0 (2023-12-01)
+===================
+
+Initial project release. To see all changes and improvements compared to Pyrogram, see `Hydrogram vs Pyrogram <https://hydrogram.amanoteam.com/en/latest/hydrogram-vs-pyrogram.html>`_
