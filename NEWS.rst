@@ -15,6 +15,12 @@ Changelog
 
 .. towncrier release notes start
 
+0.1.1 (2023-12-01)
+===================
+
+Fixup release that fixes our logo url in PyPI.
+
+
 0.1.0 (2023-12-01)
 ===================
 
