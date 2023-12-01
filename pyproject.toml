@@ -1,7 +1,7 @@
 [project]
 name = "Hydrogram"
 dynamic = ["version"]
-description = "Elegant, modern and asynchronous Telegram MTProto API framework in Python for users and bots"
+description = "Sleek, advanced, and asynchronous Telegram MTProto API framework in Python, designed for fluid user and bot interactions."
 authors = [{ name = "Amano LLC", email = "contact@amanoteam.com" }]
 dependencies = [
     "pyaes==1.6.1",

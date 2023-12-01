@@ -1,9 +1,9 @@
 <p align="center">
     <a href="https://github.com/AmanoTeam/hydrogram">
         <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="docs/source/_static/hydrogram-dark.png">
-            <source media="(prefers-color-scheme: light)" srcset="docs/source/_static/hydrogram-light.png">
-            <img alt="Hydrogram" width="128" src="docs/source/_static/hydrogram-light.png">
+            <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AmanoTeam/hydrogram/main/docs/source/_static/hydrogram-dark.png">
+            <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AmanoTeam/hydrogram/main/docs/source/_static/hydrogram-light.png">
+            <img alt="Hydrogram" width="128" src="https://raw.githubusercontent.com/AmanoTeam/hydrogram/main/docs/source/_static/hydrogram-light.png">
         </picture>
     </a>
     <br>
