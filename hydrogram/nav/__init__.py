@@ -19,3 +19,5 @@ along with pyromod.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 from .pagination import Pagination
+
+__all__ = ["Pagination"]

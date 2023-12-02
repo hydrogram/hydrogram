@@ -81,9 +81,8 @@ class Pagination:
                 (f"{last_page} »", self.page_data(last_page)),
             ]
 
-        buttons = []
-        for item in cutted:
-            buttons.append((self.item_title(item, page), self.item_data(item, page)))
+        buttons = [(self.item_title(item, page), self.item_data(item, page)) for item in cutted]
+
         kb_lines = array_chunk(buttons, columns)
         if last_page > 1:
             kb_lines.append(nav)

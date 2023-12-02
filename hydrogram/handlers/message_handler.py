@@ -136,14 +136,14 @@ class MessageHandler(Handler):
                 listener.future.set_result(message)
 
                 raise hydrogram.StopPropagation
-            elif listener.callback:
+            if listener.callback:
                 if iscoroutinefunction(listener.callback):
                     await listener.callback(client, message, *args)
                 else:
                     listener.callback(client, message, *args)
 
                 raise hydrogram.StopPropagation
-            else:
-                raise ValueError("Listener must have either a future or a callback")
-        else:
-            await self.original_callback(client, message, *args)
+
+            raise ValueError("Listener must have either a future or a callback")
+
+        await self.original_callback(client, message, *args)

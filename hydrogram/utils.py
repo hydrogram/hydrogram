@@ -27,7 +27,7 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timezone
 from getpass import getpass
 from types import SimpleNamespace
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types

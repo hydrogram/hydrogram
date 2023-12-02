@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from typing import Callable
 
 import hydrogram
-from hydrogram import filters
 
 from .identifier import Identifier
 from .listener_types import ListenerTypes

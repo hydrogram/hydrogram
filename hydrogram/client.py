@@ -351,10 +351,10 @@ class Client(Methods):
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         timeout: Optional[int] = None,
         unallowed_click_alert: bool = True,
-        chat_id: Optional[Union[Union[int, str], List[Union[int, str]]]] = None,
-        user_id: Optional[Union[Union[int, str], List[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, List[int]]] = None,
-        inline_message_id: Optional[Union[str, List[str]]] = None,
+        chat_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        message_id: Optional[Union[int, list[int]]] = None,
+        inline_message_id: Optional[Union[str, list[str]]] = None,
     ):
         """
         Creates a listener and waits for it to be fulfilled.
@@ -406,15 +406,15 @@ class Client(Methods):
 
     async def ask(
         self,
-        chat_id: Union[Union[int, str], List[Union[int, str]]],
+        chat_id: Union[Union[int, str], list[Union[int, str]]],
         text: str,
         filters: Optional[Filter] = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         timeout: Optional[int] = None,
         unallowed_click_alert: bool = True,
-        user_id: Optional[Union[Union[int, str], List[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, List[int]]] = None,
-        inline_message_id: Optional[Union[str, List[str]]] = None,
+        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        message_id: Optional[Union[int, list[int]]] = None,
+        inline_message_id: Optional[Union[str, list[str]]] = None,
         *args,
         **kwargs,
     ):
@@ -475,10 +475,11 @@ class Client(Methods):
         :param listener_type: The type of listener to get. Must be a value from :class:`pyromod.types.ListenerTypes`.
         :return: The listener that matches the given data or ``None`` if no listener matches.
         """
-        matching = []
-        for listener in self.listeners[listener_type]:
-            if listener.identifier.matches(data):
-                matching.append(listener)
+        matching = [
+            listener
+            for listener in self.listeners[listener_type]
+            if listener.identifier.matches(data)
+        ]
 
         # in case of multiple matching listeners, the most specific should be returned
         def count_populated_attributes(listener_item: Listener):
@@ -500,10 +501,11 @@ class Client(Methods):
         :param listener_type: The type of listener to get. Must be a value from :class:`pyromod.types.ListenerTypes`.
         :return: The listener that matches the given identifier pattern or ``None`` if no listener matches.
         """
-        matching = []
-        for listener in self.listeners[listener_type]:
-            if pattern.matches(listener.identifier):
-                matching.append(listener)
+        matching = [
+            listener
+            for listener in self.listeners[listener_type]
+            if pattern.matches(listener.identifier)
+        ]
 
         # in case of multiple matching listeners, the most specific should be returned
 
@@ -516,7 +518,7 @@ class Client(Methods):
         self,
         data: Identifier,
         listener_type: ListenerTypes,
-    ) -> List[Listener]:
+    ) -> list[Listener]:
         """
         Same of :meth:`pyromod.types.Client.get_listener_matching_with_data` but returns a list of listeners instead of one.
 
@@ -524,17 +526,17 @@ class Client(Methods):
         :param listener_type: Same as :meth:`pyromod.types.Client.get_listener_matching_with_data`.
         :return: A list of listeners that match the given data.
         """
-        listeners = []
-        for listener in self.listeners[listener_type]:
-            if listener.identifier.matches(data):
-                listeners.append(listener)
-        return listeners
+        return [
+            listener
+            for listener in self.listeners[listener_type]
+            if listener.identifier.matches(data)
+        ]
 
     def get_many_listeners_matching_with_identifier_pattern(
         self,
         pattern: Identifier,
         listener_type: ListenerTypes,
-    ) -> List[Listener]:
+    ) -> list[Listener]:
         """
         Same of :meth:`pyromod.types.Client.get_listener_matching_with_identifier_pattern` but returns a list of listeners instead of one.
 
@@ -542,19 +544,19 @@ class Client(Methods):
         :param listener_type: Same as :meth:`pyromod.types.Client.get_listener_matching_with_identifier_pattern`.
         :return: A list of listeners that match the given identifier pattern.
         """
-        listeners = []
-        for listener in self.listeners[listener_type]:
-            if pattern.matches(listener.identifier):
-                listeners.append(listener)
-        return listeners
+        return [
+            listener
+            for listener in self.listeners[listener_type]
+            if pattern.matches(listener.identifier)
+        ]
 
     async def stop_listening(
         self,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        chat_id: Optional[Union[Union[int, str], List[Union[int, str]]]] = None,
-        user_id: Optional[Union[Union[int, str], List[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, List[int]]] = None,
-        inline_message_id: Optional[Union[str, List[str]]] = None,
+        chat_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        message_id: Optional[Union[int, list[int]]] = None,
+        inline_message_id: Optional[Union[str, list[str]]] = None,
     ):
         """
         Stops all listeners that match the given identifier pattern.
@@ -609,10 +611,10 @@ class Client(Methods):
         filters: Optional[Filter] = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         unallowed_click_alert: bool = True,
-        chat_id: Optional[Union[Union[int, str], List[Union[int, str]]]] = None,
-        user_id: Optional[Union[Union[int, str], List[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, List[int]]] = None,
-        inline_message_id: Optional[Union[str, List[str]]] = None,
+        chat_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        message_id: Optional[Union[int, list[int]]] = None,
+        inline_message_id: Optional[Union[str, list[str]]] = None,
     ):
         """
         Registers a listener with a callback to be called when the listener is fulfilled.

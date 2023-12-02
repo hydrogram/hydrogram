@@ -507,7 +507,7 @@ class Message(Object, Update):
 
     async def wait_for_click(
         self,
-        from_user_id: Optional[Union[Union[int, str], List[Union[int, str]]]] = None,
+        from_user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
         timeout: Optional[int] = None,
         filters=None,
         alert: Union[str, bool] = True,
