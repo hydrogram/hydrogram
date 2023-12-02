@@ -15,8 +15,7 @@ The supporting branches are:
 
 - **feat**: These branches are created from the develop branch and merged back into it when the feature is completed. They are used to implement new features or enhancements for the project. They are named as ``feature/<feature-name>``, where ``<feature-name>`` is a short and descriptive name of the feature.
 - **fix**: These branches are created from the develop branch and merged back into it when the fix is completed. They are used to fix bugs or issues in the project. They are named as ``fix/<issue-number>``, where ``<issue-number>`` is the issue number of the bug tracker.
-- **hotfix**: These branches are created from the main branch and merged back into it and the develop branch when the hotfix is completed. They are used to fix urgent bugs or issues in the released versions of the project. They are named as ``hotfix/<version>-<issue-number>``, where ``<version>`` is the version number of the release and `<issue-number>` is the issue number of the bug tracker.
-- **release**: These branches are created from the develop branch and merged back into it and the main branch when the release is ready. They are used to prepare and test the new versions of the project before releasing them. They are named as ``release/<version>``, where ``<version>`` is the version number of the release.
+- **hotfix**: These branches are created from the main branch and merged back into it and the develop branch when the hotfix is completed. They are used to fix urgent bugs or issues in the released versions of the project. They are named as ``hotfix/<issue-number>``, where `<issue-number>` is the issue number of the bug tracker.
 
 Git Convention
 --------------
