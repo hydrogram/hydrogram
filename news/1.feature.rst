@@ -1,0 +1,2 @@
+Integrate pyromod patches into the project (many thanks to @usernein for his excellent work). To check out the pyromod specific features, have a look at https://pyromod.pauxis.dev/.
+You can use the features in the same way as in pyromod, except that you import them directly from the hydrogram package.
