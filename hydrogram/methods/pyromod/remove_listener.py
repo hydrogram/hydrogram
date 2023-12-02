@@ -26,7 +26,7 @@ from hydrogram.types import Listener
 class RemoveListener:
     def remove_listener(self: "hydrogram.Client", listener: Listener):
         """
-        Removes a listener from the :meth:`pyromod.types.Client.listeners` dictionary.
+        Removes a listener from the :meth:`hydrogram.Client.listeners` dictionary.
 
         :param listener: The listener to remove.
         :return: ``void``

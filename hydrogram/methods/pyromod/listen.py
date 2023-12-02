@@ -46,7 +46,7 @@ class Listen:
         Creates a listener and waits for it to be fulfilled.
 
         :param filters: A filter to check if the listener should be fulfilled.
-        :param listener_type: The type of listener to create. Defaults to :attr:`pyromod.types.ListenerTypes.MESSAGE`.
+        :param listener_type: The type of listener to create. Defaults to :attr:`hydrogram.types.ListenerTypes.MESSAGE`.
         :param timeout: The maximum amount of time to wait for the listener to be fulfilled. Defaults to ``None``.
         :param unallowed_click_alert: Whether to alert the user if they click on a button that is not intended for them. Defaults to ``True``.
         :param chat_id: The chat ID(s) to listen for. Defaults to ``None``.

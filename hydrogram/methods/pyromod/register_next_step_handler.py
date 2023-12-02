@@ -40,13 +40,13 @@ class RegisterNextStepHandler:
         Registers a listener with a callback to be called when the listener is fulfilled.
 
         :param callback: The callback to call when the listener is fulfilled.
-        :param filters: Same as :meth:`pyromod.types.Client.listen`.
-        :param listener_type: Same as :meth:`pyromod.types.Client.listen`.
-        :param unallowed_click_alert: Same as :meth:`pyromod.types.Client.listen`.
-        :param chat_id: Same as :meth:`pyromod.types.Client.listen`.
-        :param user_id: Same as :meth:`pyromod.types.Client.listen`.
-        :param message_id: Same as :meth:`pyromod.types.Client.listen`.
-        :param inline_message_id: Same as :meth:`pyromod.types.Client.listen`.
+        :param filters: Same as :meth:`hydrogram.Client.listen`.
+        :param listener_type: Same as :meth:`hydrogram.Client.listen`.
+        :param unallowed_click_alert: Same as :meth:`hydrogram.Client.listen`.
+        :param chat_id: Same as :meth:`hydrogram.Client.listen`.
+        :param user_id: Same as :meth:`hydrogram.Client.listen`.
+        :param message_id: Same as :meth:`hydrogram.Client.listen`.
+        :param inline_message_id: Same as :meth:`hydrogram.Client.listen`.
         :return: ``void``
         """
         pattern = Identifier(

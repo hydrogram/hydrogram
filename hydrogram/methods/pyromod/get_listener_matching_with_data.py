@@ -30,8 +30,8 @@ class GetListenerMatchingWithData:
         """
         Gets a listener that matches the given data.
 
-        :param data: A :class:`pyromod.types.Identifier` to match against.
-        :param listener_type: The type of listener to get. Must be a value from :class:`pyromod.types.ListenerTypes`.
+        :param data: A :class:`hydrogram.types.Identifier` to match against.
+        :param listener_type: The type of listener to get. Must be a value from :class:`hydrogram.types.ListenerTypes`.
         :return: The listener that matches the given data or ``None`` if no listener matches.
         """
         matching = [

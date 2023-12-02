@@ -32,7 +32,7 @@ class StopListener:
         """
         Stops a listener, calling stopped_handler if applicable or raising ListenerStopped if throw_exceptions is True.
 
-        :param listener: The :class:`pyromod.types.Listener` to stop.
+        :param listener: The :class:`hydrogram.types.Listener` to stop.
         :return: ``void``
         :raises ListenerStopped: If throw_exceptions is True.
         """

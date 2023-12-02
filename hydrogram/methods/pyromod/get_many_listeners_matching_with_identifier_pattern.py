@@ -29,10 +29,10 @@ class GetManyListenersMatchingWithIdentifierPattern:
         listener_type: ListenerTypes,
     ) -> list[Listener]:
         """
-        Same of :meth:`pyromod.types.Client.get_listener_matching_with_identifier_pattern` but returns a list of listeners instead of one.
+        Same of :meth:`hydrogram.Client.get_listener_matching_with_identifier_pattern` but returns a list of listeners instead of one.
 
-        :param pattern: Same as :meth:`pyromod.types.Client.get_listener_matching_with_identifier_pattern`.
-        :param listener_type: Same as :meth:`pyromod.types.Client.get_listener_matching_with_identifier_pattern`.
+        :param pattern: Same as :meth:`hydrogram.Client.get_listener_matching_with_identifier_pattern`.
+        :param listener_type: Same as :meth:`hydrogram.Client.get_listener_matching_with_identifier_pattern`.
         :return: A list of listeners that match the given identifier pattern.
         """
         return [

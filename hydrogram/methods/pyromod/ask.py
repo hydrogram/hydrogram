@@ -44,17 +44,17 @@ class Ask:
 
         :param chat_id: The chat ID(s) to wait for a message from. The first chat ID will be used to send the message.
         :param text: The text to send.
-        :param filters: Same as :meth:`pyromod.types.Client.listen`.
-        :param listener_type: Same as :meth:`pyromod.types.Client.listen`.
-        :param timeout: Same as :meth:`pyromod.types.Client.listen`.
-        :param unallowed_click_alert: Same as :meth:`pyromod.types.Client.listen`.
-        :param user_id: Same as :meth:`pyromod.types.Client.listen`.
-        :param message_id: Same as :meth:`pyromod.types.Client.listen`.
-        :param inline_message_id: Same as :meth:`pyromod.types.Client.listen`.
+        :param filters: Same as :meth:`hydrogram.Client.listen`.
+        :param listener_type: Same as :meth:`hydrogram.Client.listen`.
+        :param timeout: Same as :meth:`hydrogram.Client.listen`.
+        :param unallowed_click_alert: Same as :meth:`hydrogram.Client.listen`.
+        :param user_id: Same as :meth:`hydrogram.Client.listen`.
+        :param message_id: Same as :meth:`hydrogram.Client.listen`.
+        :param inline_message_id: Same as :meth:`hydrogram.Client.listen`.
         :param args: Additional arguments to pass to :meth:`hydrogram.Client.send_message`.
         :param kwargs: Additional keyword arguments to pass to :meth:`hydrogram.Client.send_message`.
         :return:
-            Same as :meth:`pyromod.types.Client.listen`. The sent message is returned as the attribute ``sent_message``.
+            Same as :meth:`hydrogram.Client.listen`. The sent message is returned as the attribute ``sent_message``.
         """
         sent_message = None
         if text.strip() != "":
