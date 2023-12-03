@@ -15,6 +15,15 @@ Changelog
 
 .. towncrier release notes start
 
+0.1.2 (2023-12-03)
+===================
+
+Bugfixes
+--------
+
+- Fix save_file reporting size as 0
+
+
 0.1.1 (2023-12-01)
 ===================
 
