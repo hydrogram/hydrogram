@@ -120,6 +120,8 @@ class SaveFile:
                     "Invalid file. Expected a file path as string or a binary (not text) file pointer"
                 )
 
+            fp.seek(0, io.SEEK_END)
+
             file_size = fp.tell()
 
             if file_size == 0:
