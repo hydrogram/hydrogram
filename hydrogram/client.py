@@ -853,7 +853,8 @@ class Client(Methods):
         ) = packet
 
         None if in_memory else Path(directory).mkdir(parents=True, exist_ok=True)
-        temp_file_path = Path(directory).resolve() / file_name + ".temp"
+        file_path = Path(directory).resolve() / file_name
+        temp_file_path = file_path.with_suffix(".temp")
         with BytesIO() if in_memory else Path(temp_file_path).open("wb") as file:
             try:
                 async for chunk in self.get_file(
@@ -877,7 +878,6 @@ class Client(Methods):
                     file.name = file_name
                     return file
                 file.close()
-                file_path = Path(temp_file_path).suffix
                 shutil.move(temp_file_path, file_path)
                 return file_path
 
