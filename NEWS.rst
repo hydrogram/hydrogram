@@ -15,6 +15,16 @@ Changelog
 
 .. towncrier release notes start
 
+0.1.3 (2023-12-03)
+===================
+
+Bugfixes
+--------
+
+- Fix handle_download file name
+  `#3 <https://github.com/AmanoTeam/hydrogram/issues/3>`_
+
+
 0.1.2 (2023-12-03)
 ===================
 
