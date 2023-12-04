@@ -855,31 +855,31 @@ class Client(Methods):
         None if in_memory else Path(directory).mkdir(parents=True, exist_ok=True)
         file_path = Path(directory).resolve() / file_name
         temp_file_path = file_path.with_suffix(".temp")
-        with BytesIO() if in_memory else Path(temp_file_path).open("wb") as file:
-            try:
-                async for chunk in self.get_file(
-                    file_id, file_size, 0, 0, progress, progress_args
-                ):
-                    file.write(chunk)
-            except BaseException as e:
-                if not in_memory:
-                    file.close()
-                    Path(temp_file_path).unlink()
 
-                if isinstance(e, asyncio.CancelledError):
-                    raise e
+        file = BytesIO() if in_memory else Path(temp_file_path).open("wb")  # noqa: SIM115 file is closed manually
 
-                if isinstance(e, hydrogram.errors.FloodWait):
-                    raise e
-
-                return None
-            else:
-                if in_memory:
-                    file.name = file_name
-                    return file
+        try:
+            async for chunk in self.get_file(file_id, file_size, 0, 0, progress, progress_args):
+                file.write(chunk)
+        except BaseException as e:
+            if not in_memory:
                 file.close()
-                shutil.move(temp_file_path, file_path)
-                return file_path
+                Path(temp_file_path).unlink()
+
+            if isinstance(e, asyncio.CancelledError):
+                raise e
+
+            if isinstance(e, hydrogram.errors.FloodWait):
+                raise e
+
+            return None
+        else:
+            if in_memory:
+                file.name = file_name
+                return file
+            file.close()
+            shutil.move(temp_file_path, file_path)
+            return file_path
 
     async def get_file(
         self,
