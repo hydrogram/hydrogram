@@ -42,18 +42,41 @@ class Ask:
         """
         Sends a message and waits for a response.
 
-        :param chat_id: The chat ID(s) to wait for a message from. The first chat ID will be used to send the message.
-        :param text: The text to send.
-        :param filters: Same as :meth:`hydrogram.Client.listen`.
-        :param listener_type: Same as :meth:`hydrogram.Client.listen`.
-        :param timeout: Same as :meth:`hydrogram.Client.listen`.
-        :param unallowed_click_alert: Same as :meth:`hydrogram.Client.listen`.
-        :param user_id: Same as :meth:`hydrogram.Client.listen`.
-        :param message_id: Same as :meth:`hydrogram.Client.listen`.
-        :param inline_message_id: Same as :meth:`hydrogram.Client.listen`.
-        :param args: Additional arguments to pass to :meth:`hydrogram.Client.send_message`.
-        :param kwargs: Additional keyword arguments to pass to :meth:`hydrogram.Client.send_message`.
-        :return:
+        Parameters:
+            chat_id (``Union[int, str], List[Union[int, str]]``):
+                The chat ID(s) to wait for a message from. The first chat ID will be used to send the message.
+
+            text (``str``):
+                The text to send.
+
+            filters (``Optional[Filter]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            listener_type (``ListenerTypes``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            timeout (``Optional[int]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            unallowed_click_alert (``bool``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            message_id (``Optional[Union[int, List[int]]]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            inline_message_id (``Optional[Union[str, List[str]]]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            args (``Any``):
+                Additional arguments to pass to :meth:`hydrogram.Client.send_message`.
+
+            kwargs (``Any``):
+                Additional keyword arguments to pass to :meth:`hydrogram.Client.send_message`.
+
+        Returns:
             Same as :meth:`hydrogram.Client.listen`. The sent message is returned as the attribute ``sent_message``.
         """
         sent_message = None

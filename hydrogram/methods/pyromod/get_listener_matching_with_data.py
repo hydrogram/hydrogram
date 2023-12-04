@@ -30,9 +30,15 @@ class GetListenerMatchingWithData:
         """
         Gets a listener that matches the given data.
 
-        :param data: A :class:`hydrogram.types.Identifier` to match against.
-        :param listener_type: The type of listener to get. Must be a value from :class:`hydrogram.types.ListenerTypes`.
-        :return: The listener that matches the given data or ``None`` if no listener matches.
+        Parameters:
+            data (:obj:`~hydrogram.types.Identifier`):
+                The data to match against.
+
+            listener_type (:obj:`~hydrogram.types.ListenerTypes`):
+                The type of listener to get.
+
+        Returns:
+            :obj:`~hydrogram.types.Listener`: The listener that matches the given data or ``None`` if no listener matches.
         """
         matching = [
             listener

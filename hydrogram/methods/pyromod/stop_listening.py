@@ -36,12 +36,21 @@ class StopListening:
         Stops all listeners that match the given identifier pattern.
         Uses :meth:`hydrogram.Client.get_many_listeners_matching_with_identifier_pattern`.
 
-        :param listener_type: The type of listener to stop. Must be a value from :class:`hydrogram.types.ListenerTypes`.
-        :param chat_id: The chat_id to match against.
-        :param user_id: The user_id to match against.
-        :param message_id: The message_id to match against.
-        :param inline_message_id: The inline_message_id to match against.
-        :return: ``void``
+        Parameters:
+            listener_type (:obj:`~hydrogram.types.ListenerTypes`):
+                The type of listener to stop. Must be a value from :class:`hydrogram.types.ListenerTypes`.
+
+            chat_id (``Union[int, str], List[Union[int, str]]``):
+                The chat_id to match against.
+
+            user_id (``Union[int, str], List[Union[int, str]]``):
+                The user_id to match against.
+
+            message_id (``Union[int, List[int]]``):
+                The message_id to match against.
+
+            inline_message_id (``Union[str, List[str]]``):
+                The inline_message_id to match against.
         """
         pattern = Identifier(
             from_user_id=user_id,

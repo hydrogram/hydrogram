@@ -22,7 +22,8 @@ from datetime import datetime
 from typing import BinaryIO, Optional, Union
 
 import hydrogram
-from hydrogram import enums, raw, types, utils
+from hydrogram import enums, filters, raw, types, utils
+from hydrogram.types import ListenerTypes
 from hydrogram.types.object import Object
 
 
@@ -405,35 +406,199 @@ class Chat(Object):
             return Chat._parse_user_chat(client, chat)
         return Chat._parse_channel_chat(client, chat)
 
-    def listen(self, *args, **kwargs):
+    def listen(
+        self,
+        filters: Optional["filters.Filter"] = None,
+        listener_type: ListenerTypes = ListenerTypes.MESSAGE,
+        timeout: Optional[int] = None,
+        unallowed_click_alert: bool = True,
+        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        message_id: Optional[Union[int, list[int]]] = None,
+        inline_message_id: Optional[Union[str, list[str]]] = None,
+    ):
         """
-        Listens for messages in the chat. Calls Client.listen() with the chat_id set to the chat's id.
+        Bound method *listen* of :obj:`~hydrogram.types.Chat`.
 
-        :param args: Arguments to pass to Client.listen().
-        :param kwargs: Keyword arguments to pass to Client.listen().
-        :return: The return value of Client.listen().
-        """
-        return self._client.listen(*args, chat_id=self.id, **kwargs)
+        Use as a shortcut for:
 
-    def ask(self, text, *args, **kwargs):
-        """
-        Asks a question in the chat. Calls Client.ask() with the chat_id set to the chat's id.
-        :param text: The text to send.
-        :param args: Arguments to pass to Client.ask().
-        :param kwargs: Keyword arguments to pass to Client.ask().
-        :return: The return value of Client.ask().
-        """
-        return self._client.ask(self.id, text, *args, **kwargs)
+        .. code-block:: python
 
-    def stop_listening(self, *args, **kwargs):
-        """
-        Stops listening for messages in the chat. Calls Client.stop_listening() with the chat_id set to the chat's id.
+            await client.listen(
+                chat_id=chat_id
+            )
 
-        :param args: Arguments to pass to Client.stop_listening().
-        :param kwargs: Keyword arguments to pass to Client.stop_listening().
-        :return: The return value of Client.stop_listening().
+        Example:
+            .. code-block:: python
+
+                await chat.listen()
+
+        Parameters:
+            filters (``Optional[filters.Filter]``):
+                A filter to check if the listener should be fulfilled.
+
+            listener_type (``ListenerTypes``):
+                The type of listener to create. Defaults to :attr:`hydrogram.types.ListenerTypes.MESSAGE`.
+
+            timeout (``Optional[int]``):
+                The maximum amount of time to wait for the listener to be fulfilled. Defaults to ``None``.
+
+            unallowed_click_alert (``bool``):
+                Whether to alert the user if they click on a button that is not intended for them. Defaults to ``True``.
+
+            chat_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The chat ID(s) to listen for. Defaults to ``None``.
+
+            user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The user ID(s) to listen for. Defaults to ``None``.
+
+            message_id (``Optional[Union[int, List[int]]]``):
+                The message ID(s) to listen for. Defaults to ``None``.
+
+            inline_message_id (``Optional[Union[str, List[str]]]``):
+                The inline message ID(s) to listen for. Defaults to ``None``.
+
+        Returns:
+            Union[:obj:`~hydrogram.types.Message`, :obj:`~hydrogram.types.CallbackQuery`]: The Message or CallbackQuery
         """
-        return self._client.stop_listening(*args, chat_id=self.id, **kwargs)
+        return self._client.listen(
+            chat_id=self.id,
+            filters=filters,
+            listener_type=listener_type,
+            timeout=timeout,
+            unallowed_click_alert=unallowed_click_alert,
+            user_id=user_id,
+            message_id=message_id,
+            inline_message_id=inline_message_id,
+        )
+
+    def ask(
+        self,
+        text: str,
+        filters: Optional["filters.Filter"] = None,
+        listener_type: ListenerTypes = ListenerTypes.MESSAGE,
+        timeout: Optional[int] = None,
+        unallowed_click_alert: bool = True,
+        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        message_id: Optional[Union[int, list[int]]] = None,
+        inline_message_id: Optional[Union[str, list[str]]] = None,
+        *args,
+        **kwargs,
+    ):
+        """
+        Bound method *ask* of :obj:`~hydrogram.types.Chat`.
+
+        Use as a shortcut for:
+
+        .. code-block:: python
+
+            await client.ask(
+                chat_id=chat_id,
+                text=text
+            )
+
+        Example:
+
+            .. code-block:: python
+
+                await chat.ask("What's your name?")
+
+        Parameters:
+            text (``str``):
+                The text to send.
+
+            filters (``Optional[filters.Filter]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            listener_type (``ListenerTypes``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            timeout (``Optional[int]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            unallowed_click_alert (``bool``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            chat_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The chat ID(s) to listen for. Defaults to ``None``.
+
+            user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The user ID(s) to listen for. Defaults to ``None``.
+
+            message_id (``Optional[Union[int, List[int]]]``):
+                The message ID(s) to listen for. Defaults to ``None``.
+
+            inline_message_id (``Optional[Union[str, List[str]]]``):
+                The inline message ID(s) to listen for. Defaults to ``None``.
+
+            args (``Any``):
+                Additional arguments to pass to :meth:`hydrogram.Client.send_message`.
+
+            kwargs (``Any``):
+                Additional keyword arguments to pass to :meth:`hydrogram.Client.send_message`.
+
+        Returns:
+            Union[:obj:`~hydrogram.types.Message`, :obj:`~hydrogram.types.CallbackQuery`]: The Message or CallbackQuery
+        """
+        return self._client.ask(
+            chat_id=self.id,
+            text=text,
+            filters=filters,
+            listener_type=listener_type,
+            timeout=timeout,
+            unallowed_click_alert=unallowed_click_alert,
+            user_id=user_id,
+            message_id=message_id,
+            inline_message_id=inline_message_id,
+            *args,
+            **kwargs,
+        )
+
+    def stop_listening(
+        self,
+        listener_type: ListenerTypes = ListenerTypes.MESSAGE,
+        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        message_id: Optional[Union[int, list[int]]] = None,
+        inline_message_id: Optional[Union[str, list[str]]] = None,
+    ):
+        """
+        Bound method *stop_listening* of :obj:`~hydrogram.types.Chat`.
+
+        Use as a shortcut for:
+
+        .. code-block:: python
+
+            await client.stop_listening(
+                chat_id=chat_id
+            )
+
+        Example:
+            .. code-block:: python
+
+                await chat.stop_listening()
+
+        Parameters:
+            listener_type (``ListenerTypes``):
+                The type of listener to stop listening for. Defaults to :attr:`hydrogram.types.ListenerTypes.MESSAGE`.
+
+            user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The user ID(s) to stop listening for. Defaults to ``None``.
+
+            message_id (``Optional[Union[int, List[int]]]``):
+                The message ID(s) to stop listening for. Defaults to ``None``.
+
+            inline_message_id (``Optional[Union[str, List[str]]]``):
+                The inline message ID(s) to stop listening for. Defaults to ``None``.
+
+        Returns:
+            ``bool``: The return value of :meth:`hydrogram.Client.stop_listening`.
+        """
+        return self._client.stop_listening(
+            chat_id=self.id,
+            listener_type=listener_type,
+            user_id=user_id,
+            message_id=message_id,
+            inline_message_id=inline_message_id,
+        )
 
     async def archive(self):
         """Bound method *archive* of :obj:`~hydrogram.types.Chat`.
@@ -442,7 +607,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.archive_chats(-100123456789)
+            await client.archive_chats(chat_id=chat_id)
 
         Example:
             .. code-block:: python
@@ -465,7 +630,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.unarchive_chats(-100123456789)
+            await client.unarchive_chats(chat_id=chat_id)
 
         Example:
             .. code-block:: python

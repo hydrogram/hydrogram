@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from asyncio import iscoroutinefunction
-from typing import Callable
+from typing import Callable, Optional
 
 import hydrogram
 from hydrogram.types import CallbackQuery, Identifier, Listener, ListenerTypes
@@ -55,12 +55,16 @@ class CallbackQueryHandler(Handler):
         self.original_callback = callback
         super().__init__(self.resolve_future_or_callback, filters)
 
-    def compose_data_identifier(self, query: CallbackQuery):
+    def compose_data_identifier(self, query: CallbackQuery) -> Identifier:
         """
         Composes an Identifier object from a CallbackQuery object.
 
-        :param query: The CallbackQuery object to compose of.
-        :return: An Identifier object.
+        Parameters:
+            query (:obj:`~hydrogram.types.CallbackQuery`):
+                The CallbackQuery object to compose of.
+
+        Returns:
+            :obj:`~hydrogram.types.Identifier`: An Identifier object.
         """
         from_user = query.from_user
         from_user_id = from_user.id if from_user else None
@@ -84,15 +88,20 @@ class CallbackQueryHandler(Handler):
 
     async def check_if_has_matching_listener(
         self, client: "hydrogram.Client", query: CallbackQuery
-    ) -> tuple[bool, Listener]:
+    ) -> tuple[bool, Optional[Listener]]:
         """
         Checks if the CallbackQuery object has a matching listener.
 
-        :param client: The Client object to check with.
-        :param query: The CallbackQuery object to check with.
-        :return: A tuple of a boolean and a Listener object. The boolean indicates whether
-        the found listener has filters and its filters matches with the CallbackQuery object.
-        The Listener object is the matching listener.
+        Parameters:
+            client (:obj:`~hydrogram.Client`):
+                The Client object to check with.
+
+            query (:obj:`~hydrogram.types.CallbackQuery`):
+                The CallbackQuery object to check with.
+
+        Returns:
+            A tuple of whether the CallbackQuery object has a matching listener and its filters does match with the
+            CallbackQuery and the matching listener;
         """
         data = self.compose_data_identifier(query)
 
@@ -114,14 +123,19 @@ class CallbackQueryHandler(Handler):
 
         return listener_does_match, listener
 
-    async def check(self, client: "hydrogram.Client", query: CallbackQuery):
+    async def check(self, client: "hydrogram.Client", query: CallbackQuery) -> bool:
         """
         Checks if the CallbackQuery object has a matching listener or handler.
 
-        :param client: The Client object to check with.
-        :param query: The CallbackQuery object to check with.
-        :return: A boolean indicating whether the CallbackQuery object has a matching listener or the handler
-        filter matches.
+        Parameters:
+            client (:obj:`~hydrogram.Client`):
+                The Client object to check with.
+
+            query (:obj:`~hydrogram.types.CallbackQuery`):
+                The CallbackQuery object to check with.
+
+        Returns:
+            ``bool``: A boolean indicating whether the CallbackQuery object has a matching listener or the handler filter matches.
         """
         listener_does_match, listener = await self.check_if_has_matching_listener(client, query)
 
@@ -167,14 +181,22 @@ class CallbackQueryHandler(Handler):
 
     async def resolve_future_or_callback(
         self, client: "hydrogram.Client", query: CallbackQuery, *args
-    ):
+    ) -> None:
         """
         Resolves the future or calls the callback of the listener. Will call the original handler if no listener.
 
-        :param client: The Client object to resolve or call with.
-        :param query: The CallbackQuery object to resolve or call with.
-        :param args: The arguments to call the callback with.
-        :return: None
+        Parameters:
+            client (:obj:`~hydrogram.Client`):
+                The Client object to resolve or call with.
+
+            query (:obj:`~hydrogram.types.CallbackQuery`):
+                The CallbackQuery object to resolve or call with.
+
+            args:
+                The arguments to call the callback with.
+
+        Returns:
+            ``None``
         """
         listener_does_match, listener = await self.check_if_has_matching_listener(client, query)
 

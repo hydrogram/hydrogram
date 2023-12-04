@@ -39,15 +39,33 @@ class RegisterNextStepHandler:
         """
         Registers a listener with a callback to be called when the listener is fulfilled.
 
-        :param callback: The callback to call when the listener is fulfilled.
-        :param filters: Same as :meth:`hydrogram.Client.listen`.
-        :param listener_type: Same as :meth:`hydrogram.Client.listen`.
-        :param unallowed_click_alert: Same as :meth:`hydrogram.Client.listen`.
-        :param chat_id: Same as :meth:`hydrogram.Client.listen`.
-        :param user_id: Same as :meth:`hydrogram.Client.listen`.
-        :param message_id: Same as :meth:`hydrogram.Client.listen`.
-        :param inline_message_id: Same as :meth:`hydrogram.Client.listen`.
-        :return: ``void``
+        Parameters:
+            callback (``Callable``):
+                The callback to call when the listener is fulfilled.
+
+            filters (``Optional[Filter]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            listener_type (``ListenerTypes``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            unallowed_click_alert (``bool``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            chat_id (``Union[int, str], List[Union[int, str]]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            user_id (``Union[int, str], List[Union[int, str]]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            message_id (``Union[int, List[int]]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+            inline_message_id (``Union[str, List[str]]``):
+                Same as :meth:`hydrogram.Client.listen`.
+
+        Returns:
+            ``None``
         """
         pattern = Identifier(
             from_user_id=user_id,

@@ -32,9 +32,15 @@ class StopListener:
         """
         Stops a listener, calling stopped_handler if applicable or raising ListenerStopped if throw_exceptions is True.
 
-        :param listener: The :class:`hydrogram.types.Listener` to stop.
-        :return: ``void``
-        :raises ListenerStopped: If throw_exceptions is True.
+        Parameters:
+            listener (:obj:`~hydrogram.types.Listener`):
+                The :class:`hydrogram.types.Listener` to stop.
+
+        Returns:
+            None
+
+        Raises:
+            ListenerStopped: If throw_exceptions is True.
         """
         self.remove_listener(listener)
 

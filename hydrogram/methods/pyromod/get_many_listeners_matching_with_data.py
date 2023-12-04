@@ -31,9 +31,15 @@ class GetManyListenersMatchingWithData:
         """
         Same of :meth:`hydrogram.Client.get_listener_matching_with_data` but returns a list of listeners instead of one.
 
-        :param data: Same as :meth:`hydrogram.Client.get_listener_matching_with_data`.
-        :param listener_type: Same as :meth:`hydrogram.Client.get_listener_matching_with_data`.
-        :return: A list of listeners that match the given data.
+        Parameters:
+            data (:obj:`~hydrogram.types.Identifier`):
+                Same as :meth:`hydrogram.Client.get_listener_matching_with_data`.
+
+            listener_type (:obj:`~hydrogram.types.ListenerTypes`):
+                Same as :meth:`hydrogram.Client.get_listener_matching_with_data`.
+
+        Returns:
+            List[:obj:`~hydrogram.types.Listener`]: A list of listeners that match the given data.
         """
         return [
             listener

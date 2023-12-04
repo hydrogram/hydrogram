@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional, Union
+
 from hydrogram.types import (
     ForceReply,
     InlineKeyboardButton,
@@ -26,11 +28,16 @@ from hydrogram.types import (
 )
 
 
-def ikb(rows=None):
+def ikb(rows: Optional[list[list[Union[str, tuple[str, str]]]]] = None) -> InlineKeyboardMarkup:
     """
     Create an InlineKeyboardMarkup from a list of lists of buttons.
-    :param rows: List of lists of buttons. Defaults to empty list.
-    :return: InlineKeyboardMarkup
+
+    Parameters:
+        rows (List[List[Union[str, Tuple[str, str]]]]):
+            List of lists of buttons. Defaults to empty list.
+
+    Returns:
+        :obj:`~hydrogram.types.InlineKeyboardMarkup`: An InlineKeyboardMarkup object.
     """
     if rows is None:
         rows = []
@@ -48,26 +55,38 @@ def ikb(rows=None):
     # return {'inline_keyboard': lines}
 
 
-def btn(text, value, type="callback_data"):
+def btn(text: str, value: str, type="callback_data") -> InlineKeyboardButton:
     """
     Create an InlineKeyboardButton.
 
-    :param text: Text of the button.
-    :param value: Value of the button.
-    :param type: Type of the button. Defaults to "callback_data".
-    :return: InlineKeyboardButton
+    Parameters:
+        text (str):
+            Text of the button.
+
+        value (str):
+            Value of the button.
+
+        type (str):
+            Type of the button. Defaults to "callback_data".
+
+    Returns:
+        :obj:`~hydrogram.types.InlineKeyboardButton`: An InlineKeyboardButton object.
     """
     return InlineKeyboardButton(text, **{type: value})
     # return {'text': text, type: value}
 
 
-# The inverse of above
-def bki(keyboard):
+# The inverse of ikb()
+def bki(keyboard: InlineKeyboardButton) -> list[list[Union[str, tuple[str, str]]]]:
     """
     Create a list of lists of buttons from an InlineKeyboardMarkup.
 
-    :param keyboard: InlineKeyboardMarkup
-    :return: List of lists of buttons
+    Parameters:
+        keyboard (:obj:`~hydrogram.types.InlineKeyboardMarkup`):
+            An InlineKeyboardMarkup object.
+
+    Returns:
+        List of lists of buttons.
     """
     lines = []
     for row in keyboard.inline_keyboard:
@@ -80,12 +99,16 @@ def bki(keyboard):
     # return ikb() format
 
 
-def ntb(button):
+def ntb(button: InlineKeyboardButton) -> list:
     """
     Create a button list from an InlineKeyboardButton.
 
-    :param button: InlineKeyboardButton
-    :return: Button as a list to be used in btn()
+    Parameters:
+        button (:obj:`~hydrogram.types.InlineKeyboardButton`):
+            An InlineKeyboardButton object.
+
+    Returns:
+        ``list``: A button list.
     """
     for btn_type in [
         "callback_data",
@@ -104,13 +127,19 @@ def ntb(button):
     # return {'text': text, type: value}
 
 
-def kb(rows=None, **kwargs):
+def kb(rows=None, **kwargs) -> ReplyKeyboardMarkup:
     """
     Create a ReplyKeyboardMarkup from a list of lists of buttons.
 
-    :param rows: List of lists of buttons. Defaults to empty list.
-    :param kwargs: Other arguments to pass to ReplyKeyboardMarkup.
-    :return: ReplyKeyboardMarkup
+    Parameters:
+        rows (List[List[str]]):
+            List of lists of buttons. Defaults to an empty list.
+
+        kwargs:
+            Other arguments to pass to ReplyKeyboardMarkup.
+
+    Returns:
+        :obj:`~hydrogram.types.ReplyKeyboardMarkup`: A ReplyKeyboardMarkup object.
     """
     if rows is None:
         rows = []
@@ -136,22 +165,32 @@ Create a KeyboardButton.
 """
 
 
-def force_reply(selective=True):
+def force_reply(selective=True) -> ForceReply:
     """
     Create a ForceReply.
 
-    :param selective: Whether the reply should be selective. Defaults to True.
-    :return: ForceReply
+    Parameters:
+        selective (bool):
+            Whether the reply should be selective. Defaults to True.
+
+    Returns:
+        :obj:`~hydrogram.types.ForceReply`: A ForceReply object.
     """
     return ForceReply(selective=selective)
 
 
-def array_chunk(input_array, size):
+def array_chunk(input_array, size) -> list[list]:
     """
     Split an array into chunks.
 
-    :param input_array: The array to split.
-    :param size: The size of each chunk.
-    :return: List of chunks.
+    Parameters:
+        input_array (list):
+            The array to split.
+
+        size (int):
+            The size of each chunk.
+
+    Returns:
+        list: A list of chunks.
     """
     return [input_array[i : i + size] for i in range(0, len(input_array), size)]

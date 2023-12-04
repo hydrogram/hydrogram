@@ -41,19 +41,37 @@ class Listen:
         user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
-    ):
+    ) -> Union["hydrogram.types.Message", "hydrogram.types.CallbackQuery"]:
         """
         Creates a listener and waits for it to be fulfilled.
 
-        :param filters: A filter to check if the listener should be fulfilled.
-        :param listener_type: The type of listener to create. Defaults to :attr:`hydrogram.types.ListenerTypes.MESSAGE`.
-        :param timeout: The maximum amount of time to wait for the listener to be fulfilled. Defaults to ``None``.
-        :param unallowed_click_alert: Whether to alert the user if they click on a button that is not intended for them. Defaults to ``True``.
-        :param chat_id: The chat ID(s) to listen for. Defaults to ``None``.
-        :param user_id: The user ID(s) to listen for. Defaults to ``None``.
-        :param message_id: The message ID(s) to listen for. Defaults to ``None``.
-        :param inline_message_id: The inline message ID(s) to listen for. Defaults to ``None``.
-        :return: The Message or CallbackQuery that fulfilled the listener.
+        Parameters:
+            filters (``Optional[Filter]``):
+                A filter to check if the listener should be fulfilled.
+
+            listener_type (``ListenerTypes``):
+                The type of listener to create. Defaults to :attr:`hydrogram.types.ListenerTypes.MESSAGE`.
+
+            timeout (``Optional[int]``):
+                The maximum amount of time to wait for the listener to be fulfilled. Defaults to ``None``.
+
+            unallowed_click_alert (``bool``):
+                Whether to alert the user if they click on a button that is not intended for them. Defaults to ``True``.
+
+            chat_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The chat ID(s) to listen for. Defaults to ``None``.
+
+            user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The user ID(s) to listen for. Defaults to ``None``.
+
+            message_id (``Optional[Union[int, List[int]]]``):
+                The message ID(s) to listen for. Defaults to ``None``.
+
+            inline_message_id (``Optional[Union[str, List[str]]]``):
+                The inline message ID(s) to listen for. Defaults to ``None``.
+
+        Returns:
+            ``Union[Message, CallbackQuery]``: The Message or CallbackQuery that fulfilled the listener.
         """
         pattern = Identifier(
             from_user_id=user_id,

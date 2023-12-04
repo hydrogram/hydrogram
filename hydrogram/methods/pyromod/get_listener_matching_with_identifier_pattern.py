@@ -34,9 +34,15 @@ class GetListenerMatchingWithIdentifierPattern:
         intends to get a listener by passing partial info of the listener identifier, while the other method
         intends to get a listener by passing the full info of the update data, which the listener should match with.
 
-        :param pattern: A :class:`hydrogram.types.Identifier` to match against.
-        :param listener_type: The type of listener to get. Must be a value from :class:`hydrogram.types.ListenerTypes`.
-        :return: The listener that matches the given identifier pattern or ``None`` if no listener matches.
+        Parameters:
+            pattern (:obj:`~hydrogram.types.Identifier`):
+                The identifier pattern to match against.
+
+            listener_type (:obj:`~hydrogram.types.ListenerTypes`):
+                The type of listener to get.
+
+        Returns:
+            :obj:`~hydrogram.types.Listener`: The listener that matches the given identifier pattern or ``None`` if no listener matches.
         """
         matching = [
             listener

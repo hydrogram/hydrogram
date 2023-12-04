@@ -31,9 +31,15 @@ class GetManyListenersMatchingWithIdentifierPattern:
         """
         Same of :meth:`hydrogram.Client.get_listener_matching_with_identifier_pattern` but returns a list of listeners instead of one.
 
-        :param pattern: Same as :meth:`hydrogram.Client.get_listener_matching_with_identifier_pattern`.
-        :param listener_type: Same as :meth:`hydrogram.Client.get_listener_matching_with_identifier_pattern`.
-        :return: A list of listeners that match the given identifier pattern.
+        Parameters:
+            pattern (:obj:`~hydrogram.types.Identifier`):
+                Same as :meth:`hydrogram.Client.get_listener_matching_with_identifier_pattern`.
+
+            listener_type (:obj:`~hydrogram.types.ListenerTypes`):
+                Same as :meth:`hydrogram.Client.get_listener_matching_with_identifier_pattern`.
+
+        Returns:
+            List[:obj:`~hydrogram.types.Listener`]: A list of listeners that match the given identifier pattern.
         """
         return [
             listener

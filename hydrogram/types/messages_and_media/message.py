@@ -511,15 +511,26 @@ class Message(Object, Update):
         timeout: Optional[int] = None,
         filters=None,
         alert: Union[str, bool] = True,
-    ):
+    ) -> "types.CallbackQuery":
         """
         Waits for a callback query to be clicked on the message.
 
-        :param from_user_id: The user ID(s) to wait for. If None, waits for any user.
-        :param timeout: The timeout in seconds. If None, waits forever.
-        :param filters: The filters to pass to Client.listen().
-        :param alert: The alert to show when the button is clicked by users that are not allowed in from_user_id.
-        :return: The callback query that was clicked.
+        Parameters:
+            from_user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The user ID(s) to wait for. If None, waits for any user.
+
+            timeout (``Optional[int]``):
+                The timeout in seconds. If None, waits forever.
+
+            filters (``Optional[Filter]``):
+                A filter to check if the callback query should be accepted.
+
+            alert (``Union[str, bool]``):
+                The alert to show when the button is clicked by users that are not allowed in from_user_id.
+                If True, shows the default alert. If False, shows no alert.
+
+        Returns:
+            :obj:`~hydrogram.types.CallbackQuery`: The callback query that was clicked.
         """
         message_id = getattr(self, "id", getattr(self, "message_id", None))
 

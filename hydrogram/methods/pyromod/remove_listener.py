@@ -28,8 +28,9 @@ class RemoveListener:
         """
         Removes a listener from the :meth:`hydrogram.Client.listeners` dictionary.
 
-        :param listener: The listener to remove.
-        :return: ``void``
+        Parameters:
+            listener (:obj:`~hydrogram.types.Listener`):
+                The listener to remove.
         """
         with contextlib.suppress(ValueError):
             self.listeners[listener.listener_type].remove(listener)

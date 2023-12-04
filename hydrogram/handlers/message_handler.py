@@ -18,10 +18,10 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from inspect import iscoroutinefunction
-from typing import Callable
+from typing import Callable, Optional
 
 import hydrogram
-from hydrogram.types import Identifier, ListenerTypes, Message
+from hydrogram.types import Identifier, Listener, ListenerTypes, Message
 
 from .handler import Handler
 
@@ -54,14 +54,22 @@ class MessageHandler(Handler):
         self.original_callback = callback
         super().__init__(self.resolve_future_or_callback, filters)
 
-    async def check_if_has_matching_listener(self, client: "hydrogram.Client", message: Message):
+    async def check_if_has_matching_listener(
+        self, client: "hydrogram.Client", message: Message
+    ) -> tuple[bool, Optional[Listener]]:
         """
         Checks if the message has a matching listener.
 
-        :param client: The Client object to check with.
-        :param message: The Message object to check with.
-        :return: A tuple of whether the message has a matching listener and its filters does match with the Message
-        and the matching listener;
+        Parameters:
+            client (:obj:`~hydrogram.Client`):
+                The Client object to check with.
+
+            message (:obj:`~hydrogram.types.Message`):
+                The Message object to check with.
+
+        Returns:
+            ``tuple``: A tuple of two elements, the first one is whether the message has a matching listener or not,
+            the second one is the matching listener if exists.
         """
         from_user = message.from_user
         from_user_id = from_user.id if from_user else None
@@ -93,13 +101,19 @@ class MessageHandler(Handler):
 
         return listener_does_match, listener
 
-    async def check(self, client: "hydrogram.Client", message: Message):
+    async def check(self, client: "hydrogram.Client", message: Message) -> bool:
         """
         Checks if the message has a matching listener or handler and its filters does match with the Message.
 
-        :param client: Client object to check with.
-        :param message: Message object to check with.
-        :return: Whether the message has a matching listener or handler and its filters does match with the Message.
+        Parameters:
+            client (:obj:`~hydrogram.Client`):
+                The Client object to check with.
+
+            message (:obj:`~hydrogram.types.Message`):
+                The Message object to check with.
+
+        Returns:
+            ``bool``: Whether the message has a matching listener or handler and its filters does match with the Message.
         """
         listener_does_match = (await self.check_if_has_matching_listener(client, message))[0]
 
@@ -123,10 +137,15 @@ class MessageHandler(Handler):
         """
         Resolves the future or calls the callback of the listener if the message has a matching listener.
 
-        :param client: Client object to resolve or call with.
-        :param message: Message object to resolve or call with.
-        :param args: Arguments to call the callback with.
-        :return: None
+        Parameters:
+            client (:obj:`~hydrogram.Client`):
+                The Client object to resolve or call with.
+
+            message (:obj:`~hydrogram.types.Message`):
+                The Message object to resolve or call with.
+
+            args (``tuple``):
+                Arguments to call the callback with.
         """
         listener_does_match, listener = await self.check_if_has_matching_listener(client, message)
 
