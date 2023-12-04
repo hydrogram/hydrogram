@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -68,8 +68,8 @@ class ChatJoinRequest(Object, Update):
     def _parse(
         client: "hydrogram.Client",
         update: "raw.types.UpdateBotChatInviteRequester",
-        users: Dict[int, "raw.types.User"],
-        chats: Dict[int, "raw.types.Chat"],
+        users: dict[int, "raw.types.User"],
+        chats: dict[int, "raw.types.Chat"],
     ) -> "ChatJoinRequest":
         chat_id = utils.get_raw_peer_id(update.peer)
 

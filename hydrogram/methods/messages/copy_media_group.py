@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -30,13 +30,13 @@ class CopyMediaGroup:
         chat_id: Union[int, str],
         from_chat_id: Union[int, str],
         message_id: int,
-        captions: Optional[Union[List[str], str]] = None,
+        captions: Optional[Union[list[str], str]] = None,
         *,
         message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         schedule_date: Optional[datetime] = None,
-    ) -> List["types.Message"]:
+    ) -> list["types.Message"]:
         """Copy a media group by providing one of the message ids.
 
         .. include:: /_includes/usable-by/users-bots.rst

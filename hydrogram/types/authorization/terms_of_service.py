@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
 
 from hydrogram import raw, types
 from hydrogram.types.object import Object
@@ -37,7 +36,7 @@ class TermsOfService(Object):
             Special entities like URLs that appear in the text.
     """
 
-    def __init__(self, *, id: str, text: str, entities: List["types.MessageEntity"]):
+    def __init__(self, *, id: str, text: str, entities: list["types.MessageEntity"]):
         super().__init__()
 
         self.id = id

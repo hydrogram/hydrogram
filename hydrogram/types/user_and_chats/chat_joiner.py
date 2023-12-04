@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -67,7 +67,7 @@ class ChatJoiner(Object):
     def _parse(
         client: "hydrogram.Client",
         joiner: "raw.base.ChatInviteImporter",
-        users: Dict[int, "raw.base.User"],
+        users: dict[int, "raw.base.User"],
     ) -> "ChatJoiner":
         return ChatJoiner(
             user=types.User._parse(client, users[joiner.user_id]),

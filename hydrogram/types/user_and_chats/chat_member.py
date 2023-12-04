@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -111,8 +111,8 @@ class ChatMember(Object):
     def _parse(
         client: "hydrogram.Client",
         member: Union["raw.base.ChatParticipant", "raw.base.ChannelParticipant"],
-        users: Dict[int, "raw.base.User"],
-        chats: Dict[int, "raw.base.Chat"],
+        users: dict[int, "raw.base.User"],
+        chats: dict[int, "raw.base.Chat"],
     ) -> "ChatMember":
         # Chat participants
         if isinstance(member, raw.types.ChatParticipant):

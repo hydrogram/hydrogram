@@ -17,7 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Match, Optional, Union
+from re import Match
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -72,7 +73,7 @@ class CallbackQuery(Object, Update):
         inline_message_id: Optional[str] = None,
         data: Optional[Union[str, bytes]] = None,
         game_short_name: Optional[str] = None,
-        matches: Optional[List[Match]] = None,
+        matches: Optional[list[Match]] = None,
     ):
         super().__init__(client)
 

@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -29,7 +29,7 @@ class SendPoll:
         self: "hydrogram.Client",
         chat_id: Union[int, str],
         question: str,
-        options: List[str],
+        options: list[str],
         *,
         message_thread_id: Optional[int] = None,
         is_anonymous: bool = True,
@@ -38,7 +38,7 @@ class SendPoll:
         correct_option_id: Optional[int] = None,
         explanation: Optional[str] = None,
         explanation_parse_mode: "enums.ParseMode" = None,
-        explanation_entities: Optional[List["types.MessageEntity"]] = None,
+        explanation_entities: Optional[list["types.MessageEntity"]] = None,
         open_period: Optional[int] = None,
         close_date: Optional[datetime] = None,
         is_closed: Optional[bool] = None,

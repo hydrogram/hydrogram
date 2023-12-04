@@ -21,7 +21,7 @@ import re
 from datetime import datetime
 from importlib import import_module
 from pathlib import Path
-from typing import Optional, Type, Union
+from typing import Optional, Union
 
 from hydrogram import raw
 from hydrogram.raw.core import TLObject
@@ -62,7 +62,7 @@ class RPCError(Exception):
                 f.write(f"{datetime.now()}\t{value}\t{rpc_name}\n")
 
     @staticmethod
-    def raise_it(rpc_error: "raw.types.RpcError", rpc_type: Type[TLObject]):
+    def raise_it(rpc_error: "raw.types.RpcError", rpc_type: type[TLObject]):
         error_code = rpc_error.error_code
         is_signed = error_code < 0
         error_message = rpc_error.error_message

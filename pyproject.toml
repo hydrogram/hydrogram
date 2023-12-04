@@ -3,14 +3,10 @@ name = "Hydrogram"
 dynamic = ["version"]
 description = "Sleek, advanced, and asynchronous Telegram MTProto API framework in Python, designed for fluid user and bot interactions."
 authors = [{ name = "Amano LLC", email = "contact@amanoteam.com" }]
-dependencies = [
-    "pyaes==1.6.1",
-    "pysocks==1.7.1",
-    "aiosqlite>=0.19.0",
-]
+dependencies = ["pyaes==1.6.1", "pysocks==1.7.1", "aiosqlite>=0.19.0"]
 readme = "README.md"
 license = "LGPL-3.0-or-later"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -98,7 +94,7 @@ package = "hydrogram"
 
 [tool.ruff]
 line-length = 99
-target-version = "py38"
+target-version = "py39"
 select = [
     "I",    # isort
     "E",    # pycodestyle

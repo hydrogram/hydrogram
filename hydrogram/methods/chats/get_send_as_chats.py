@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Union
+from typing import Union
 
 import hydrogram
 from hydrogram import raw, types
@@ -26,7 +26,7 @@ from hydrogram import raw, types
 class GetSendAsChats:
     async def get_send_as_chats(
         self: "hydrogram.Client", chat_id: Union[int, str]
-    ) -> List["types.Chat"]:
+    ) -> list["types.Chat"]:
         """Get the list of "send_as" chats available.
 
         .. include:: /_includes/usable-by/users.rst

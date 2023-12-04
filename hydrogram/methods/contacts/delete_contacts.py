@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Union
+from typing import Union
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,8 +25,8 @@ from hydrogram import raw, types
 
 class DeleteContacts:
     async def delete_contacts(
-        self: "hydrogram.Client", user_ids: Union[int, str, List[Union[int, str]]]
-    ) -> Union["types.User", List["types.User"], None]:
+        self: "hydrogram.Client", user_ids: Union[int, str, list[Union[int, str]]]
+    ) -> Union["types.User", list["types.User"], None]:
         """Delete contacts from your Telegram address book.
 
         .. include:: /_includes/usable-by/users.rst

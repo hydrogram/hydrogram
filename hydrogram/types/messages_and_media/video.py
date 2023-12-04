@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -83,7 +83,7 @@ class Video(Object):
         supports_streaming: Optional[bool] = None,
         ttl_seconds: Optional[int] = None,
         date: Optional[datetime] = None,
-        thumbs: Optional[List["types.Thumbnail"]] = None,
+        thumbs: Optional[list["types.Thumbnail"]] = None,
     ):
         super().__init__(client)
 

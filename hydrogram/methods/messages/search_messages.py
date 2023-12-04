@@ -17,7 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import AsyncGenerator, List, Optional, Union
+from collections.abc import AsyncGenerator
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -31,7 +32,7 @@ async def get_chunk(
     offset: int = 0,
     limit: int = 100,
     from_user: Optional[Union[int, str]] = None,
-) -> List["types.Message"]:
+) -> list["types.Message"]:
     r = await client.invoke(
         raw.functions.messages.Search(
             peer=await client.resolve_peer(chat_id),

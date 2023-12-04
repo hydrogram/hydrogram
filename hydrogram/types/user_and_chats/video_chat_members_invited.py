@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict, List
 
 from hydrogram import raw, types
 from hydrogram.types.object import Object
@@ -32,7 +31,7 @@ class VideoChatMembersInvited(Object):
             New members that were invited to the voice chat.
     """
 
-    def __init__(self, *, users: List["types.User"]):
+    def __init__(self, *, users: list["types.User"]):
         super().__init__()
 
         self.users = users
@@ -41,7 +40,7 @@ class VideoChatMembersInvited(Object):
     def _parse(
         client,
         action: "raw.types.MessageActionInviteToGroupCall",
-        users: Dict[int, "raw.types.User"],
+        users: dict[int, "raw.types.User"],
     ) -> "VideoChatMembersInvited":
         users = [types.User._parse(client, users[i]) for i in action.users]
 

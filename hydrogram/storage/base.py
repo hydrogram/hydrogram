@@ -20,7 +20,6 @@
 import base64
 import struct
 from abc import ABC, abstractmethod
-from typing import List, Tuple
 
 
 class BaseStorage(ABC):
@@ -58,7 +57,7 @@ class BaseStorage(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def update_peers(self, peers: List[Tuple[int, int, str, str, str]]):
+    async def update_peers(self, peers: list[tuple[int, int, str, str, str]]):
         """
         Update the peers table with the provided information.
 

@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
 
 import hydrogram
 from hydrogram import raw, types
@@ -26,7 +25,7 @@ from hydrogram import raw, types
 class GetDefaultEmojiStatuses:
     async def get_default_emoji_statuses(
         self: "hydrogram.Client",
-    ) -> List["types.EmojiStatus"]:
+    ) -> list["types.EmojiStatus"]:
         """Get the default emoji statuses.
 
         .. include:: /_includes/usable-by/users-bots.rst

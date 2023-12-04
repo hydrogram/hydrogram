@@ -18,7 +18,8 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from typing import Iterable, List, Optional, Union
+from collections.abc import Iterable
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -36,7 +37,7 @@ class GetMessages:
         message_ids: Optional[Union[int, Iterable[int]]] = None,
         reply_to_message_ids: Optional[Union[int, Iterable[int]]] = None,
         replies: int = 1,
-    ) -> Union["types.Message", List["types.Message"]]:
+    ) -> Union["types.Message", list["types.Message"]]:
         """Get one or more messages from a chat by using message identifiers.
 
         You can retrieve up to 200 messages at once.

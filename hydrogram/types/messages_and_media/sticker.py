@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import ClassVar, Dict, List, Optional, Type
+from typing import ClassVar, Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -90,7 +90,7 @@ class Sticker(Object):
         date: Optional[datetime] = None,
         emoji: Optional[str] = None,
         set_name: Optional[str] = None,
-        thumbs: Optional[List["types.Thumbnail"]] = None,
+        thumbs: Optional[list["types.Thumbnail"]] = None,
     ):
         super().__init__(client)
 
@@ -147,8 +147,8 @@ class Sticker(Object):
     async def _parse(
         client,
         sticker: "raw.types.Document",
-        document_attributes: Dict[
-            Type["raw.base.DocumentAttribute"], "raw.base.DocumentAttribute"
+        document_attributes: dict[
+            type["raw.base.DocumentAttribute"], "raw.base.DocumentAttribute"
         ],
     ) -> "Sticker":
         sticker_attributes = (

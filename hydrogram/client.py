@@ -27,6 +27,7 @@ import platform
 import re
 import shutil
 import sys
+from collections.abc import AsyncGenerator
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from hashlib import sha256
@@ -34,7 +35,7 @@ from importlib import import_module
 from io import BytesIO, StringIO
 from mimetypes import MimeTypes
 from pathlib import Path
-from typing import AsyncGenerator, Callable, List, Optional, Union
+from typing import Callable, Optional, Union
 
 import hydrogram
 from hydrogram import __license__, __version__, enums, raw, utils
@@ -499,7 +500,7 @@ class Client(Methods):
         self.parse_mode = parse_mode
 
     async def fetch_peers(
-        self, peers: List[Union[raw.types.User, raw.types.Chat, raw.types.Channel]]
+        self, peers: list[Union[raw.types.User, raw.types.Chat, raw.types.Channel]]
     ) -> bool:
         is_min = False
         parsed_peers = []

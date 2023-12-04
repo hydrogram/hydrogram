@@ -17,7 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Match, Optional
+from re import Match
+from typing import Optional
 
 import hydrogram
 from hydrogram import enums, raw, types
@@ -64,7 +65,7 @@ class InlineQuery(Object, Update):
         offset: str,
         chat_type: "enums.ChatType",
         location: "types.Location" = None,
-        matches: Optional[List[Match]] = None,
+        matches: Optional[list[Match]] = None,
     ):
         super().__init__(client)
 
@@ -110,7 +111,7 @@ class InlineQuery(Object, Update):
 
     async def answer(
         self,
-        results: List["types.InlineQueryResult"],
+        results: list["types.InlineQueryResult"],
         cache_time: int = 300,
         is_gallery: bool = False,
         is_personal: bool = False,

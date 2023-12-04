@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw, types
@@ -58,7 +58,7 @@ class ReplyKeyboardMarkup(Object):
 
     def __init__(
         self,
-        keyboard: List[List[Union["types.KeyboardButton", str]]],
+        keyboard: list[list[Union["types.KeyboardButton", str]]],
         is_persistent: Optional[bool] = None,
         resize_keyboard: Optional[bool] = None,
         one_time_keyboard: Optional[bool] = None,

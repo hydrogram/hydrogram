@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import ClassVar, Tuple
+from typing import ClassVar
 
 
 class DataCenter:
@@ -58,7 +58,7 @@ class DataCenter:
         4: "2001:067c:04e8:f004:0000:0000:0000:000b",
     }
 
-    def __new__(cls, dc_id: int, test_mode: bool, ipv6: bool, media: bool) -> Tuple[str, int]:
+    def __new__(cls, dc_id: int, test_mode: bool, ipv6: bool, media: bool) -> tuple[str, int]:
         if test_mode:
             ip = cls.TEST_IPV6[dc_id] if ipv6 else cls.TEST[dc_id]
 

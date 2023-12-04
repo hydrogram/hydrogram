@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw, types
@@ -29,7 +29,7 @@ class GetGameHighScores:
         user_id: Union[int, str],
         chat_id: Union[int, str],
         message_id: Optional[int] = None,
-    ) -> List["types.GameHighScore"]:
+    ) -> list["types.GameHighScore"]:
         """Get data for high score tables.
 
         .. include:: /_includes/usable-by/bots.rst
