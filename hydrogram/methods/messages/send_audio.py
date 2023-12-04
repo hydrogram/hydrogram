@@ -189,7 +189,7 @@ class SendAudio:
                                 duration=duration, performer=performer, title=title
                             ),
                             raw.types.DocumentAttributeFilename(
-                                file_name=file_name or Path(audio).is_file()
+                                file_name=file_name or Path(audio).name
                             ),
                         ],
                     )
