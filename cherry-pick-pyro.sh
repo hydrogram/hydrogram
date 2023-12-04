@@ -8,7 +8,7 @@ ORIGIN_BRANCH="master"
 RUFF_TOML=$(cat <<EOF
 [tool.ruff]
 line-length = 99
-target-version = "py38"
+target-version = "py39"
 select = [
     "I",    # isort
     "E",    # pycodestyle
