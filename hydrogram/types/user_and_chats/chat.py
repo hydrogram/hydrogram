@@ -230,9 +230,9 @@ class Chat(Object):
             is_fake=getattr(user, "fake", None),
             is_support=getattr(user, "support", None),
             username=user.usernames[0].username if user.usernames else user.username,
-            active_usernames=types.List(
-                [username.username for username in user.usernames if username.active]
-            )
+            active_usernames=types.List([
+                username.username for username in user.usernames if username.active
+            ])
             or None,
             usernames=types.List([types.Username._parse(r) for r in user.usernames]) or None,
             first_name=user.first_name,

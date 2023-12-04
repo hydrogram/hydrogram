@@ -37,23 +37,21 @@ PRE_DELIM = "```"
 
 MARKDOWN_RE = re.compile(
     r"({d})|\[(.+?)\]\((.+?)\)".format(
-        d="|".join(
-            [
-                "".join(i)
+        d="|".join([
+            "".join(i)
+            for i in [
+                [rf"\{j}" for j in i]
                 for i in [
-                    [rf"\{j}" for j in i]
-                    for i in [
-                        PRE_DELIM,
-                        CODE_DELIM,
-                        STRIKE_DELIM,
-                        UNDERLINE_DELIM,
-                        ITALIC_DELIM,
-                        BOLD_DELIM,
-                        SPOILER_DELIM,
-                    ]
+                    PRE_DELIM,
+                    CODE_DELIM,
+                    STRIKE_DELIM,
+                    UNDERLINE_DELIM,
+                    ITALIC_DELIM,
+                    BOLD_DELIM,
+                    SPOILER_DELIM,
                 ]
             ]
-        )
+        ])
     )
 )
 

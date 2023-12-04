@@ -428,13 +428,11 @@ def start(format: bool = False):
                                 f"{arg_name} |= (1 << {flag.group(2)}) if self.{i[0]} is not None else 0"
                             )
 
-                write_flags = "\n        ".join(
-                    [
-                        f"{arg_name} = 0",
-                        "\n        ".join(write_flags),
-                        f"b.write(Int({arg_name}))\n        ",
-                    ]
-                )
+                write_flags = "\n        ".join([
+                    f"{arg_name} = 0",
+                    "\n        ".join(write_flags),
+                    f"b.write(Int({arg_name}))\n        ",
+                ])
 
                 write_types += write_flags
                 read_types += f"\n        {arg_name} = Int.read(b)\n        "

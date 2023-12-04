@@ -557,12 +557,10 @@ class Client(Methods):
         self.last_update_time = datetime.now()
 
         if isinstance(updates, (raw.types.Updates, raw.types.UpdatesCombined)):
-            is_min = any(
-                (
-                    await self.fetch_peers(updates.users),
-                    await self.fetch_peers(updates.chats),
-                )
-            )
+            is_min = any((
+                await self.fetch_peers(updates.users),
+                await self.fetch_peers(updates.chats),
+            ))
 
             users = {u.id: u for u in updates.users}
             chats = {c.id: c for c in updates.chats}
@@ -618,17 +616,15 @@ class Client(Methods):
             )
 
             if diff.new_messages:
-                self.dispatcher.updates_queue.put_nowait(
-                    (
-                        raw.types.UpdateNewMessage(
-                            message=diff.new_messages[0],
-                            pts=updates.pts,
-                            pts_count=updates.pts_count,
-                        ),
-                        {u.id: u for u in diff.users},
-                        {c.id: c for c in diff.chats},
-                    )
-                )
+                self.dispatcher.updates_queue.put_nowait((
+                    raw.types.UpdateNewMessage(
+                        message=diff.new_messages[0],
+                        pts=updates.pts,
+                        pts_count=updates.pts_count,
+                    ),
+                    {u.id: u for u in diff.users},
+                    {c.id: c for c in diff.chats},
+                ))
             elif diff.other_updates:  # The other_updates list can be empty
                 self.dispatcher.updates_queue.put_nowait((diff.other_updates[0], {}, {}))
         elif isinstance(updates, raw.types.UpdateShort):
@@ -639,14 +635,12 @@ class Client(Methods):
     async def load_session(self):
         await self.storage.open()
 
-        session_empty = any(
-            [
-                await self.storage.test_mode() is None,
-                await self.storage.auth_key() is None,
-                await self.storage.user_id() is None,
-                await self.storage.is_bot() is None,
-            ]
-        )
+        session_empty = any([
+            await self.storage.test_mode() is None,
+            await self.storage.auth_key() is None,
+            await self.storage.user_id() is None,
+            await self.storage.is_bot() is None,
+        ])
 
         if session_empty:
             if not self.api_id or not self.api_hash:

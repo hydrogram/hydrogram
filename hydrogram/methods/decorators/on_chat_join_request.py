@@ -45,12 +45,10 @@ class OnChatJoinRequest:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
 
-                func.handlers.append(
-                    (
-                        hydrogram.handlers.ChatJoinRequestHandler(func, self),
-                        group if filters is None else filters,
-                    )
-                )
+                func.handlers.append((
+                    hydrogram.handlers.ChatJoinRequestHandler(func, self),
+                    group if filters is None else filters,
+                ))
 
             return func
 

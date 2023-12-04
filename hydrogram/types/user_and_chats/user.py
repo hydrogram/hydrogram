@@ -245,9 +245,9 @@ class User(Object, Update):
             last_name=user.last_name,
             **User._parse_status(user.status, user.bot),
             username=user.usernames[0].username if user.usernames else user.username,
-            active_usernames=types.List(
-                [username.username for username in user.usernames if username.active]
-            )
+            active_usernames=types.List([
+                username.username for username in user.usernames if username.active
+            ])
             or None,
             usernames=types.List([types.Username._parse(r) for r in user.usernames]) or None,
             language_code=user.lang_code,
