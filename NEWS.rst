@@ -15,6 +15,18 @@ Changelog
 
 .. towncrier release notes start
 
+0.1.4 (2023-12-04)
+===================
+
+Bugfixes
+--------
+
+- Fix a boolean instead of file name in send_audio
+  `#4 <https://github.com/AmanoTeam/hydrogram/issues/4>`_
+- Prevent from closing BytesIO object in handle_download
+  `#4 <https://github.com/AmanoTeam/hydrogram/issues/4>`_
+
+
 0.1.3 (2023-12-03)
 ===================
 
