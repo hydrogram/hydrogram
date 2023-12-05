@@ -18,7 +18,8 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
-from typing import Iterable, List, Union
+from collections.abc import Iterable
+from typing import Union
 
 import hydrogram
 from hydrogram import raw, types
@@ -27,7 +28,7 @@ from hydrogram import raw, types
 class GetUsers:
     async def get_users(
         self: "hydrogram.Client", user_ids: Union[int, str, Iterable[Union[int, str]]]
-    ) -> Union["types.User", List["types.User"]]:
+    ) -> Union["types.User", list["types.User"]]:
         """Get information about a user.
         You can retrieve up to 200 users at once.
 

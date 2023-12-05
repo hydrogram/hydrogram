@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Union
+from typing import Union
 
 import hydrogram
 from hydrogram import raw
@@ -27,7 +27,7 @@ class AddChatMembers:
     async def add_chat_members(
         self: "hydrogram.Client",
         chat_id: Union[int, str],
-        user_ids: Union[Union[int, str], List[Union[int, str]]],
+        user_ids: Union[Union[int, str], list[Union[int, str]]],
         forward_limit: int = 100,
     ) -> bool:
         """Add new chat members to a group, supergroup or channel

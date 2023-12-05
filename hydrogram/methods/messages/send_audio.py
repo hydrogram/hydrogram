@@ -20,7 +20,7 @@
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import BinaryIO, Callable, List, Optional, Union
+from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
 from hydrogram import StopTransmission, enums, raw, types, utils
@@ -37,7 +37,7 @@ class SendAudio:
         *,
         message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         duration: int = 0,
         performer: Optional[str] = None,
         title: Optional[str] = None,

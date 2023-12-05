@@ -17,8 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from collections.abc import Iterable
 from datetime import datetime
-from typing import Iterable, List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -35,7 +36,7 @@ class ForwardMessages:
         disable_notification: Optional[bool] = None,
         schedule_date: Optional[datetime] = None,
         protect_content: Optional[bool] = None,
-    ) -> Union["types.Message", List["types.Message"]]:
+    ) -> Union["types.Message", list["types.Message"]]:
         """Forward messages of any kind.
 
         .. include:: /_includes/usable-by/users-bots.rst

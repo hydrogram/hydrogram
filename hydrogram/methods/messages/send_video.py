@@ -20,7 +20,7 @@
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import BinaryIO, Callable, List, Optional, Union
+from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
 from hydrogram import StopTransmission, enums, raw, types, utils
@@ -37,7 +37,7 @@ class SendVideo:
         *,
         message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         has_spoiler: Optional[bool] = None,
         ttl_seconds: Optional[int] = None,
         duration: int = 0,

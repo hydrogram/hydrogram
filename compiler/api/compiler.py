@@ -23,7 +23,7 @@ import re
 import shutil
 from functools import partial
 from pathlib import Path
-from typing import List, NamedTuple, Tuple
+from typing import NamedTuple
 
 # from autoflake import fix_code
 # from black import format_str, FileMode
@@ -84,7 +84,7 @@ class Combinator(NamedTuple):
     name: str
     id: str
     has_flags: bool
-    args: List[Tuple[str, str]]
+    args: list[tuple[str, str]]
     qualtype: str
     typespace: str
     type: str
@@ -428,13 +428,11 @@ def start(format: bool = False):
                                 f"{arg_name} |= (1 << {flag.group(2)}) if self.{i[0]} is not None else 0"
                             )
 
-                write_flags = "\n        ".join(
-                    [
-                        f"{arg_name} = 0",
-                        "\n        ".join(write_flags),
-                        f"b.write(Int({arg_name}))\n        ",
-                    ]
-                )
+                write_flags = "\n        ".join([
+                    f"{arg_name} = 0",
+                    "\n        ".join(write_flags),
+                    f"b.write(Int({arg_name}))\n        ",
+                ])
 
                 write_types += write_flags
                 read_types += f"\n        {arg_name} = Int.read(b)\n        "

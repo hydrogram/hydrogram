@@ -20,7 +20,8 @@
 import logging
 from datetime import datetime
 from functools import partial
-from typing import BinaryIO, Callable, List, Match, Optional, Union
+from re import Match
+from typing import BinaryIO, Callable, Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -368,8 +369,8 @@ class Message(Object, Update):
         has_protected_content: Optional[bool] = None,
         has_media_spoiler: Optional[bool] = None,
         text: Str = None,
-        entities: Optional[List["types.MessageEntity"]] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        entities: Optional[list["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         audio: "types.Audio" = None,
         document: "types.Document" = None,
         photo: "types.Photo" = None,
@@ -386,7 +387,7 @@ class Message(Object, Update):
         web_page: "types.WebPage" = None,
         poll: "types.Poll" = None,
         dice: "types.Dice" = None,
-        new_chat_members: Optional[List["types.User"]] = None,
+        new_chat_members: Optional[list["types.User"]] = None,
         left_chat_member: "types.User" = None,
         new_chat_title: Optional[str] = None,
         new_chat_photo: "types.Photo" = None,
@@ -402,8 +403,8 @@ class Message(Object, Update):
         forwards: Optional[int] = None,
         via_bot: "types.User" = None,
         outgoing: Optional[bool] = None,
-        matches: Optional[List[Match]] = None,
-        command: Optional[List[str]] = None,
+        matches: Optional[list[Match]] = None,
+        command: Optional[list[str]] = None,
         forum_topic_created: "types.ForumTopicCreated" = None,
         forum_topic_closed: "types.ForumTopicClosed" = None,
         forum_topic_reopened: "types.ForumTopicReopened" = None,
@@ -421,7 +422,7 @@ class Message(Object, Update):
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        reactions: Optional[List["types.Reaction"]] = None,
+        reactions: Optional[list["types.Reaction"]] = None,
     ):
         super().__init__(client)
 
@@ -1000,7 +1001,7 @@ class Message(Object, Update):
             return f"https://t.me/{self.chat.username}/{self.id}"
         return f"https://t.me/c/{utils.get_channel_id(self.chat.id)}/{self.id}"
 
-    async def get_media_group(self) -> List["types.Message"]:
+    async def get_media_group(self) -> list["types.Message"]:
         """Bound method *get_media_group* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -1031,7 +1032,7 @@ class Message(Object, Update):
         text: str,
         quote: Optional[bool] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: Optional[List["types.MessageEntity"]] = None,
+        entities: Optional[list["types.MessageEntity"]] = None,
         disable_web_page_preview: Optional[bool] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
@@ -1129,7 +1130,7 @@ class Message(Object, Update):
         quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         has_spoiler: Optional[bool] = None,
         duration: int = 0,
         width: int = 0,
@@ -1275,7 +1276,7 @@ class Message(Object, Update):
         quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         duration: int = 0,
         performer: Optional[str] = None,
         title: Optional[str] = None,
@@ -1416,7 +1417,7 @@ class Message(Object, Update):
         quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         reply_markup: Union[
@@ -1629,7 +1630,7 @@ class Message(Object, Update):
         thumb: Optional[str] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         file_name: Optional[str] = None,
         force_document: Optional[bool] = None,
         disable_notification: Optional[bool] = None,
@@ -1982,11 +1983,11 @@ class Message(Object, Update):
 
     async def reply_media_group(
         self,
-        media: List[Union["types.InputMediaPhoto", "types.InputMediaVideo"]],
+        media: list[Union["types.InputMediaPhoto", "types.InputMediaVideo"]],
         quote: Optional[bool] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
-    ) -> List["types.Message"]:
+    ) -> list["types.Message"]:
         """Bound method *reply_media_group* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2049,7 +2050,7 @@ class Message(Object, Update):
         quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         has_spoiler: Optional[bool] = None,
         ttl_seconds: Optional[int] = None,
         disable_notification: Optional[bool] = None,
@@ -2176,14 +2177,14 @@ class Message(Object, Update):
     async def reply_poll(
         self,
         question: str,
-        options: List[str],
+        options: list[str],
         is_anonymous: bool = True,
         type: "enums.PollType" = enums.PollType.REGULAR,
         allows_multiple_answers: Optional[bool] = None,
         correct_option_id: Optional[int] = None,
         explanation: Optional[str] = None,
         explanation_parse_mode: "enums.ParseMode" = None,
-        explanation_entities: Optional[List["types.MessageEntity"]] = None,
+        explanation_entities: Optional[list["types.MessageEntity"]] = None,
         open_period: Optional[int] = None,
         close_date: Optional[datetime] = None,
         is_closed: Optional[bool] = None,
@@ -2528,7 +2529,7 @@ class Message(Object, Update):
         quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         has_spoiler: Optional[bool] = None,
         ttl_seconds: Optional[int] = None,
         duration: int = 0,
@@ -2806,7 +2807,7 @@ class Message(Object, Update):
         quote: Optional[bool] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         duration: int = 0,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
@@ -2927,7 +2928,7 @@ class Message(Object, Update):
         self,
         text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: Optional[List["types.MessageEntity"]] = None,
+        entities: Optional[list["types.MessageEntity"]] = None,
         disable_web_page_preview: Optional[bool] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> "Message":
@@ -2989,7 +2990,7 @@ class Message(Object, Update):
         self,
         caption: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
     ) -> "Message":
         """Bound method *edit_caption* of :obj:`~hydrogram.types.Message`.
@@ -3121,7 +3122,7 @@ class Message(Object, Update):
         message_thread_id: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         schedule_date: Optional[datetime] = None,
-    ) -> Union["types.Message", List["types.Message"]]:
+    ) -> Union["types.Message", list["types.Message"]]:
         """Bound method *forward* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3176,7 +3177,7 @@ class Message(Object, Update):
         caption: Optional[str] = None,
         message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         schedule_date: Optional[datetime] = None,
@@ -3187,7 +3188,7 @@ class Message(Object, Update):
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = object,
-    ) -> Union["types.Message", List["types.Message"]]:
+    ) -> Union["types.Message", list["types.Message"]]:
         """Bound method *copy* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:

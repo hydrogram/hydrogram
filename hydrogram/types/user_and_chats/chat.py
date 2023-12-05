@@ -17,8 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from collections.abc import AsyncGenerator
 from datetime import datetime
-from typing import AsyncGenerator, BinaryIO, List, Optional, Union
+from typing import BinaryIO, Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -158,7 +159,7 @@ class Chat(Object):
         title: Optional[str] = None,
         username: Optional[str] = None,
         active_usernames: Optional[str] = None,
-        usernames: Optional[List["types.Username"]] = None,
+        usernames: Optional[list["types.Username"]] = None,
         first_name: Optional[str] = None,
         last_name: Optional[str] = None,
         photo: "types.ChatPhoto" = None,
@@ -171,7 +172,7 @@ class Chat(Object):
         sticker_set_name: Optional[str] = None,
         can_set_sticker_set: Optional[bool] = None,
         members_count: Optional[int] = None,
-        restrictions: Optional[List["types.Restriction"]] = None,
+        restrictions: Optional[list["types.Restriction"]] = None,
         permissions: "types.ChatPermissions" = None,
         distance: Optional[int] = None,
         linked_chat: "types.Chat" = None,
@@ -229,9 +230,9 @@ class Chat(Object):
             is_fake=getattr(user, "fake", None),
             is_support=getattr(user, "support", None),
             username=user.usernames[0].username if user.usernames else user.username,
-            active_usernames=types.List(
-                [username.username for username in user.usernames if username.active]
-            )
+            active_usernames=types.List([
+                username.username for username in user.usernames if username.active
+            ])
             or None,
             usernames=types.List([types.Username._parse(r) for r in user.usernames]) or None,
             first_name=user.first_name,
@@ -879,7 +880,7 @@ class Chat(Object):
 
     async def add_members(
         self,
-        user_ids: Union[Union[int, str], List[Union[int, str]]],
+        user_ids: Union[Union[int, str], list[Union[int, str]]],
         forward_limit: int = 100,
     ) -> bool:
         """Bound method *add_members* of :obj:`~hydrogram.types.Chat`.

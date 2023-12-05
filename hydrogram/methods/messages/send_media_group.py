@@ -21,7 +21,7 @@ import logging
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -35,7 +35,7 @@ class SendMediaGroup:
     async def send_media_group(
         self: "hydrogram.Client",
         chat_id: Union[int, str],
-        media: List[
+        media: list[
             Union[
                 "types.InputMediaPhoto",
                 "types.InputMediaVideo",
@@ -49,7 +49,7 @@ class SendMediaGroup:
         reply_to_message_id: Optional[int] = None,
         schedule_date: Optional[datetime] = None,
         protect_content: Optional[bool] = None,
-    ) -> List["types.Message"]:
+    ) -> list["types.Message"]:
         """Send a group of photos or videos as an album.
 
         .. include:: /_includes/usable-by/users-bots.rst

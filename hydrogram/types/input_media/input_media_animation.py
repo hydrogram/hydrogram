@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import BinaryIO, List, Optional, Union
+from typing import BinaryIO, Optional, Union
 
 from hydrogram import enums
 from hydrogram.types.messages_and_media import MessageEntity
@@ -72,7 +72,7 @@ class InputMediaAnimation(InputMedia):
         thumb: Optional[str] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List[MessageEntity]] = None,
+        caption_entities: Optional[list[MessageEntity]] = None,
         width: int = 0,
         height: int = 0,
         duration: int = 0,

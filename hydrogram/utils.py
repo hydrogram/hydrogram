@@ -26,7 +26,7 @@ import struct
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timezone
 from getpass import getpass
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types
@@ -86,7 +86,7 @@ def get_input_media_from_file_id(
 
 async def parse_messages(
     client, messages: "raw.types.messages.Messages", replies: int = 1
-) -> List["types.Message"]:
+) -> list["types.Message"]:
     users = {i.id: i for i in messages.users}
     chats = {i.id: i for i in messages.chats}
     topics = {i.id: i for i in messages.topics} if hasattr(messages, "topics") else None
@@ -126,7 +126,7 @@ async def parse_messages(
     return types.List(parsed_messages)
 
 
-def parse_deleted_messages(client, update) -> List["types.Message"]:
+def parse_deleted_messages(client, update) -> list["types.Message"]:
     messages = update.messages
     channel_id = getattr(update, "channel_id", None)
 
@@ -319,8 +319,8 @@ async def parse_text_entities(
     client: "hydrogram.Client",
     text: str,
     parse_mode: enums.ParseMode,
-    entities: List["types.MessageEntity"],
-) -> Dict[str, Union[str, List[raw.base.MessageEntity]]]:
+    entities: list["types.MessageEntity"],
+) -> dict[str, Union[str, list[raw.base.MessageEntity]]]:
     if entities:
         # Inject the client instance because parsing user mentions requires it
         for entity in entities:

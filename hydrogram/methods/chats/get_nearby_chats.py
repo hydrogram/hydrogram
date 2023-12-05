@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -26,7 +25,7 @@ from hydrogram import raw, types, utils
 class GetNearbyChats:
     async def get_nearby_chats(
         self: "hydrogram.Client", latitude: float, longitude: float
-    ) -> List["types.Chat"]:
+    ) -> list["types.Chat"]:
         """Get nearby chats.
 
         .. include:: /_includes/usable-by/users.rst

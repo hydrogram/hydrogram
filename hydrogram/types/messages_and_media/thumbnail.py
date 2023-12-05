@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw
@@ -73,7 +73,7 @@ class Thumbnail(Object):
     @staticmethod
     def _parse(
         client, media: Union["raw.types.Photo", "raw.types.Document"]
-    ) -> Optional[List["Thumbnail"]]:
+    ) -> Optional[list["Thumbnail"]]:
         if isinstance(media, raw.types.Photo):
             raw_thumbs = [i for i in media.sizes if isinstance(i, raw.types.PhotoSize)]
             raw_thumbs.sort(key=lambda p: p.size)

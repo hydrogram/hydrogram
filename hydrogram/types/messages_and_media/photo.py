@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -73,7 +73,7 @@ class Photo(Object):
         file_size: int,
         date: datetime,
         ttl_seconds: Optional[int] = None,
-        thumbs: Optional[List["types.Thumbnail"]] = None,
+        thumbs: Optional[list["types.Thumbnail"]] = None,
     ):
         super().__init__(client)
 
@@ -89,7 +89,7 @@ class Photo(Object):
     @staticmethod
     def _parse(client, photo: "raw.types.Photo", ttl_seconds: Optional[int] = None) -> "Photo":
         if isinstance(photo, raw.types.Photo):
-            photos: List[raw.types.PhotoSize] = []
+            photos: list[raw.types.PhotoSize] = []
 
             for p in photo.sizes:
                 if isinstance(p, raw.types.PhotoSize):

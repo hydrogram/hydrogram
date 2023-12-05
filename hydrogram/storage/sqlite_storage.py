@@ -22,7 +22,7 @@ import inspect
 import struct
 import time
 from pathlib import Path
-from typing import Any, List, Optional, Tuple
+from typing import Any, Optional
 
 import aiosqlite
 
@@ -180,7 +180,7 @@ class SQLiteStorage(BaseStorage):
         if self.database != ":memory:":
             Path(self.database).unlink()
 
-    async def update_peers(self, peers: List[Tuple[int, int, str, str, str]]):
+    async def update_peers(self, peers: list[tuple[int, int, str, str, str]]):
         await self.conn.executemany(
             "REPLACE INTO peers (id, access_hash, type, username, phone_number)"
             "VALUES (?, ?, ?, ?, ?)",

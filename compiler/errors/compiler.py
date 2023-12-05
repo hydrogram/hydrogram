@@ -76,9 +76,9 @@ def start():
                 reader = csv.reader(f_csv, delimiter="\t")
 
                 super_class = caml(name)
-                name = " ".join(
-                    [str(i.capitalize()) for i in re.sub(r"_", " ", name).lower().split(" ")]
-                )
+                name = " ".join([
+                    str(i.capitalize()) for i in re.sub(r"_", " ", name).lower().split(" ")
+                ])
 
                 sub_classes = []
 
@@ -116,17 +116,15 @@ def start():
                         super_class=super_class,
                         code=code,
                         docstring=f'"""{name}"""',
-                        sub_classes="".join(
-                            [
-                                sub_class_template.format(
-                                    sub_class=k[0],
-                                    super_class=super_class,
-                                    id=f'"{k[1]}"',
-                                    docstring=f'"""{k[2]}"""',
-                                )
-                                for k in sub_classes
-                            ]
-                        ),
+                        sub_classes="".join([
+                            sub_class_template.format(
+                                sub_class=k[0],
+                                super_class=super_class,
+                                id=f'"{k[1]}"',
+                                docstring=f'"""{k[2]}"""',
+                            )
+                            for k in sub_classes
+                        ]),
                     )
 
                 f_class.write(class_template)

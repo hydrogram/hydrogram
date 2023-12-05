@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
 
 import hydrogram
 from hydrogram import raw, types
@@ -26,8 +25,8 @@ from hydrogram import raw, types
 class GetCustomEmojiStickers:
     async def get_custom_emoji_stickers(
         self: "hydrogram.Client",
-        custom_emoji_ids: List[int],
-    ) -> List["types.Sticker"]:
+        custom_emoji_ids: list[int],
+    ) -> list["types.Sticker"]:
         """Get information about custom emoji stickers by their identifiers.
 
         .. include:: /_includes/usable-by/users-bots.rst

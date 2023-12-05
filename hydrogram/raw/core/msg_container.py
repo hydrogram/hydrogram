@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from io import BytesIO
-from typing import Any, List
+from typing import Any
 
 from .message import Message
 from .primitives.int import Int
@@ -32,7 +32,7 @@ class MsgContainer(TLObject):
 
     QUALNAME = "MsgContainer"
 
-    def __init__(self, messages: List[Message]):
+    def __init__(self, messages: list[Message]):
         self.messages = messages
 
     @staticmethod

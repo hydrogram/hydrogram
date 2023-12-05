@@ -19,7 +19,8 @@
 
 import inspect
 import re
-from typing import Callable, List, Optional, Pattern, Union
+from re import Pattern
+from typing import Callable, Optional, Union
 
 import hydrogram
 from hydrogram import enums
@@ -787,8 +788,8 @@ linked_channel = create(linked_channel_filter)
 
 # region command_filter
 def command(
-    commands: Union[str, List[str]],
-    prefixes: Union[str, List[str]] = "/",
+    commands: Union[str, list[str]],
+    prefixes: Union[str, list[str]] = "/",
     case_sensitive: bool = False,
 ):
     """Filter commands, i.e.: text messages starting with "/" or any other custom prefix.
@@ -928,7 +929,7 @@ class user(Filter, set):  # noqa: N801
             Defaults to None (no users).
     """
 
-    def __init__(self, users: Optional[Union[int, str, List[Union[int, str]]]] = None):
+    def __init__(self, users: Optional[Union[int, str, list[Union[int, str]]]] = None):
         users = [] if users is None else users if isinstance(users, list) else [users]
 
         super().__init__(
@@ -957,7 +958,7 @@ class chat(Filter, set):  # noqa: N801
             Defaults to None (no chats).
     """
 
-    def __init__(self, chats: Optional[Union[int, str, List[Union[int, str]]]] = None):
+    def __init__(self, chats: Optional[Union[int, str, list[Union[int, str]]]] = None):
         chats = [] if chats is None else chats if isinstance(chats, list) else [chats]
 
         super().__init__(

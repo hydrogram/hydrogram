@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable, List
+from typing import Callable
 
 import hydrogram
 from hydrogram.filters import Filter
@@ -53,7 +53,7 @@ class DeletedMessagesHandler(Handler):
     def __init__(self, callback: Callable, filters: Filter = None):
         super().__init__(callback, filters)
 
-    async def check(self, client: "hydrogram.Client", messages: List[Message]):
+    async def check(self, client: "hydrogram.Client", messages: list[Message]):
         # Every message should be checked, if at least one matches the filter True is returned
         # otherwise, or if the list is empty, False is returned
         for message in messages:

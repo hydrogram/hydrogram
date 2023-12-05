@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict, Union
+from typing import Union
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -73,8 +73,8 @@ class ChatMemberUpdated(Object, Update):
     def _parse(
         client: "hydrogram.Client",
         update: Union["raw.types.UpdateChatParticipant", "raw.types.UpdateChannelParticipant"],
-        users: Dict[int, "raw.types.User"],
-        chats: Dict[int, "raw.types.Chat"],
+        users: dict[int, "raw.types.User"],
+        chats: dict[int, "raw.types.Chat"],
     ) -> "ChatMemberUpdated":
         chat_id = getattr(update, "chat_id", None) or getattr(update, "channel_id")
 

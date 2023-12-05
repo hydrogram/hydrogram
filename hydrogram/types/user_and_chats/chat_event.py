@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -259,8 +259,8 @@ class ChatEvent(Object):
     async def _parse(
         client: "hydrogram.Client",
         event: "raw.base.ChannelAdminLogEvent",
-        users: List["raw.base.User"],
-        chats: List["raw.base.Chat"],
+        users: list["raw.base.User"],
+        chats: list["raw.base.Chat"],
     ):
         users = {i.id: i for i in users}
         chats = {i.id: i for i in chats}

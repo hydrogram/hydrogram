@@ -17,7 +17,8 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from typing import AsyncGenerator, Optional, Union
+from collections.abc import AsyncGenerator
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw, types

@@ -17,14 +17,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
 
 import hydrogram
 from hydrogram import raw, types
 
 
 class ImportContacts:
-    async def import_contacts(self: "hydrogram.Client", contacts: List["types.InputPhoneContact"]):
+    async def import_contacts(self: "hydrogram.Client", contacts: list["types.InputPhoneContact"]):
         """Import contacts to your Telegram address book.
 
         .. include:: /_includes/usable-by/users.rst

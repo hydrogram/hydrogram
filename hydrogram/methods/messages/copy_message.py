@@ -19,7 +19,7 @@
 
 import logging
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, types
@@ -37,7 +37,7 @@ class CopyMessage:
         *,
         message_thread_id: Optional[int] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        caption_entities: Optional[list["types.MessageEntity"]] = None,
         disable_notification: Optional[bool] = None,
         reply_to_message_id: Optional[int] = None,
         schedule_date: Optional[datetime] = None,

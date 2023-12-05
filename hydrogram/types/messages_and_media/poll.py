@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -82,7 +82,7 @@ class Poll(Object, Update):
         client: "hydrogram.Client" = None,
         id: str,
         question: str,
-        options: List["types.PollOption"],
+        options: list["types.PollOption"],
         total_voter_count: int,
         is_closed: bool,
         is_anonymous: Optional[bool] = None,
@@ -91,7 +91,7 @@ class Poll(Object, Update):
         chosen_option_id: Optional[int] = None,
         correct_option_id: Optional[int] = None,
         explanation: Optional[str] = None,
-        explanation_entities: Optional[List["types.MessageEntity"]] = None,
+        explanation_entities: Optional[list["types.MessageEntity"]] = None,
         open_period: Optional[int] = None,
         close_date: Optional[datetime] = None,
     ):
@@ -119,7 +119,7 @@ class Poll(Object, Update):
     ) -> "Poll":
         poll: raw.types.Poll = media_poll.poll
         poll_results: raw.types.PollResults = media_poll.results
-        results: List[raw.types.PollAnswerVoters] = poll_results.results
+        results: list[raw.types.PollAnswerVoters] = poll_results.results
 
         chosen_option_id = None
         correct_option_id = None

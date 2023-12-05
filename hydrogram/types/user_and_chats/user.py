@@ -19,7 +19,7 @@
 
 import html
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -174,13 +174,13 @@ class User(Object, Update):
         next_offline_date: Optional[datetime] = None,
         username: Optional[str] = None,
         active_usernames: Optional[str] = None,
-        usernames: Optional[List["types.Username"]] = None,
+        usernames: Optional[list["types.Username"]] = None,
         language_code: Optional[str] = None,
         emoji_status: Optional["types.EmojiStatus"] = None,
         dc_id: Optional[int] = None,
         phone_number: Optional[str] = None,
         photo: "types.ChatPhoto" = None,
-        restrictions: Optional[List["types.Restriction"]] = None,
+        restrictions: Optional[list["types.Restriction"]] = None,
     ):
         super().__init__(client)
 
@@ -245,9 +245,9 @@ class User(Object, Update):
             last_name=user.last_name,
             **User._parse_status(user.status, user.bot),
             username=user.usernames[0].username if user.usernames else user.username,
-            active_usernames=types.List(
-                [username.username for username in user.usernames if username.active]
-            )
+            active_usernames=types.List([
+                username.username for username in user.usernames if username.active
+            ])
             or None,
             usernames=types.List([types.Username._parse(r) for r in user.usernames]) or None,
             language_code=user.lang_code,

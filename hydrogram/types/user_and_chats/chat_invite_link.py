@@ -18,7 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -103,7 +103,7 @@ class ChatInviteLink(Object):
     def _parse(
         client: "hydrogram.Client",
         invite: "raw.base.ExportedChatInvite",
-        users: Optional[Dict[int, "raw.types.User"]] = None,
+        users: Optional[dict[int, "raw.types.User"]] = None,
     ) -> Optional["ChatInviteLink"]:
         if not isinstance(invite, raw.types.ChatInviteExported):
             return None
