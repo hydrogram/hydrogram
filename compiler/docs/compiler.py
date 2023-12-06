@@ -581,6 +581,9 @@ def hydrogram_api():
             Chat.mark_unread
             Chat.set_protected_content
             Chat.unpin_all_messages
+            Chat.ask
+            Chat.listen
+            Chat.stop_listening
         """,
         "user": """
         User
@@ -588,6 +591,9 @@ def hydrogram_api():
             User.unarchive
             User.block
             User.unblock
+            User.ask
+            User.listen
+            User.stop_listening
         """,
         "callback_query": """
         Callback Query

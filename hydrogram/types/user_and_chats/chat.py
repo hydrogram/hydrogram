@@ -445,9 +445,6 @@ class Chat(Object):
             unallowed_click_alert (``bool``):
                 Whether to alert the user if they click on a button that is not intended for them. Defaults to ``True``.
 
-            chat_id (``Optional[Union[int, str], List[Union[int, str]]]``):
-                The chat ID(s) to listen for. Defaults to ``None``.
-
             user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
                 The user ID(s) to listen for. Defaults to ``None``.
 
@@ -517,9 +514,6 @@ class Chat(Object):
 
             unallowed_click_alert (``bool``):
                 Same as :meth:`hydrogram.Client.listen`.
-
-            chat_id (``Optional[Union[int, str], List[Union[int, str]]]``):
-                The chat ID(s) to listen for. Defaults to ``None``.
 
             user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
                 The user ID(s) to listen for. Defaults to ``None``.

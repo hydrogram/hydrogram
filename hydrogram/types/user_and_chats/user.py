@@ -308,6 +308,7 @@ class User(Object, Update):
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         timeout: Optional[int] = None,
         unallowed_click_alert: bool = True,
+        chat_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
     ):
@@ -356,7 +357,7 @@ class User(Object, Update):
             listener_type=listener_type,
             timeout=timeout,
             unallowed_click_alert=unallowed_click_alert,
-            chat_id=self.id,
+            chat_id=chat_id,
             message_id=message_id,
             inline_message_id=inline_message_id,
         )
@@ -435,6 +436,7 @@ class User(Object, Update):
     def stop_listening(
         self,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
+        chat_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
     ):
@@ -443,6 +445,9 @@ class User(Object, Update):
 
         Parameters:
             listener_type (``ListenerTypes``):
+                Same as :meth:`hydrogram.Client.stop_listening`.
+
+            chat_id (``Union[int, str], List[Union[int, str]]``):
                 Same as :meth:`hydrogram.Client.stop_listening`.
 
             message_id (``Union[int, List[int]]``):
@@ -457,7 +462,7 @@ class User(Object, Update):
         return self._client.stop_listening(
             user_id=self.id,
             listener_type=listener_type,
-            chat_id=self.id,
+            chat_id=chat_id,
             message_id=message_id,
             inline_message_id=inline_message_id,
         )
