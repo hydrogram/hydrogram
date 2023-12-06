@@ -242,15 +242,16 @@ def start(format: bool = False):
             type = camel(type)
             qualtype = ".".join([typespace, type]).lstrip(".")
 
-            # Pingu!
             has_flags = bool(FLAGS_RE_3.findall(line))
 
             args = ARGS_RE.findall(line)
 
-            # Fix arg name being "self" (reserved python keyword)
+            # Fix arg name being "self" or "from" (reserved python keywords)
             for i, item in enumerate(args):
                 if item[0] == "self":
                     args[i] = ("is_self", item[1])
+                if item[0] == "from":
+                    args[i] = ("from_peer", item[1])
 
             combinator = Combinator(
                 section=section,
