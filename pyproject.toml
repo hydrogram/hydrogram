@@ -38,10 +38,11 @@ path = "hydrogram/__init__.py"
 [tool.hatch.build.hooks.custom]
 
 [project.urls]
-Tracker = "https://github.com/AmanoTeam/Hydrogram/issues"
-Community = "https://t.me/HydrogramNews"
-Source = "https://github.com/AmanoTeam/Hydrogram"
-Documentation = "https://hydrogram.org"
+homepage = "https://hydrogram.org"
+tracker = "https://github.com/AmanoTeam/Hydrogram/issues"
+community = "https://t.me/HydrogramNews"
+source = "https://github.com/AmanoTeam/Hydrogram"
+documentation = "https://docs.hydrogram.org"
 
 [build-system]
 requires = ["hatchling"]

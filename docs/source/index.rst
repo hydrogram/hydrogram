@@ -25,7 +25,7 @@ Welcome to Hydrogram
             Development
         </a>
         •
-        <a href="https://docs.hydrogram.org/releases">
+        <a href="https://docs.hydrogram.org/en/latest/releases.html">
             Releases
         </a>
         •
