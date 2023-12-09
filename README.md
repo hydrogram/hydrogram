@@ -9,15 +9,15 @@
     <br>
     <b>Python Framework for the Telegram MTProto API</b>
     <br>
-    <a href="https://hydrogram.amanoteam.com">
+    <a href="https://hydrogram.org">
         Homepage
     </a>
     •
-    <a href="https://hydrogram.amanoteam.com/docs">
+    <a href="https://docs.hydrogram.org">
         Documentation
     </a>
     •
-    <a href="https://hydrogram.amanoteam.com/docs/releases">
+    <a href="https://docs.hydrogram.org/en/latest/releases.html">
         Releases
     </a>
     •
@@ -78,8 +78,8 @@ app.run()
 
 ## Resources
 
-- The [documentation](https://hydrogram.amanoteam.com/docs) is the technical reference for Hydrogram. It includes detailed usage guides, API reference, and more.
-- The [homepage](https://hydrogram.amanoteam.com) is the official website for Hydrogram. It includes a quickstart guide, a list of features, and more.
+- The [documentation](https://docs.hydrogram.org) is the technical reference for Hydrogram. It includes detailed usage guides, API reference, and more.
+- The [homepage](https://hydrogram.org) is the official website for Hydrogram. It includes a quickstart guide, a list of features, and more.
 - Our [Telegram channel](https://t.me/HydrogramNews) is where we post news and updates about Hydrogram.
 
 ## Contributing

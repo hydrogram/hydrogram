@@ -55,4 +55,4 @@ Fixup release that fixes our logo url in PyPI.
 0.1.0 (2023-12-01)
 ===================
 
-Initial project release. To see all changes and improvements compared to Pyrogram, see `Hydrogram vs Pyrogram <https://hydrogram.amanoteam.com/en/latest/hydrogram-vs-pyrogram.html>`_
+Initial project release. To see all changes and improvements compared to Pyrogram, see `Hydrogram vs Pyrogram <https://hydrogram.org/en/latest/hydrogram-vs-pyrogram.html>`_

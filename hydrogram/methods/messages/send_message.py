@@ -99,7 +99,7 @@ class SendMessage:
                 await app.send_message("me", "Message sent with **Hydrogram**!")
 
                 # Disable web page previews
-                await app.send_message("me", "https://hydrogram.amanoteam.com/docs",
+                await app.send_message("me", "https://docs.hydrogram.org",
                     disable_web_page_preview=True)
 
                 # Reply to a message using its id
@@ -123,7 +123,7 @@ class SendMessage:
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [InlineKeyboardButton("Data", callback_data="callback_data")],
-                            [InlineKeyboardButton("Docs", url="https://hydrogram.amanoteam.com/docs")]
+                            [InlineKeyboardButton("Docs", url="https://docs.hydrogram.org")]
                         ]))
         """
 

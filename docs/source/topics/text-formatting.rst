@@ -30,7 +30,7 @@ list of the basic styles currently supported by Hydrogram.
 - :strike:`strike`
 - :underline:`underline`
 - spoiler
-- `text URL <https://hydrogram.amanoteam.com>`_
+- `text URL <https://hydrogram.org>`_
 - `user text mention <tg://user?id=123456789>`_
 - ``inline fixed-width code``
 - .. code-block:: text
@@ -57,7 +57,7 @@ To strictly use this mode, pass :obj:`~hydrogram.enums.ParseMode.MARKDOWN` to th
 
     ||spoiler||
 
-    [text URL](https://hydrogram.amanoteam.com/)
+    [text URL](https://hydrogram.org/)
 
     [text user mention](tg://user?id=123456789)
 
@@ -83,7 +83,7 @@ To strictly use this mode, pass :obj:`~hydrogram.enums.ParseMode.MARKDOWN` to th
             "--underline--, "
             "~~strike~~, "
             "||spoiler||, "
-            "[URL](https://hydrogram.amanoteam.com), "
+            "[URL](https://hydrogram.org), "
             "`code`, "
             "```"
             "for i in range(10):\n"
@@ -111,7 +111,7 @@ To strictly use this mode, pass :obj:`~hydrogram.enums.HTML` to the *parse_mode*
 
     <spoiler>spoiler</spoiler>
 
-    <a href="https://hydrogram.amanoteam.com/">text URL</a>
+    <a href="https://hydrogram.org/">text URL</a>
 
     <a href="tg://user?id=123456789">inline mention</a>
 
@@ -139,7 +139,7 @@ To strictly use this mode, pass :obj:`~hydrogram.enums.HTML` to the *parse_mode*
             "<u>underline</u>, "
             "<s>strike</s>, "
             "<spoiler>spoiler</spoiler>, "
-            "<a href=\"https://hydrogram.amanoteam.com/\">URL</a>, "
+            "<a href=\"https://hydrogram.org/\">URL</a>, "
             "<code>code</code>\n\n"
             "<pre>"
             "for i in range(10):\n"

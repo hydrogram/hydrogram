@@ -17,7 +17,7 @@ Welcome to Hydrogram
         <b>Python Framework for the Telegram MTProto API</b>
 
         <br>
-        <a href="https://hydrogram.amanoteam.com">
+        <a href="https://hydrogram.org">
             Homepage
         </a>
         •
@@ -25,7 +25,7 @@ Welcome to Hydrogram
             Development
         </a>
         •
-        <a href="https://hydrogram.amanoteam.com/docs/releases">
+        <a href="https://docs.hydrogram.org/releases">
             Releases
         </a>
         •

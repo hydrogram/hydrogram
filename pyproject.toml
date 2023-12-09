@@ -41,7 +41,7 @@ path = "hydrogram/__init__.py"
 Tracker = "https://github.com/AmanoTeam/Hydrogram/issues"
 Community = "https://t.me/HydrogramNews"
 Source = "https://github.com/AmanoTeam/Hydrogram"
-Documentation = "https://hydrogram.amanoteam.com"
+Documentation = "https://hydrogram.org"
 
 [build-system]
 requires = ["hatchling"]

@@ -86,14 +86,14 @@ def test_html_unparse_spoiler():
 
 
 def test_html_unparse_url():
-    expected = '<a href="https://hydrogram.amanoteam.com/">URL</a>'
+    expected = '<a href="https://hydrogram.org/">URL</a>'
     text = "URL"
     entities = hydrogram.types.List([
         hydrogram.types.MessageEntity(
             type=hydrogram.enums.MessageEntityType.TEXT_LINK,
             offset=0,
             length=3,
-            url="https://hydrogram.amanoteam.com/",
+            url="https://hydrogram.org/",
         )
     ])
 

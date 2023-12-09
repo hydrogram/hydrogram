@@ -132,7 +132,7 @@ html_theme_options = {
         },
         {  # PTB website logo - globe
             "name": "python-telegram-bot website",
-            "url": "https://hydrogram.amanoteam.com/",
+            "url": "https://hydrogram.org/",
             "html": (
                 '<svg stroke="currentColor" fill="currentColor" stroke-width="0" '
                 'viewBox="0 0 16 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">'

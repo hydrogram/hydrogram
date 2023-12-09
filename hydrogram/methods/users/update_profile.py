@@ -58,7 +58,7 @@ class UpdateProfile:
                 await app.update_profile(first_name="Hydrogram")
 
                 # Update first name and bio
-                await app.update_profile(first_name="Hydrogram", bio="https://hydrogram.amanoteam.com/docs/")
+                await app.update_profile(first_name="Hydrogram", bio="https://docs.hydrogram.org/")
 
                 # Remove the last name
                 await app.update_profile(last_name="")

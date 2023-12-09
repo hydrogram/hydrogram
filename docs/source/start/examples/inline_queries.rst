@@ -24,13 +24,13 @@ It uses the @on_inline_query decorator to register an InlineQueryHandler.
                     input_message_content=InputTextMessageContent(
                         "Here's how to install **Hydrogram**"
                     ),
-                    url="https://hydrogram.amanoteam.com/docs/intro/install",
+                    url="https://docs.hydrogram.org/en/latest/intro/install.html",
                     description="How to install Hydrogram",
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [InlineKeyboardButton(
                                 "Open website",
-                                url="https://hydrogram.amanoteam.com/docs/intro/install"
+                                url="https://docs.hydrogram.org/en/latest/intro/install.html"
                             )]
                         ]
                     )
@@ -40,13 +40,13 @@ It uses the @on_inline_query decorator to register an InlineQueryHandler.
                     input_message_content=InputTextMessageContent(
                         "Here's how to use **Hydrogram**"
                     ),
-                    url="https://hydrogram.amanoteam.com/docs/start/invoking",
+                    url="https://docs.hydrogram.org/en/latest/start/invoking.html",
                     description="How to use Hydrogram",
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [InlineKeyboardButton(
                                 "Open website",
-                                url="https://hydrogram.amanoteam.com/docs/start/invoking"
+                                url="https://docs.hydrogram.org/en/latest/start/invoking.html"
                             )]
                         ]
                     )
