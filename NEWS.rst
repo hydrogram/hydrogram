@@ -22,9 +22,9 @@ Bugfixes
 --------
 
 - Fix a boolean instead of file name in send_audio
-  `#4 <https://github.com/AmanoTeam/hydrogram/issues/4>`_
+  `#4 <https://github.com/hydrogram/hydrogram/issues/4>`_
 - Prevent from closing BytesIO object in handle_download
-  `#4 <https://github.com/AmanoTeam/hydrogram/issues/4>`_
+  `#4 <https://github.com/hydrogram/hydrogram/issues/4>`_
 
 
 0.1.3 (2023-12-03)
@@ -34,7 +34,7 @@ Bugfixes
 --------
 
 - Fix handle_download file name
-  `#3 <https://github.com/AmanoTeam/hydrogram/issues/3>`_
+  `#3 <https://github.com/hydrogram/hydrogram/issues/3>`_
 
 
 0.1.2 (2023-12-03)

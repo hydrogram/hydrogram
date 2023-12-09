@@ -1,6 +1,6 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
 #  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
-#  Copyright (C) 2023-present Amano LLC <https://amanoteam.com>
+#  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
 #
@@ -19,7 +19,7 @@
 
 __version__ = "0.1.4"
 __license__ = "GNU Lesser General Public License v3.0 (LGPL-3.0)"
-__copyright__ = "Copyright (C) 2023-present Amano LLC <https://amanoteam.com>"
+__copyright__ = "Copyright (C) 2023-present Hydrogram <https://hydrogram.org>"
 
 from concurrent.futures.thread import ThreadPoolExecutor
 

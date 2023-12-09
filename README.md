@@ -1,9 +1,9 @@
 <p align="center">
-    <a href="https://github.com/AmanoTeam/hydrogram">
+    <a href="https://github.com/hydrogram/hydrogram">
         <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AmanoTeam/hydrogram/main/docs/source/_static/hydrogram-dark.png">
-            <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AmanoTeam/hydrogram/main/docs/source/_static/hydrogram-light.png">
-            <img alt="Hydrogram" width="128" src="https://raw.githubusercontent.com/AmanoTeam/hydrogram/main/docs/source/_static/hydrogram-light.png">
+            <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/hydrogram/hydrogram/main/docs/source/_static/hydrogram-dark.png">
+            <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/hydrogram/hydrogram/main/docs/source/_static/hydrogram-light.png">
+            <img alt="Hydrogram" width="128" src="https://raw.githubusercontent.com/hydrogram/hydrogram/main/docs/source/_static/hydrogram-light.png">
         </picture>
     </a>
     <br>
@@ -33,7 +33,7 @@
 [![PyPI license](https://img.shields.io/pypi/l/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram)
 [![PyPI python versions](https://img.shields.io/pypi/pyversions/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram)
 [![PyPI download month](https://img.shields.io/pypi/dm/hydrogram.svg)](https://pypi.python.org/pypi/hydrogram/)
-[![GitHub Actions status](https://github.com/AmanoTeam/hydrogram/actions/workflows/python.yml/badge.svg)](https://github.com/AmanoTeam/hydrogram/actions)
+[![GitHub Actions status](https://github.com/hydrogram/hydrogram/actions/workflows/python.yml/badge.svg)](https://github.com/hydrogram/hydrogram/actions)
 
 ## Description
 
@@ -86,16 +86,16 @@ app.run()
 
 Hydrogram is an open source project and we welcome contributions from the community. We appreciate all types of contributions, including bug reports, feature requests, documentation improvements, and code contributions.
 
-To get started, please review our [contribution guidelines](https://github.com/AmanoTeam/hydrogram/blob/main/CONTRIBUTING.rst) for more information. You can also help by [reporting bugs or feature requests](https://github.com/AmanoTeam/hydrogram/issues/new/choose).
+To get started, please review our [contribution guidelines](https://github.com/hydrogram/hydrogram/blob/main/CONTRIBUTING.rst) for more information. You can also help by [reporting bugs or feature requests](https://github.com/hydrogram/hydrogram/issues/new/choose).
 
 If you're interested in contributing code, you'll need to set up the development environment. Here are the steps:
 
-1. Clone the repository: `git clone https://github.com/AmanoTeam/hydrogram.git`
+1. Clone the repository: `git clone https://github.com/hydrogram/hydrogram.git`
 2. Install the dependencies: `pip install .[dev]`
 3. Run the tests: `pytest`
 4. Make your changes and submit a pull request.
 
-All contributors are expected to adhere to the [Code of Conduct](https://github.com/AmanoTeam/hydrogram/blob/main/CODE_OF_CONDUCT.rst). Please read it before contributing.
+All contributors are expected to adhere to the [Code of Conduct](https://github.com/hydrogram/hydrogram/blob/main/CODE_OF_CONDUCT.rst). Please read it before contributing.
 
 We appreciate your help in making Hydrogram better!
 

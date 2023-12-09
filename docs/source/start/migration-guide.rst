@@ -50,4 +50,4 @@ Make sure to review your codebase, apply these changes where necessary, and enjo
 
 Don't hesitate to contact us if you have any questions or need assistance with the migration process.
 
-If you find any bugs or have a feature request, please `open an issue on GitHub <https://github.com/AmanoTeam/hydrogram/issues/new>`_.
+If you find any bugs or have a feature request, please `open an issue on GitHub <https://github.com/hydrogram/hydrogram/issues/new>`_.
