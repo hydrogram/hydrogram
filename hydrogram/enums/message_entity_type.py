@@ -1,6 +1,6 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
 #  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
-#  Copyright (C) 2023-present Amano LLC <https://amanoteam.com>
+#  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
 #
@@ -38,7 +38,7 @@ class MessageEntityType(AutoName):
     "``/start@hydrogrambot``"
 
     URL = raw.types.MessageEntityUrl
-    "``https://hydrogram.amanoteam.com`` (see ``url``)"
+    "``https://hydrogram.org`` (see ``url``)"
 
     EMAIL = raw.types.MessageEntityEmail
     "``do-not-reply@hydrogram.org``"

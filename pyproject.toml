@@ -2,7 +2,7 @@
 name = "Hydrogram"
 dynamic = ["version"]
 description = "Sleek, advanced, and asynchronous Telegram MTProto API framework in Python, designed for fluid user and bot interactions."
-authors = [{ name = "Amano LLC", email = "contact@amanoteam.com" }]
+authors = [{ name = "Hydrogram", email = "contact@hydrogram.org" }]
 dependencies = ["pyaes==1.6.1", "pysocks==1.7.1", "aiosqlite>=0.19.0"]
 readme = "README.md"
 license = "LGPL-3.0-or-later"
@@ -38,10 +38,11 @@ path = "hydrogram/__init__.py"
 [tool.hatch.build.hooks.custom]
 
 [project.urls]
-Tracker = "https://github.com/AmanoTeam/Hydrogram/issues"
-Community = "https://t.me/HydrogramNews"
-Source = "https://github.com/AmanoTeam/Hydrogram"
-Documentation = "https://hydrogram.amanoteam.com"
+homepage = "https://hydrogram.org"
+tracker = "https://github.com/hydrogram/hydrogram/issues"
+community = "https://t.me/HydrogramNews"
+source = "https://github.com/hydrogram/hydrogram"
+documentation = "https://docs.hydrogram.org"
 
 [build-system]
 requires = ["hatchling"]
@@ -121,7 +122,7 @@ package = "hydrogram"
 filename = "NEWS.rst"
 directory = "news/"
 template = "news/.template.rst.jinja2"
-issue_format = "`#{issue} <https://github.com/AmanoTeam/hydrogram/issues/{issue}>`_"
+issue_format = "`#{issue} <https://github.com/hydrogram/hydrogram/issues/{issue}>`_"
 
 [[tool.towncrier.section]]
 path = ""

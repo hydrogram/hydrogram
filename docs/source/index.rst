@@ -17,15 +17,15 @@ Welcome to Hydrogram
         <b>Python Framework for the Telegram MTProto API</b>
 
         <br>
-        <a href="https://hydrogram.amanoteam.com">
+        <a href="https://hydrogram.org">
             Homepage
         </a>
         •
-        <a href="https://github.com/AmanoTeam/hydrogram">
+        <a href="https://github.com/hydrogram/hydrogram">
             Development
         </a>
         •
-        <a href="https://hydrogram.amanoteam.com/docs/releases">
+        <a href="https://docs.hydrogram.org/en/latest/releases.html">
             Releases
         </a>
         •

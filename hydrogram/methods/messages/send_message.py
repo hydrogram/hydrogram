@@ -1,6 +1,6 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
 #  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
-#  Copyright (C) 2023-present Amano LLC <https://amanoteam.com>
+#  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
 #
@@ -99,7 +99,7 @@ class SendMessage:
                 await app.send_message("me", "Message sent with **Hydrogram**!")
 
                 # Disable web page previews
-                await app.send_message("me", "https://hydrogram.amanoteam.com/docs",
+                await app.send_message("me", "https://docs.hydrogram.org",
                     disable_web_page_preview=True)
 
                 # Reply to a message using its id
@@ -123,7 +123,7 @@ class SendMessage:
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [InlineKeyboardButton("Data", callback_data="callback_data")],
-                            [InlineKeyboardButton("Docs", url="https://hydrogram.amanoteam.com/docs")]
+                            [InlineKeyboardButton("Docs", url="https://docs.hydrogram.org")]
                         ]))
         """
 

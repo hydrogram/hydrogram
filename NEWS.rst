@@ -22,9 +22,9 @@ Bugfixes
 --------
 
 - Fix a boolean instead of file name in send_audio
-  `#4 <https://github.com/AmanoTeam/hydrogram/issues/4>`_
+  `#4 <https://github.com/hydrogram/hydrogram/issues/4>`_
 - Prevent from closing BytesIO object in handle_download
-  `#4 <https://github.com/AmanoTeam/hydrogram/issues/4>`_
+  `#4 <https://github.com/hydrogram/hydrogram/issues/4>`_
 
 
 0.1.3 (2023-12-03)
@@ -34,7 +34,7 @@ Bugfixes
 --------
 
 - Fix handle_download file name
-  `#3 <https://github.com/AmanoTeam/hydrogram/issues/3>`_
+  `#3 <https://github.com/hydrogram/hydrogram/issues/3>`_
 
 
 0.1.2 (2023-12-03)
@@ -55,4 +55,4 @@ Fixup release that fixes our logo url in PyPI.
 0.1.0 (2023-12-01)
 ===================
 
-Initial project release. To see all changes and improvements compared to Pyrogram, see `Hydrogram vs Pyrogram <https://hydrogram.amanoteam.com/en/latest/hydrogram-vs-pyrogram.html>`_
+Initial project release. To see all changes and improvements compared to Pyrogram, see `Hydrogram vs Pyrogram <https://hydrogram.org/en/latest/hydrogram-vs-pyrogram.html>`_

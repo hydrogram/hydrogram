@@ -7,16 +7,16 @@ Support Hydrogram
 
     <div style="float: right; margin-bottom: 10px">
         <a class="github-button"
-           href="https://github.com/AmanoTeam/hydrogram"
+           href="https://github.com/hydrogram/hydrogram"
            data-color-scheme="no-preference: light; light: light; dark: dark;"
            data-icon="octicon-star" data-size="large" data-show-count="true"
-           aria-label="Star AmanoTeam/hydrogram on GitHub">Star</a>
+           aria-label="Star hydrogram/hydrogram on GitHub">Star</a>
 
         <a class="github-button"
-           href="https://github.com/AmanoTeam/hydrogram/fork"
+           href="https://github.com/hydrogram/hydrogram/fork"
            data-color-scheme="no-preference: light; light: light; dark: dark;"
            data-icon="octicon-repo-forked" data-size="large"
-           data-show-count="true" aria-label="Fork AmanoTeam/hydrogram on GitHub">Fork</a>
+           data-show-count="true" aria-label="Fork hydrogram/hydrogram on GitHub">Fork</a>
     </div>
 
     <br style="clear: both"/>

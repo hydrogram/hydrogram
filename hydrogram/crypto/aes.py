@@ -1,6 +1,6 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
 #  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
-#  Copyright (C) 2023-present Amano LLC <https://amanoteam.com>
+#  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
 #
@@ -55,7 +55,7 @@ except ImportError:
     log.warning(
         "TgCrypto is missing! "
         "Hydrogram will work the same, but at a much slower speed. "
-        "More info: https://hydrogram.amanoteam.com/docs/topics/speedups"
+        "More info: https://docs.hydrogram.org/en/latest/topics/speedups.html"
     )
 
     def ige256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes:

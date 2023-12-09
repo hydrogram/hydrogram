@@ -24,11 +24,11 @@ Install Hydrogram
 Bleeding Edge
 -------------
 
-You can install the development version from the git ``master`` branch using this command:
+You can install the development version from the git ``dev`` branch using this command:
 
 .. code-block:: text
 
-    $ pip3 install -U https://github.com/AmanoTeam/hydrogram/archive/master.zip
+    $ pip3 install -U https://github.com/hydrogram/hydrogram/archive/dev.zip
 
 Verifying
 ---------
@@ -42,4 +42,4 @@ If no error shows up you are good to go.
     >>> hydrogram.__version__
     'x.y.z'
 
-.. _`Github repo`: http://github.com/AmanoTeam/hydrogram
+.. _`Github repo`: http://github.com/hydrogram/hydrogram

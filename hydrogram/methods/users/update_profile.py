@@ -1,6 +1,6 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
 #  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
-#  Copyright (C) 2023-present Amano LLC <https://amanoteam.com>
+#  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
 #
@@ -58,7 +58,7 @@ class UpdateProfile:
                 await app.update_profile(first_name="Hydrogram")
 
                 # Update first name and bio
-                await app.update_profile(first_name="Hydrogram", bio="https://hydrogram.amanoteam.com/docs/")
+                await app.update_profile(first_name="Hydrogram", bio="https://docs.hydrogram.org/")
 
                 # Remove the last name
                 await app.update_profile(last_name="")

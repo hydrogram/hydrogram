@@ -1,6 +1,6 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
 #  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
-#  Copyright (C) 2023-present Amano LLC <https://amanoteam.com>
+#  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
 #
@@ -86,14 +86,14 @@ def test_html_unparse_spoiler():
 
 
 def test_html_unparse_url():
-    expected = '<a href="https://hydrogram.amanoteam.com/">URL</a>'
+    expected = '<a href="https://hydrogram.org/">URL</a>'
     text = "URL"
     entities = hydrogram.types.List([
         hydrogram.types.MessageEntity(
             type=hydrogram.enums.MessageEntityType.TEXT_LINK,
             offset=0,
             length=3,
-            url="https://hydrogram.amanoteam.com/",
+            url="https://hydrogram.org/",
         )
     ])
 
