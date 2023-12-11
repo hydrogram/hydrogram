@@ -1,0 +1,1 @@
+Changed the minimum required version of Python to 3.9 and integrated the newest Python type hints.

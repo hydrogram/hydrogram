@@ -1,0 +1,1 @@
+Added the attribute `is_participants_hidden`` to the `Chat` type. If the list of members is hidden, `True` will be returned; otherwise, `False` will be returned.
