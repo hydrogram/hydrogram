@@ -86,16 +86,9 @@ app.run()
 
 Hydrogram is an open source project and we welcome contributions from the community. We appreciate all types of contributions, including bug reports, feature requests, documentation improvements, and code contributions.
 
-To get started, please review our [contribution guidelines](https://github.com/hydrogram/hydrogram/blob/main/CONTRIBUTING.rst) for more information. You can also help by [reporting bugs or feature requests](https://github.com/hydrogram/hydrogram/issues/new/choose).
+To get started, please review our [Contribution Guidelines](https://github.com/hydrogram/hydrogram/blob/main/CONTRIBUTING.md) for more information.
 
-If you're interested in contributing code, you'll need to set up the development environment. Here are the steps:
-
-1. Clone the repository: `git clone https://github.com/hydrogram/hydrogram.git`
-2. Install the dependencies: `pip install .[dev]`
-3. Run the tests: `pytest`
-4. Make your changes and submit a pull request.
-
-All contributors are expected to adhere to the [Code of Conduct](https://github.com/hydrogram/hydrogram/blob/main/CODE_OF_CONDUCT.rst). Please read it before contributing.
+All contributors are expected to adhere to the [Code of Conduct](https://github.com/hydrogram/.github/blob/main/CODE_OF_CONDUCT.md). Please read it before contributing.
 
 We appreciate your help in making Hydrogram better!
 
