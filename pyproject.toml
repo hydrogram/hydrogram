@@ -51,9 +51,9 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
-    "ruff>=0.1.3",
+    "ruff>=0.1.8",
     "pytest>=7.4.3",
-    "pytest-asyncio>=0.21.1",
+    "pytest-asyncio>=0.23.2",
     "pytest-cov>=4.1.0",
     "twine>=4.0.2",
 ]
@@ -64,9 +64,9 @@ docs = [
     "furo>=2023.9.10",
     "sphinx-autobuild>=2021.3.14",
     "sphinx-copybutton>=0.5.2",
-    "pygments>=2.16.1",
-    "towncrier>=23.6.0",
-    "sphinxcontrib-towncrier>=0.3.2a0",
+    "pygments>=2.17.2",
+    "towncrier>=23.11.0",
+    "sphinxcontrib-towncrier>=0.4.0a0",
 ]
 
 [tool.hatch.metadata]
