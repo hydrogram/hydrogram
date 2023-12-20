@@ -92,7 +92,7 @@ class Dispatcher:
                     update.message,
                     users,
                     chats,
-                    isinstance(update, UpdateNewScheduledMessage),
+                    is_scheduled=isinstance(update, UpdateNewScheduledMessage),
                 ),
                 MessageHandler,
             )
