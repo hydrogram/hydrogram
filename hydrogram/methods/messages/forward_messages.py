@@ -105,7 +105,7 @@ class ForwardMessages:
         chats = {i.id: i for i in r.chats}
 
         forwarded_messages: list = [
-            await types.Message._parse(self, i.message, users, chats)
+            await types.Message._parse(client=self, message=i.message, users=users, chats=chats)
             for i in r.updates
             if isinstance(
                 i,
