@@ -80,7 +80,9 @@ class GetDiscussionReplies:
                 return
 
             for message in messages:
-                yield await types.Message._parse(self, message, users, chats, replies=0)
+                yield await types.Message._parse(
+                    client=self, message=message, users=users, chats=chats, replies=0
+                )
 
                 current += 1
 

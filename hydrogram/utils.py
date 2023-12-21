@@ -96,7 +96,9 @@ async def parse_messages(
     parsed_messages = []
 
     parsed_messages = [
-        await types.Message._parse(client, message, users, chats, topics, replies=0)
+        await types.Message._parse(
+            client=client, message=message, users=users, chats=chats, topics=topics, replies=0
+        )
         for message in messages.messages
     ]
 
