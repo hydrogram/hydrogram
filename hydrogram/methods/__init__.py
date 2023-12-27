@@ -28,7 +28,7 @@ from .messages import Messages
 from .password import Password
 from .users import Users
 from .utilities import Utilities
-from .messages.inline_session import get_session
+
 
 class Methods(
     Advanced,
