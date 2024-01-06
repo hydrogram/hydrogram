@@ -189,6 +189,7 @@ from .messages_and_media import (
     web_page,
 )
 from .object import Object
+from .pyromod import Identifier, Listener, ListenerTypes
 from .update import Update
 from .user_and_chats import (
     Chat,
@@ -275,6 +276,9 @@ __all__ = [
     "WebAppData",
     "WebPage",
     "Object",
+    "Identifier",
+    "Listener",
+    "ListenerTypes",
     "Update",
     "Chat",
     "ChatAdminWithInviteLinks",

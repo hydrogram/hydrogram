@@ -51,7 +51,7 @@ from hydrogram.handlers.handler import Handler
 from hydrogram.methods import Methods
 from hydrogram.session import Auth, Session
 from hydrogram.storage import BaseStorage, SQLiteStorage
-from hydrogram.types import TermsOfService, User
+from hydrogram.types import ListenerTypes, TermsOfService, User
 from hydrogram.utils import ainput
 
 from .dispatcher import Dispatcher
@@ -310,6 +310,7 @@ class Client(Methods):
         self.last_update_time = datetime.now()
 
         self.loop = asyncio.get_event_loop()
+        self.listeners = {listener_type: [] for listener_type in ListenerTypes}
 
     def __enter__(self):
         return self.start()
