@@ -547,6 +547,7 @@ class Message(Object, Update):
 
     @staticmethod
     async def _parse(
+        *,
         client: "hydrogram.Client",
         message: raw.base.Message,
         users: dict,

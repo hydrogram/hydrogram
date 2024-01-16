@@ -362,12 +362,18 @@ class ChatEvent(Object):
             action = enums.ChatEventAction.CHAT_PERMISSIONS_CHANGED
 
         elif isinstance(action, raw.types.ChannelAdminLogEventActionDeleteMessage):
-            deleted_message = await types.Message._parse(client, action.message, users, chats)
+            deleted_message = await types.Message._parse(
+                client=client, message=action.message, users=users, chats=chats
+            )
             action = enums.ChatEventAction.MESSAGE_DELETED
 
         elif isinstance(action, raw.types.ChannelAdminLogEventActionEditMessage):
-            old_message = await types.Message._parse(client, action.prev_message, users, chats)
-            new_message = await types.Message._parse(client, action.new_message, users, chats)
+            old_message = await types.Message._parse(
+                client=client, message=action.prev_message, users=users, chats=chats
+            )
+            new_message = await types.Message._parse(
+                client=client, message=action.new_message, users=users, chats=chats
+            )
             action = enums.ChatEventAction.MESSAGE_EDITED
 
         elif isinstance(action, raw.types.ChannelAdminLogEventActionParticipantInvite):
@@ -393,7 +399,9 @@ class ChatEvent(Object):
             action = enums.ChatEventAction.MEMBER_PERMISSIONS_CHANGED
 
         elif isinstance(action, raw.types.ChannelAdminLogEventActionStopPoll):
-            stopped_poll = await types.Message._parse(client, action.message, users, chats)
+            stopped_poll = await types.Message._parse(
+                client=client, message=action.message, users=users, chats=chats
+            )
             action = enums.ChatEventAction.POLL_STOPPED
 
         elif isinstance(action, raw.types.ChannelAdminLogEventActionParticipantJoin):
@@ -423,10 +431,14 @@ class ChatEvent(Object):
             message = action.message
 
             if message.pinned:
-                pinned_message = await types.Message._parse(client, message, users, chats)
+                pinned_message = await types.Message._parse(
+                    client=client, message=message, users=users, chats=chats
+                )
                 action = enums.ChatEventAction.MESSAGE_PINNED
             else:
-                unpinned_message = await types.Message._parse(client, message, users, chats)
+                unpinned_message = await types.Message._parse(
+                    client=client, message=message, users=users, chats=chats
+                )
                 action = enums.ChatEventAction.MESSAGE_UNPINNED
 
         elif isinstance(action, raw.types.ChannelAdminLogEventActionExportedInviteEdit):
