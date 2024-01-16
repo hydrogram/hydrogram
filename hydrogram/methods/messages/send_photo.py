@@ -153,7 +153,7 @@ class SendPhoto:
         file = None
 
         try:
-            if isinstance(photo, str) and Path(photo).is_file() or not isinstance(photo, str):
+            if (isinstance(photo, str) and Path(photo).is_file()) or not isinstance(photo, str):
                 file = await self.save_file(photo, progress=progress, progress_args=progress_args)
                 media = raw.types.InputMediaUploadedPhoto(
                     file=file,

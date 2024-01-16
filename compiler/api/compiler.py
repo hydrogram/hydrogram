@@ -203,14 +203,17 @@ def start(format: bool = False):
     shutil.rmtree(DESTINATION_PATH / "functions", ignore_errors=True)
     shutil.rmtree(DESTINATION_PATH / "base", ignore_errors=True)
 
-    with open(HOME_PATH / "source/auth_key.tl") as f1, open(
-        HOME_PATH / "source/sys_msgs.tl"
-    ) as f2, open(HOME_PATH / "source/main_api.tl") as f3:
+    with (
+        open(HOME_PATH / "source/auth_key.tl") as f1,
+        open(HOME_PATH / "source/sys_msgs.tl") as f2,
+        open(HOME_PATH / "source/main_api.tl") as f3,
+    ):
         schema = (f1.read() + f2.read() + f3.read()).splitlines()
 
-    with open(HOME_PATH / "template/type.txt") as f1, open(
-        HOME_PATH / "template/combinator.txt"
-    ) as f2:
+    with (
+        open(HOME_PATH / "template/type.txt") as f1,
+        open(HOME_PATH / "template/combinator.txt") as f2,
+    ):
         type_tmpl = f1.read()
         combinator_tmpl = f2.read()
 
