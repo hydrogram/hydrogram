@@ -27,8 +27,8 @@ class StopListening:
     async def stop_listening(
         self: "hydrogram.Client",
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        chat_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
-        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        chat_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
+        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
     ):

@@ -37,8 +37,8 @@ class Listen:
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         timeout: Optional[int] = None,
         unallowed_click_alert: bool = True,
-        chat_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
-        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        chat_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
+        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
     ) -> Union["hydrogram.types.Message", "hydrogram.types.CallbackQuery"]:

@@ -412,7 +412,7 @@ class Chat(Object):
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         timeout: Optional[int] = None,
         unallowed_click_alert: bool = True,
-        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
     ):
@@ -475,7 +475,7 @@ class Chat(Object):
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         timeout: Optional[int] = None,
         unallowed_click_alert: bool = True,
-        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
         *args,
@@ -550,7 +550,7 @@ class Chat(Object):
     def stop_listening(
         self,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
     ):

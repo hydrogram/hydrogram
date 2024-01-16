@@ -508,7 +508,7 @@ class Message(Object, Update):
 
     async def wait_for_click(
         self,
-        from_user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None,
+        from_user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         timeout: Optional[int] = None,
         filters=None,
         alert: Union[str, bool] = True,
@@ -1037,6 +1037,7 @@ class Message(Object, Update):
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         timeout: Optional[int] = None,
         unallowed_click_alert: bool = True,
+        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
     ):
@@ -1048,8 +1049,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.listen(
-                chat_id=chat_id,
-                user_id=user_id
+                chat_id=chat_id
             )
 
         Example:
@@ -1070,6 +1070,9 @@ class Message(Object, Update):
             unallowed_click_alert (``bool``):
                 Whether to alert the user if they click on a button that is not intended for them. Defaults to ``True``.
 
+            user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The user ID(s) to listen for. Defaults to ``None``.
+
             message_id (``Optional[Union[int, List[int]]]``):
                 The message ID(s) to listen for. Defaults to ``None``.
 
@@ -1085,7 +1088,7 @@ class Message(Object, Update):
             listener_type=listener_type,
             timeout=timeout,
             unallowed_click_alert=unallowed_click_alert,
-            user_id=self.from_user.id if self.from_user else None,
+            user_id=user_id,
             message_id=message_id,
             inline_message_id=inline_message_id,
         )
@@ -1097,6 +1100,7 @@ class Message(Object, Update):
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         timeout: Optional[int] = None,
         unallowed_click_alert: bool = True,
+        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
         *args,
@@ -1111,7 +1115,6 @@ class Message(Object, Update):
 
             await client.ask(
                 chat_id=chat_id,
-                user_id=user_id,
                 text=text
             )
 
@@ -1137,6 +1140,9 @@ class Message(Object, Update):
             unallowed_click_alert (``bool``):
                 Same as :meth:`hydrogram.Client.listen`.
 
+            user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The user ID(s) to listen for. Defaults to ``None``.
+
             message_id (``Optional[Union[int, List[int]]]``):
                 The message ID(s) to listen for. Defaults to ``None``.
 
@@ -1159,7 +1165,7 @@ class Message(Object, Update):
             listener_type=listener_type,
             timeout=timeout,
             unallowed_click_alert=unallowed_click_alert,
-            user_id=self.from_user.id if self.from_user else None,
+            user_id=user_id,
             message_id=message_id,
             inline_message_id=inline_message_id,
             *args,
@@ -1169,6 +1175,7 @@ class Message(Object, Update):
     def stop_listening(
         self,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
+        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
         message_id: Optional[Union[int, list[int]]] = None,
         inline_message_id: Optional[Union[str, list[str]]] = None,
     ):
@@ -1180,8 +1187,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.stop_listening(
-                chat_id=chat_id,
-                user_id=user_id
+                chat_id=chat_id
             )
 
         Example:
@@ -1192,6 +1198,9 @@ class Message(Object, Update):
         Parameters:
             listener_type (``ListenerTypes``):
                 The type of listener to stop listening for. Defaults to :attr:`hydrogram.types.ListenerTypes.MESSAGE`.
+
+            user_id (``Optional[Union[int, str], List[Union[int, str]]]``):
+                The user ID(s) to stop listening for. Defaults to ``None``.
 
             message_id (``Optional[Union[int, List[int]]]``):
                 The message ID(s) to stop listening for. Defaults to ``None``.
@@ -1205,7 +1214,7 @@ class Message(Object, Update):
         return self._client.stop_listening(
             chat_id=self.chat.id if self.chat else None,
             listener_type=listener_type,
-            user_id=self.from_user.id if self.from_user else None,
+            user_id=user_id,
             message_id=message_id,
             inline_message_id=inline_message_id,
         )

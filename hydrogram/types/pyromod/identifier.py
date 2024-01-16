@@ -24,9 +24,9 @@ from typing import Optional, Union
 @dataclass
 class Identifier:
     inline_message_id: Optional[Union[str, list[str]]] = None
-    chat_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None
+    chat_id: Optional[Union[int, str, list[Union[int, str]]]] = None
     message_id: Optional[Union[int, list[int]]] = None
-    from_user_id: Optional[Union[Union[int, str], list[Union[int, str]]]] = None
+    from_user_id: Optional[Union[int, str, list[Union[int, str]]]] = None
 
     def matches(self, update: "Identifier") -> bool:
         # Compare each property of other with the corresponding property in self
