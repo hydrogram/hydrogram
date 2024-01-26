@@ -78,5 +78,7 @@ class PinChatMessage:
 
         for i in r.updates:
             if isinstance(i, (raw.types.UpdateNewMessage, raw.types.UpdateNewChannelMessage)):
-                return await types.Message._parse(self, i.message, users, chats)
+                return await types.Message._parse(
+                    client=self, message=i.message, users=users, chats=chats
+                )
         return None
