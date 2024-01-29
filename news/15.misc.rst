@@ -1,0 +1,1 @@
+Use `get_session` to upload files crom Telegram's CDN

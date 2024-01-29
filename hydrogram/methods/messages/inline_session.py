@@ -24,8 +24,8 @@ from hydrogram.session import Session
 from hydrogram.session.auth import Auth
 
 
-async def get_session(client: "hydrogram.Client", dc_id: int):
-    if dc_id == await client.storage.dc_id():
+async def get_session(client: "hydrogram.Client", dc_id: int, is_cdn: bool = False):
+    if dc_id == await client.storage.dc_id() and not is_cdn:
         return client
 
     async with client.media_sessions_lock:
@@ -38,27 +38,29 @@ async def get_session(client: "hydrogram.Client", dc_id: int):
             await Auth(client, dc_id, await client.storage.test_mode()).create(),
             await client.storage.test_mode(),
             is_media=True,
+            is_cdn=is_cdn,
         )
 
         await session.start()
 
-        for _ in range(3):
-            exported_auth = await client.invoke(
-                raw.functions.auth.ExportAuthorization(dc_id=dc_id)
-            )
-
-            try:
-                await session.invoke(
-                    raw.functions.auth.ImportAuthorization(
-                        id=exported_auth.id, bytes=exported_auth.bytes
-                    )
+        if not is_cdn:
+            for _ in range(3):
+                exported_auth = await client.invoke(
+                    raw.functions.auth.ExportAuthorization(dc_id=dc_id)
                 )
-            except AuthBytesInvalid:
-                continue
+
+                try:
+                    await session.invoke(
+                        raw.functions.auth.ImportAuthorization(
+                            id=exported_auth.id, bytes=exported_auth.bytes
+                        )
+                    )
+                except AuthBytesInvalid:
+                    continue
+                else:
+                    break
             else:
-                break
-        else:
-            await session.stop()
-            raise AuthBytesInvalid
+                await session.stop()
+                raise AuthBytesInvalid
 
         return session

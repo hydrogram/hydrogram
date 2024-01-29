@@ -973,18 +973,9 @@ class Client(Methods):
                         )
 
                 elif isinstance(r, raw.types.upload.FileCdnRedirect):
-                    cdn_session = Session(
-                        self,
-                        r.dc_id,
-                        await Auth(self, r.dc_id, await self.storage.test_mode()).create(),
-                        await self.storage.test_mode(),
-                        is_media=True,
-                        is_cdn=True,
-                    )
+                    cdn_session = await get_session(self, r.dc_id, is_cdn=True)
 
                     try:
-                        await cdn_session.start()
-
                         while True:
                             r2 = await cdn_session.invoke(
                                 raw.functions.upload.GetCdnFile(
