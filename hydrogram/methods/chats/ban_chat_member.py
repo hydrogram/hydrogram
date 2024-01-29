@@ -100,9 +100,9 @@ class BanChatMember:
         for i in r.updates:
             if isinstance(i, (raw.types.UpdateNewMessage, raw.types.UpdateNewChannelMessage)):
                 return await types.Message._parse(
-                    self,
-                    i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats},
+                    client=self,
+                    message=i.message,
+                    users={i.id: i for i in r.users},
+                    chats={i.id: i for i in r.chats},
                 )
         return True

@@ -70,9 +70,10 @@ def start():
             with Path(init).open("a", encoding="utf-8") as f_init:
                 f_init.write(f"from .{name.lower()}_{code} import *\n")
 
-            with Path(f"{HOME}/source/{i}").open(encoding="utf-8") as f_csv, Path(
-                f"{DEST}/{name.lower()}_{code}.py"
-            ).open("w", encoding="utf-8") as f_class:
+            with (
+                Path(f"{HOME}/source/{i}").open(encoding="utf-8") as f_csv,
+                Path(f"{DEST}/{name.lower()}_{code}.py").open("w", encoding="utf-8") as f_class,
+            ):
                 reader = csv.reader(f_csv, delimiter="\t")
 
                 super_class = caml(name)

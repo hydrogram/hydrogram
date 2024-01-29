@@ -88,11 +88,11 @@ class Dispatcher:
         async def message_parser(update, users, chats):
             return (
                 await hydrogram.types.Message._parse(
-                    self.client,
-                    update.message,
-                    users,
-                    chats,
-                    isinstance(update, UpdateNewScheduledMessage),
+                    client=self.client,
+                    message=update.message,
+                    users=users,
+                    chats=chats,
+                    is_scheduled=isinstance(update, UpdateNewScheduledMessage),
                 ),
                 MessageHandler,
             )

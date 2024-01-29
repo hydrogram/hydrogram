@@ -84,7 +84,7 @@ class SetChatPhoto:
         """
         peer = await self.resolve_peer(chat_id)
 
-        if isinstance(photo, str) and Path(photo).is_file() or not isinstance(photo, str):
+        if (isinstance(photo, str) and Path(photo).is_file()) or not isinstance(photo, str):
             photo = raw.types.InputChatUploadedPhoto(
                 file=await self.save_file(photo),
                 video=await self.save_file(video),

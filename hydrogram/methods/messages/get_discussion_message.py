@@ -61,4 +61,6 @@ class GetDiscussionMessage:
         users = {u.id: u for u in r.users}
         chats = {c.id: c for c in r.chats}
 
-        return await types.Message._parse(self, r.messages[0], users, chats)
+        return await types.Message._parse(
+            client=self, message=r.messages[0], users=users, chats=chats
+        )

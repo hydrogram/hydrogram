@@ -153,7 +153,7 @@ class SendPhoto:
         file = None
 
         try:
-            if isinstance(photo, str) and Path(photo).is_file() or not isinstance(photo, str):
+            if (isinstance(photo, str) and Path(photo).is_file()) or not isinstance(photo, str):
                 file = await self.save_file(photo, progress=progress, progress_args=progress_args)
                 media = raw.types.InputMediaUploadedPhoto(
                     file=file,
@@ -205,10 +205,10 @@ class SendPhoto:
                             ),
                         ):
                             return await types.Message._parse(
-                                self,
-                                i.message,
-                                {i.id: i for i in r.users},
-                                {i.id: i for i in r.chats},
+                                client=self,
+                                message=i.message,
+                                users={i.id: i for i in r.users},
+                                chats={i.id: i for i in r.chats},
                                 is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
                             )
         except hydrogram.StopTransmission:

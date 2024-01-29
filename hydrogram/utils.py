@@ -26,11 +26,20 @@ import struct
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timezone
 from getpass import getpass
+from types import SimpleNamespace
 from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types
 from hydrogram.file_id import DOCUMENT_TYPES, PHOTO_TYPES, FileId, FileType
+
+PyromodConfig = SimpleNamespace(
+    timeout_handler=None,
+    stopped_handler=None,
+    throw_exceptions=True,
+    unallowed_click_alert=True,
+    unallowed_click_alert_text=("[pyromod] You're not expected to click this button."),
+)
 
 
 async def ainput(prompt: str = "", *, hide: bool = False):
@@ -96,7 +105,9 @@ async def parse_messages(
     parsed_messages = []
 
     parsed_messages = [
-        await types.Message._parse(client, message, users, chats, topics, replies=0)
+        await types.Message._parse(
+            client=client, message=message, users=users, chats=chats, topics=topics, replies=0
+        )
         for message in messages.messages
     ]
 

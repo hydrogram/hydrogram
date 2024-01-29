@@ -77,7 +77,9 @@ class GetDialogs:
                     continue
 
                 chat_id = utils.get_peer_id(message.peer_id)
-                messages[chat_id] = await types.Message._parse(self, message, users, chats)
+                messages[chat_id] = await types.Message._parse(
+                    client=self, message=message, users=users, chats=chats
+                )
 
             dialogs = [
                 types.Dialog._parse(self, dialog, messages, users, chats)

@@ -203,14 +203,17 @@ def start(format: bool = False):
     shutil.rmtree(DESTINATION_PATH / "functions", ignore_errors=True)
     shutil.rmtree(DESTINATION_PATH / "base", ignore_errors=True)
 
-    with open(HOME_PATH / "source/auth_key.tl") as f1, open(
-        HOME_PATH / "source/sys_msgs.tl"
-    ) as f2, open(HOME_PATH / "source/main_api.tl") as f3:
+    with (
+        open(HOME_PATH / "source/auth_key.tl") as f1,
+        open(HOME_PATH / "source/sys_msgs.tl") as f2,
+        open(HOME_PATH / "source/main_api.tl") as f3,
+    ):
         schema = (f1.read() + f2.read() + f3.read()).splitlines()
 
-    with open(HOME_PATH / "template/type.txt") as f1, open(
-        HOME_PATH / "template/combinator.txt"
-    ) as f2:
+    with (
+        open(HOME_PATH / "template/type.txt") as f1,
+        open(HOME_PATH / "template/combinator.txt") as f2,
+    ):
         type_tmpl = f1.read()
         combinator_tmpl = f2.read()
 
@@ -242,15 +245,16 @@ def start(format: bool = False):
             type = camel(type)
             qualtype = ".".join([typespace, type]).lstrip(".")
 
-            # Pingu!
             has_flags = bool(FLAGS_RE_3.findall(line))
 
             args = ARGS_RE.findall(line)
 
-            # Fix arg name being "self" (reserved python keyword)
+            # Fix arg name being "self" or "from" (reserved python keywords)
             for i, item in enumerate(args):
                 if item[0] == "self":
                     args[i] = ("is_self", item[1])
+                if item[0] == "from":
+                    args[i] = ("from_peer", item[1])
 
             combinator = Combinator(
                 section=section,

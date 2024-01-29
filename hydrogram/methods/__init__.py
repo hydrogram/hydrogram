@@ -26,6 +26,7 @@ from .decorators import Decorators
 from .invite_links import InviteLinks
 from .messages import Messages
 from .password import Password
+from .pyromod import Pyromod
 from .users import Users
 from .utilities import Utilities
 
@@ -39,6 +40,7 @@ class Methods(
     Chats,
     Users,
     Messages,
+    Pyromod,
     Decorators,
     Utilities,
     InviteLinks,
