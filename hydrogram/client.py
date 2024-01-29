@@ -48,7 +48,8 @@ from hydrogram.errors import (
     VolumeLocNotFound,
 )
 from hydrogram.handlers.handler import Handler
-from hydrogram.methods import Methods, get_session
+from hydrogram.methods import Methods
+from hydrogram.methods.messages.inline_session import get_session
 from hydrogram.session import Auth, Session
 from hydrogram.storage import BaseStorage, SQLiteStorage
 from hydrogram.types import ListenerTypes, TermsOfService, User
