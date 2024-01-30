@@ -60,21 +60,24 @@ You can read more about pull requests in the [GitHub docs](https://docs.github.c
 1. Fork the Hydrogram repository to your GitHub account.
 2. Clone your forked repository of Hydrogram to your computer:
 
-bash```
+```bash
 git clone <https://github.com/><your username>/hydrogram
-cd hydrogram```
+cd hydrogram
+```
 
 4. Add a track to the original repository:
 
-bash```
-git remote add upstream <https://github.com/hydrogram/hydrogram>```
+```bash
+git remote add upstream <https://github.com/hydrogram/hydrogram>
+```
 
 5. Install dependencies:
 
 Hydrogram uses and recommends [Rye](https://rye-up.com/) for managing virtual environmens and dependencies.
 
-bash```
-rye sync --all-features```
+```bash
+rye sync --all-features
+```
 
 > We use `--all-features` to install all the optional dependencies, which are required to run the tests and build the documentation.
 
@@ -82,27 +85,31 @@ rye sync --all-features```
 
 [Pre-commit](https://pre-commit.com/) is a tool that runs various checks before you make a commit. It helps you avoid committing any errors or warnings that might break your code or violate the coding standards.
 
-bash```
-pre-commit install```
+```bash
+pre-commit install
+```
 
 ### Format the code (code-style)
 
 Hydrogram uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting the code to maintain it consistent and clean. You should [install](https://docs.astral.sh/ruff/installation/) and run Ruff on your code before committing:
 
-bash```
-ruff check .```
+```bash
+ruff check .
+```
 
 However, you can also rely on [pre-commit](https://pre-commit.com/) for it:
 
-bash```
-pre-commit run --run-all-files```
+```bash
+pre-commit run --run-all-files
+```
 
 ### Run tests
 
 All changes should be tested:
 
-bash```
-pytest tests```
+```bash
+pytest tests
+```
 
 Remember to write tests for your new features or modify the existing tests to cover your code changes. Testing is essential to ensure the quality and reliability of your code.
 
@@ -110,8 +117,9 @@ Remember to write tests for your new features or modify the existing tests to co
 
 We use Sphinx to generate documentation in the `docs` directory. You can edit the sources and preview the changes using a live-preview server with:
 
-bash```
-sphinx-autobuild docs/source/ docs/build/ --watch hydrogram/```
+```bash
+sphinx-autobuild docs/source/ docs/build/ --watch hydrogram/
+```
 
 ### Commit Messages
 
@@ -158,7 +166,7 @@ Write a concise summary of your changes in one or more sentences, so that bot de
 - `feature` - when you add a new feature
 - `bugfix` - when you fix a bug
 - `doc` - when you improve the documentation
-- `removal` - when you remove something from the library968sm6
+- `removal` - when you remove something from the library
 - `misc` - when you change something in the core or the project configuration
 
 If you are not sure which category to use, you can ask the core contributors for help.
