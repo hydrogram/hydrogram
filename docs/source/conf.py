@@ -1,40 +1,16 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
-import re
+import datetime
 import sys
 from pathlib import Path
-
-project = "Hydrogram"
-copyright = "2023-present, Hydrogram."
-author = "Hydrogram"
 
 docs_dir = Path(__file__).parent.parent
 sys.path.insert(0, docs_dir.resolve().as_posix())
 
-# Find the version and release information.
-# We have a single source of truth for our version number: pip's __init__.py file.
-# This next bit of code reads from it.
-file_with_version = Path(docs_dir / ".." / "hydrogram" / "__init__.py")
-with Path(file_with_version).open() as f:
-    for line in f:
-        if m := re.match(r'__version__ = "(.*)"', line):
-            __version__ = m[1]
-            # The short X.Y version.
-            version = ".".join(__version__.split(".")[:2])
-            # The full version, including alpha/beta/rc tags.
-            release = __version__
-            break
-    else:  # AKA no-break
-        version = release = "dev"
+import hydrogram  # noqa: E402
 
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+project = "Hydrogram"
+author = "Hydrogram"
+copyright = f"{datetime.date.today().year}, {author}"
+release = hydrogram.__version__
 
 extensions = [
     "sphinx.ext.autodoc",
@@ -48,38 +24,41 @@ extensions = [
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
+    "aiosqlite": ("https://aiosqlite.omnilib.dev/en/stable/", None),
 }
+
+html_use_modindex = False
+html_use_index = False
+
+napoleon_preprocess_types = True
+napoleon_use_rtype = False
+napoleon_use_param = False
 
 master_doc = "index"
 source_suffix = ".rst"
 autodoc_member_order = "bysource"
-
-napoleon_use_rtype = False
-napoleon_use_param = False
+autodoc_typehints = "none"
 
 towncrier_draft_autoversion_mode = "draft"
 towncrier_draft_include_empty = True
 towncrier_draft_working_directory = Path(__file__).parent.parent.parent
 
-# The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "sphinx"
-
-# Decides the language used for syntax highlighting of code blocks.
-highlight_language = "python3"
-
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+pygments_style = "friendly"
 
 html_theme = "furo"
-html_title = f"{project} documentation v{release}"
+html_title = f"{project} v{release} Documentation"
+html_last_updated_fmt = (
+    f"{datetime.datetime.now(tz=datetime.UTC).strftime('%d/%m/%Y, %H:%M:%S')} UTC"
+)
+
+html_copy_source = False
+
 html_static_path = ["_static"]
 html_css_files = [
     "css/all.min.css",
     "css/custom.css",
 ]
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further. For a list of options available for each theme, see the documentation.
 html_theme_options = {
     "navigation_with_keys": True,
     "dark_css_variables": {
@@ -92,12 +71,10 @@ html_theme_options = {
     },
     "light_logo": "hydrogram-light.png",
     "dark_logo": "hydrogram-dark.png",
-    "footer_icons": [
+    "footer_icons": [  # all these icons are from https://react-icons.github.io/react-icons
         {
-            # Telegram channel logo
             "name": "Telegram Channel",
             "url": "https://t.me/HydrogramNews/",
-            # Following svg is from https://react-icons.github.io/react-icons/search?q=telegram
             "html": (
                 '<svg stroke="currentColor" fill="currentColor" stroke-width="0" '
                 'viewBox="0 0 16 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">'
@@ -113,9 +90,9 @@ html_theme_options = {
             ),
             "class": "",
         },
-        {  # Github logo
-            "name": "GitHub",
-            "url": "https://github.com/hydrogram/hydrogram/",
+        {
+            "name": "GitHub Organization",
+            "url": "https://github.com/hydrogram/",
             "html": (
                 '<svg stroke="currentColor" fill="currentColor" stroke-width="0" '
                 'viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 '
@@ -130,8 +107,8 @@ html_theme_options = {
             ),
             "class": "",
         },
-        {  # PTB website logo - globe
-            "name": "python-telegram-bot website",
+        {
+            "name": "Hydrogram Website",
             "url": "https://hydrogram.org/",
             "html": (
                 '<svg stroke="currentColor" fill="currentColor" stroke-width="0" '
