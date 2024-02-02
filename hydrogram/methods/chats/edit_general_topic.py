@@ -43,7 +43,7 @@ class EditGeneralTopic:
         Example:
             .. code-block:: python
 
-                await app.edit_general_topic(chat_id,"New Topic Title")
+                await app.edit_general_topic(chat_id, "New Topic Title")
         """
         await self.invoke(
             raw.functions.channels.EditForumTopic(

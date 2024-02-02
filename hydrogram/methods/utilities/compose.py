@@ -47,11 +47,7 @@ async def compose(clients: list["hydrogram.Client"], sequential: bool = False):
 
 
             async def main():
-                apps = [
-                    Client("account1"),
-                    Client("account2"),
-                    Client("account3")
-                ]
+                apps = [Client("account1"), Client("account2"), Client("account3")]
 
                 ...
 

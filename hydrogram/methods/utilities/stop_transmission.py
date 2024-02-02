@@ -35,10 +35,8 @@ class StopTransmission:
                     if (current * 100 / total) > 50:
                         client.stop_transmission()
 
+
                 async with app:
-                    await app.send_document(
-                        "me", "file.zip",
-                        progress=progress,
-                        progress_args=(app,))
+                    await app.send_document("me", "file.zip", progress=progress, progress_args=(app,))
         """
         raise hydrogram.StopTransmission

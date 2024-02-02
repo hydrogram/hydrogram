@@ -125,10 +125,7 @@ class InlineQuery(Object, Update):
 
         .. code-block:: python
 
-            await client.answer_inline_query(
-                inline_query.id,
-                results=[...]
-            )
+            await client.answer_inline_query(inline_query.id, results=[...])
 
         Example:
             .. code-block:: python

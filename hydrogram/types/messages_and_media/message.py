@@ -1049,9 +1049,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.listen(
-                chat_id=chat_id
-            )
+            await client.listen(chat_id=chat_id)
 
         Example:
             .. code-block:: python
@@ -1114,10 +1112,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.ask(
-                chat_id=chat_id,
-                text=text
-            )
+            await client.ask(chat_id=chat_id, text=text)
 
         Example:
 
@@ -1187,9 +1182,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.stop_listening(
-                chat_id=chat_id
-            )
+            await client.stop_listening(chat_id=chat_id)
 
         Example:
             .. code-block:: python
@@ -1237,10 +1230,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.get_media_group(
-                chat_id=message.chat.id,
-                message_id=message.id
-            )
+            await client.get_media_group(chat_id=message.chat.id, message_id=message.id)
 
         Example:
             .. code-block:: python
@@ -1281,7 +1271,7 @@ class Message(Object, Update):
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
                 text="hello",
-                reply_to_message_id=message.id
+                reply_to_message_id=message.id,
             )
 
         Example:
@@ -1385,7 +1375,7 @@ class Message(Object, Update):
             await client.send_animation(
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
-                animation=animation
+                animation=animation,
             )
 
         Example:
@@ -1528,9 +1518,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_audio(
-                chat_id=message.chat.id,
-                message_thread_id=message.message_thread_id,
-                audio=audio
+                chat_id=message.chat.id, message_thread_id=message.message_thread_id, audio=audio
             )
 
         Example:
@@ -1663,9 +1651,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_cached_media(
-                chat_id=message.chat.id,
-                message_thread_id=message.message_thread_id,
-                file_id=file_id
+                chat_id=message.chat.id, message_thread_id=message.message_thread_id, file_id=file_id
             )
 
         Example:
@@ -1740,7 +1726,7 @@ class Message(Object, Update):
             await client.send_chat_action(
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
-                action=enums.ChatAction.TYPING
+                action=enums.ChatAction.TYPING,
             )
 
         Example:
@@ -1791,7 +1777,7 @@ class Message(Object, Update):
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
                 phone_number=phone_number,
-                first_name=first_name
+                first_name=first_name,
             )
 
         Example:
@@ -1881,9 +1867,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_document(
-                chat_id=message.chat.id,
-                message_thread_id=message.message_thread_id,
-                document=document
+                chat_id=message.chat.id, message_thread_id=message.message_thread_id, document=document
             )
 
         Example:
@@ -2018,7 +2002,7 @@ class Message(Object, Update):
             await client.send_game(
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
-                game_short_name="lumberjack"
+                game_short_name="lumberjack",
             )
 
         Example:
@@ -2085,7 +2069,7 @@ class Message(Object, Update):
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
                 query_id=query_id,
-                result_id=result_id
+                result_id=result_id,
             )
 
         Example:
@@ -2157,7 +2141,7 @@ class Message(Object, Update):
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
                 latitude=latitude,
-                longitude=longitude
+                longitude=longitude,
             )
 
         Example:
@@ -2226,7 +2210,7 @@ class Message(Object, Update):
             await client.send_media_group(
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
-                media=list_of_media
+                media=list_of_media,
             )
 
         Example:
@@ -2300,9 +2284,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_photo(
-                chat_id=message.chat.id,
-                message_thread_id=message.message_thread_id,
-                photo=photo
+                chat_id=message.chat.id, message_thread_id=message.message_thread_id, photo=photo
             )
 
         Example:
@@ -2572,9 +2554,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_sticker(
-                chat_id=message.chat.id,
-                message_thread_id=message.message_thread_id,
-                sticker=sticker
+                chat_id=message.chat.id, message_thread_id=message.message_thread_id, sticker=sticker
             )
 
         Example:
@@ -2682,7 +2662,7 @@ class Message(Object, Update):
                 latitude=latitude,
                 longitude=longitude,
                 title="Venue title",
-                address="Venue address"
+                address="Venue address",
             )
 
         Example:
@@ -2784,9 +2764,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_video(
-                chat_id=message.chat.id,
-                message_thread_id=message.message_thread_id,
-                video=video
+                chat_id=message.chat.id, message_thread_id=message.message_thread_id, video=video
             )
 
         Example:
@@ -2937,7 +2915,7 @@ class Message(Object, Update):
             await client.send_video_note(
                 chat_id=message.chat.id,
                 message_thread_id=message.message_thread_id,
-                video_note=video_note
+                video_note=video_note,
             )
 
         Example:
@@ -3056,9 +3034,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_voice(
-                chat_id=message.chat.id,
-                message_thread_id=message.message_thread_id,
-                voice=voice
+                chat_id=message.chat.id, message_thread_id=message.message_thread_id, voice=voice
             )
 
         Example:
@@ -3170,9 +3146,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.edit_message_text(
-                chat_id=message.chat.id,
-                message_id=message.id,
-                text="hello"
+                chat_id=message.chat.id, message_id=message.id, text="hello"
             )
 
         Example:
@@ -3229,9 +3203,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.edit_message_caption(
-                chat_id=message.chat.id,
-                message_id=message.id,
-                caption="hello"
+                chat_id=message.chat.id, message_id=message.id, caption="hello"
             )
 
         Example:
@@ -3280,9 +3252,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.edit_message_media(
-                chat_id=message.chat.id,
-                message_id=message.id,
-                media=media
+                chat_id=message.chat.id, message_id=message.id, media=media
             )
 
         Example:
@@ -3320,9 +3290,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.edit_message_reply_markup(
-                chat_id=message.chat.id,
-                message_id=message.id,
-                reply_markup=inline_reply_markup
+                chat_id=message.chat.id, message_id=message.id, reply_markup=inline_reply_markup
             )
 
         Example:
@@ -3359,9 +3327,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.forward_messages(
-                chat_id=chat_id,
-                from_chat_id=message.chat.id,
-                message_ids=message.id
+                chat_id=chat_id, from_chat_id=message.chat.id, message_ids=message.id
             )
 
         Example:
@@ -3425,9 +3391,7 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.copy_message(
-                chat_id=chat_id,
-                from_chat_id=message.chat.id,
-                message_id=message.id
+                chat_id=chat_id, from_chat_id=message.chat.id, message_id=message.id
             )
 
         Example:
@@ -3616,10 +3580,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.delete_messages(
-                chat_id=chat_id,
-                message_ids=message.id
-            )
+            await client.delete_messages(chat_id=chat_id, message_ids=message.id)
 
         Example:
             .. code-block:: python
@@ -3661,17 +3622,14 @@ class Message(Object, Update):
             await client.request_callback_answer(
                 chat_id=message.chat.id,
                 message_id=message.id,
-                callback_data=message.reply_markup[i][j].callback_data
+                callback_data=message.reply_markup[i][j].callback_data,
             )
 
         - Clicking normal buttons:
 
         .. code-block:: python
 
-            await client.send_message(
-                chat_id=message.chat.id,
-                text=message.reply_markup[i][j].text
-            )
+            await client.send_message(chat_id=message.chat.id, text=message.reply_markup[i][j].text)
 
         Example:
             This method can be used in three different ways:
@@ -3767,11 +3725,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.send_reaction(
-                chat_id=chat_id,
-                message_id=message.id,
-                emoji="🔥"
-            )
+            await client.send_reaction(chat_id=chat_id, message_id=message.id, emoji="🔥")
 
         Example:
             .. code-block:: python
@@ -3911,11 +3865,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            client.vote_poll(
-                chat_id=message.chat.id,
-                message_id=message.id,
-                option=1
-            )
+            client.vote_poll(chat_id=message.chat.id, message_id=message.id, option=1)
 
         Example:
             .. code-block:: python
@@ -3946,10 +3896,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.pin_chat_message(
-                chat_id=message.chat.id,
-                message_id=message_id
-            )
+            await client.pin_chat_message(chat_id=message.chat.id, message_id=message_id)
 
         Example:
             .. code-block:: python
@@ -3985,10 +3932,7 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.unpin_chat_message(
-                chat_id=message.chat.id,
-                message_id=message_id
-            )
+            await client.unpin_chat_message(chat_id=message.chat.id, message_id=message_id)
 
         Example:
             .. code-block:: python

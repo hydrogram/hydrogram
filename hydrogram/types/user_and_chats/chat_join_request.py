@@ -90,8 +90,7 @@ class ChatJoinRequest(Object, Update):
         .. code-block:: python
 
             await client.approve_chat_join_request(
-                chat_id=request.chat.id,
-                user_id=request.from_user.id
+                chat_id=request.chat.id, user_id=request.from_user.id
             )
 
         Example:
@@ -117,8 +116,7 @@ class ChatJoinRequest(Object, Update):
         .. code-block:: python
 
             await client.decline_chat_join_request(
-                chat_id=request.chat.id,
-                user_id=request.from_user.id
+                chat_id=request.chat.id, user_id=request.from_user.id
             )
 
         Example:

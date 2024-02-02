@@ -68,12 +68,12 @@ class RestrictChatMember:
                 await app.restrict_chat_member(chat_id, user_id, ChatPermissions())
 
                 # Chat member muted for 24h
-                await app.restrict_chat_member(chat_id, user_id, ChatPermissions(),
-                    datetime.now() + timedelta(days=1))
+                await app.restrict_chat_member(
+                    chat_id, user_id, ChatPermissions(), datetime.now() + timedelta(days=1)
+                )
 
                 # Chat member can only send text messages
-                await app.restrict_chat_member(chat_id, user_id,
-                    ChatPermissions(can_send_messages=True))
+                await app.restrict_chat_member(chat_id, user_id, ChatPermissions(can_send_messages=True))
         """
         r = await self.invoke(
             raw.functions.channels.EditBanned(

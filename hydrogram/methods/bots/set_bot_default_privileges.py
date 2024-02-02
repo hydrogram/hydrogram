@@ -53,10 +53,7 @@ class SetBotDefaultPrivileges:
                 from hydrogram.types import ChatPrivileges
 
                 await app.set_bot_default_privileges(
-                    ChatPrivileges(
-                        can_delete_messages=True,
-                        can_restrict_members=True
-                    )
+                    ChatPrivileges(can_delete_messages=True, can_restrict_members=True)
                 )
         """
 

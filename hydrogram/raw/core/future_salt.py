@@ -27,7 +27,7 @@ from .tl_object import TLObject
 class FutureSalt(TLObject):
     ID = 0x0949D9DC
 
-    __slots__ = ["valid_since", "valid_until", "salt"]
+    __slots__ = ["salt", "valid_since", "valid_until"]
 
     QUALNAME = "FutureSalt"
 

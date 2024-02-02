@@ -20,4 +20,4 @@
 from .base import BaseStorage
 from .sqlite_storage import SQLiteStorage
 
-__all__ = ["SQLiteStorage", "BaseStorage"]
+__all__ = ["BaseStorage", "SQLiteStorage"]

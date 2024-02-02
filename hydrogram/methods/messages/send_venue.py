@@ -103,9 +103,7 @@ class SendVenue:
         Example:
             .. code-block:: python
 
-                app.send_venue(
-                    "me", latitude, longitude,
-                    "Venue title", "Venue address")
+                app.send_venue("me", latitude, longitude, "Venue title", "Venue address")
         """
 
         reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)

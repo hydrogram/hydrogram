@@ -56,11 +56,7 @@ class SetChatPermissions:
 
                 # Chat members can only send text messages and media messages
                 await app.set_chat_permissions(
-                    chat_id,
-                    ChatPermissions(
-                        can_send_messages=True,
-                        can_send_media_messages=True
-                    )
+                    chat_id, ChatPermissions(can_send_messages=True, can_send_media_messages=True)
                 )
         """
 

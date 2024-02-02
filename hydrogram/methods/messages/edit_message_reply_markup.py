@@ -56,9 +56,10 @@ class EditMessageReplyMarkup:
 
                 # Bots only
                 await app.edit_message_reply_markup(
-                    chat_id, message_id,
-                    InlineKeyboardMarkup([[
-                        InlineKeyboardButton("New button", callback_data="new_data")]]))
+                    chat_id,
+                    message_id,
+                    InlineKeyboardMarkup([[InlineKeyboardButton("New button", callback_data="new_data")]]),
+                )
         """
         r = await self.invoke(
             raw.functions.messages.EditMessage(

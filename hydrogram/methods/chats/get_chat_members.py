@@ -108,7 +108,9 @@ class GetChatMembers:
 
                 # Get administrators
                 administrators = []
-                async for m in app.get_chat_members(chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS):
+                async for m in app.get_chat_members(
+                    chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS
+                ):
                     administrators.append(m)
 
                 # Get bots

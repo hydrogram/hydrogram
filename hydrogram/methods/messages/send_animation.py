@@ -171,9 +171,11 @@ class SendAnimation:
                 # Unsave the animation once is sent
                 await app.send_animation("me", "animation.gif", unsave=True)
 
+
                 # Keep track of the progress while uploading
                 async def progress(current, total):
                     print(f"{current * 100 / total:.1f}%")
+
 
                 await app.send_animation("me", "animation.gif", progress=progress)
         """

@@ -176,9 +176,11 @@ class SendVideo:
                 # Send self-destructing video
                 await app.send_video("me", "video.mp4", ttl_seconds=10)
 
+
                 # Keep track of the progress while uploading
                 async def progress(current, total):
                     print(f"{current * 100 / total:.1f}%")
+
 
                 await app.send_video("me", "video.mp4", progress=progress)
         """

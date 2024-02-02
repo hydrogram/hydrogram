@@ -93,8 +93,8 @@ class SendMediaGroup:
                     [
                         InputMediaPhoto("photo1.jpg"),
                         InputMediaPhoto("photo2.jpg", caption="photo caption"),
-                        InputMediaVideo("video.mp4", caption="video caption")
-                    ]
+                        InputMediaVideo("video.mp4", caption="video caption"),
+                    ],
                 )
         """
         multi_media = []
