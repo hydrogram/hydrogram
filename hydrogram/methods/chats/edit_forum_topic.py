@@ -53,7 +53,7 @@ class EditForumTopic:
         Example:
             .. code-block:: python
 
-                await app.edit_forum_topic(chat_id,topic_id,"New Topic Title")
+                await app.edit_forum_topic(chat_id, topic_id, "New Topic Title")
         """
         await self.invoke(
             raw.functions.channels.EditForumTopic(

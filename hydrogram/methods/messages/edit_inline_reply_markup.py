@@ -51,8 +51,8 @@ class EditInlineReplyMarkup:
                 # Bots only
                 await app.edit_inline_reply_markup(
                     inline_message_id,
-                    InlineKeyboardMarkup([[
-                        InlineKeyboardButton("New button", callback_data="new_data")]]))
+                    InlineKeyboardMarkup([[InlineKeyboardButton("New button", callback_data="new_data")]]),
+                )
         """
 
         unpacked = utils.unpack_inline_message_id(inline_message_id)

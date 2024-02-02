@@ -51,11 +51,7 @@ async def idle():
 
 
             async def main():
-                apps = [
-                    Client("account1"),
-                    Client("account2"),
-                    Client("account3")
-                ]
+                apps = [Client("account1"), Client("account2"), Client("account3")]
 
                 ...  # Set up handlers
 

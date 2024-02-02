@@ -152,9 +152,11 @@ class SendDocument:
                 # Add caption to the document file
                 await app.send_document("me", "document.zip", caption="document caption")
 
+
                 # Keep track of the progress while uploading
                 async def progress(current, total):
                     print(f"{current * 100 / total:.1f}%")
+
 
                 await app.send_document("me", "document.zip", progress=progress)
         """

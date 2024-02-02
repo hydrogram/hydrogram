@@ -99,8 +99,7 @@ class SendMessage:
                 await app.send_message("me", "Message sent with **Hydrogram**!")
 
                 # Disable web page previews
-                await app.send_message("me", "https://docs.hydrogram.org",
-                    disable_web_page_preview=True)
+                await app.send_message("me", "https://docs.hydrogram.org", disable_web_page_preview=True)
 
                 # Reply to a message using its id
                 await app.send_message("me", "this is a reply", reply_to_message_id=123)
@@ -109,22 +108,22 @@ class SendMessage:
 
                 # For bots only, send messages with keyboards attached
 
-                from hydrogram.types import (
-                    ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton)
+                from hydrogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 
                 # Send a normal keyboard
                 await app.send_message(
-                    chat_id, "Look at that button!",
-                    reply_markup=ReplyKeyboardMarkup([["Nice!"]]))
+                    chat_id, "Look at that button!", reply_markup=ReplyKeyboardMarkup([["Nice!"]])
+                )
 
                 # Send an inline keyboard
                 await app.send_message(
-                    chat_id, "These are inline buttons",
-                    reply_markup=InlineKeyboardMarkup(
-                        [
-                            [InlineKeyboardButton("Data", callback_data="callback_data")],
-                            [InlineKeyboardButton("Docs", url="https://docs.hydrogram.org")]
-                        ]))
+                    chat_id,
+                    "These are inline buttons",
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton("Data", callback_data="callback_data")],
+                        [InlineKeyboardButton("Docs", url="https://docs.hydrogram.org")],
+                    ]),
+                )
         """
 
         message, entities = (

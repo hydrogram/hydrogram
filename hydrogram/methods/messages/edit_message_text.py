@@ -74,8 +74,8 @@ class EditMessageText:
 
                 # Take the same text message, remove the web page preview only
                 await app.edit_message_text(
-                    chat_id, message_id, message.text,
-                    disable_web_page_preview=True)
+                    chat_id, message_id, message.text, disable_web_page_preview=True
+                )
         """
 
         r = await self.invoke(

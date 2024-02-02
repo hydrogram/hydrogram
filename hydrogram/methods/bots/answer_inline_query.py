@@ -91,9 +91,9 @@ class AnswerInlineQuery:
                 await app.answer_inline_query(
                     inline_query_id,
                     results=[
-                        InlineQueryResultArticle(
-                            "Title",
-                            InputTextMessageContent("Message content"))])
+                        InlineQueryResultArticle("Title", InputTextMessageContent("Message content"))
+                    ],
+                )
         """
 
         return await self.invoke(

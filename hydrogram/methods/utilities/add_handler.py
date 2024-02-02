@@ -47,8 +47,10 @@ class AddHandler:
                 from hydrogram import Client
                 from hydrogram.handlers import MessageHandler
 
+
                 async def hello(client, message):
                     print(message)
+
 
                 app = Client("my_account")
 

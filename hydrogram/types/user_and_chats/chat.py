@@ -423,9 +423,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.listen(
-                chat_id=chat_id
-            )
+            await client.listen(chat_id=chat_id)
 
         Example:
             .. code-block:: python
@@ -488,10 +486,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.ask(
-                chat_id=chat_id,
-                text=text
-            )
+            await client.ask(chat_id=chat_id, text=text)
 
         Example:
 
@@ -561,9 +556,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.stop_listening(
-                chat_id=chat_id
-            )
+            await client.stop_listening(chat_id=chat_id)
 
         Example:
             .. code-block:: python
@@ -648,10 +641,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.set_chat_title(
-                chat_id=chat_id,
-                title=title
-            )
+            await client.set_chat_title(chat_id=chat_id, title=title)
 
         Example:
             .. code-block:: python
@@ -683,10 +673,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.set_chat_description(
-                chat_id=chat_id,
-                description=description
-            )
+            await client.set_chat_description(chat_id=chat_id, description=description)
 
         Example:
             .. code-block:: python
@@ -720,10 +707,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.set_chat_photo(
-                chat_id=chat_id,
-                photo=photo
-            )
+            await client.set_chat_photo(chat_id=chat_id, photo=photo)
 
         Example:
             .. code-block:: python
@@ -776,10 +760,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.ban_chat_member(
-                chat_id=chat_id,
-                user_id=user_id
-            )
+            await client.ban_chat_member(chat_id=chat_id, user_id=user_id)
 
         Example:
             .. code-block:: python
@@ -820,10 +801,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.unban_chat_member(
-                chat_id=chat_id,
-                user_id=user_id
-            )
+            await client.unban_chat_member(chat_id=chat_id, user_id=user_id)
 
         Example:
             .. code-block:: python
@@ -860,9 +838,7 @@ class Chat(Object):
         .. code-block:: python
 
             await client.restrict_chat_member(
-                chat_id=chat_id,
-                user_id=user_id,
-                permissions=ChatPermissions()
+                chat_id=chat_id, user_id=user_id, permissions=ChatPermissions()
             )
 
         Example:
@@ -908,10 +884,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.promote_chat_member(
-                chat_id=chat_id,
-                user_id=user_id
-            )
+            await client.promote_chat_member(chat_id=chat_id, user_id=user_id)
 
         Example:
 
@@ -1017,10 +990,7 @@ class Chat(Object):
 
         .. code-block:: python
 
-            await client.get_chat_member(
-                chat_id=chat_id,
-                user_id=user_id
-            )
+            await client.get_chat_member(chat_id=chat_id, user_id=user_id)
 
         Example:
             .. code-block:: python

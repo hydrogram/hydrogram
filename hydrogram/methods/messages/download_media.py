@@ -106,9 +106,11 @@ class DownloadMedia:
                 # Download from file id
                 await app.download_media(message.photo.file_id)
 
+
                 # Keep track of the progress while downloading
                 async def progress(current, total):
                     print(f"{current * 100 / total:.1f}%")
+
 
                 await app.download_media(message, progress=progress)
 

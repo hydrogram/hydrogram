@@ -60,7 +60,8 @@ class SetBotCommands:
                 # Set new commands
                 await app.set_bot_commands([
                     BotCommand("start", "Start the bot"),
-                    BotCommand("settings", "Bot settings")])
+                    BotCommand("settings", "Bot settings"),
+                ])
         """
 
         return await self.invoke(

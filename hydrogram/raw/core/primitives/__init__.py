@@ -31,9 +31,9 @@ __all__ = [
     "Bytes",
     "Double",
     "Int",
-    "Long",
     "Int128",
     "Int256",
+    "Long",
     "String",
     "Vector",
 ]
