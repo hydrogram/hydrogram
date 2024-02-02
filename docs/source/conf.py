@@ -30,7 +30,6 @@ intersphinx_mapping = {
 html_use_modindex = False
 html_use_index = False
 
-napoleon_preprocess_types = True
 napoleon_use_rtype = False
 napoleon_use_param = False
 
