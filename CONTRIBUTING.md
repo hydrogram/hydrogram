@@ -61,14 +61,14 @@ You can read more about pull requests in the [GitHub docs](https://docs.github.c
 2. Clone your forked repository of Hydrogram to your computer:
 
 ```bash
-git clone <https://github.com/><your username>/hydrogram
+git clone https://github.com/<your username>/hydrogram
 cd hydrogram
 ```
 
 4. Add a track to the original repository:
 
 ```bash
-git remote add upstream <https://github.com/hydrogram/hydrogram>
+git remote add upstream https://github.com/hydrogram/hydrogram
 ```
 
 5. Install dependencies:
