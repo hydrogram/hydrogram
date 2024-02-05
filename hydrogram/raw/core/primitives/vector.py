@@ -37,7 +37,7 @@ class Vector(bytes, TLObject):
         if size == 4:
             e = int.from_bytes(b.read(4), "little")
             b.seek(-4, 1)
-            if e in [BoolFalse.ID, BoolTrue.ID]:
+            if e in {BoolFalse.ID, BoolTrue.ID}:
                 return Bool.read(b)
             return Int.read(b)
 
