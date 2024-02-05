@@ -23,6 +23,7 @@ from typing import Any, Union, cast
 from hydrogram.raw.core.list import List
 from hydrogram.raw.core.tl_object import TLObject
 
+from .bool import Bool, BoolFalse, BoolTrue
 from .int import Int, Long
 
 
@@ -34,6 +35,10 @@ class Vector(bytes, TLObject):
     @staticmethod
     def read_bare(b: BytesIO, size: int) -> Union[int, Any]:
         if size == 4:
+            e = int.from_bytes(b.read(4), "little")
+            b.seek(-4, 1)
+            if e in [BoolFalse.ID, BoolTrue.ID]:
+                return Bool.read(b)
             return Int.read(b)
 
         return Long.read(b) if size == 8 else TLObject.read(b)
