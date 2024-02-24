@@ -12,7 +12,9 @@ If you have a question, please use the [discussions](https://github.com/orgs/hyd
 
 ## Providing Feedback
 
-Feedback from the community is very important to us at Hydrogram. You can share your thoughts and suggestions by creating [discussions](https://github.com/orgs/hydrogram/discussions).
+Feedback from the community is very important to us at Hydrogram. If you have any suggestions, ideas, or concerns, please share them with us. You can use the [discussions](https://github.com/orgs/hydrogram/discussions) to start a conversation.
+
+You might be wondering about the difference between asking questions, providing feedback, and making feature requests. Asking questions is about seeking help or clarification. Providing feedback involves sharing your thoughts and opinions on the existing features and the project as a whole. Feature requests, on the other hand, are about suggesting new features or improvements. See the next section for more details on feature requests.
 
 ## Creating Issues
 
@@ -123,9 +125,7 @@ sphinx-autobuild docs/source/ docs/build/ --watch hydrogram/
 
 ### Commit Messages
 
-We use conventional commits, which provide a standardized and structured format for commit messages. This helps ensure clear and consistent communication about the changes made in each commit.
-
-- **Commit messages**: The commit messages should follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification, which provides a structured and consistent format for describing the changes in the commits. The commit messages should have the following structure:
+We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), which provide a standardized and structured format for commit messages. This helps ensure clear and consistent communication about the changes made in each commit. The commit messages should have the following structure:
 
 ```
 <type>[optional scope]: <description>
