@@ -140,10 +140,14 @@ class SendPoll:
         """
 
         solution, solution_entities = (
-            await utils.parse_text_entities(
-                self, explanation, explanation_parse_mode, explanation_entities
-            )
-        ).values()
+            (
+                await utils.parse_text_entities(
+                    self, explanation, explanation_parse_mode, explanation_entities
+                )
+            ).values()
+            if explanation
+            else (None, None)
+        )
 
         reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
 
@@ -169,7 +173,7 @@ class SendPoll:
                     if correct_option_id is not None
                     else None,
                     solution=solution,
-                    solution_entities=solution_entities or [],
+                    solution_entities=None if solution is None else (solution_entities or []),
                 ),
                 message="",
                 silent=disable_notification,
