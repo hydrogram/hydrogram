@@ -60,11 +60,11 @@ dev-dependencies = [
 
 [project.optional-dependencies]
 docs = [
-    "Sphinx>=7.2.6",
-    "furo>=2023.9.10",
-    "sphinx-autobuild>=2021.3.14",
+    "Sphinx>=7.3.7",
+    "furo>=2024.5.6",
+    "sphinx-autobuild>=2024.4.16",
     "sphinx-copybutton>=0.5.2",
-    "pygments>=2.17.2",
+    "pygments>=2.18.0",
     "towncrier>=23.11.0",
     "sphinxcontrib-towncrier>=0.4.0a0",
 ]

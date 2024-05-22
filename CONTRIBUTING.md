@@ -12,7 +12,9 @@ If you have a question, please use the [discussions](https://github.com/orgs/hyd
 
 ## Providing Feedback
 
-Feedback from the community is very important to us at Hydrogram. You can share your thoughts and suggestions by creating [discussions](https://github.com/orgs/hydrogram/discussions).
+Feedback from the community is very important to us at Hydrogram. If you have any suggestions, ideas, or concerns, please share them with us. You can use the [discussions](https://github.com/orgs/hydrogram/discussions) to start a conversation.
+
+You might be wondering about the difference between asking questions, providing feedback, and making feature requests. Asking questions is about seeking help or clarification. Providing feedback involves sharing your thoughts and opinions on the existing features and the project as a whole. Feature requests, on the other hand, are about suggesting new features or improvements. See the next section for more details on feature requests.
 
 ## Creating Issues
 
@@ -60,21 +62,24 @@ You can read more about pull requests in the [GitHub docs](https://docs.github.c
 1. Fork the Hydrogram repository to your GitHub account.
 2. Clone your forked repository of Hydrogram to your computer:
 
-bash```
-git clone <https://github.com/><your username>/hydrogram
-cd hydrogram```
+```bash
+git clone https://github.com/<your username>/hydrogram
+cd hydrogram
+```
 
 4. Add a track to the original repository:
 
-bash```
-git remote add upstream <https://github.com/hydrogram/hydrogram>```
+```bash
+git remote add upstream https://github.com/hydrogram/hydrogram
+```
 
 5. Install dependencies:
 
 Hydrogram uses and recommends [Rye](https://rye-up.com/) for managing virtual environmens and dependencies.
 
-bash```
-rye sync --all-features```
+```bash
+rye sync --all-features
+```
 
 > We use `--all-features` to install all the optional dependencies, which are required to run the tests and build the documentation.
 
@@ -82,27 +87,31 @@ rye sync --all-features```
 
 [Pre-commit](https://pre-commit.com/) is a tool that runs various checks before you make a commit. It helps you avoid committing any errors or warnings that might break your code or violate the coding standards.
 
-bash```
-pre-commit install```
+```bash
+pre-commit install
+```
 
 ### Format the code (code-style)
 
 Hydrogram uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting the code to maintain it consistent and clean. You should [install](https://docs.astral.sh/ruff/installation/) and run Ruff on your code before committing:
 
-bash```
-ruff check .```
+```bash
+ruff check .
+```
 
 However, you can also rely on [pre-commit](https://pre-commit.com/) for it:
 
-bash```
-pre-commit run --run-all-files```
+```bash
+pre-commit run --run-all-files
+```
 
 ### Run tests
 
 All changes should be tested:
 
-bash```
-pytest tests```
+```bash
+pytest tests
+```
 
 Remember to write tests for your new features or modify the existing tests to cover your code changes. Testing is essential to ensure the quality and reliability of your code.
 
@@ -110,14 +119,13 @@ Remember to write tests for your new features or modify the existing tests to co
 
 We use Sphinx to generate documentation in the `docs` directory. You can edit the sources and preview the changes using a live-preview server with:
 
-bash```
-sphinx-autobuild docs/source/ docs/build/ --watch hydrogram/```
+```bash
+sphinx-autobuild docs/source/ docs/build/ --watch hydrogram/
+```
 
 ### Commit Messages
 
-We use conventional commits, which provide a standardized and structured format for commit messages. This helps ensure clear and consistent communication about the changes made in each commit.
-
-- **Commit messages**: The commit messages should follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification, which provides a structured and consistent format for describing the changes in the commits. The commit messages should have the following structure:
+We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), which provide a standardized and structured format for commit messages. This helps ensure clear and consistent communication about the changes made in each commit. The commit messages should have the following structure:
 
 ```
 <type>[optional scope]: <description>
@@ -158,7 +166,7 @@ Write a concise summary of your changes in one or more sentences, so that bot de
 - `feature` - when you add a new feature
 - `bugfix` - when you fix a bug
 - `doc` - when you improve the documentation
-- `removal` - when you remove something from the library968sm6
+- `removal` - when you remove something from the library
 - `misc` - when you change something in the core or the project configuration
 
 If you are not sure which category to use, you can ask the core contributors for help.
