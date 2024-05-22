@@ -103,7 +103,7 @@ class Dispatcher:
 
             return (parsed, EditedMessageHandler)
 
-        async def deleted_messages_parser(update, users, chats):
+        def deleted_messages_parser(update, users, chats):
             return (
                 utils.parse_deleted_messages(self.client, update),
                 DeletedMessagesHandler,
@@ -115,37 +115,37 @@ class Dispatcher:
                 CallbackQueryHandler,
             )
 
-        async def user_status_parser(update, users, chats):
+        def user_status_parser(update, users, chats):
             return (
                 hydrogram.types.User._parse_user_status(self.client, update),
                 UserStatusHandler,
             )
 
-        async def inline_query_parser(update, users, chats):
+        def inline_query_parser(update, users, chats):
             return (
                 hydrogram.types.InlineQuery._parse(self.client, update, users),
                 InlineQueryHandler,
             )
 
-        async def poll_parser(update, users, chats):
+        def poll_parser(update, users, chats):
             return (
                 hydrogram.types.Poll._parse_update(self.client, update),
                 PollHandler,
             )
 
-        async def chosen_inline_result_parser(update, users, chats):
+        def chosen_inline_result_parser(update, users, chats):
             return (
                 hydrogram.types.ChosenInlineResult._parse(self.client, update, users),
                 ChosenInlineResultHandler,
             )
 
-        async def chat_member_updated_parser(update, users, chats):
+        def chat_member_updated_parser(update, users, chats):
             return (
                 hydrogram.types.ChatMemberUpdated._parse(self.client, update, users, chats),
                 ChatMemberUpdatedHandler,
             )
 
-        async def chat_join_request_parser(update, users, chats):
+        def chat_join_request_parser(update, users, chats):
             return (
                 hydrogram.types.ChatJoinRequest._parse(self.client, update, users, chats),
                 ChatJoinRequestHandler,

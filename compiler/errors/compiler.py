@@ -138,7 +138,7 @@ def start():
         content = f.read()
 
     with Path(f"{DEST}/all.py").open("w", encoding="utf-8") as f:
-        f.write(re.sub("{count}", str(count), content))
+        f.write(re.sub("{count}", str(count), content))  # noqa: RUF027
 
 
 if __name__ == "__main__":
