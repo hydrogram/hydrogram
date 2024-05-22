@@ -39,7 +39,7 @@ class ContinuePropagation(StopAsyncIteration):
 crypto_executor = ThreadPoolExecutor(1, thread_name_prefix="CryptoWorker")
 
 # ruff: noqa: E402
-from . import emoji, enums, errors, filters, handlers, raw, types
+from . import enums, errors, filters, handlers, raw, types
 from .client import Client
 from .sync import compose, idle
 
@@ -50,7 +50,6 @@ __all__ = [
     "StopTransmission",
     "compose",
     "crypto_executor",
-    "emoji",
     "enums",
     "errors",
     "filters",
