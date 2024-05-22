@@ -2,50 +2,42 @@ Using Filters
 =============
 
 So far we've seen :doc:`how to register a callback function <../start/updates>` that executes every time an update comes
-from the server, but there's much more than that to come.
-
-Here we'll discuss about :obj:`~hydrogram.filters`. Filters enable a fine-grain control over what kind of
-updates are allowed or not to be passed in your callback functions, based on their inner details.
+from the server. Now, let's explore :obj:`~hydrogram.filters` which provide a fine-grain control over the types of
+updates that can trigger your callback functions.
 
 -----
 
 Single Filters
 --------------
 
-Let's start right away with a simple example:
+Here's an example of how to use a single filter. This example will only handle messages containing a :class:`~hydrogram.types.Sticker` object and
+ignore any other message. Filters are passed as the first argument of the decorator:
 
--   This example will show you how to **only** handle messages containing a :class:`~hydrogram.types.Sticker` object and
-    ignore any other message. Filters are passed as the first argument of the decorator:
+.. code-block:: python
 
-    .. code-block:: python
+    from hydrogram.filters import Command
 
-        from hydrogram import filters
+    @app.on_message(Command("start"))
+    async def my_handler(client, message):
+        print(message)
 
+Alternatively, you can use filters without decorators. In this case, filters are passed as the second argument of the handler constructor; the first is the
+callback function itself:
 
-        @app.on_message(filters.sticker)
-        async def my_handler(client, message):
-            print(message)
+.. code-block:: python
 
--   or, without decorators. Here filters are passed as the second argument of the handler constructor; the first is the
-    callback function itself:
+    from hydrogram.filters import Command
+    from hydrogram.handlers import MessageHandler
 
-    .. code-block:: python
+    async def my_handler(client, message):
+        print(message)
 
-        from hydrogram import filters
-        from hydrogram.handlers import MessageHandler
-
-
-        async def my_handler(client, message):
-            print(message)
-
-
-        app.add_handler(MessageHandler(my_handler, filters.sticker))
+    app.add_handler(MessageHandler(my_handler, Command("start")))
 
 Combining Filters
 -----------------
 
-Filters can be used in a more advanced way by inverting and combining more filters together using bitwise
-operators ``~``, ``&`` and ``|``:
+Filters can be combined using bitwise operators ``~``, ``&`` and ``|``:
 
 -   Use ``~`` to invert a filter (behaves like the ``not`` operator).
 -   Use ``&`` and ``|`` to merge two filters (behave like ``and``, ``or`` operators respectively).
@@ -56,7 +48,9 @@ Here are some examples:
 
     .. code-block:: python
 
-        @app.on_message(filters.text | filters.photo)
+        from magic_filter import F
+
+        @app.on_message(F.text | F.photo)
         async def my_handler(client, message):
             print(message)
 
@@ -64,21 +58,26 @@ Here are some examples:
 
     .. code-block:: python
 
-        @app.on_message(filters.sticker & (filters.channel | filters.private))
+        from magic_filter import F
+
+        from hydrogram.enums import ChatType
+
+        @app.on_message(F.sticker & (F.channel | F.chat == ChatType.PRIVATE ))
         async def my_handler(client, message):
             print(message)
 
 Advanced Filters
 ----------------
 
-Some filters, like :meth:`~hydrogram.filters.command` or :meth:`~hydrogram.filters.regex`
-can also accept arguments:
+Some filters, like :meth:`~hydrogram.filters.command.Command` can also accept arguments:
 
 -   Message is either a */start* or */help* **command**.
 
     .. code-block:: python
 
-        @app.on_message(filters.command(["start", "help"]))
+        from hydrogram.filters import Command
+
+        @app.on_message(Command(commands=["start", "help"]))
         async def my_handler(client, message):
             print(message)
 
@@ -86,24 +85,27 @@ can also accept arguments:
 
     .. code-block:: python
 
-        @app.on_message(filters.regex("hydrogram"))
+        from magic_filter import F
+
+        @app.on_message(F.text.regexp("hydrogram"))
         async def my_handler(client, message):
             print(message)
 
-More handlers using different filters can also live together.
+Multiple handlers using different filters can coexist.
 
 .. code-block:: python
 
-    @app.on_message(filters.command("start"))
+    from magic_filter import F
+    from hydrogram.filters import Command
+
+    @app.on_message(Command("start"))
     async def start_command(client, message):
         print("This is the /start command")
 
-
-    @app.on_message(filters.command("help"))
+    @app.on_message(Command("help"))
     async def help_command(client, message):
         print("This is the /help command")
 
-
-    @app.on_message(filters.chat("HydrogramChat"))
+    @app.on_message(F.chat.username.is_("HydrogramChat"))
     async def from_hydrogramchat(client, message):
         print("New message in @HydrogramChat")

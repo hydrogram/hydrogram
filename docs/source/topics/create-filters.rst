@@ -1,9 +1,9 @@
 Creating Filters
 ================
 
-Hydrogram already provides lots of built-in :class:`~hydrogram.filters` to work with, but in case you can't find a
-specific one for your needs or want to build a custom filter by yourself you can use
-:meth:`filters.create() <hydrogram.filters.create>`.
+Hydrogram provides a base class :class:`~hydrogram.filters.Filter` for creating custom filters. If you can't find a
+specific built-in filter for your needs or want to build a custom filter, you can subclass this base class and override
+the `__call__` method to implement your filter logic.
 
 -----
 
@@ -31,9 +31,9 @@ button:
 Basic Filters
 -------------
 
-For this basic filter we will be using only the first parameter of :meth:`~hydrogram.filters.create`.
+For this basic filter we will be creating a subclass of :class:`~hydrogram.filters.Filter` and overriding the `__call__` method.
 
-The heart of a filter is its callback function, which accepts three arguments *(self, client, update)* and returns
+The heart of a filter is its `__call__` method, which accepts two arguments *(client, update)* and returns
 either ``True``, in case you want the update to pass the filter or ``False`` otherwise.
 
 In this example we are matching the query data to "hydrogram", which means that the filter will only allow callback
@@ -41,15 +41,13 @@ queries containing "hydrogram" as data:
 
 .. code-block:: python
 
-    from hydrogram import filters
+    from hydrogram.filters import Filter
 
-    async def func(_, __, query):
-        return query.data == "hydrogram"
+    class StaticDataFilter(Filter):
+        async def __call__(self, client, query):
+            return query.data == "hydrogram"
 
-    static_data_filter = filters.create(func)
-
-
-The first two arguments of the callback function are unused here and because of this we named them using underscores.
+    static_data_filter = StaticDataFilter()
 
 Finally, the filter usage remains the same:
 
@@ -71,34 +69,36 @@ This is how a dynamic custom filter looks like:
 
 .. code-block:: python
 
-    from hydrogram import filters
+    from hydrogram.filters import Filter
 
-    def dynamic_data_filter(data):
-        async def func(flt, _, query):
-            return flt.data == query.data
+    class DynamicDataFilter(Filter):
+        def __init__(self, data):
+            self.data = data
 
-        # "data" kwarg is accessed with "flt.data" above
-        return filters.create(func, data=data)
+        async def __call__(self, client, query):
+            return self.data == query.data
 
 And finally its usage:
 
 .. code-block:: python
 
-    @app.on_callback_query(dynamic_data_filter("hydrogram"))
+    @app.on_callback_query(DynamicDataFilter("hydrogram"))
     async def hydrogram_data(_, query):
         query.answer("it works!")
-
 
 Method Calls Inside Filters
 ---------------------------
 
-The missing piece we haven't covered yet is the second argument of a filter callback function, namely, the ``client``
+The missing piece we haven't covered yet is the first argument of a filter's `__call__` method, namely, the ``client``
 argument. This is a reference to the :obj:`~hydrogram.Client` instance that is running the filter and it is useful in
 case you would like to make some API calls before deciding whether the filter should allow the update or not:
 
 .. code-block:: python
 
-    async def func(_, client, query):
-        # r = await client.some_api_method()
-        # check response "r" and decide to return True or False
-        ...
+    from hydrogram.filters import Filter
+
+    class ApiCallFilter(Filter):
+        async def __call__(self, client, query):
+            # r = await client.some_api_method()
+            # check response "r" and decide to return True or False
+            ...

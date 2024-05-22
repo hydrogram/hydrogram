@@ -20,6 +20,8 @@
 from asyncio import iscoroutinefunction
 from typing import Callable, Optional
 
+from magic_filter import MagicFilter
+
 import hydrogram
 from hydrogram.types import CallbackQuery, Identifier, Listener, ListenerTypes
 from hydrogram.utils import PyromodConfig
@@ -140,14 +142,16 @@ class CallbackQueryHandler(Handler):
         listener_does_match, listener = await self.check_if_has_matching_listener(client, query)
 
         if callable(self.filters):
-            if iscoroutinefunction(self.filters.__call__):
+            if isinstance(self.filters, MagicFilter):
+                handler_does_match = await client.loop.run_in_executor(
+                    client.executor, self.filters.resolve, query
+                )
+            elif iscoroutinefunction(self.filters.__call__):
                 handler_does_match = await self.filters(client, query)
             else:
                 handler_does_match = await client.loop.run_in_executor(
-                    None, self.filters, client, query
+                    client.executor, self.filters, client, query
                 )
-        else:
-            handler_does_match = True
 
         data = self.compose_data_identifier(query)
 

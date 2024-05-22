@@ -20,6 +20,8 @@
 from inspect import iscoroutinefunction
 from typing import Callable, Optional
 
+from magic_filter import MagicFilter
+
 import hydrogram
 from hydrogram.types import Identifier, Listener, ListenerTypes, Message
 
@@ -118,14 +120,16 @@ class MessageHandler(Handler):
         listener_does_match = (await self.check_if_has_matching_listener(client, message))[0]
 
         if callable(self.filters):
-            if iscoroutinefunction(self.filters.__call__):
+            if isinstance(self.filters, MagicFilter):
+                handler_does_match = await client.loop.run_in_executor(
+                    client.executor, self.filters.resolve, message
+                )
+            elif iscoroutinefunction(self.filters.__call__):
                 handler_does_match = await self.filters(client, message)
             else:
                 handler_does_match = await client.loop.run_in_executor(
-                    None, self.filters, client, message
+                    client.executor, self.filters, client, message
                 )
-        else:
-            handler_does_match = True
 
         # let handler get the chance to handle if listener
         # exists but its filters doesn't match

@@ -17,8 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import inspect
+from asyncio import iscoroutinefunction
 from typing import Callable
+
+from magic_filter import MagicFilter
 
 import hydrogram
 from hydrogram.filters import Filter
@@ -32,8 +34,16 @@ class Handler:
 
     async def check(self, client: "hydrogram.Client", update: Update):
         if callable(self.filters):
-            if inspect.iscoroutinefunction(self.filters.__call__):
-                return await self.filters(client, update)
-            return await client.loop.run_in_executor(client.executor, self.filters, client, update)
+            if isinstance(self.filters, MagicFilter):
+                filters = await client.loop.run_in_executor(
+                    client.executor, self.filters.resolve, update
+                )
+            elif iscoroutinefunction(self.filters.__call__):
+                filters = await self.filters(client, update)
+            else:
+                filters = await client.loop.run_in_executor(
+                    client.executor, self.filters, client, update
+                )
+            return filters
 
         return True

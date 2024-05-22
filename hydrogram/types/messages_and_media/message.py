@@ -26,6 +26,7 @@ from typing import BinaryIO, Callable, Optional, Union
 import hydrogram
 from hydrogram import enums, filters, raw, types, utils
 from hydrogram.errors import MessageIdsEmpty, PeerIdInvalid
+from hydrogram.filters.command import CommandObject
 from hydrogram.parser import Parser
 from hydrogram.parser import utils as parser_utils
 from hydrogram.types.object import Object
@@ -286,10 +287,11 @@ class Message(Object, Update):
             A list containing all `Match Objects <https://docs.python.org/3/library/re.html#match-objects>`_ that match
             the text of this message. Only applicable when using :obj:`Filters.regex <hydrogram.Filters.regex>`.
 
-        command (List of ``str``, *optional*):
-            A list containing the command and its arguments, if any.
-            E.g.: "/start 1 2 3" would produce ["start", "1", "2", "3"].
-            Only applicable when using :obj:`~hydrogram.filters.command`.
+        command (CommandObject, *optional*):
+            The parsed command object. Only applicable when using
+            :obj:`Filters.command <hydrogram.Filters.command>`. This field will contain the
+            command prefix, name, mention, arguments, regular expression match object,
+            and magic result.
 
         forum_topic_created (:obj:`~hydrogram.types.ForumTopicCreated`, *optional*):
             Service message: forum topic created
@@ -405,7 +407,7 @@ class Message(Object, Update):
         via_bot: "types.User" = None,
         outgoing: Optional[bool] = None,
         matches: Optional[list[Match]] = None,
-        command: Optional[list[str]] = None,
+        command: Optional[CommandObject] = None,
         forum_topic_created: "types.ForumTopicCreated" = None,
         forum_topic_closed: "types.ForumTopicClosed" = None,
         forum_topic_reopened: "types.ForumTopicReopened" = None,
