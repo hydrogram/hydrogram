@@ -1,0 +1,1 @@
+Refactored the Hydrogram filter system to be class-based. This provides a more structured and flexible way to create filters.
