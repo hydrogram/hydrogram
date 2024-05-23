@@ -64,16 +64,16 @@ class Filter(ABC):
         ...
 
     def __invert__(self) -> "InvertFilter":
-        from hydrogram.filters.logic import InvertFilter
+        from hydrogram.filters.logic import invert_f
 
-        return InvertFilter(self)
+        return invert_f(self)
 
     def __and__(self, other) -> "AndFilter":
-        from hydrogram.filters.logic import AndFilter
+        from hydrogram.filters.logic import and_f
 
-        return AndFilter(self, other)
+        return and_f(self, other)
 
     def __or__(self, other) -> "OrFilter":
-        from hydrogram.filters.logic import OrFilter
+        from hydrogram.filters.logic import or_f
 
-        return OrFilter(self, other)
+        return or_f(self, other)

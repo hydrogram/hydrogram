@@ -33,13 +33,13 @@ if TYPE_CHECKING:
 
 
 def resolve_filter(
-    filter: Filter, client: "Client", update: Update
+    filter: Filter | MagicFilter, client: "Client", update: Update
 ) -> Future[Any] | Coroutine[Any, Any, bool]:
-    if inspect.iscoroutinefunction(filter.__call__):
-        return filter(client, update)
-
     if isinstance(filter, MagicFilter):
         return client.loop.run_in_executor(client.executor, filter.resolve, update)
+
+    if inspect.iscoroutinefunction(filter.__call__):
+        return filter(client, update)
 
     return client.loop.run_in_executor(client.executor, partial(filter, client, update))
 

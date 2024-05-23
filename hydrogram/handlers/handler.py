@@ -28,7 +28,7 @@ from hydrogram.types import Update
 
 
 class Handler:
-    def __init__(self, callback: Callable, filters: Filter = None):
+    def __init__(self, callback: Callable, filters: Filter | MagicFilter = None):
         self.callback = callback
         self.filters = filters
 

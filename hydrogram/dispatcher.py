@@ -238,6 +238,8 @@ class Dispatcher:
 
                 parsed_update, handler_type = (
                     await parser(update, users, chats)
+                    if parser is not None and inspect.iscoroutinefunction(parser)
+                    else parser(update, users, chats)
                     if parser is not None
                     else (None, type(None))
                 )
