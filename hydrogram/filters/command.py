@@ -194,7 +194,7 @@ class Command(Filter):
             msg = f"Invalid prefix: {command.prefix!r}"
             raise CommandError(msg)
 
-    async def validade_mention(self, client: "Client", command: CommandObject) -> None:
+    async def validate_mention(self, client: "Client", command: CommandObject) -> None:
         if command.mention and not self.ignore_mention:
             me = client.me or await client.get_me()
 
@@ -221,7 +221,7 @@ class Command(Filter):
         command = CommandObject(message).parse()
 
         self.validate_prefix(command)
-        await self.validade_mention(client, command)
+        await self.validate_mention(client, command)
         return self.do_magic(command=self.validate_command(command))
 
     def do_magic(self, command: CommandObject) -> CommandObject:
