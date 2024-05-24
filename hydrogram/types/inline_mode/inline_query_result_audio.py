@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -70,14 +70,14 @@ class InlineQueryResultAudio(InlineQueryResult):
         self,
         audio_url: str,
         title: str,
-        id: Optional[str] = None,
+        id: str | None = None,
         performer: str = "",
         audio_duration: int = 0,
         caption: str = "",
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-        input_message_content: "types.InputMessageContent" = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        reply_markup: types.InlineKeyboardMarkup = None,
+        input_message_content: types.InputMessageContent = None,
     ):
         super().__init__("audio", id, input_message_content, reply_markup)
 
@@ -89,7 +89,7 @@ class InlineQueryResultAudio(InlineQueryResult):
         self.parse_mode = parse_mode
         self.caption_entities = caption_entities
 
-    async def write(self, client: "hydrogram.Client"):
+    async def write(self, client: hydrogram.Client):
         audio = raw.types.InputWebDocument(
             url=self.audio_url,
             size=0,

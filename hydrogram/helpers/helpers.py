@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 from hydrogram.types import (
     ForceReply,
@@ -28,7 +28,7 @@ from hydrogram.types import (
 )
 
 
-def ikb(rows: Optional[list[list[Union[str, tuple[str, str]]]]] = None) -> InlineKeyboardMarkup:
+def ikb(rows: list[list[str | tuple[str, str]]] | None = None) -> InlineKeyboardMarkup:
     """
     Create an InlineKeyboardMarkup from a list of lists of buttons.
 
@@ -77,7 +77,7 @@ def btn(text: str, value: str, type="callback_data") -> InlineKeyboardButton:
 
 
 # The inverse of ikb()
-def bki(keyboard: InlineKeyboardButton) -> list[list[Union[str, tuple[str, str]]]]:
+def bki(keyboard: InlineKeyboardButton) -> list[list[str | tuple[str, str]]]:
     """
     Create a list of lists of buttons from an InlineKeyboardMarkup.
 

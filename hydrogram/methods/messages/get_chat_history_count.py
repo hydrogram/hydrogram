@@ -17,8 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
-from typing import Union
 
 import hydrogram
 from hydrogram import raw
@@ -27,7 +28,7 @@ log = logging.getLogger(__name__)
 
 
 class GetChatHistoryCount:
-    async def get_chat_history_count(self: "hydrogram.Client", chat_id: Union[int, str]) -> int:
+    async def get_chat_history_count(self: hydrogram.Client, chat_id: int | str) -> int:
         """Get the total count of messages in a chat.
 
         .. note::

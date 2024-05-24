@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -27,12 +27,12 @@ from .inline_session import get_session
 
 class EditInlineText:
     async def edit_inline_text(
-        self: "hydrogram.Client",
+        self: hydrogram.Client,
         inline_message_id: str,
         text: str,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        disable_web_page_preview: Optional[bool] = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None,
+        parse_mode: enums.ParseMode | None = None,
+        disable_web_page_preview: bool | None = None,
+        reply_markup: types.InlineKeyboardMarkup = None,
     ) -> bool:
         """Edit the text of inline messages.
 

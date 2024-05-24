@@ -17,16 +17,19 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import re
 from datetime import datetime
 from importlib import import_module
 from pathlib import Path
-from typing import Optional, Union
-
-from hydrogram import raw
-from hydrogram.raw.core import TLObject
+from typing import TYPE_CHECKING
 
 from .exceptions.all import exceptions
+
+if TYPE_CHECKING:
+    from hydrogram import raw
+    from hydrogram.raw.core import TLObject
 
 
 class RPCError(Exception):
@@ -37,8 +40,8 @@ class RPCError(Exception):
 
     def __init__(
         self,
-        value: Union[int, str, raw.types.RpcError] = None,
-        rpc_name: Optional[str] = None,
+        value: int | str | raw.types.RpcError = None,
+        rpc_name: str | None = None,
         is_unknown: bool = False,
         is_signed: bool = False,
     ):
@@ -62,7 +65,7 @@ class RPCError(Exception):
                 f.write(f"{datetime.now()}\t{value}\t{rpc_name}\n")
 
     @staticmethod
-    def raise_it(rpc_error: "raw.types.RpcError", rpc_type: type[TLObject]):
+    def raise_it(rpc_error: raw.types.RpcError, rpc_type: type[TLObject]):
         error_code = rpc_error.error_code
         is_signed = error_code < 0
         error_message = rpc_error.error_message

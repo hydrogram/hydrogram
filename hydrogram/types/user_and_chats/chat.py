@@ -17,14 +17,18 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import AsyncGenerator
-from datetime import datetime
-from typing import BinaryIO, Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, BinaryIO
 
 import hydrogram
 from hydrogram import enums, filters, raw, types, utils
 from hydrogram.types import ListenerTypes
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+    from datetime import datetime
 
 
 class Chat(Object):
@@ -150,39 +154,39 @@ class Chat(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         id: int,
-        type: "enums.ChatType",
-        is_verified: Optional[bool] = None,
-        is_participants_hidden: Optional[bool] = None,
-        is_restricted: Optional[bool] = None,
-        is_creator: Optional[bool] = None,
-        is_scam: Optional[bool] = None,
-        is_fake: Optional[bool] = None,
-        is_support: Optional[bool] = None,
-        is_forum: Optional[bool] = None,
-        title: Optional[str] = None,
-        username: Optional[str] = None,
-        active_usernames: Optional[str] = None,
-        usernames: Optional[list["types.Username"]] = None,
-        first_name: Optional[str] = None,
-        last_name: Optional[str] = None,
-        photo: "types.ChatPhoto" = None,
-        bio: Optional[str] = None,
-        description: Optional[str] = None,
-        dc_id: Optional[int] = None,
-        has_protected_content: Optional[bool] = None,
-        invite_link: Optional[str] = None,
+        type: enums.ChatType,
+        is_verified: bool | None = None,
+        is_participants_hidden: bool | None = None,
+        is_restricted: bool | None = None,
+        is_creator: bool | None = None,
+        is_scam: bool | None = None,
+        is_fake: bool | None = None,
+        is_support: bool | None = None,
+        is_forum: bool | None = None,
+        title: str | None = None,
+        username: str | None = None,
+        active_usernames: str | None = None,
+        usernames: list[types.Username] | None = None,
+        first_name: str | None = None,
+        last_name: str | None = None,
+        photo: types.ChatPhoto = None,
+        bio: str | None = None,
+        description: str | None = None,
+        dc_id: int | None = None,
+        has_protected_content: bool | None = None,
+        invite_link: str | None = None,
         pinned_message=None,
-        sticker_set_name: Optional[str] = None,
-        can_set_sticker_set: Optional[bool] = None,
-        members_count: Optional[int] = None,
-        restrictions: Optional[list["types.Restriction"]] = None,
-        permissions: "types.ChatPermissions" = None,
-        distance: Optional[int] = None,
-        linked_chat: "types.Chat" = None,
-        send_as_chat: "types.Chat" = None,
-        available_reactions: Optional["types.ChatReactions"] = None,
+        sticker_set_name: str | None = None,
+        can_set_sticker_set: bool | None = None,
+        members_count: int | None = None,
+        restrictions: list[types.Restriction] | None = None,
+        permissions: types.ChatPermissions = None,
+        distance: int | None = None,
+        linked_chat: types.Chat = None,
+        send_as_chat: types.Chat = None,
+        available_reactions: types.ChatReactions | None = None,
     ):
         super().__init__(client)
 
@@ -224,7 +228,7 @@ class Chat(Object):
         return " ".join(filter(None, [self.first_name, self.last_name])) or None
 
     @staticmethod
-    def _parse_user_chat(client, user: raw.types.User) -> "Chat":
+    def _parse_user_chat(client, user: raw.types.User) -> Chat:
         peer_id = user.id
 
         return Chat(
@@ -251,7 +255,7 @@ class Chat(Object):
         )
 
     @staticmethod
-    def _parse_chat_chat(client, chat: raw.types.Chat) -> "Chat":
+    def _parse_chat_chat(client, chat: raw.types.Chat) -> Chat:
         peer_id = -chat.id
         usernames = getattr(chat, "usernames", [])
 
@@ -270,7 +274,7 @@ class Chat(Object):
         )
 
     @staticmethod
-    def _parse_channel_chat(client, channel: raw.types.Channel) -> "Chat":
+    def _parse_channel_chat(client, channel: raw.types.Channel) -> Chat:
         peer_id = utils.get_channel_id(channel.id)
         restriction_reason = getattr(channel, "restriction_reason", [])
         usernames = getattr(channel, "usernames", [])
@@ -309,11 +313,11 @@ class Chat(Object):
     @staticmethod
     def _parse(
         client,
-        message: Union[raw.types.Message, raw.types.MessageService],
+        message: raw.types.Message | raw.types.MessageService,
         users: dict,
         chats: dict,
         is_chat: bool,
-    ) -> "Chat":
+    ) -> Chat:
         from_id = utils.get_raw_peer_id(message.from_id)
         peer_id = utils.get_raw_peer_id(message.peer_id)
         chat_id = (peer_id or from_id) if is_chat else (from_id or peer_id)
@@ -336,8 +340,8 @@ class Chat(Object):
 
     @staticmethod
     async def _parse_full(
-        client, chat_full: Union[raw.types.messages.ChatFull, raw.types.users.UserFull]
-    ) -> "Chat":
+        client, chat_full: raw.types.messages.ChatFull | raw.types.users.UserFull
+    ) -> Chat:
         users = {u.id: u for u in chat_full.users}
         chats = {c.id: c for c in chat_full.chats}
 
@@ -397,9 +401,7 @@ class Chat(Object):
         return parsed_chat
 
     @staticmethod
-    def _parse_chat(
-        client, chat: Union[raw.types.Chat, raw.types.User, raw.types.Channel]
-    ) -> "Chat":
+    def _parse_chat(client, chat: raw.types.Chat | raw.types.User | raw.types.Channel) -> Chat:
         if isinstance(chat, raw.types.Chat):
             return Chat._parse_chat_chat(client, chat)
         if isinstance(chat, raw.types.User):
@@ -408,13 +410,13 @@ class Chat(Object):
 
     def listen(
         self,
-        filters: Optional["filters.Filter"] = None,
+        filters: filters.Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
         unallowed_click_alert: bool = True,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
     ):
         """
         Bound method *listen* of :obj:`~hydrogram.types.Chat`.
@@ -469,13 +471,13 @@ class Chat(Object):
     def ask(
         self,
         text: str,
-        filters: Optional["filters.Filter"] = None,
+        filters: filters.Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
         unallowed_click_alert: bool = True,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
         *args,
         **kwargs,
     ):
@@ -545,9 +547,9 @@ class Chat(Object):
     def stop_listening(
         self,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
     ):
         """
         Bound method *stop_listening* of :obj:`~hydrogram.types.Chat`.
@@ -697,9 +699,9 @@ class Chat(Object):
     async def set_photo(
         self,
         *,
-        photo: Optional[Union[str, BinaryIO]] = None,
-        video: Optional[Union[str, BinaryIO]] = None,
-        video_start_ts: Optional[float] = None,
+        photo: str | BinaryIO | None = None,
+        video: str | BinaryIO | None = None,
+        video_start_ts: float | None = None,
     ) -> bool:
         """Bound method *set_photo* of :obj:`~hydrogram.types.Chat`.
 
@@ -752,8 +754,8 @@ class Chat(Object):
         )
 
     async def ban_member(
-        self, user_id: Union[int, str], until_date: datetime = utils.zero_datetime()
-    ) -> Union["types.Message", bool]:
+        self, user_id: int | str, until_date: datetime = utils.zero_datetime()
+    ) -> types.Message | bool:
         """Bound method *ban_member* of :obj:`~hydrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -794,7 +796,7 @@ class Chat(Object):
             chat_id=self.id, user_id=user_id, until_date=until_date
         )
 
-    async def unban_member(self, user_id: Union[int, str]) -> bool:
+    async def unban_member(self, user_id: int | str) -> bool:
         """Bound method *unban_member* of :obj:`~hydrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -827,10 +829,10 @@ class Chat(Object):
 
     async def restrict_member(
         self,
-        user_id: Union[int, str],
-        permissions: "types.ChatPermissions",
+        user_id: int | str,
+        permissions: types.ChatPermissions,
         until_date: datetime = utils.zero_datetime(),
-    ) -> "types.Chat":
+    ) -> types.Chat:
         """Bound method *unban_member* of :obj:`~hydrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -876,7 +878,7 @@ class Chat(Object):
     # Set None as privileges default due to issues with partially initialized module, because at the time Chat
     # is being initialized, ChatPrivileges would be required here, but was not initialized yet.
     async def promote_member(
-        self, user_id: Union[int, str], privileges: "types.ChatPrivileges" = None
+        self, user_id: int | str, privileges: types.ChatPrivileges = None
     ) -> bool:
         """Bound method *promote_member* of :obj:`~hydrogram.types.Chat`.
 
@@ -982,8 +984,8 @@ class Chat(Object):
 
     async def get_member(
         self,
-        user_id: Union[int, str],
-    ) -> "types.ChatMember":
+        user_id: int | str,
+    ) -> types.ChatMember:
         """Bound method *get_member* of :obj:`~hydrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -1007,8 +1009,8 @@ class Chat(Object):
         self,
         query: str = "",
         limit: int = 0,
-        filter: "enums.ChatMembersFilter" = enums.ChatMembersFilter.SEARCH,
-    ) -> Optional[AsyncGenerator["types.ChatMember", None]]:
+        filter: enums.ChatMembersFilter = enums.ChatMembersFilter.SEARCH,
+    ) -> AsyncGenerator[types.ChatMember, None] | None:
         """Bound method *get_members* of :obj:`~hydrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -1047,7 +1049,7 @@ class Chat(Object):
 
     async def add_members(
         self,
-        user_ids: Union[Union[int, str], list[Union[int, str]]],
+        user_ids: int | str | list[int | str],
         forward_limit: int = 100,
     ) -> bool:
         """Bound method *add_members* of :obj:`~hydrogram.types.Chat`.

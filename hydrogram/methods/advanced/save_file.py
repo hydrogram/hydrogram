@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import asyncio
 import functools
 import inspect
@@ -25,7 +27,7 @@ import logging
 import math
 from hashlib import md5
 from pathlib import Path, PurePath
-from typing import BinaryIO, Callable, Optional, Union
+from typing import BinaryIO, Callable
 
 import hydrogram
 from hydrogram import StopTransmission, raw
@@ -36,11 +38,11 @@ log = logging.getLogger(__name__)
 
 class SaveFile:
     async def save_file(
-        self: "hydrogram.Client",
-        path: Union[str, BinaryIO],
-        file_id: Optional[int] = None,
+        self: hydrogram.Client,
+        path: str | BinaryIO,
+        file_id: int | None = None,
         file_part: int = 0,
-        progress: Optional[Callable] = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
     ):
         """Upload a file onto Telegram servers, without actually sending the message to anyone.

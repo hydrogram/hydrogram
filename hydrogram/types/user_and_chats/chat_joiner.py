@@ -17,12 +17,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class ChatJoiner(Object):
@@ -48,12 +52,12 @@ class ChatJoiner(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client",
-        user: "types.User",
-        date: Optional[datetime] = None,
-        bio: Optional[str] = None,
-        pending: Optional[bool] = None,
-        approved_by: "types.User" = None,
+        client: hydrogram.Client,
+        user: types.User,
+        date: datetime | None = None,
+        bio: str | None = None,
+        pending: bool | None = None,
+        approved_by: types.User = None,
     ):
         super().__init__(client)
 
@@ -65,10 +69,10 @@ class ChatJoiner(Object):
 
     @staticmethod
     def _parse(
-        client: "hydrogram.Client",
-        joiner: "raw.base.ChatInviteImporter",
-        users: dict[int, "raw.base.User"],
-    ) -> "ChatJoiner":
+        client: hydrogram.Client,
+        joiner: raw.base.ChatInviteImporter,
+        users: dict[int, raw.base.User],
+    ) -> ChatJoiner:
         return ChatJoiner(
             user=types.User._parse(client, users[joiner.user_id]),
             date=utils.timestamp_to_datetime(joiner.date),

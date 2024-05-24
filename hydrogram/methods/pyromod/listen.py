@@ -17,31 +17,35 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import asyncio
 import inspect
-from typing import Optional, Union
+from typing import TYPE_CHECKING
 
-import hydrogram
 from hydrogram.errors import (
     ListenerTimeout,
 )
-from hydrogram.filters import Filter
 from hydrogram.types import Identifier, Listener, ListenerTypes
 from hydrogram.utils import PyromodConfig
+
+if TYPE_CHECKING:
+    import hydrogram
+    from hydrogram.filters import Filter
 
 
 class Listen:
     async def listen(
-        self: "hydrogram.Client",
-        filters: Optional[Filter] = None,
+        self: hydrogram.Client,
+        filters: Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
         unallowed_click_alert: bool = True,
-        chat_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
-    ) -> Union["hydrogram.types.Message", "hydrogram.types.CallbackQuery"]:
+        chat_id: int | str | list[int | str] | None = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
+    ) -> hydrogram.types.Message | hydrogram.types.CallbackQuery:
         """
         Creates a listener and waits for it to be fulfilled.
 

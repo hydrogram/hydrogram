@@ -17,17 +17,21 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import AsyncGenerator
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+
 
 class GetDialogs:
     async def get_dialogs(
-        self: "hydrogram.Client", limit: int = 0
-    ) -> Optional[AsyncGenerator["types.Dialog", None]]:
+        self: hydrogram.Client, limit: int = 0
+    ) -> AsyncGenerator[types.Dialog, None] | None:
         """Get a user's dialogs sequentially.
 
         .. include:: /_includes/usable-by/users.rst

@@ -17,24 +17,28 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable, Optional, Union
+from __future__ import annotations
 
-import hydrogram
-from hydrogram.filters import Filter
+from typing import TYPE_CHECKING, Callable
+
 from hydrogram.types import Identifier, Listener, ListenerTypes
+
+if TYPE_CHECKING:
+    import hydrogram
+    from hydrogram.filters import Filter
 
 
 class RegisterNextStepHandler:
     def register_next_step_handler(
-        self: "hydrogram.Client",
+        self: hydrogram.Client,
         callback: Callable,
-        filters: Optional[Filter] = None,
+        filters: Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
         unallowed_click_alert: bool = True,
-        chat_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        chat_id: int | str | list[int | str] | None = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
     ):
         """
         Registers a listener with a callback to be called when the listener is fulfilled.

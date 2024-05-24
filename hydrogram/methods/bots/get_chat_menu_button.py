@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,9 +25,9 @@ from hydrogram import raw, types
 
 class GetChatMenuButton:
     async def get_chat_menu_button(
-        self: "hydrogram.Client",
-        chat_id: Optional[Union[int, str]] = None,
-    ) -> "types.MenuButton":
+        self: hydrogram.Client,
+        chat_id: int | str | None = None,
+    ) -> types.MenuButton:
         """Get the current value of the bot's menu button in a private chat, or the default menu button.
 
         .. include:: /_includes/usable-by/bots.rst

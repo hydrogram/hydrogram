@@ -17,13 +17,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
 from hydrogram.types.object import Object
 from hydrogram.types.update import Update
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Poll(Object, Update):
@@ -79,21 +83,21 @@ class Poll(Object, Update):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         id: str,
         question: str,
-        options: list["types.PollOption"],
+        options: list[types.PollOption],
         total_voter_count: int,
         is_closed: bool,
-        is_anonymous: Optional[bool] = None,
-        type: "enums.PollType" = None,
-        allows_multiple_answers: Optional[bool] = None,
-        chosen_option_id: Optional[int] = None,
-        correct_option_id: Optional[int] = None,
-        explanation: Optional[str] = None,
-        explanation_entities: Optional[list["types.MessageEntity"]] = None,
-        open_period: Optional[int] = None,
-        close_date: Optional[datetime] = None,
+        is_anonymous: bool | None = None,
+        type: enums.PollType = None,
+        allows_multiple_answers: bool | None = None,
+        chosen_option_id: int | None = None,
+        correct_option_id: int | None = None,
+        explanation: str | None = None,
+        explanation_entities: list[types.MessageEntity] | None = None,
+        open_period: int | None = None,
+        close_date: datetime | None = None,
     ):
         super().__init__(client)
 
@@ -115,8 +119,8 @@ class Poll(Object, Update):
     @staticmethod
     def _parse(
         client,
-        media_poll: Union["raw.types.MessageMediaPoll", "raw.types.UpdateMessagePoll"],
-    ) -> "Poll":
+        media_poll: raw.types.MessageMediaPoll | raw.types.UpdateMessagePoll,
+    ) -> Poll:
         poll: raw.types.Poll = media_poll.poll
         poll_results: raw.types.PollResults = media_poll.results
         results: list[raw.types.PollAnswerVoters] = poll_results.results
@@ -170,7 +174,7 @@ class Poll(Object, Update):
         )
 
     @staticmethod
-    def _parse_update(client, update: "raw.types.UpdateMessagePoll"):
+    def _parse_update(client, update: raw.types.UpdateMessagePoll):
         if update.poll is not None:
             return Poll._parse(client, update)
 

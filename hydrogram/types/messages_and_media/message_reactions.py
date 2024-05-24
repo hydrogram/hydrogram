@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -35,8 +35,8 @@ class MessageReactions(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
-        reactions: Optional[list["types.Reaction"]] = None,
+        client: hydrogram.Client = None,
+        reactions: list[types.Reaction] | None = None,
     ):
         super().__init__(client)
 
@@ -44,9 +44,9 @@ class MessageReactions(Object):
 
     @staticmethod
     def _parse(
-        client: "hydrogram.Client",
-        message_reactions: Optional["raw.base.MessageReactions"] = None,
-    ) -> Optional["MessageReactions"]:
+        client: hydrogram.Client,
+        message_reactions: raw.base.MessageReactions | None = None,
+    ) -> MessageReactions | None:
         if not message_reactions:
             return None
 

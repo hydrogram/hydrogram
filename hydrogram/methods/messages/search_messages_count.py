@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import enums, raw
@@ -25,11 +25,11 @@ from hydrogram import enums, raw
 
 class SearchMessagesCount:
     async def search_messages_count(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         query: str = "",
-        filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
-        from_user: Optional[Union[int, str]] = None,
+        filter: enums.MessagesFilter = enums.MessagesFilter.EMPTY,
+        from_user: int | str | None = None,
     ) -> int:
         """Get the count of messages resulting from a search inside a chat.
 

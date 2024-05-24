@@ -18,11 +18,13 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import inspect
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
-import hydrogram
 from hydrogram.filters import Filter
 from hydrogram.types import Update
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 class Handler:

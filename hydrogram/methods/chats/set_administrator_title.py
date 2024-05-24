@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -25,9 +25,9 @@ from hydrogram import raw
 
 class SetAdministratorTitle:
     async def set_administrator_title(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        user_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
+        user_id: int | str,
         title: str,
     ) -> bool:
         """Set a custom title (rank) to an administrator of a supergroup.

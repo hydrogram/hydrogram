@@ -17,22 +17,25 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
-import hydrogram
-from hydrogram import enums, types
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import hydrogram
+    from hydrogram import enums, types
 
 
 class EditMessageCaption:
     async def edit_message_caption(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         message_id: int,
         caption: str,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-    ) -> "types.Message":
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        reply_markup: types.InlineKeyboardMarkup = None,
+    ) -> types.Message:
         """Edit the caption of media messages.
 
         .. include:: /_includes/usable-by/users-bots.rst

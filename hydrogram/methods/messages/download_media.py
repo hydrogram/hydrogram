@@ -17,11 +17,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import asyncio
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import BinaryIO, Callable, Optional, Union
+from typing import BinaryIO, Callable
 
 import hydrogram
 from hydrogram import types
@@ -32,14 +34,14 @@ DEFAULT_DOWNLOAD_DIR = "downloads/"
 
 class DownloadMedia:
     async def download_media(
-        self: "hydrogram.Client",
-        message: Union["types.Message", str],
+        self: hydrogram.Client,
+        message: types.Message | str,
         file_name: str = DEFAULT_DOWNLOAD_DIR,
         in_memory: bool = False,
         block: bool = True,
-        progress: Optional[Callable] = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> Optional[Union[str, BinaryIO]]:
+    ) -> str | BinaryIO | None:
         """Download the media from a message.
 
         .. include:: /_includes/usable-by/users-bots.rst

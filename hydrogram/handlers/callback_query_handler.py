@@ -17,8 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from asyncio import iscoroutinefunction
-from typing import Callable, Optional
+from typing import Callable
 
 import hydrogram
 from hydrogram.types import CallbackQuery, Identifier, Listener, ListenerTypes
@@ -87,8 +89,8 @@ class CallbackQueryHandler(Handler):
         )
 
     async def check_if_has_matching_listener(
-        self, client: "hydrogram.Client", query: CallbackQuery
-    ) -> tuple[bool, Optional[Listener]]:
+        self, client: hydrogram.Client, query: CallbackQuery
+    ) -> tuple[bool, Listener | None]:
         """
         Checks if the CallbackQuery object has a matching listener.
 
@@ -123,7 +125,7 @@ class CallbackQueryHandler(Handler):
 
         return listener_does_match, listener
 
-    async def check(self, client: "hydrogram.Client", query: CallbackQuery) -> bool:
+    async def check(self, client: hydrogram.Client, query: CallbackQuery) -> bool:
         """
         Checks if the CallbackQuery object has a matching listener or handler.
 
@@ -180,7 +182,7 @@ class CallbackQueryHandler(Handler):
         return listener_does_match or handler_does_match
 
     async def resolve_future_or_callback(
-        self, client: "hydrogram.Client", query: CallbackQuery, *args
+        self, client: hydrogram.Client, query: CallbackQuery, *args
     ) -> None:
         """
         Resolves the future or calls the callback of the listener. Will call the original handler if no listener.

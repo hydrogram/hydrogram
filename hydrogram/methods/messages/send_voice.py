@@ -17,41 +17,43 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import re
-from datetime import datetime
 from pathlib import Path
-from typing import BinaryIO, Callable, Optional, Union
+from typing import TYPE_CHECKING, BinaryIO, Callable
 
 import hydrogram
 from hydrogram import StopTransmission, enums, raw, types, utils
 from hydrogram.errors import FilePartMissing
 from hydrogram.file_id import FileType
 
+if TYPE_CHECKING:
+    from datetime import datetime
+
 
 class SendVoice:
     async def send_voice(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        voice: Union[str, BinaryIO],
+        self: hydrogram.Client,
+        chat_id: int | str,
+        voice: str | BinaryIO,
         caption: str = "",
         *,
-        message_thread_id: Optional[int] = None,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
+        message_thread_id: int | None = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
         duration: int = 0,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        schedule_date: Optional[datetime] = None,
-        protect_content: Optional[bool] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        progress: Optional[Callable] = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        schedule_date: datetime | None = None,
+        protect_content: bool | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> Optional["types.Message"]:
+    ) -> types.Message | None:
         """Send audio files.
 
         .. include:: /_includes/usable-by/users-bots.rst

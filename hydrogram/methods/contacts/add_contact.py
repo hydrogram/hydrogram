@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,8 +25,8 @@ from hydrogram import raw, types
 
 class AddContact:
     async def add_contact(
-        self: "hydrogram.Client",
-        user_id: Union[int, str],
+        self: hydrogram.Client,
+        user_id: int | str,
         first_name: str,
         last_name: str = "",
         phone_number: str = "",

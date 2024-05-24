@@ -17,12 +17,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import base64
 import inspect
 import struct
 import time
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import aiosqlite
 
@@ -96,8 +98,8 @@ class SQLiteStorage(BaseStorage):
     def __init__(
         self,
         name: str,
-        workdir: Optional[Path] = None,
-        session_string: Optional[str] = None,
+        workdir: Path | None = None,
+        session_string: str | None = None,
         use_memory: bool = False,
     ):
         super().__init__(name)

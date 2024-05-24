@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,10 +25,10 @@ from hydrogram import raw, types
 
 class CreateGroup:
     async def create_group(
-        self: "hydrogram.Client",
+        self: hydrogram.Client,
         title: str,
-        users: Union[Union[int, str], list[Union[int, str]]],
-    ) -> "types.Chat":
+        users: int | str | list[int | str],
+    ) -> types.Chat:
         """Create a new basic group.
 
         .. note::

@@ -17,13 +17,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.types.object import Object
 from hydrogram.types.update import Update
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class ChatJoinRequest(Object, Update):
@@ -49,12 +53,12 @@ class ChatJoinRequest(Object, Update):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
-        chat: "types.Chat",
-        from_user: "types.User",
+        client: hydrogram.Client = None,
+        chat: types.Chat,
+        from_user: types.User,
         date: datetime,
-        bio: Optional[str] = None,
-        invite_link: "types.ChatInviteLink" = None,
+        bio: str | None = None,
+        invite_link: types.ChatInviteLink = None,
     ):
         super().__init__(client)
 
@@ -66,11 +70,11 @@ class ChatJoinRequest(Object, Update):
 
     @staticmethod
     def _parse(
-        client: "hydrogram.Client",
-        update: "raw.types.UpdateBotChatInviteRequester",
-        users: dict[int, "raw.types.User"],
-        chats: dict[int, "raw.types.Chat"],
-    ) -> "ChatJoinRequest":
+        client: hydrogram.Client,
+        update: raw.types.UpdateBotChatInviteRequester,
+        users: dict[int, raw.types.User],
+        chats: dict[int, raw.types.Chat],
+    ) -> ChatJoinRequest:
         chat_id = utils.get_raw_peer_id(update.peer)
 
         return ChatJoinRequest(

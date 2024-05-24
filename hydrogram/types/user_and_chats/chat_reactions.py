@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -40,10 +40,10 @@ class ChatReactions(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
-        all_are_enabled: Optional[bool] = None,
-        allow_custom_emoji: Optional[bool] = None,
-        reactions: Optional[list["types.Reaction"]] = None,
+        client: hydrogram.Client = None,
+        all_are_enabled: bool | None = None,
+        allow_custom_emoji: bool | None = None,
+        reactions: list[types.Reaction] | None = None,
     ):
         super().__init__(client)
 
@@ -52,7 +52,7 @@ class ChatReactions(Object):
         self.reactions = reactions
 
     @staticmethod
-    def _parse(client, chat_reactions: "raw.base.ChatReactions") -> Optional["ChatReactions"]:
+    def _parse(client, chat_reactions: raw.base.ChatReactions) -> ChatReactions | None:
         if isinstance(chat_reactions, raw.types.ChatReactionsAll):
             return ChatReactions(
                 client=client,

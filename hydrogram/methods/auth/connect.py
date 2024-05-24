@@ -17,8 +17,12 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import hydrogram
+from typing import TYPE_CHECKING
+
 from hydrogram.session import Session
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 class Connect:

@@ -17,8 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
-from typing import Optional
 
 from .tcp import TCP
 
@@ -40,7 +41,7 @@ class TCPAbridged(TCP):
             (bytes([length]) if length <= 126 else b"\x7f" + length.to_bytes(3, "little")) + data
         )
 
-    async def recv(self, length: int = 0) -> Optional[bytes]:
+    async def recv(self, length: int = 0) -> bytes | None:
         length = await super().recv(1)
 
         if length is None:

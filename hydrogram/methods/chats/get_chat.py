@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -25,8 +25,8 @@ from hydrogram import raw, types, utils
 
 class GetChat:
     async def get_chat(
-        self: "hydrogram.Client", chat_id: Union[int, str]
-    ) -> Union["types.Chat", "types.ChatPreview"]:
+        self: hydrogram.Client, chat_id: int | str
+    ) -> types.Chat | types.ChatPreview:
         """Get up to date information about a chat.
 
         Information include current name of the user for one-on-one conversations, current username of a user, group or

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -25,10 +25,10 @@ from hydrogram import raw
 
 class RequestCallbackAnswer:
     async def request_callback_answer(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         message_id: int,
-        callback_data: Union[str, bytes],
+        callback_data: str | bytes,
         timeout: int = 10,
     ):
         """Request a callback answer from bots.

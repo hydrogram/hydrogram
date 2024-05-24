@@ -17,14 +17,18 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import ClassVar, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
 
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.errors import StickersetInvalid
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Sticker(Object):
@@ -77,20 +81,20 @@ class Sticker(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         file_id: str,
         file_unique_id: str,
         width: int,
         height: int,
         is_animated: bool,
         is_video: bool,
-        file_name: Optional[str] = None,
-        mime_type: Optional[str] = None,
-        file_size: Optional[int] = None,
-        date: Optional[datetime] = None,
-        emoji: Optional[str] = None,
-        set_name: Optional[str] = None,
-        thumbs: Optional[list["types.Thumbnail"]] = None,
+        file_name: str | None = None,
+        mime_type: str | None = None,
+        file_size: int | None = None,
+        date: datetime | None = None,
+        emoji: str | None = None,
+        set_name: str | None = None,
+        thumbs: list[types.Thumbnail] | None = None,
     ):
         super().__init__(client)
 
@@ -146,11 +150,9 @@ class Sticker(Object):
     @staticmethod
     async def _parse(
         client,
-        sticker: "raw.types.Document",
-        document_attributes: dict[
-            type["raw.base.DocumentAttribute"], "raw.base.DocumentAttribute"
-        ],
-    ) -> "Sticker":
+        sticker: raw.types.Document,
+        document_attributes: dict[type[raw.base.DocumentAttribute], raw.base.DocumentAttribute],
+    ) -> Sticker:
         sticker_attributes = (
             document_attributes.get(raw.types.DocumentAttributeSticker)
             or document_attributes[raw.types.DocumentAttributeCustomEmoji]

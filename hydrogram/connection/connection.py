@@ -17,9 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import asyncio
 import logging
-from typing import Optional
 
 from hydrogram.session.internals import DataCenter
 
@@ -72,5 +73,5 @@ class Connection:
     async def send(self, data: bytes):
         await self.protocol.send(data)
 
-    async def recv(self) -> Optional[bytes]:
+    async def recv(self) -> bytes | None:
         return await self.protocol.recv()

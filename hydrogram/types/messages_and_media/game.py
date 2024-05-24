@@ -69,7 +69,7 @@ class Game(Object):
 
     @staticmethod
     def _parse(client, message: "raw.types.Message") -> "Game":
-        game: "raw.types.Game" = message.media.game
+        game: raw.types.Game = message.media.game
         animation = None
 
         if game.document:

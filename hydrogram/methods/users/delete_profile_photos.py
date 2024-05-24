@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, utils
@@ -25,9 +25,7 @@ from hydrogram.file_id import FileType
 
 
 class DeleteProfilePhotos:
-    async def delete_profile_photos(
-        self: "hydrogram.Client", photo_ids: Union[str, list[str]]
-    ) -> bool:
+    async def delete_profile_photos(self: hydrogram.Client, photo_ids: str | list[str]) -> bool:
         """Delete your own profile photos.
 
         .. include:: /_includes/usable-by/users.rst

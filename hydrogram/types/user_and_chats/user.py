@@ -17,15 +17,19 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import html
-from datetime import datetime
-from typing import Optional, Union
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, filters, raw, types, utils
 from hydrogram.types.object import Object
 from hydrogram.types.pyromod import ListenerTypes
 from hydrogram.types.update import Update
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Link(str):
@@ -48,7 +52,7 @@ class Link(str):
     def __new__(cls, url, text, style):
         return str.__new__(cls, Link.format(url, text, style))
 
-    def __call__(self, other: Optional[str] = None, *, style: Optional[str] = None):
+    def __call__(self, other: str | None = None, *, style: str | None = None):
         return Link.format(self.url, other or self.text, style or self.style)
 
     def __str__(self):
@@ -155,33 +159,33 @@ class User(Object, Update):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         id: int,
-        is_self: Optional[bool] = None,
-        is_contact: Optional[bool] = None,
-        is_mutual_contact: Optional[bool] = None,
-        is_deleted: Optional[bool] = None,
-        is_bot: Optional[bool] = None,
-        is_verified: Optional[bool] = None,
-        is_restricted: Optional[bool] = None,
-        is_scam: Optional[bool] = None,
-        is_fake: Optional[bool] = None,
-        is_support: Optional[bool] = None,
-        is_premium: Optional[bool] = None,
-        first_name: Optional[str] = None,
-        last_name: Optional[str] = None,
-        status: "enums.UserStatus" = None,
-        last_online_date: Optional[datetime] = None,
-        next_offline_date: Optional[datetime] = None,
-        username: Optional[str] = None,
-        active_usernames: Optional[str] = None,
-        usernames: Optional[list["types.Username"]] = None,
-        language_code: Optional[str] = None,
-        emoji_status: Optional["types.EmojiStatus"] = None,
-        dc_id: Optional[int] = None,
-        phone_number: Optional[str] = None,
-        photo: "types.ChatPhoto" = None,
-        restrictions: Optional[list["types.Restriction"]] = None,
+        is_self: bool | None = None,
+        is_contact: bool | None = None,
+        is_mutual_contact: bool | None = None,
+        is_deleted: bool | None = None,
+        is_bot: bool | None = None,
+        is_verified: bool | None = None,
+        is_restricted: bool | None = None,
+        is_scam: bool | None = None,
+        is_fake: bool | None = None,
+        is_support: bool | None = None,
+        is_premium: bool | None = None,
+        first_name: str | None = None,
+        last_name: str | None = None,
+        status: enums.UserStatus = None,
+        last_online_date: datetime | None = None,
+        next_offline_date: datetime | None = None,
+        username: str | None = None,
+        active_usernames: str | None = None,
+        usernames: list[types.Username] | None = None,
+        language_code: str | None = None,
+        emoji_status: types.EmojiStatus | None = None,
+        dc_id: int | None = None,
+        phone_number: str | None = None,
+        photo: types.ChatPhoto = None,
+        restrictions: list[types.Restriction] | None = None,
     ):
         super().__init__(client)
 
@@ -225,7 +229,7 @@ class User(Object, Update):
         )
 
     @staticmethod
-    def _parse(client, user: "raw.base.User") -> Optional["User"]:
+    def _parse(client, user: raw.base.User) -> User | None:
         if user is None or isinstance(user, raw.types.UserEmpty):
             return None
 
@@ -262,7 +266,7 @@ class User(Object, Update):
         )
 
     @staticmethod
-    def _parse_status(user_status: "raw.base.UserStatus", is_bot: bool = False):
+    def _parse_status(user_status: raw.base.UserStatus, is_bot: bool = False):
         if isinstance(user_status, raw.types.UserStatusOnline):
             status, date = enums.UserStatus.ONLINE, user_status.expires
         elif isinstance(user_status, raw.types.UserStatusOffline):
@@ -295,7 +299,7 @@ class User(Object, Update):
         }
 
     @staticmethod
-    def _parse_user_status(client, user_status: "raw.types.UpdateUserStatus"):
+    def _parse_user_status(client, user_status: raw.types.UpdateUserStatus):
         return User(
             id=user_status.user_id,
             **User._parse_status(user_status.status),
@@ -304,13 +308,13 @@ class User(Object, Update):
 
     def listen(
         self,
-        filters: Optional["filters.Filter"] = None,
+        filters: filters.Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
         unallowed_click_alert: bool = True,
-        chat_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        chat_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
     ):
         """
         Bound method *listen* of :obj:`~hydrogram.types.User`.
@@ -365,12 +369,12 @@ class User(Object, Update):
     def ask(
         self,
         text: str,
-        filters: Optional["filters.Filter"] = None,
+        filters: filters.Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
         unallowed_click_alert: bool = True,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
         *args,
         **kwargs,
     ):
@@ -436,9 +440,9 @@ class User(Object, Update):
     def stop_listening(
         self,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        chat_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        chat_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
     ):
         """
         Stops listening for messages from the user. Calls Client.stop_listening() with the user_id set to the user's id.
