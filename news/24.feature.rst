@@ -1,0 +1,1 @@
+Added the `from __future__ import annotations` statement to the codebase in order to simplify the usage of the typing module. This statement allows for the use of forward references in type hints, which can improve code readability and maintainability.
