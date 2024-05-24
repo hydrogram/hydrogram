@@ -12,7 +12,7 @@ Custom Filters
 
 An example to demonstrate how custom filters work is to show how to create and use one for the
 :class:`~hydrogram.handlers.CallbackQueryHandler`. Note that callback queries updates are only received by bots as result
-of a user pressing an inline button attached to the bot's message; create and :doc:`authorize your bot <../start/auth>`,
+of a user pressing an inline button attached to the bot's message; create and :doc:`authorize your bot <../../start/auth>`,
 then send a message with an inline keyboard to yourself. This allows you to test your filter by pressing the inline
 button:
 

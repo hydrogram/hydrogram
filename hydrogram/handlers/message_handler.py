@@ -18,6 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from inspect import iscoroutinefunction
+from re import Match
 from typing import Callable, Optional
 
 from magic_filter import MagicFilter
@@ -124,12 +125,18 @@ class MessageHandler(Handler):
                 handler_does_match = await client.loop.run_in_executor(
                     client.executor, self.filters.resolve, message
                 )
+                if isinstance(handler_does_match, Match):
+                    message.matches = [handler_does_match]
+                elif isinstance(handler_does_match, list):
+                    message.matches = handler_does_match
             elif iscoroutinefunction(self.filters.__call__):
                 handler_does_match = await self.filters(client, message)
             else:
                 handler_does_match = await client.loop.run_in_executor(
                     client.executor, self.filters, client, message
                 )
+        else:
+            handler_does_match = True
 
         # let handler get the chance to handle if listener
         # exists but its filters doesn't match

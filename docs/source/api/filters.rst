@@ -2,7 +2,7 @@ Update Filters
 ==============
 
 Filters are objects that can be used to filter the content of incoming updates.
-:doc:`Read more about how filters work <../topics/use-filters>`.
+:doc:`Read more about how filters work <../topics/filters/use-filters>`.
 
 Details
 -------

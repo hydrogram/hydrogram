@@ -17,7 +17,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from asyncio import iscoroutinefunction
+from re import Match
 from typing import Callable
+
+from magic_filter import MagicFilter
+
+import hydrogram
+from hydrogram.types import InlineQuery
 
 from .handler import Handler
 
@@ -48,3 +55,23 @@ class InlineQueryHandler(Handler):
 
     def __init__(self, callback: Callable, filters=None):
         super().__init__(callback, filters)
+
+    async def check(self, client: "hydrogram.Client", inline: InlineQuery):
+        if callable(self.filters):
+            if isinstance(self.filters, MagicFilter):
+                filters = await client.loop.run_in_executor(
+                    client.executor, self.filters.resolve, inline
+                )
+                if isinstance(filters, Match):
+                    inline.matches = [filters]
+                elif isinstance(filters, list):
+                    inline.matches = filters
+            elif iscoroutinefunction(self.filters.__call__):
+                filters = await self.filters(client, inline)
+            else:
+                filters = await client.loop.run_in_executor(
+                    client.executor, self.filters, client, inline
+                )
+            return filters
+
+        return True

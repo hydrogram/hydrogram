@@ -142,8 +142,7 @@ Meta
     :hidden:
     :caption: Topic Guides
 
-    topics/use-filters
-    topics/create-filters
+    topics/filters/index
     topics/more-on-updates
     topics/client-settings
     topics/speedups

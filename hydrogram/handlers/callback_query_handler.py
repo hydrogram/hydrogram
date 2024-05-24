@@ -18,6 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from asyncio import iscoroutinefunction
+from re import Match
 from typing import Callable, Optional
 
 from magic_filter import MagicFilter
@@ -146,12 +147,18 @@ class CallbackQueryHandler(Handler):
                 handler_does_match = await client.loop.run_in_executor(
                     client.executor, self.filters.resolve, query
                 )
+                if isinstance(handler_does_match, Match):
+                    query.matches = [handler_does_match]
+                elif isinstance(handler_does_match, list):
+                    query.matches = handler_does_match
             elif iscoroutinefunction(self.filters.__call__):
                 handler_does_match = await self.filters(client, query)
             else:
                 handler_does_match = await client.loop.run_in_executor(
                     client.executor, self.filters, client, query
                 )
+        else:
+            handler_does_match = True
 
         data = self.compose_data_identifier(query)
 

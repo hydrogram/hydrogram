@@ -1,7 +1,7 @@
 Using Filters
 =============
 
-So far we've seen :doc:`how to register a callback function <../start/updates>` that executes every time an update comes
+So far we've seen :doc:`how to register a callback function <../../start/updates>` that executes every time an update comes
 from the server. Now, let's explore :obj:`~hydrogram.filters` which provide a fine-grain control over the types of
 updates that can trigger your callback functions.
 
@@ -109,3 +109,34 @@ Multiple handlers using different filters can coexist.
     @app.on_message(F.chat.username.is_("HydrogramChat"))
     async def from_hydrogramchat(client, message):
         print("New message in @HydrogramChat")
+
+Magic Filters
+-------------
+
+This is a external package maintained by the AIOgram team.
+
+You can refer to the `official documentation <https://docs.aiogram.dev/en/dev-3.x/dispatcher/filters/magic_filters.html>`_ for more information.
+
+.. code-block:: python
+
+    from magic_filter import F
+
+    @app.on_message(F.text == 'hello')  # lambda message: message.text == 'hello'
+    async def my_handler(client, message):
+        print("Hello!")
+
+    @app.on_inline_query(F.data == 'button:1') # lambda callback_query: callback_query.data == 'button:1'
+    async def my_handler(client, callback_query):
+        print("Button 1 pressed")
+
+    @app.on_message(F.text.startswith('foo')) # lambda message: message.text.startswith('foo')
+    async def my_handler(client, message):
+        print("Message starts with 'foo'")
+
+    @app.on_message(F.content_type.in_({'text', 'sticker'})) # lambda message: message.content_type in {'text', 'sticker'}
+    async def my_handler(client, message):
+        print("Message is text or sticker")
+
+    @app.on_message(F.text.regexp(r'\d+')) # lambda message: re.match(r'\d+', message.text)
+    async def my_handler(client, message):
+        print("Message contains a number")
