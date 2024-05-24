@@ -17,20 +17,24 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import AsyncGenerator
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
 
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+
 
 class SearchGlobal:
     async def search_global(
-        self: "hydrogram.Client",
+        self: hydrogram.Client,
         query: str = "",
-        filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
+        filter: enums.MessagesFilter = enums.MessagesFilter.EMPTY,
         limit: int = 0,
-    ) -> Optional[AsyncGenerator["types.Message", None]]:
+    ) -> AsyncGenerator[types.Message, None] | None:
         """Search messages globally from all of your chats.
 
         If you want to get the messages count only, see :meth:`~hydrogram.Client.search_global_count`.

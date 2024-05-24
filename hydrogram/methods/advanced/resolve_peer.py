@@ -17,9 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
 import re
-from typing import Union
 
 import hydrogram
 from hydrogram import raw, utils
@@ -30,8 +31,8 @@ log = logging.getLogger(__name__)
 
 class ResolvePeer:
     async def resolve_peer(
-        self: "hydrogram.Client", peer_id: Union[int, str]
-    ) -> Union[raw.base.InputPeer, raw.base.InputUser, raw.base.InputChannel]:
+        self: hydrogram.Client, peer_id: int | str
+    ) -> raw.base.InputPeer | raw.base.InputUser | raw.base.InputChannel:
         """Get the InputPeer of a known peer id.
         Useful whenever an InputPeer type is required.
 

@@ -51,7 +51,7 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
-    "ruff>=0.4.4",
+    "ruff>=0.4.5",
     "pytest>=7.4.3",
     "pytest-asyncio>=0.23.2",
     "pytest-cov>=4.1.0",
@@ -95,7 +95,6 @@ package = "hydrogram"
 [tool.ruff]
 line-length = 99
 target-version = "py39"
-preview = true
 
 [tool.ruff.lint]
 select = [
@@ -113,14 +112,18 @@ select = [
     "RUF",  # ruff
     "G",    # flake8-logging-format
     "TID",  # flake8-tidy-imports
+    "TCH",  # flake8-type-checking
+    "FA",   # flake8-future-annotations
 ]
 ignore = ["RUF001", "RUF002", "RUF003", "E203", "PERF203"]
+preview = true
 
 [tool.ruff.lint.isort]
 known-first-party = ["hydrogram"]
 
 [tool.ruff.format]
 docstring-code-format = true
+preview = true
 
 [tool.towncrier]
 package = "hydrogram"

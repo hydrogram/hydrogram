@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -25,7 +25,7 @@ from hydrogram import raw
 
 class SetChatProtectedContent:
     async def set_chat_protected_content(
-        self: "hydrogram.Client", chat_id: Union[int, str], enabled: bool
+        self: hydrogram.Client, chat_id: int | str, enabled: bool
     ) -> bool:
         """Set the chat protected content setting.
 

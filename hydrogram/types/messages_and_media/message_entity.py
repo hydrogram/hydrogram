@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import enums, raw, types
@@ -56,14 +56,14 @@ class MessageEntity(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
-        type: "enums.MessageEntityType",
+        client: hydrogram.Client = None,
+        type: enums.MessageEntityType,
         offset: int,
         length: int,
-        url: Optional[str] = None,
-        user: "types.User" = None,
-        language: Optional[str] = None,
-        custom_emoji_id: Optional[int] = None,
+        url: str | None = None,
+        user: types.User = None,
+        language: str | None = None,
+        custom_emoji_id: int | None = None,
     ):
         super().__init__(client)
 
@@ -76,7 +76,7 @@ class MessageEntity(Object):
         self.custom_emoji_id = custom_emoji_id
 
     @staticmethod
-    def _parse(client, entity: "raw.base.MessageEntity", users: dict) -> Optional["MessageEntity"]:
+    def _parse(client, entity: raw.base.MessageEntity, users: dict) -> MessageEntity | None:
         # Special case for InputMessageEntityMentionName -> MessageEntityType.TEXT_MENTION
         # This happens in case of UpdateShortSentMessage inside send_message() where entities are parsed from the input
         if isinstance(entity, raw.types.InputMessageEntityMentionName):

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -80,14 +80,14 @@ class InlineQueryResultLocation(InlineQueryResult):
         title: str,
         latitude: float,
         longitude: float,
-        horizontal_accuracy: Optional[float] = None,
-        live_period: Optional[int] = None,
-        heading: Optional[int] = None,
-        proximity_alert_radius: Optional[int] = None,
-        id: Optional[str] = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-        input_message_content: "types.InputMessageContent" = None,
-        thumb_url: Optional[str] = None,
+        horizontal_accuracy: float | None = None,
+        live_period: int | None = None,
+        heading: int | None = None,
+        proximity_alert_radius: int | None = None,
+        id: str | None = None,
+        reply_markup: types.InlineKeyboardMarkup = None,
+        input_message_content: types.InputMessageContent = None,
+        thumb_url: str | None = None,
         thumb_width: int = 0,
         thumb_height: int = 0,
     ):
@@ -104,7 +104,7 @@ class InlineQueryResultLocation(InlineQueryResult):
         self.thumb_width = thumb_width
         self.thumb_height = thumb_height
 
-    async def write(self, client: "hydrogram.Client"):
+    async def write(self, client: hydrogram.Client):
         return raw.types.InputBotInlineResult(
             id=self.id,
             type=self.type,

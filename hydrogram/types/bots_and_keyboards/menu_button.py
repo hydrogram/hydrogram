@@ -17,9 +17,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import hydrogram
-from hydrogram import raw
+from typing import TYPE_CHECKING
+
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    import hydrogram
+    from hydrogram import raw
 
 
 class MenuButton(Object):

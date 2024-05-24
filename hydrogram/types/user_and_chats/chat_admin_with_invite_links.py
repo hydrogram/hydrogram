@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -41,9 +41,9 @@ class ChatAdminWithInviteLinks(Object):
     def __init__(
         self,
         *,
-        admin: "types.User",
+        admin: types.User,
         chat_invite_links_count: int,
-        revoked_chat_invite_links_count: Optional[int] = None,
+        revoked_chat_invite_links_count: int | None = None,
     ):
         super().__init__()
 
@@ -53,10 +53,10 @@ class ChatAdminWithInviteLinks(Object):
 
     @staticmethod
     def _parse(
-        client: "hydrogram.Client",
-        admin: "raw.types.ChatAdminWithInvites",
-        users: Optional[dict[int, "raw.types.User"]] = None,
-    ) -> "ChatAdminWithInviteLinks":
+        client: hydrogram.Client,
+        admin: raw.types.ChatAdminWithInvites,
+        users: dict[int, raw.types.User] | None = None,
+    ) -> ChatAdminWithInviteLinks:
         return ChatAdminWithInviteLinks(
             admin=types.User._parse(client, users[admin.admin_id]),
             chat_invite_links_count=admin.invites_count,

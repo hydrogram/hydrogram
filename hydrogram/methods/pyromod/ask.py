@@ -17,25 +17,29 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
-import hydrogram
-from hydrogram.filters import Filter
+from typing import TYPE_CHECKING
+
 from hydrogram.types import ListenerTypes
+
+if TYPE_CHECKING:
+    import hydrogram
+    from hydrogram.filters import Filter
 
 
 class Ask:
     async def ask(
-        self: "hydrogram.Client",
-        chat_id: Union[Union[int, str], list[Union[int, str]]],
+        self: hydrogram.Client,
+        chat_id: int | str | list[int | str],
         text: str,
-        filters: Optional[Filter] = None,
+        filters: Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
         unallowed_click_alert: bool = True,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
         *args,
         **kwargs,
     ):

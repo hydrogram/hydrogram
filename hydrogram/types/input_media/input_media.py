@@ -17,10 +17,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import BinaryIO, Optional, Union
+from __future__ import annotations
 
-from hydrogram.types.messages_and_media import MessageEntity
+from typing import TYPE_CHECKING, BinaryIO
+
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from hydrogram.types.messages_and_media import MessageEntity
 
 
 class InputMedia(Object):
@@ -37,10 +41,10 @@ class InputMedia(Object):
 
     def __init__(
         self,
-        media: Union[str, BinaryIO],
+        media: str | BinaryIO,
         caption: str = "",
-        parse_mode: Optional[str] = None,
-        caption_entities: Optional[list[MessageEntity]] = None,
+        parse_mode: str | None = None,
+        caption_entities: list[MessageEntity] | None = None,
     ):
         super().__init__()
 

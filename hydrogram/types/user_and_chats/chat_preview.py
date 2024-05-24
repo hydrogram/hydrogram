@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -47,12 +47,12 @@ class ChatPreview(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         title: str,
         type: str,
         members_count: int,
-        photo: "types.Photo" = None,
-        members: Optional[list["types.User"]] = None,
+        photo: types.Photo = None,
+        members: list[types.User] | None = None,
     ):
         super().__init__(client)
 
@@ -63,7 +63,7 @@ class ChatPreview(Object):
         self.members = members
 
     @staticmethod
-    def _parse(client, chat_invite: "raw.types.ChatInvite") -> "ChatPreview":
+    def _parse(client, chat_invite: raw.types.ChatInvite) -> ChatPreview:
         return ChatPreview(
             title=chat_invite.title,
             type=(

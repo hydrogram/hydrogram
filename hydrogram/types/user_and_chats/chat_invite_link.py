@@ -17,12 +17,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class ChatInviteLink(Object):
@@ -73,16 +77,16 @@ class ChatInviteLink(Object):
         *,
         invite_link: str,
         date: datetime,
-        is_primary: Optional[bool] = None,
-        is_revoked: Optional[bool] = None,
-        creator: "types.User" = None,
-        name: Optional[str] = None,
-        creates_join_request: Optional[bool] = None,
-        start_date: Optional[datetime] = None,
-        expire_date: Optional[datetime] = None,
-        member_limit: Optional[int] = None,
-        member_count: Optional[int] = None,
-        pending_join_request_count: Optional[int] = None,
+        is_primary: bool | None = None,
+        is_revoked: bool | None = None,
+        creator: types.User = None,
+        name: str | None = None,
+        creates_join_request: bool | None = None,
+        start_date: datetime | None = None,
+        expire_date: datetime | None = None,
+        member_limit: int | None = None,
+        member_count: int | None = None,
+        pending_join_request_count: int | None = None,
     ):
         super().__init__()
 
@@ -101,10 +105,10 @@ class ChatInviteLink(Object):
 
     @staticmethod
     def _parse(
-        client: "hydrogram.Client",
-        invite: "raw.base.ExportedChatInvite",
-        users: Optional[dict[int, "raw.types.User"]] = None,
-    ) -> Optional["ChatInviteLink"]:
+        client: hydrogram.Client,
+        invite: raw.base.ExportedChatInvite,
+        users: dict[int, raw.types.User] | None = None,
+    ) -> ChatInviteLink | None:
         if not isinstance(invite, raw.types.ChatInviteExported):
             return None
 

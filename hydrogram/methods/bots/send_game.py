@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -25,21 +25,19 @@ from hydrogram import raw, types, utils
 
 class SendGame:
     async def send_game(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         game_short_name: str,
         *,
-        message_thread_id: Optional[int] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        protect_content: Optional[bool] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "types.Message":
+        message_thread_id: int | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        protect_content: bool | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> types.Message:
         """Send a game.
 
         .. include:: /_includes/usable-by/bots.rst

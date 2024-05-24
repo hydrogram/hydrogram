@@ -17,16 +17,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
 
 
 class GetCommonChats:
-    async def get_common_chats(
-        self: "hydrogram.Client", user_id: Union[int, str]
-    ) -> list["types.Chat"]:
+    async def get_common_chats(self: hydrogram.Client, user_id: int | str) -> list[types.Chat]:
         """Get the common chats you have with a user.
 
         .. include:: /_includes/usable-by/users.rst

@@ -17,14 +17,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
 
 
 class GetChatMembersCount:
-    async def get_chat_members_count(self: "hydrogram.Client", chat_id: Union[int, str]) -> int:
+    async def get_chat_members_count(self: hydrogram.Client, chat_id: int | str) -> int:
         """Get the number of members in a chat.
 
         .. include:: /_includes/usable-by/users-bots.rst

@@ -17,12 +17,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
-from collections.abc import Iterable
-from typing import Optional, Union
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 log = logging.getLogger(__name__)
 
@@ -32,12 +36,12 @@ log = logging.getLogger(__name__)
 
 class GetMessages:
     async def get_messages(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        message_ids: Optional[Union[int, Iterable[int]]] = None,
-        reply_to_message_ids: Optional[Union[int, Iterable[int]]] = None,
+        self: hydrogram.Client,
+        chat_id: int | str,
+        message_ids: int | Iterable[int] | None = None,
+        reply_to_message_ids: int | Iterable[int] | None = None,
         replies: int = 1,
-    ) -> Union["types.Message", list["types.Message"]]:
+    ) -> types.Message | list[types.Message]:
         """Get one or more messages from a chat by using message identifiers.
 
         You can retrieve up to 200 messages at once.

@@ -17,15 +17,19 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
 import re
-from datetime import datetime
 from pathlib import Path
-from typing import Optional, Union
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.file_id import FileType
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 log = logging.getLogger(__name__)
 
@@ -33,23 +37,21 @@ log = logging.getLogger(__name__)
 class SendMediaGroup:
     # TODO: Add progress parameter
     async def send_media_group(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         media: list[
-            Union[
-                "types.InputMediaPhoto",
-                "types.InputMediaVideo",
-                "types.InputMediaAudio",
-                "types.InputMediaDocument",
-            ]
+            types.InputMediaPhoto
+            | types.InputMediaVideo
+            | types.InputMediaAudio
+            | types.InputMediaDocument
         ],
         *,
-        message_thread_id: Optional[int] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        schedule_date: Optional[datetime] = None,
-        protect_content: Optional[bool] = None,
-    ) -> list["types.Message"]:
+        message_thread_id: int | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        schedule_date: datetime | None = None,
+        protect_content: bool | None = None,
+    ) -> list[types.Message]:
         """Send a group of photos or videos as an album.
 
         .. include:: /_includes/usable-by/users-bots.rst

@@ -17,26 +17,30 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import Iterable
-from datetime import datetime
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from datetime import datetime
+
 
 class ForwardMessages:
     async def forward_messages(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        from_chat_id: Union[int, str],
-        message_ids: Union[int, Iterable[int]],
+        self: hydrogram.Client,
+        chat_id: int | str,
+        from_chat_id: int | str,
+        message_ids: int | Iterable[int],
         *,
-        message_thread_id: Optional[int] = None,
-        disable_notification: Optional[bool] = None,
-        schedule_date: Optional[datetime] = None,
-        protect_content: Optional[bool] = None,
-    ) -> Union["types.Message", list["types.Message"]]:
+        message_thread_id: int | None = None,
+        disable_notification: bool | None = None,
+        schedule_date: datetime | None = None,
+        protect_content: bool | None = None,
+    ) -> types.Message | list[types.Message]:
         """Forward messages of any kind.
 
         .. include:: /_includes/usable-by/users-bots.rst

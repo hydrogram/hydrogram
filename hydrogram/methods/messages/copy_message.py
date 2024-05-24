@@ -17,38 +17,40 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-from datetime import datetime
-from typing import Optional, Union
+from __future__ import annotations
 
-import hydrogram
-from hydrogram import enums, types
+import logging
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from datetime import datetime
+
+    import hydrogram
+    from hydrogram import enums, types
 
 log = logging.getLogger(__name__)
 
 
 class CopyMessage:
     async def copy_message(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        from_chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
+        from_chat_id: int | str,
         message_id: int,
-        caption: Optional[str] = None,
+        caption: str | None = None,
         *,
-        message_thread_id: Optional[int] = None,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        schedule_date: Optional[datetime] = None,
-        protect_content: Optional[bool] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "types.Message":
+        message_thread_id: int | None = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        schedule_date: datetime | None = None,
+        protect_content: bool | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> types.Message:
         """Copy messages of any kind.
 
         The method is analogous to the method :meth:`~Client.forward_messages`, but the copied message doesn't have a

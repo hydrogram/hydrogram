@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -58,12 +58,12 @@ class ReplyKeyboardMarkup(Object):
 
     def __init__(
         self,
-        keyboard: list[list[Union["types.KeyboardButton", str]]],
-        is_persistent: Optional[bool] = None,
-        resize_keyboard: Optional[bool] = None,
-        one_time_keyboard: Optional[bool] = None,
-        selective: Optional[bool] = None,
-        placeholder: Optional[str] = None,
+        keyboard: list[list[types.KeyboardButton | str]],
+        is_persistent: bool | None = None,
+        resize_keyboard: bool | None = None,
+        one_time_keyboard: bool | None = None,
+        selective: bool | None = None,
+        placeholder: str | None = None,
     ):
         super().__init__()
 
@@ -75,7 +75,7 @@ class ReplyKeyboardMarkup(Object):
         self.placeholder = placeholder
 
     @staticmethod
-    def read(kb: "raw.base.ReplyMarkup"):
+    def read(kb: raw.base.ReplyMarkup):
         keyboard = []
 
         for i in kb.rows:
@@ -91,7 +91,7 @@ class ReplyKeyboardMarkup(Object):
             placeholder=kb.placeholder,
         )
 
-    async def write(self, _: "hydrogram.Client"):
+    async def write(self, _: hydrogram.Client):
         return raw.types.ReplyKeyboardMarkup(
             rows=[
                 raw.types.KeyboardButtonRow(

@@ -17,21 +17,25 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
-from collections.abc import AsyncGenerator
-from typing import Optional, Union
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, raw, types
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
 
 log = logging.getLogger(__name__)
 
 
 async def get_chunk(
-    client: "hydrogram.Client",
-    chat_id: Union[int, str],
+    client: hydrogram.Client,
+    chat_id: int | str,
     offset: int,
-    filter: "enums.ChatMembersFilter",
+    filter: enums.ChatMembersFilter,
     limit: int,
     query: str,
 ):
@@ -63,12 +67,12 @@ async def get_chunk(
 
 class GetChatMembers:
     async def get_chat_members(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         query: str = "",
         limit: int = 0,
-        filter: "enums.ChatMembersFilter" = enums.ChatMembersFilter.SEARCH,
-    ) -> Optional[AsyncGenerator["types.ChatMember", None]]:
+        filter: enums.ChatMembersFilter = enums.ChatMembersFilter.SEARCH,
+    ) -> AsyncGenerator[types.ChatMember, None] | None:
         """Get the members list of a chat.
 
         A chat can be either a basic group, a supergroup or a channel.

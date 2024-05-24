@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -46,9 +46,9 @@ class InputTextMessageContent(InputMessageContent):
     def __init__(
         self,
         message_text: str,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        entities: Optional[list["types.MessageEntity"]] = None,
-        disable_web_page_preview: Optional[bool] = None,
+        parse_mode: enums.ParseMode | None = None,
+        entities: list[types.MessageEntity] | None = None,
+        disable_web_page_preview: bool | None = None,
     ):
         super().__init__()
 
@@ -57,7 +57,7 @@ class InputTextMessageContent(InputMessageContent):
         self.entities = entities
         self.disable_web_page_preview = disable_web_page_preview
 
-    async def write(self, client: "hydrogram.Client", reply_markup):
+    async def write(self, client: hydrogram.Client, reply_markup):
         message, entities = (
             await utils.parse_text_entities(
                 client, self.message_text, self.parse_mode, self.entities

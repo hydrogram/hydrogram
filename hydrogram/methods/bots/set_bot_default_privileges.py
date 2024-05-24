@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,9 +25,9 @@ from hydrogram import raw, types
 
 class SetBotDefaultPrivileges:
     async def set_bot_default_privileges(
-        self: "hydrogram.Client",
-        privileges: "types.ChatPrivileges" = None,
-        for_channels: Optional[bool] = None,
+        self: hydrogram.Client,
+        privileges: types.ChatPrivileges = None,
+        for_channels: bool | None = None,
     ) -> bool:
         """Change the default privileges requested by the bot when it's added as an administrator to groups or channels.
 

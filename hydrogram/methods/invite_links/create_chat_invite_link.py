@@ -17,22 +17,26 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 
+if TYPE_CHECKING:
+    from datetime import datetime
+
 
 class CreateChatInviteLink:
     async def create_chat_invite_link(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        name: Optional[str] = None,
-        expire_date: Optional[datetime] = None,
-        member_limit: Optional[int] = None,
-        creates_join_request: Optional[bool] = None,
-    ) -> "types.ChatInviteLink":
+        self: hydrogram.Client,
+        chat_id: int | str,
+        name: str | None = None,
+        expire_date: datetime | None = None,
+        member_limit: int | None = None,
+        creates_join_request: bool | None = None,
+    ) -> types.ChatInviteLink:
         """Create an additional invite link for a chat.
 
         You must be an administrator in the chat for this to work and must have the appropriate admin rights.

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -49,12 +49,12 @@ class Venue(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
-        location: "types.Location",
+        client: hydrogram.Client = None,
+        location: types.Location,
         title: str,
         address: str,
-        foursquare_id: Optional[str] = None,
-        foursquare_type: Optional[str] = None,
+        foursquare_id: str | None = None,
+        foursquare_type: str | None = None,
     ):
         super().__init__(client)
 
@@ -65,7 +65,7 @@ class Venue(Object):
         self.foursquare_type = foursquare_type
 
     @staticmethod
-    def _parse(client, venue: "raw.types.MessageMediaVenue"):
+    def _parse(client, venue: raw.types.MessageMediaVenue):
         return Venue(
             location=types.Location._parse(client, venue.geo),
             title=venue.title,

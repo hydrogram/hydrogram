@@ -16,10 +16,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
-from hydrogram import raw
+from typing import TYPE_CHECKING
+
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from hydrogram import raw
 
 
 class ForumTopicEdited(Object):
@@ -40,9 +44,9 @@ class ForumTopicEdited(Object):
     def __init__(
         self,
         *,
-        title: Optional[str] = None,
-        icon_color: Optional[int] = None,
-        icon_emoji_id: Optional[str] = None,
+        title: str | None = None,
+        icon_color: int | None = None,
+        icon_emoji_id: str | None = None,
     ):
         super().__init__()
 
@@ -51,7 +55,7 @@ class ForumTopicEdited(Object):
         self.icon_emoji_id = icon_emoji_id
 
     @staticmethod
-    def _parse(action: "raw.types.MessageActionTopicEdit") -> "ForumTopicEdited":
+    def _parse(action: raw.types.MessageActionTopicEdit) -> ForumTopicEdited:
         return ForumTopicEdited(
             title=getattr(action, "title", None),
             icon_color=getattr(action, "icon_color", None),

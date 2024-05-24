@@ -17,8 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import math
-from typing import BinaryIO, Optional, Union
+from typing import BinaryIO
 
 import hydrogram
 from hydrogram import types
@@ -27,11 +29,11 @@ from hydrogram.file_id import FileId
 
 class StreamMedia:
     async def stream_media(
-        self: "hydrogram.Client",
-        message: Union["types.Message", str],
+        self: hydrogram.Client,
+        message: types.Message | str,
         limit: int = 0,
         offset: int = 0,
-    ) -> Optional[Union[str, BinaryIO]]:
+    ) -> str | BinaryIO | None:
         """Stream the media from a message chunk by chunk.
 
         You can use this method to partially download a file into memory or to selectively download chunks of file.

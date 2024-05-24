@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -89,25 +89,25 @@ class WebPage(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         id: str,
         url: str,
         display_url: str,
-        type: Optional[str] = None,
-        site_name: Optional[str] = None,
-        title: Optional[str] = None,
-        description: Optional[str] = None,
-        audio: "types.Audio" = None,
-        document: "types.Document" = None,
-        photo: "types.Photo" = None,
-        animation: "types.Animation" = None,
-        video: "types.Video" = None,
-        embed_url: Optional[str] = None,
-        embed_type: Optional[str] = None,
-        embed_width: Optional[int] = None,
-        embed_height: Optional[int] = None,
-        duration: Optional[int] = None,
-        author: Optional[str] = None,
+        type: str | None = None,
+        site_name: str | None = None,
+        title: str | None = None,
+        description: str | None = None,
+        audio: types.Audio = None,
+        document: types.Document = None,
+        photo: types.Photo = None,
+        animation: types.Animation = None,
+        video: types.Video = None,
+        embed_url: str | None = None,
+        embed_type: str | None = None,
+        embed_width: int | None = None,
+        embed_height: int | None = None,
+        duration: int | None = None,
+        author: str | None = None,
     ):
         super().__init__(client)
 
@@ -131,7 +131,7 @@ class WebPage(Object):
         self.author = author
 
     @staticmethod
-    def _parse(client, webpage: "raw.types.WebPage") -> "WebPage":
+    def _parse(client, webpage: raw.types.WebPage) -> WebPage:
         audio = None
         document = None
         photo = None

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,11 +25,11 @@ from hydrogram import raw, types
 
 class GetGameHighScores:
     async def get_game_high_scores(
-        self: "hydrogram.Client",
-        user_id: Union[int, str],
-        chat_id: Union[int, str],
-        message_id: Optional[int] = None,
-    ) -> list["types.GameHighScore"]:
+        self: hydrogram.Client,
+        user_id: int | str,
+        chat_id: int | str,
+        message_id: int | None = None,
+    ) -> list[types.GameHighScore]:
         """Get data for high score tables.
 
         .. include:: /_includes/usable-by/bots.rst

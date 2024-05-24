@@ -17,13 +17,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Audio(Object):
@@ -65,17 +69,17 @@ class Audio(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         file_id: str,
         file_unique_id: str,
         duration: int,
-        performer: Optional[str] = None,
-        title: Optional[str] = None,
-        file_name: Optional[str] = None,
-        mime_type: Optional[str] = None,
-        file_size: Optional[int] = None,
-        date: Optional[datetime] = None,
-        thumbs: Optional[list["types.Thumbnail"]] = None,
+        performer: str | None = None,
+        title: str | None = None,
+        file_name: str | None = None,
+        mime_type: str | None = None,
+        file_size: int | None = None,
+        date: datetime | None = None,
+        thumbs: list[types.Thumbnail] | None = None,
     ):
         super().__init__(client)
 
@@ -93,10 +97,10 @@ class Audio(Object):
     @staticmethod
     def _parse(
         client,
-        audio: "raw.types.Document",
-        audio_attributes: "raw.types.DocumentAttributeAudio",
+        audio: raw.types.Document,
+        audio_attributes: raw.types.DocumentAttributeAudio,
         file_name: str,
-    ) -> "Audio":
+    ) -> Audio:
         return Audio(
             file_id=FileId(
                 file_type=FileType.AUDIO,

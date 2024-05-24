@@ -17,10 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import io
 import re
 from pathlib import Path
-from typing import Optional, Union
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -29,13 +30,13 @@ from hydrogram.file_id import FileType
 
 class EditMessageMedia:
     async def edit_message_media(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         message_id: int,
-        media: "types.InputMedia",
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-        file_name: Optional[str] = None,
-    ) -> "types.Message":
+        media: types.InputMedia,
+        reply_markup: types.InlineKeyboardMarkup = None,
+        file_name: str | None = None,
+    ) -> types.Message:
         """Edit animation, audio, document, photo or video messages.
 
         If a message is a part of a message album, then it can be edited only to a photo or a video. Otherwise, the

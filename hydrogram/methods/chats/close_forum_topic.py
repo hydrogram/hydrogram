@@ -16,16 +16,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
 
 
 class CloseForumTopic:
-    async def close_forum_topic(
-        self: "hydrogram.Client", chat_id: Union[int, str], topic_id: int
-    ) -> bool:
+    async def close_forum_topic(self: hydrogram.Client, chat_id: int | str, topic_id: int) -> bool:
         """Close a forum topic.
 
         .. include:: /_includes/usable-by/users-bots.rst

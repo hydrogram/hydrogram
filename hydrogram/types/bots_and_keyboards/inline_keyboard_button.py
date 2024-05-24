@@ -17,7 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any, Optional, Union
+from __future__ import annotations
+
+from typing import Any
 
 import hydrogram
 from hydrogram import raw, types
@@ -73,15 +75,15 @@ class InlineKeyboardButton(Object):
 
     def __init__(
         self,
-        text: Union[str, Any],
-        callback_data: Optional[Union[str, bytes]] = None,
-        url: Optional[str] = None,
-        web_app: "types.WebAppInfo" = None,
-        login_url: "types.LoginUrl" = None,
-        user_id: Optional[int] = None,
-        switch_inline_query: Optional[str] = None,
-        switch_inline_query_current_chat: Optional[str] = None,
-        callback_game: "types.CallbackGame" = None,
+        text: str | Any,
+        callback_data: str | bytes | None = None,
+        url: str | None = None,
+        web_app: types.WebAppInfo = None,
+        login_url: types.LoginUrl = None,
+        user_id: int | None = None,
+        switch_inline_query: str | None = None,
+        switch_inline_query_current_chat: str | None = None,
+        callback_game: types.CallbackGame = None,
     ):
         super().__init__()
 
@@ -97,7 +99,7 @@ class InlineKeyboardButton(Object):
         # self.pay = pay
 
     @staticmethod
-    def read(b: "raw.base.KeyboardButton"):
+    def read(b: raw.base.KeyboardButton):
         if isinstance(b, raw.types.KeyboardButtonCallback):
             # Try decode data to keep it as string, but if fails, fallback to bytes so we don't lose any information,
             # instead of decoding by ignoring/replacing errors.
@@ -129,7 +131,7 @@ class InlineKeyboardButton(Object):
             return InlineKeyboardButton(text=b.text, web_app=types.WebAppInfo(url=b.url))
         return None
 
-    async def write(self, client: "hydrogram.Client"):
+    async def write(self, client: hydrogram.Client):
         if self.callback_data is not None:
             # Telegram only wants bytes, but we are allowed to pass strings too, for convenience.
             data = (

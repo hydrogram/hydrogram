@@ -17,12 +17,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class ChatEvent(Object):
@@ -149,46 +153,46 @@ class ChatEvent(Object):
         *,
         id: int,
         date: datetime,
-        user: "types.User",
+        user: types.User,
         action: str,
-        old_description: Optional[str] = None,
-        new_description: Optional[str] = None,
-        old_history_ttl: Optional[int] = None,
-        new_history_ttl: Optional[int] = None,
-        old_linked_chat: "types.Chat" = None,
-        new_linked_chat: "types.Chat" = None,
-        old_photo: "types.Photo" = None,
-        new_photo: "types.Photo" = None,
-        old_title: Optional[str] = None,
-        new_title: Optional[str] = None,
-        old_username: Optional[str] = None,
-        new_username: Optional[str] = None,
-        old_chat_permissions: "types.ChatPermissions" = None,
-        new_chat_permissions: "types.ChatPermissions" = None,
-        deleted_message: "types.Message" = None,
-        old_message: "types.Message" = None,
-        new_message: "types.Message" = None,
-        invited_member: "types.ChatMember" = None,
-        old_administrator_privileges: "types.ChatMember" = None,
-        new_administrator_privileges: "types.ChatMember" = None,
-        old_member_permissions: "types.ChatMember" = None,
-        new_member_permissions: "types.ChatMember" = None,
-        stopped_poll: "types.Message" = None,
-        invites_enabled: "types.ChatMember" = None,
-        history_hidden: Optional[bool] = None,
-        signatures_enabled: Optional[bool] = None,
-        old_slow_mode: Optional[int] = None,
-        new_slow_mode: Optional[int] = None,
-        pinned_message: "types.Message" = None,
-        unpinned_message: "types.Message" = None,
-        old_invite_link: "types.ChatInviteLink" = None,
-        new_invite_link: "types.ChatInviteLink" = None,
-        revoked_invite_link: "types.ChatInviteLink" = None,
-        deleted_invite_link: "types.ChatInviteLink" = None,
-        created_forum_topic: "types.ForumTopic" = None,
-        old_forum_topic: "types.ForumTopic" = None,
-        new_forum_topic: "types.ForumTopic" = None,
-        deleted_forum_topic: "types.ForumTopic" = None,
+        old_description: str | None = None,
+        new_description: str | None = None,
+        old_history_ttl: int | None = None,
+        new_history_ttl: int | None = None,
+        old_linked_chat: types.Chat = None,
+        new_linked_chat: types.Chat = None,
+        old_photo: types.Photo = None,
+        new_photo: types.Photo = None,
+        old_title: str | None = None,
+        new_title: str | None = None,
+        old_username: str | None = None,
+        new_username: str | None = None,
+        old_chat_permissions: types.ChatPermissions = None,
+        new_chat_permissions: types.ChatPermissions = None,
+        deleted_message: types.Message = None,
+        old_message: types.Message = None,
+        new_message: types.Message = None,
+        invited_member: types.ChatMember = None,
+        old_administrator_privileges: types.ChatMember = None,
+        new_administrator_privileges: types.ChatMember = None,
+        old_member_permissions: types.ChatMember = None,
+        new_member_permissions: types.ChatMember = None,
+        stopped_poll: types.Message = None,
+        invites_enabled: types.ChatMember = None,
+        history_hidden: bool | None = None,
+        signatures_enabled: bool | None = None,
+        old_slow_mode: int | None = None,
+        new_slow_mode: int | None = None,
+        pinned_message: types.Message = None,
+        unpinned_message: types.Message = None,
+        old_invite_link: types.ChatInviteLink = None,
+        new_invite_link: types.ChatInviteLink = None,
+        revoked_invite_link: types.ChatInviteLink = None,
+        deleted_invite_link: types.ChatInviteLink = None,
+        created_forum_topic: types.ForumTopic = None,
+        old_forum_topic: types.ForumTopic = None,
+        new_forum_topic: types.ForumTopic = None,
+        deleted_forum_topic: types.ForumTopic = None,
     ):
         super().__init__()
 
@@ -257,10 +261,10 @@ class ChatEvent(Object):
 
     @staticmethod
     async def _parse(
-        client: "hydrogram.Client",
-        event: "raw.base.ChannelAdminLogEvent",
-        users: list["raw.base.User"],
-        chats: list["raw.base.Chat"],
+        client: hydrogram.Client,
+        event: raw.base.ChannelAdminLogEvent,
+        users: list[raw.base.User],
+        chats: list[raw.base.Chat],
     ):
         users = {i.id: i for i in users}
         chats = {i.id: i for i in chats}
@@ -268,63 +272,63 @@ class ChatEvent(Object):
         user = types.User._parse(client, users[event.user_id])
         action = event.action
 
-        old_description: Optional[str] = None
-        new_description: Optional[str] = None
+        old_description: str | None = None
+        new_description: str | None = None
 
-        old_history_ttl: Optional[int] = None
-        new_history_ttl: Optional[int] = None
+        old_history_ttl: int | None = None
+        new_history_ttl: int | None = None
 
-        old_linked_chat: Optional[types.Chat] = None
-        new_linked_chat: Optional[types.Chat] = None
+        old_linked_chat: types.Chat | None = None
+        new_linked_chat: types.Chat | None = None
 
-        old_photo: Optional[types.Photo] = None
-        new_photo: Optional[types.Photo] = None
+        old_photo: types.Photo | None = None
+        new_photo: types.Photo | None = None
 
-        old_title: Optional[str] = None
-        new_title: Optional[str] = None
+        old_title: str | None = None
+        new_title: str | None = None
 
-        old_username: Optional[str] = None
-        new_username: Optional[str] = None
+        old_username: str | None = None
+        new_username: str | None = None
 
-        old_chat_permissions: Optional[types.ChatPermissions] = None
-        new_chat_permissions: Optional[types.ChatPermissions] = None
+        old_chat_permissions: types.ChatPermissions | None = None
+        new_chat_permissions: types.ChatPermissions | None = None
 
-        deleted_message: Optional[types.Message] = None
+        deleted_message: types.Message | None = None
 
-        old_message: Optional[types.Message] = None
-        new_message: Optional[types.Message] = None
+        old_message: types.Message | None = None
+        new_message: types.Message | None = None
 
-        invited_member: Optional[types.ChatMember] = None
+        invited_member: types.ChatMember | None = None
 
-        old_administrator_privileges: Optional[types.ChatMember] = None
-        new_administrator_privileges: Optional[types.ChatMember] = None
+        old_administrator_privileges: types.ChatMember | None = None
+        new_administrator_privileges: types.ChatMember | None = None
 
-        old_member_permissions: Optional[types.ChatMember] = None
-        new_member_permissions: Optional[types.ChatMember] = None
+        old_member_permissions: types.ChatMember | None = None
+        new_member_permissions: types.ChatMember | None = None
 
-        stopped_poll: Optional[types.Message] = None
+        stopped_poll: types.Message | None = None
 
-        invites_enabled: Optional[bool] = None
+        invites_enabled: bool | None = None
 
-        history_hidden: Optional[bool] = None
+        history_hidden: bool | None = None
 
-        signatures_enabled: Optional[bool] = None
+        signatures_enabled: bool | None = None
 
-        old_slow_mode: Optional[int] = None
-        new_slow_mode: Optional[int] = None
+        old_slow_mode: int | None = None
+        new_slow_mode: int | None = None
 
-        pinned_message: Optional[types.Message] = None
-        unpinned_message: Optional[types.Message] = None
+        pinned_message: types.Message | None = None
+        unpinned_message: types.Message | None = None
 
-        old_invite_link: Optional[types.ChatInviteLink] = None
-        new_invite_link: Optional[types.ChatInviteLink] = None
-        revoked_invite_link: Optional[types.ChatInviteLink] = None
-        deleted_invite_link: Optional[types.ChatInviteLink] = None
+        old_invite_link: types.ChatInviteLink | None = None
+        new_invite_link: types.ChatInviteLink | None = None
+        revoked_invite_link: types.ChatInviteLink | None = None
+        deleted_invite_link: types.ChatInviteLink | None = None
 
-        created_forum_topic: Optional[types.ForumTopic] = None
-        old_forum_topic: Optional[types.ForumTopic] = None
-        new_forum_topic: Optional[types.ForumTopic] = None
-        deleted_forum_topic: Optional[types.ForumTopic] = None
+        created_forum_topic: types.ForumTopic | None = None
+        old_forum_topic: types.ForumTopic | None = None
+        new_forum_topic: types.ForumTopic | None = None
+        deleted_forum_topic: types.ForumTopic | None = None
 
         if isinstance(action, raw.types.ChannelAdminLogEventActionChangeAbout):
             old_description = action.prev_value

@@ -19,8 +19,10 @@
 
 import asyncio
 import logging
+from typing import TYPE_CHECKING
 
-import hydrogram
+if TYPE_CHECKING:
+    import hydrogram
 
 log = logging.getLogger(__name__)
 

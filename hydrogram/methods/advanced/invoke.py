@@ -17,24 +17,28 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
-from typing import Optional
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw
-from hydrogram.raw.core import TLObject
 from hydrogram.session import Session
+
+if TYPE_CHECKING:
+    from hydrogram.raw.core import TLObject
 
 log = logging.getLogger(__name__)
 
 
 class Invoke:
     async def invoke(
-        self: "hydrogram.Client",
+        self: hydrogram.Client,
         query: TLObject,
         retries: int = Session.MAX_RETRIES,
         timeout: float = Session.WAIT_TIMEOUT,
-        sleep_threshold: Optional[float] = None,
+        sleep_threshold: float | None = None,
     ):
         """Invoke raw Telegram functions.
 

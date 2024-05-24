@@ -17,11 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
-from datetime import datetime
 from functools import partial
-from re import Match
-from typing import BinaryIO, Callable, Optional, Union
+from typing import TYPE_CHECKING, BinaryIO, Callable
 
 import hydrogram
 from hydrogram import enums, filters, raw, types, utils
@@ -31,6 +31,10 @@ from hydrogram.parser import utils as parser_utils
 from hydrogram.types.object import Object
 from hydrogram.types.pyromod import ListenerTypes
 from hydrogram.types.update import Update
+
+if TYPE_CHECKING:
+    from datetime import datetime
+    from re import Match
 
 log = logging.getLogger(__name__)
 
@@ -340,90 +344,88 @@ class Message(Object, Update):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         id: int,
-        message_thread_id: Optional[int] = None,
-        from_user: "types.User" = None,
-        sender_chat: "types.Chat" = None,
-        date: Optional[datetime] = None,
-        chat: "types.Chat" = None,
-        topics: "types.ForumTopic" = None,
-        forward_from: "types.User" = None,
-        forward_sender_name: Optional[str] = None,
-        forward_from_chat: "types.Chat" = None,
-        forward_from_message_id: Optional[int] = None,
-        forward_signature: Optional[str] = None,
-        forward_date: Optional[datetime] = None,
-        is_topic_message: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_to_top_message_id: Optional[int] = None,
-        reply_to_message: "Message" = None,
-        mentioned: Optional[bool] = None,
-        empty: Optional[bool] = None,
-        service: "enums.MessageServiceType" = None,
-        scheduled: Optional[bool] = None,
-        from_scheduled: Optional[bool] = None,
-        media: "enums.MessageMediaType" = None,
-        edit_date: Optional[datetime] = None,
-        media_group_id: Optional[str] = None,
-        author_signature: Optional[str] = None,
-        has_protected_content: Optional[bool] = None,
-        has_media_spoiler: Optional[bool] = None,
+        message_thread_id: int | None = None,
+        from_user: types.User = None,
+        sender_chat: types.Chat = None,
+        date: datetime | None = None,
+        chat: types.Chat = None,
+        topics: types.ForumTopic = None,
+        forward_from: types.User = None,
+        forward_sender_name: str | None = None,
+        forward_from_chat: types.Chat = None,
+        forward_from_message_id: int | None = None,
+        forward_signature: str | None = None,
+        forward_date: datetime | None = None,
+        is_topic_message: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_to_top_message_id: int | None = None,
+        reply_to_message: Message = None,
+        mentioned: bool | None = None,
+        empty: bool | None = None,
+        service: enums.MessageServiceType = None,
+        scheduled: bool | None = None,
+        from_scheduled: bool | None = None,
+        media: enums.MessageMediaType = None,
+        edit_date: datetime | None = None,
+        media_group_id: str | None = None,
+        author_signature: str | None = None,
+        has_protected_content: bool | None = None,
+        has_media_spoiler: bool | None = None,
         text: Str = None,
-        entities: Optional[list["types.MessageEntity"]] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        audio: "types.Audio" = None,
-        document: "types.Document" = None,
-        photo: "types.Photo" = None,
-        sticker: "types.Sticker" = None,
-        animation: "types.Animation" = None,
-        game: "types.Game" = None,
-        video: "types.Video" = None,
-        voice: "types.Voice" = None,
-        video_note: "types.VideoNote" = None,
+        entities: list[types.MessageEntity] | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        audio: types.Audio = None,
+        document: types.Document = None,
+        photo: types.Photo = None,
+        sticker: types.Sticker = None,
+        animation: types.Animation = None,
+        game: types.Game = None,
+        video: types.Video = None,
+        voice: types.Voice = None,
+        video_note: types.VideoNote = None,
         caption: Str = None,
-        contact: "types.Contact" = None,
-        location: "types.Location" = None,
-        venue: "types.Venue" = None,
-        web_page: "types.WebPage" = None,
-        poll: "types.Poll" = None,
-        dice: "types.Dice" = None,
-        new_chat_members: Optional[list["types.User"]] = None,
-        left_chat_member: "types.User" = None,
-        new_chat_title: Optional[str] = None,
-        new_chat_photo: "types.Photo" = None,
-        delete_chat_photo: Optional[bool] = None,
-        group_chat_created: Optional[bool] = None,
-        supergroup_chat_created: Optional[bool] = None,
-        channel_chat_created: Optional[bool] = None,
-        migrate_to_chat_id: Optional[int] = None,
-        migrate_from_chat_id: Optional[int] = None,
-        pinned_message: "Message" = None,
-        game_high_score: Optional[int] = None,
-        views: Optional[int] = None,
-        forwards: Optional[int] = None,
-        via_bot: "types.User" = None,
-        outgoing: Optional[bool] = None,
-        matches: Optional[list[Match]] = None,
-        command: Optional[list[str]] = None,
-        forum_topic_created: "types.ForumTopicCreated" = None,
-        forum_topic_closed: "types.ForumTopicClosed" = None,
-        forum_topic_reopened: "types.ForumTopicReopened" = None,
-        forum_topic_edited: "types.ForumTopicEdited" = None,
-        general_topic_hidden: "types.GeneralTopicHidden" = None,
-        general_topic_unhidden: "types.GeneralTopicUnhidden" = None,
-        video_chat_scheduled: "types.VideoChatScheduled" = None,
-        video_chat_started: "types.VideoChatStarted" = None,
-        video_chat_ended: "types.VideoChatEnded" = None,
-        video_chat_members_invited: "types.VideoChatMembersInvited" = None,
-        web_app_data: "types.WebAppData" = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        reactions: Optional[list["types.Reaction"]] = None,
+        contact: types.Contact = None,
+        location: types.Location = None,
+        venue: types.Venue = None,
+        web_page: types.WebPage = None,
+        poll: types.Poll = None,
+        dice: types.Dice = None,
+        new_chat_members: list[types.User] | None = None,
+        left_chat_member: types.User = None,
+        new_chat_title: str | None = None,
+        new_chat_photo: types.Photo = None,
+        delete_chat_photo: bool | None = None,
+        group_chat_created: bool | None = None,
+        supergroup_chat_created: bool | None = None,
+        channel_chat_created: bool | None = None,
+        migrate_to_chat_id: int | None = None,
+        migrate_from_chat_id: int | None = None,
+        pinned_message: Message = None,
+        game_high_score: int | None = None,
+        views: int | None = None,
+        forwards: int | None = None,
+        via_bot: types.User = None,
+        outgoing: bool | None = None,
+        matches: list[Match] | None = None,
+        command: list[str] | None = None,
+        forum_topic_created: types.ForumTopicCreated = None,
+        forum_topic_closed: types.ForumTopicClosed = None,
+        forum_topic_reopened: types.ForumTopicReopened = None,
+        forum_topic_edited: types.ForumTopicEdited = None,
+        general_topic_hidden: types.GeneralTopicHidden = None,
+        general_topic_unhidden: types.GeneralTopicUnhidden = None,
+        video_chat_scheduled: types.VideoChatScheduled = None,
+        video_chat_started: types.VideoChatStarted = None,
+        video_chat_ended: types.VideoChatEnded = None,
+        video_chat_members_invited: types.VideoChatMembersInvited = None,
+        web_app_data: types.WebAppData = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        reactions: list[types.Reaction] | None = None,
     ):
         super().__init__(client)
 
@@ -508,11 +510,11 @@ class Message(Object, Update):
 
     async def wait_for_click(
         self,
-        from_user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        timeout: Optional[int] = None,
+        from_user_id: int | str | list[int | str] | None = None,
+        timeout: int | None = None,
         filters=None,
-        alert: Union[str, bool] = True,
-    ) -> "types.CallbackQuery":
+        alert: str | bool = True,
+    ) -> types.CallbackQuery:
         """
         Waits for a callback query to be clicked on the message.
 
@@ -548,11 +550,11 @@ class Message(Object, Update):
     @staticmethod
     async def _parse(
         *,
-        client: "hydrogram.Client",
+        client: hydrogram.Client,
         message: raw.base.Message,
         users: dict,
         chats: dict,
-        topics: Optional[dict] = None,
+        topics: dict | None = None,
         is_scheduled: bool = False,
         replies: int = 1,
     ):
@@ -1034,13 +1036,13 @@ class Message(Object, Update):
 
     def listen(
         self,
-        filters: Optional["filters.Filter"] = None,
+        filters: filters.Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
         unallowed_click_alert: bool = True,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
     ):
         """
         Bound method *listen* of :obj:`~hydrogram.types.Chat`.
@@ -1095,13 +1097,13 @@ class Message(Object, Update):
     def ask(
         self,
         text: str,
-        filters: Optional["filters.Filter"] = None,
+        filters: filters.Filter | None = None,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
         unallowed_click_alert: bool = True,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
         *args,
         **kwargs,
     ):
@@ -1171,9 +1173,9 @@ class Message(Object, Update):
     def stop_listening(
         self,
         listener_type: ListenerTypes = ListenerTypes.MESSAGE,
-        user_id: Optional[Union[int, str, list[Union[int, str]]]] = None,
-        message_id: Optional[Union[int, list[int]]] = None,
-        inline_message_id: Optional[Union[str, list[str]]] = None,
+        user_id: int | str | list[int | str] | None = None,
+        message_id: int | list[int] | None = None,
+        inline_message_id: str | list[str] | None = None,
     ):
         """
         Bound method *stop_listening* of :obj:`~hydrogram.types.Chat`.
@@ -1223,7 +1225,7 @@ class Message(Object, Update):
             return f"https://t.me/{self.chat.username}/{self.id}"
         return f"https://t.me/c/{utils.get_channel_id(self.chat.id)}/{self.id}"
 
-    async def get_media_group(self) -> list["types.Message"]:
+    async def get_media_group(self) -> list[types.Message]:
         """Bound method *get_media_group* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -1249,16 +1251,16 @@ class Message(Object, Update):
     async def reply_text(
         self,
         text: str,
-        quote: Optional[bool] = None,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        entities: Optional[list["types.MessageEntity"]] = None,
-        disable_web_page_preview: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        schedule_date: Optional[datetime] = None,
-        protect_content: Optional[bool] = None,
+        quote: bool | None = None,
+        parse_mode: enums.ParseMode | None = None,
+        entities: list[types.MessageEntity] | None = None,
+        disable_web_page_preview: bool | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        schedule_date: datetime | None = None,
+        protect_content: bool | None = None,
         reply_markup=None,
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_text* of :obj:`~hydrogram.types.Message`.
 
         An alias exists as *reply*.
@@ -1345,27 +1347,25 @@ class Message(Object, Update):
 
     async def reply_animation(
         self,
-        animation: Union[str, BinaryIO],
-        quote: Optional[bool] = None,
+        animation: str | BinaryIO,
+        quote: bool | None = None,
         caption: str = "",
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        has_spoiler: Optional[bool] = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        has_spoiler: bool | None = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: Optional[str] = None,
-        disable_notification: Optional[bool] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        reply_to_message_id: Optional[int] = None,
-        progress: Optional[Callable] = None,
+        thumb: str | None = None,
+        disable_notification: bool | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        reply_to_message_id: int | None = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_animation* :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -1491,26 +1491,24 @@ class Message(Object, Update):
 
     async def reply_audio(
         self,
-        audio: Union[str, BinaryIO],
-        quote: Optional[bool] = None,
+        audio: str | BinaryIO,
+        quote: bool | None = None,
         caption: str = "",
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
         duration: int = 0,
-        performer: Optional[str] = None,
-        title: Optional[str] = None,
-        thumb: Optional[str] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        progress: Optional[Callable] = None,
+        performer: str | None = None,
+        title: str | None = None,
+        thumb: str | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_audio* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -1631,19 +1629,17 @@ class Message(Object, Update):
     async def reply_cached_media(
         self,
         file_id: str,
-        quote: Optional[bool] = None,
+        quote: bool | None = None,
         caption: str = "",
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "Message":
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> Message:
         """Bound method *reply_cached_media* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -1714,7 +1710,7 @@ class Message(Object, Update):
             reply_markup=reply_markup,
         )
 
-    async def reply_chat_action(self, action: "enums.ChatAction") -> bool:
+    async def reply_chat_action(self, action: enums.ChatAction) -> bool:
         """Bound method *reply_chat_action* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -1755,18 +1751,16 @@ class Message(Object, Update):
         self,
         phone_number: str,
         first_name: str,
-        quote: Optional[bool] = None,
+        quote: bool | None = None,
         last_name: str = "",
         vcard: str = "",
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "Message":
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> Message:
         """Bound method *reply_contact* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -1840,26 +1834,24 @@ class Message(Object, Update):
 
     async def reply_document(
         self,
-        document: Union[str, BinaryIO],
-        quote: Optional[bool] = None,
-        thumb: Optional[str] = None,
+        document: str | BinaryIO,
+        quote: bool | None = None,
+        thumb: str | None = None,
         caption: str = "",
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        file_name: Optional[str] = None,
-        force_document: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        schedule_date: Optional[datetime] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        progress: Optional[Callable] = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        file_name: str | None = None,
+        force_document: bool | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        schedule_date: datetime | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_document* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -1983,16 +1975,14 @@ class Message(Object, Update):
     async def reply_game(
         self,
         game_short_name: str,
-        quote: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "Message":
+        quote: bool | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> Message:
         """Bound method *reply_game* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2055,10 +2045,10 @@ class Message(Object, Update):
         self,
         query_id: int,
         result_id: str,
-        quote: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-    ) -> "Message":
+        quote: bool | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+    ) -> Message:
         """Bound method *reply_inline_bot_result* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2121,16 +2111,14 @@ class Message(Object, Update):
         self,
         latitude: float,
         longitude: float,
-        quote: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "Message":
+        quote: bool | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> Message:
         """Bound method *reply_location* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2196,11 +2184,11 @@ class Message(Object, Update):
 
     async def reply_media_group(
         self,
-        media: list[Union["types.InputMediaPhoto", "types.InputMediaVideo"]],
-        quote: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-    ) -> list["types.Message"]:
+        media: list[types.InputMediaPhoto | types.InputMediaVideo],
+        quote: bool | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+    ) -> list[types.Message]:
         """Bound method *reply_media_group* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2259,24 +2247,22 @@ class Message(Object, Update):
 
     async def reply_photo(
         self,
-        photo: Union[str, BinaryIO],
-        quote: Optional[bool] = None,
+        photo: str | BinaryIO,
+        quote: bool | None = None,
         caption: str = "",
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        has_spoiler: Optional[bool] = None,
-        ttl_seconds: Optional[int] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        progress: Optional[Callable] = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        has_spoiler: bool | None = None,
+        ttl_seconds: int | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_photo* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2390,27 +2376,25 @@ class Message(Object, Update):
         question: str,
         options: list[str],
         is_anonymous: bool = True,
-        type: "enums.PollType" = enums.PollType.REGULAR,
-        allows_multiple_answers: Optional[bool] = None,
-        correct_option_id: Optional[int] = None,
-        explanation: Optional[str] = None,
-        explanation_parse_mode: "enums.ParseMode" = None,
-        explanation_entities: Optional[list["types.MessageEntity"]] = None,
-        open_period: Optional[int] = None,
-        close_date: Optional[datetime] = None,
-        is_closed: Optional[bool] = None,
-        quote: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        protect_content: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        schedule_date: Optional[datetime] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "Message":
+        type: enums.PollType = enums.PollType.REGULAR,
+        allows_multiple_answers: bool | None = None,
+        correct_option_id: int | None = None,
+        explanation: str | None = None,
+        explanation_parse_mode: enums.ParseMode = None,
+        explanation_entities: list[types.MessageEntity] | None = None,
+        open_period: int | None = None,
+        close_date: datetime | None = None,
+        is_closed: bool | None = None,
+        quote: bool | None = None,
+        disable_notification: bool | None = None,
+        protect_content: bool | None = None,
+        reply_to_message_id: int | None = None,
+        schedule_date: datetime | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> Message:
         """Bound method *reply_poll* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2534,19 +2518,17 @@ class Message(Object, Update):
 
     async def reply_sticker(
         self,
-        sticker: Union[str, BinaryIO],
-        quote: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        progress: Optional[Callable] = None,
+        sticker: str | BinaryIO,
+        quote: bool | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_sticker* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2638,18 +2620,16 @@ class Message(Object, Update):
         longitude: float,
         title: str,
         address: str,
-        quote: Optional[bool] = None,
+        quote: bool | None = None,
         foursquare_id: str = "",
         foursquare_type: str = "",
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "Message":
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> Message:
         """Bound method *reply_venue* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2734,29 +2714,27 @@ class Message(Object, Update):
 
     async def reply_video(
         self,
-        video: Union[str, BinaryIO],
-        quote: Optional[bool] = None,
+        video: str | BinaryIO,
+        quote: bool | None = None,
         caption: str = "",
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        has_spoiler: Optional[bool] = None,
-        ttl_seconds: Optional[int] = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        has_spoiler: bool | None = None,
+        ttl_seconds: int | None = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: Optional[str] = None,
+        thumb: str | None = None,
         supports_streaming: bool = True,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        progress: Optional[Callable] = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_video* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2890,22 +2868,20 @@ class Message(Object, Update):
 
     async def reply_video_note(
         self,
-        video_note: Union[str, BinaryIO],
-        quote: Optional[bool] = None,
+        video_note: str | BinaryIO,
+        quote: bool | None = None,
         duration: int = 0,
         length: int = 1,
-        thumb: Optional[str] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        progress: Optional[Callable] = None,
+        thumb: str | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_video_note* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3010,23 +2986,21 @@ class Message(Object, Update):
 
     async def reply_voice(
         self,
-        voice: Union[str, BinaryIO],
-        quote: Optional[bool] = None,
+        voice: str | BinaryIO,
+        quote: bool | None = None,
         caption: str = "",
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
         duration: int = 0,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-        progress: Optional[Callable] = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> "Message":
+    ) -> Message:
         """Bound method *reply_voice* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3132,11 +3106,11 @@ class Message(Object, Update):
     async def edit_text(
         self,
         text: str,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        entities: Optional[list["types.MessageEntity"]] = None,
-        disable_web_page_preview: Optional[bool] = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-    ) -> "Message":
+        parse_mode: enums.ParseMode | None = None,
+        entities: list[types.MessageEntity] | None = None,
+        disable_web_page_preview: bool | None = None,
+        reply_markup: types.InlineKeyboardMarkup = None,
+    ) -> Message:
         """Bound method *edit_text* of :obj:`~hydrogram.types.Message`.
 
         An alias exists as *edit*.
@@ -3192,10 +3166,10 @@ class Message(Object, Update):
     async def edit_caption(
         self,
         caption: str,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-    ) -> "Message":
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        reply_markup: types.InlineKeyboardMarkup = None,
+    ) -> Message:
         """Bound method *edit_caption* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3242,9 +3216,9 @@ class Message(Object, Update):
 
     async def edit_media(
         self,
-        media: "types.InputMedia",
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-    ) -> "Message":
+        media: types.InputMedia,
+        reply_markup: types.InlineKeyboardMarkup = None,
+    ) -> Message:
         """Bound method *edit_media* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3280,9 +3254,7 @@ class Message(Object, Update):
             reply_markup=reply_markup,
         )
 
-    async def edit_reply_markup(
-        self, reply_markup: "types.InlineKeyboardMarkup" = None
-    ) -> "Message":
+    async def edit_reply_markup(self, reply_markup: types.InlineKeyboardMarkup = None) -> Message:
         """Bound method *edit_reply_markup* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3315,11 +3287,11 @@ class Message(Object, Update):
 
     async def forward(
         self,
-        chat_id: Union[int, str],
-        message_thread_id: Optional[int] = None,
-        disable_notification: Optional[bool] = None,
-        schedule_date: Optional[datetime] = None,
-    ) -> Union["types.Message", list["types.Message"]]:
+        chat_id: int | str,
+        message_thread_id: int | None = None,
+        disable_notification: bool | None = None,
+        schedule_date: datetime | None = None,
+    ) -> types.Message | list[types.Message]:
         """Bound method *forward* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3368,22 +3340,20 @@ class Message(Object, Update):
 
     async def copy(
         self,
-        chat_id: Union[int, str],
-        caption: Optional[str] = None,
-        message_thread_id: Optional[int] = None,
-        parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: Optional[list["types.MessageEntity"]] = None,
-        disable_notification: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        schedule_date: Optional[datetime] = None,
-        protect_content: Optional[bool] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = object,
-    ) -> Union["types.Message", list["types.Message"]]:
+        chat_id: int | str,
+        caption: str | None = None,
+        message_thread_id: int | None = None,
+        parse_mode: enums.ParseMode | None = None,
+        caption_entities: list[types.MessageEntity] | None = None,
+        disable_notification: bool | None = None,
+        reply_to_message_id: int | None = None,
+        schedule_date: datetime | None = None,
+        protect_content: bool | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = object,
+    ) -> types.Message | list[types.Message]:
         """Bound method *copy* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3606,9 +3576,9 @@ class Message(Object, Update):
 
     async def click(
         self,
-        x: Union[int, str] = 0,
-        y: Optional[int] = None,
-        quote: Optional[bool] = None,
+        x: int | str = 0,
+        y: int | None = None,
+        quote: bool | None = None,
         timeout: int = 10,
     ):
         """Bound method *click* of :obj:`~hydrogram.types.Message`.
@@ -3754,7 +3724,7 @@ class Message(Object, Update):
 
     async def retract_vote(
         self,
-    ) -> "types.Poll":
+    ) -> types.Poll:
         """Bound method *retract_vote* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3785,7 +3755,7 @@ class Message(Object, Update):
         file_name: str = "",
         in_memory: bool = False,
         block: bool = True,
-        progress: Optional[Callable] = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
     ) -> str:
         """Bound method *download* of :obj:`~hydrogram.types.Message`.
@@ -3858,7 +3828,7 @@ class Message(Object, Update):
     async def vote(
         self,
         option: int,
-    ) -> "types.Poll":
+    ) -> types.Poll:
         """Bound method *vote* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3889,7 +3859,7 @@ class Message(Object, Update):
 
     async def pin(
         self, disable_notification: bool = False, both_sides: bool = False
-    ) -> "types.Message":
+    ) -> types.Message:
         """Bound method *pin* of :obj:`~hydrogram.types.Message`.
 
         Use as a shortcut for:

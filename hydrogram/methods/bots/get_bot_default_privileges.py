@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,8 +25,8 @@ from hydrogram import raw, types
 
 class GetBotDefaultPrivileges:
     async def get_bot_default_privileges(
-        self: "hydrogram.Client", for_channels: Optional[bool] = None
-    ) -> Optional["types.ChatPrivileges"]:
+        self: hydrogram.Client, for_channels: bool | None = None
+    ) -> types.ChatPrivileges | None:
         """Get the current default privileges of the bot.
 
         .. include:: /_includes/usable-by/bots.rst

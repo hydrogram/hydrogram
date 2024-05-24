@@ -17,16 +17,19 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
-import hydrogram
-from hydrogram.types import Identifier, Listener, ListenerTypes
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import hydrogram
+    from hydrogram.types import Identifier, Listener, ListenerTypes
 
 
 class GetListenerMatchingWithIdentifierPattern:
     def get_listener_matching_with_identifier_pattern(
-        self: "hydrogram.Client", pattern: Identifier, listener_type: ListenerTypes
-    ) -> Optional[Listener]:
+        self: hydrogram.Client, pattern: Identifier, listener_type: ListenerTypes
+    ) -> Listener | None:
         """
         Gets a listener that matches the given identifier pattern.
 

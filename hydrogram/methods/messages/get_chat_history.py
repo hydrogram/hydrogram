@@ -17,18 +17,22 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import AsyncGenerator
-from datetime import datetime
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+    from datetime import datetime
+
 
 async def get_chunk(
     *,
-    client: "hydrogram.Client",
-    chat_id: Union[int, str],
+    client: hydrogram.Client,
+    chat_id: int | str,
     limit: int = 0,
     offset: int = 0,
     from_message_id: int = 0,
@@ -53,13 +57,13 @@ async def get_chunk(
 
 class GetChatHistory:
     async def get_chat_history(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         limit: int = 0,
         offset: int = 0,
         offset_id: int = 0,
         offset_date: datetime = utils.zero_datetime(),
-    ) -> Optional[AsyncGenerator["types.Message", None]]:
+    ) -> AsyncGenerator[types.Message, None] | None:
         """Get messages from a chat history.
 
         The messages are returned in reverse chronological order.

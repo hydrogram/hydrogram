@@ -17,9 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
 import os
-from typing import Optional
 
 import hydrogram
 from hydrogram.crypto import aes
@@ -72,7 +73,7 @@ class TCPAbridgedO(TCP):
 
         await super().send(payload)
 
-    async def recv(self, length: int = 0) -> Optional[bytes]:
+    async def recv(self, length: int = 0) -> bytes | None:
         length = await super().recv(1)
 
         if length is None:

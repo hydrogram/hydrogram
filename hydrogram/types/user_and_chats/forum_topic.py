@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 from hydrogram import raw, types
 from hydrogram.types.object import Object
@@ -92,13 +92,13 @@ class ForumTopic(Object):
         unread_count: int,
         unread_mentions_count: int,
         unread_reactions_count: int,
-        from_id: Union["types.PeerChannel", "types.PeerUser"],
+        from_id: types.PeerChannel | types.PeerUser,
         # notify_settings: "types.PeerNotifySettings", //todo
-        my: Optional[bool] = None,
-        closed: Optional[bool] = None,
-        pinned: Optional[bool] = None,
-        short: Optional[bool] = None,
-        icon_emoji_id: Optional[int] = None,
+        my: bool | None = None,
+        closed: bool | None = None,
+        pinned: bool | None = None,
+        short: bool | None = None,
+        icon_emoji_id: int | None = None,
         # draft: "types.DraftMessage" = None //todo
     ):
         super().__init__()
@@ -123,7 +123,7 @@ class ForumTopic(Object):
         # self.draft = draft //todo
 
     @staticmethod
-    def _parse(forum_topic: "raw.types.forum_topic") -> "ForumTopic":
+    def _parse(forum_topic: raw.types.forum_topic) -> ForumTopic:
         from_id = forum_topic.from_id
         if isinstance(from_id, raw.types.PeerChannel):
             peer = types.PeerChannel._parse(from_id)

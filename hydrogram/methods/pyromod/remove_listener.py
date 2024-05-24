@@ -18,9 +18,12 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import contextlib
+from typing import TYPE_CHECKING
 
-import hydrogram
 from hydrogram.types import Listener
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 class RemoveListener:

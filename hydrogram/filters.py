@@ -17,10 +17,12 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import inspect
 import re
 from re import Pattern
-from typing import Callable, Optional, Union
+from typing import Callable
 
 import hydrogram
 from hydrogram import enums
@@ -35,7 +37,7 @@ from hydrogram.types import (
 
 
 class Filter:
-    async def __call__(self, client: "hydrogram.Client", update: Update):
+    async def __call__(self, client: hydrogram.Client, update: Update):
         raise NotImplementedError
 
     def __invert__(self):
@@ -52,7 +54,7 @@ class InvertFilter(Filter):
     def __init__(self, base):
         self.base = base
 
-    async def __call__(self, client: "hydrogram.Client", update: Update):
+    async def __call__(self, client: hydrogram.Client, update: Update):
         if inspect.iscoroutinefunction(self.base.__call__):
             x = await self.base(client, update)
         else:
@@ -66,7 +68,7 @@ class AndFilter(Filter):
         self.base = base
         self.other = other
 
-    async def __call__(self, client: "hydrogram.Client", update: Update):
+    async def __call__(self, client: hydrogram.Client, update: Update):
         if inspect.iscoroutinefunction(self.base.__call__):
             x = await self.base(client, update)
         else:
@@ -89,7 +91,7 @@ class OrFilter(Filter):
         self.base = base
         self.other = other
 
-    async def __call__(self, client: "hydrogram.Client", update: Update):
+    async def __call__(self, client: hydrogram.Client, update: Update):
         if inspect.iscoroutinefunction(self.base.__call__):
             x = await self.base(client, update)
         else:
@@ -110,7 +112,7 @@ class OrFilter(Filter):
 CUSTOM_FILTER_NAME = "CustomFilter"
 
 
-def create(func: Callable, name: Optional[str] = None, **kwargs) -> Filter:
+def create(func: Callable, name: str | None = None, **kwargs) -> Filter:
     """Easily create a custom filter.
 
     Custom filters give you extra control over which updates are allowed or not to be processed by your handlers.
@@ -788,8 +790,8 @@ linked_channel = create(linked_channel_filter)
 
 # region command_filter
 def command(
-    commands: Union[str, list[str]],
-    prefixes: Union[str, list[str]] = "/",
+    commands: str | list[str],
+    prefixes: str | list[str] = "/",
     case_sensitive: bool = False,
 ):
     """Filter commands, i.e.: text messages starting with "/" or any other custom prefix.
@@ -874,7 +876,7 @@ def command(
 # endregion
 
 
-def regex(pattern: Union[str, Pattern], flags: int = 0):
+def regex(pattern: str | Pattern, flags: int = 0):
     """Filter updates that match a given regular expression pattern.
 
     Can be applied to handlers that receive one of the following updates:
@@ -929,7 +931,7 @@ class user(Filter, set):  # noqa: N801
             Defaults to None (no users).
     """
 
-    def __init__(self, users: Optional[Union[int, str, list[Union[int, str]]]] = None):
+    def __init__(self, users: int | str | list[int | str] | None = None):
         users = [] if users is None else users if isinstance(users, list) else [users]
 
         super().__init__(
@@ -958,7 +960,7 @@ class chat(Filter, set):  # noqa: N801
             Defaults to None (no chats).
     """
 
-    def __init__(self, chats: Optional[Union[int, str, list[Union[int, str]]]] = None):
+    def __init__(self, chats: int | str | list[int | str] | None = None):
         chats = [] if chats is None else chats if isinstance(chats, list) else [chats]
 
         super().__init__(

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -50,9 +50,9 @@ class InlineQueryResultCachedSticker(InlineQueryResult):
     def __init__(
         self,
         sticker_file_id: str,
-        id: Optional[str] = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-        input_message_content: "types.InputMessageContent" = None,
+        id: str | None = None,
+        reply_markup: types.InlineKeyboardMarkup = None,
+        input_message_content: types.InputMessageContent = None,
     ):
         super().__init__("sticker", id, input_message_content, reply_markup)
 
@@ -60,7 +60,7 @@ class InlineQueryResultCachedSticker(InlineQueryResult):
         self.reply_markup = reply_markup
         self.input_message_content = input_message_content
 
-    async def write(self, client: "hydrogram.Client"):
+    async def write(self, client: hydrogram.Client):
         file_id = FileId.decode(self.sticker_file_id)
 
         return raw.types.InputBotInlineResultDocument(

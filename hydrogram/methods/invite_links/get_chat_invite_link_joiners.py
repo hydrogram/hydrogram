@@ -17,20 +17,24 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import AsyncGenerator
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types
 
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+
 
 class GetChatInviteLinkJoiners:
     async def get_chat_invite_link_joiners(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         invite_link: str,
         limit: int = 0,
-    ) -> Optional[AsyncGenerator["types.ChatJoiner", None]]:
+    ) -> AsyncGenerator[types.ChatJoiner, None] | None:
         """Get the members who joined the chat with the invite link.
 
         .. include:: /_includes/usable-by/users.rst

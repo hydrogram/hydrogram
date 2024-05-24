@@ -18,13 +18,16 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import inspect
+from typing import TYPE_CHECKING
 
-import hydrogram
 from hydrogram.errors import (
     ListenerStopped,
 )
 from hydrogram.types import Listener
 from hydrogram.utils import PyromodConfig
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 class StopListener:

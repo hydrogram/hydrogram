@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -26,12 +26,12 @@ from hydrogram.errors import UnknownError
 
 class GetInlineBotResults:
     async def get_inline_bot_results(
-        self: "hydrogram.Client",
-        bot: Union[int, str],
+        self: hydrogram.Client,
+        bot: int | str,
         query: str = "",
         offset: str = "",
-        latitude: Optional[float] = None,
-        longitude: Optional[float] = None,
+        latitude: float | None = None,
+        longitude: float | None = None,
     ):
         """Get bot results via inline queries.
         You can then send a result using :meth:`~hydrogram.Client.send_inline_bot_result`
