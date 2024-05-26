@@ -17,42 +17,44 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
 
+if TYPE_CHECKING:
+    from datetime import datetime
+
 
 class SendPoll:
     async def send_poll(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         question: str,
         options: list[str],
         *,
-        message_thread_id: Optional[int] = None,
+        message_thread_id: int | None = None,
         is_anonymous: bool = True,
-        type: "enums.PollType" = enums.PollType.REGULAR,
-        allows_multiple_answers: Optional[bool] = None,
-        correct_option_id: Optional[int] = None,
-        explanation: Optional[str] = None,
-        explanation_parse_mode: "enums.ParseMode" = None,
-        explanation_entities: Optional[list["types.MessageEntity"]] = None,
-        open_period: Optional[int] = None,
-        close_date: Optional[datetime] = None,
-        is_closed: Optional[bool] = None,
-        disable_notification: Optional[bool] = None,
-        protect_content: Optional[bool] = None,
-        reply_to_message_id: Optional[int] = None,
-        schedule_date: Optional[datetime] = None,
-        reply_markup: Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply",
-        ] = None,
-    ) -> "types.Message":
+        type: enums.PollType = enums.PollType.REGULAR,
+        allows_multiple_answers: bool | None = None,
+        correct_option_id: int | None = None,
+        explanation: str | None = None,
+        explanation_parse_mode: enums.ParseMode = None,
+        explanation_entities: list[types.MessageEntity] | None = None,
+        open_period: int | None = None,
+        close_date: datetime | None = None,
+        is_closed: bool | None = None,
+        disable_notification: bool | None = None,
+        protect_content: bool | None = None,
+        reply_to_message_id: int | None = None,
+        schedule_date: datetime | None = None,
+        reply_markup: types.InlineKeyboardMarkup
+        | types.ReplyKeyboardMarkup
+        | types.ReplyKeyboardRemove
+        | types.ForceReply = None,
+    ) -> types.Message:
         """Send a new poll.
 
         .. include:: /_includes/usable-by/users-bots.rst

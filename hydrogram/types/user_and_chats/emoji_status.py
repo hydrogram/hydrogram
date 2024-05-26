@@ -17,12 +17,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, utils
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class EmojiStatus(Object):
@@ -39,9 +43,9 @@ class EmojiStatus(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         custom_emoji_id: int,
-        until_date: Optional[datetime] = None,
+        until_date: datetime | None = None,
     ):
         super().__init__(client)
 
@@ -49,7 +53,7 @@ class EmojiStatus(Object):
         self.until_date = until_date
 
     @staticmethod
-    def _parse(client, emoji_status: "raw.base.EmojiStatus") -> Optional["EmojiStatus"]:
+    def _parse(client, emoji_status: raw.base.EmojiStatus) -> EmojiStatus | None:
         if isinstance(emoji_status, raw.types.EmojiStatus):
             return EmojiStatus(client=client, custom_emoji_id=emoji_status.document_id)
 

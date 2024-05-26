@@ -17,13 +17,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Animation(Object):
@@ -65,17 +69,17 @@ class Animation(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         file_id: str,
         file_unique_id: str,
         width: int,
         height: int,
         duration: int,
-        file_name: Optional[str] = None,
-        mime_type: Optional[str] = None,
-        file_size: Optional[int] = None,
-        date: Optional[datetime] = None,
-        thumbs: Optional[list["types.Thumbnail"]] = None,
+        file_name: str | None = None,
+        mime_type: str | None = None,
+        file_size: int | None = None,
+        date: datetime | None = None,
+        thumbs: list[types.Thumbnail] | None = None,
     ):
         super().__init__(client)
 
@@ -93,10 +97,10 @@ class Animation(Object):
     @staticmethod
     def _parse(
         client,
-        animation: "raw.types.Document",
-        video_attributes: "raw.types.DocumentAttributeVideo",
+        animation: raw.types.Document,
+        video_attributes: raw.types.DocumentAttributeVideo,
         file_name: str,
-    ) -> "Animation":
+    ) -> Animation:
         return Animation(
             file_id=FileId(
                 file_type=FileType.ANIMATION,

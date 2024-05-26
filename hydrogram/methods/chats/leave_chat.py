@@ -17,14 +17,14 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
 
 
 class LeaveChat:
-    async def leave_chat(self: "hydrogram.Client", chat_id: Union[int, str], delete: bool = False):
+    async def leave_chat(self: hydrogram.Client, chat_id: int | str, delete: bool = False):
         """Leave a group chat or channel.
 
         .. include:: /_includes/usable-by/users-bots.rst

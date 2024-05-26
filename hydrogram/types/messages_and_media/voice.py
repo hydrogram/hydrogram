@@ -17,13 +17,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, utils
 from hydrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Voice(Object):
@@ -56,14 +60,14 @@ class Voice(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         file_id: str,
         file_unique_id: str,
         duration: int,
-        waveform: Optional[bytes] = None,
-        mime_type: Optional[str] = None,
-        file_size: Optional[int] = None,
-        date: Optional[datetime] = None,
+        waveform: bytes | None = None,
+        mime_type: str | None = None,
+        file_size: int | None = None,
+        date: datetime | None = None,
     ):
         super().__init__(client)
 
@@ -78,9 +82,9 @@ class Voice(Object):
     @staticmethod
     def _parse(
         client,
-        voice: "raw.types.Document",
-        attributes: "raw.types.DocumentAttributeAudio",
-    ) -> "Voice":
+        voice: raw.types.Document,
+        attributes: raw.types.DocumentAttributeAudio,
+    ) -> Voice:
         return Voice(
             file_id=FileId(
                 file_type=FileType.VOICE,

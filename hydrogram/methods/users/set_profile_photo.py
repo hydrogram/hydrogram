@@ -17,7 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import BinaryIO, Optional, Union
+from __future__ import annotations
+
+from typing import BinaryIO
 
 import hydrogram
 from hydrogram import raw
@@ -25,9 +27,9 @@ from hydrogram import raw
 
 class SetProfilePhoto:
     async def set_profile_photo(
-        self: "hydrogram.Client",
-        photo: Optional[Union[str, BinaryIO]] = None,
-        video: Optional[Union[str, BinaryIO]] = None,
+        self: hydrogram.Client,
+        photo: str | BinaryIO | None = None,
+        video: str | BinaryIO | None = None,
     ) -> bool:
         """Set a new profile photo or video (H.264/MPEG-4 AVC video, max 5 seconds).
 

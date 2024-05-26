@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -25,8 +25,8 @@ from hydrogram import raw
 
 class UnarchiveChats:
     async def unarchive_chats(
-        self: "hydrogram.Client",
-        chat_ids: Union[int, str, list[Union[int, str]]],
+        self: hydrogram.Client,
+        chat_ids: int | str | list[int | str],
     ) -> bool:
         """Unarchive one or more chats.
 

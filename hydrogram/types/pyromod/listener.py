@@ -19,12 +19,13 @@
 
 from asyncio import Future
 from dataclasses import dataclass
-from typing import Callable
-
-import hydrogram
+from typing import TYPE_CHECKING, Callable
 
 from .identifier import Identifier
 from .listener_types import ListenerTypes
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 @dataclass

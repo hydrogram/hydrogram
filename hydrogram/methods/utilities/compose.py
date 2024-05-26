@@ -18,10 +18,12 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
-
-import hydrogram
+from typing import TYPE_CHECKING
 
 from .idle import idle
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 async def compose(clients: list["hydrogram.Client"], sequential: bool = False):

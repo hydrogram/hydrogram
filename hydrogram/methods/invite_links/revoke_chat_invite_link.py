@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,10 +25,10 @@ from hydrogram import raw, types
 
 class RevokeChatInviteLink:
     async def revoke_chat_invite_link(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         invite_link: str,
-    ) -> "types.ChatInviteLink":
+    ) -> types.ChatInviteLink:
         """Revoke a previously created invite link.
 
         If the primary link is revoked, a new link is automatically generated.

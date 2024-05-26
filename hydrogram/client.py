@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import asyncio
 import contextlib
 import functools
@@ -27,7 +29,6 @@ import platform
 import re
 import shutil
 import sys
-from collections.abc import AsyncGenerator
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from hashlib import sha256
@@ -35,7 +36,7 @@ from importlib import import_module
 from io import BytesIO, StringIO
 from mimetypes import MimeTypes
 from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import TYPE_CHECKING, Callable
 
 import hydrogram
 from hydrogram import __license__, __version__, enums, raw, utils
@@ -60,6 +61,9 @@ from .file_id import FileId, FileType, ThumbnailSource
 from .mime_types import mime_types
 from .parser import Parser
 from .session.internals import MsgId
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
 
 log = logging.getLogger(__name__)
 
@@ -211,28 +215,28 @@ class Client(Methods):
     def __init__(
         self,
         name: str,
-        api_id: Optional[Union[int, str]] = None,
-        api_hash: Optional[str] = None,
+        api_id: int | str | None = None,
+        api_hash: str | None = None,
         app_version: str = APP_VERSION,
         device_model: str = DEVICE_MODEL,
         system_version: str = SYSTEM_VERSION,
         lang_code: str = LANG_CODE,
         ipv6: bool = False,
-        proxy: Optional[dict] = None,
+        proxy: dict | None = None,
         test_mode: bool = False,
-        bot_token: Optional[str] = None,
-        session_string: Optional[str] = None,
-        session_storage_engine: Optional[BaseStorage] = None,
-        in_memory: Optional[bool] = None,
-        phone_number: Optional[str] = None,
-        phone_code: Optional[str] = None,
-        password: Optional[str] = None,
+        bot_token: str | None = None,
+        session_string: str | None = None,
+        session_storage_engine: BaseStorage | None = None,
+        in_memory: bool | None = None,
+        phone_number: str | None = None,
+        phone_code: str | None = None,
+        password: str | None = None,
         workers: int = WORKERS,
         workdir: str = str(WORKDIR),
-        plugins: Optional[dict] = None,
-        parse_mode: "enums.ParseMode" = enums.ParseMode.DEFAULT,
-        no_updates: Optional[bool] = None,
-        takeout: Optional[bool] = None,
+        plugins: dict | None = None,
+        parse_mode: enums.ParseMode = enums.ParseMode.DEFAULT,
+        no_updates: bool | None = None,
+        takeout: bool | None = None,
         sleep_threshold: int = Session.SLEEP_THRESHOLD,
         hide_password: bool = False,
         max_concurrent_transmissions: int = MAX_CONCURRENT_TRANSMISSIONS,
@@ -299,7 +303,7 @@ class Client(Methods):
 
         self.disconnect_handler = None
 
-        self.me: Optional[User] = None
+        self.me: User | None = None
 
         self.message_cache = Cache(10000)
 
@@ -463,7 +467,7 @@ class Client(Methods):
 
         return signed_up
 
-    def set_parse_mode(self, parse_mode: Optional["enums.ParseMode"]):
+    def set_parse_mode(self, parse_mode: enums.ParseMode | None):
         """Set the parse mode to be used globally by the client.
 
         When setting the parse mode with this method, all other methods having a *parse_mode* parameter will follow the
@@ -502,7 +506,7 @@ class Client(Methods):
         self.parse_mode = parse_mode
 
     async def fetch_peers(
-        self, peers: list[Union[raw.types.User, raw.types.Chat, raw.types.Channel]]
+        self, peers: list[raw.types.User | raw.types.Chat | raw.types.Channel]
     ) -> bool:
         is_min = False
         parsed_peers = []
@@ -884,9 +888,9 @@ class Client(Methods):
         file_size: int = 0,
         limit: int = 0,
         offset: int = 0,
-        progress: Optional[Callable] = None,
+        progress: Callable | None = None,
         progress_args: tuple = (),
-    ) -> Optional[AsyncGenerator[bytes, None]]:
+    ) -> AsyncGenerator[bytes, None] | None:
         async with self.get_file_semaphore:
             file_type = file_id.file_type
 
@@ -1067,10 +1071,10 @@ class Client(Methods):
             finally:
                 await session.stop()
 
-    def guess_mime_type(self, filename: str) -> Optional[str]:
+    def guess_mime_type(self, filename: str) -> str | None:
         return self.mimetypes.guess_type(filename)[0]
 
-    def guess_extension(self, mime_type: str) -> Optional[str]:
+    def guess_extension(self, mime_type: str) -> str | None:
         return self.mimetypes.guess_extension(mime_type)
 
 

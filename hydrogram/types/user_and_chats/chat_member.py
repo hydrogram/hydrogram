@@ -17,12 +17,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class ChatMember(Object):
@@ -76,20 +80,20 @@ class ChatMember(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
-        status: "enums.ChatMemberStatus",
-        user: "types.User" = None,
-        chat: "types.Chat" = None,
-        custom_title: Optional[str] = None,
-        until_date: Optional[datetime] = None,
-        joined_date: Optional[datetime] = None,
-        invited_by: "types.User" = None,
-        promoted_by: "types.User" = None,
-        restricted_by: "types.User" = None,
-        is_member: Optional[bool] = None,
-        can_be_edited: Optional[bool] = None,
-        permissions: "types.ChatPermissions" = None,
-        privileges: "types.ChatPrivileges" = None,
+        client: hydrogram.Client = None,
+        status: enums.ChatMemberStatus,
+        user: types.User = None,
+        chat: types.Chat = None,
+        custom_title: str | None = None,
+        until_date: datetime | None = None,
+        joined_date: datetime | None = None,
+        invited_by: types.User = None,
+        promoted_by: types.User = None,
+        restricted_by: types.User = None,
+        is_member: bool | None = None,
+        can_be_edited: bool | None = None,
+        permissions: types.ChatPermissions = None,
+        privileges: types.ChatPrivileges = None,
     ):
         super().__init__(client)
 
@@ -109,11 +113,11 @@ class ChatMember(Object):
 
     @staticmethod
     def _parse(
-        client: "hydrogram.Client",
-        member: Union["raw.base.ChatParticipant", "raw.base.ChannelParticipant"],
-        users: dict[int, "raw.base.User"],
-        chats: dict[int, "raw.base.Chat"],
-    ) -> "ChatMember":
+        client: hydrogram.Client,
+        member: raw.base.ChatParticipant | raw.base.ChannelParticipant,
+        users: dict[int, raw.base.User],
+        chats: dict[int, raw.base.Chat],
+    ) -> ChatMember:
         # Chat participants
         if isinstance(member, raw.types.ChatParticipant):
             return ChatMember(

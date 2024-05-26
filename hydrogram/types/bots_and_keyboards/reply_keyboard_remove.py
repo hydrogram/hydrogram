@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -41,7 +41,7 @@ class ReplyKeyboardRemove(Object):
             keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
     """
 
-    def __init__(self, selective: Optional[bool] = None):
+    def __init__(self, selective: bool | None = None):
         super().__init__()
 
         self.selective = selective
@@ -50,5 +50,5 @@ class ReplyKeyboardRemove(Object):
     def read(b):
         return ReplyKeyboardRemove(selective=b.selective)
 
-    async def write(self, _: "hydrogram.Client"):
+    async def write(self, _: hydrogram.Client):
         return raw.types.ReplyKeyboardHide(selective=self.selective or None)

@@ -19,14 +19,16 @@
 
 from asyncio import iscoroutinefunction
 from re import Match
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 from magic_filter import MagicFilter
 
-import hydrogram
 from hydrogram.types import InlineQuery
 
 from .handler import Handler
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 class InlineQueryHandler(Handler):

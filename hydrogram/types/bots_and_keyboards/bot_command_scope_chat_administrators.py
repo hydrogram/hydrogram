@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -34,10 +34,10 @@ class BotCommandScopeChatAdministrators(BotCommandScope):
             @supergroupusername).
     """
 
-    def __init__(self, chat_id: Union[int, str]):
+    def __init__(self, chat_id: int | str):
         super().__init__("chat_administrators")
 
         self.chat_id = chat_id
 
-    async def write(self, client: "hydrogram.Client") -> "raw.base.BotCommandScope":
+    async def write(self, client: hydrogram.Client) -> raw.base.BotCommandScope:
         return raw.types.BotCommandScopePeerAdmins(peer=await client.resolve_peer(self.chat_id))

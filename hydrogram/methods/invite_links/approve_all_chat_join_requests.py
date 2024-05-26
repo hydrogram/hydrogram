@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -25,7 +25,7 @@ from hydrogram import raw
 
 class ApproveAllChatJoinRequests:
     async def approve_all_chat_join_requests(
-        self: "hydrogram.Client", chat_id: Union[int, str], invite_link: Optional[str] = None
+        self: hydrogram.Client, chat_id: int | str, invite_link: str | None = None
     ) -> bool:
         """Approve all pending join requests in a chat.
 

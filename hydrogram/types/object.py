@@ -22,7 +22,8 @@ from datetime import datetime
 from enum import Enum
 from json import dumps
 
-import hydrogram
+if typing.TYPE_CHECKING:
+    import hydrogram
 
 
 class Object:

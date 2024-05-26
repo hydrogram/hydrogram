@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -25,8 +25,8 @@ from hydrogram import raw
 
 class DeclineChatJoinRequest:
     async def decline_chat_join_request(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         user_id: int,
     ) -> bool:
         """Decline a chat join request.

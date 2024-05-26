@@ -17,21 +17,25 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
 
+if TYPE_CHECKING:
+    from datetime import datetime
+
 
 class RestrictChatMember:
     async def restrict_chat_member(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        user_id: Union[int, str],
-        permissions: "types.ChatPermissions",
+        self: hydrogram.Client,
+        chat_id: int | str,
+        user_id: int | str,
+        permissions: types.ChatPermissions,
         until_date: datetime = utils.zero_datetime(),
-    ) -> "types.Chat":
+    ) -> types.Chat:
         """Restrict a user in a supergroup.
 
         You must be an administrator in the supergroup for this to work and must have the appropriate admin rights.

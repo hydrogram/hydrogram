@@ -17,9 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
 from struct import pack, unpack
-from typing import Optional
 
 from .tcp import TCP
 
@@ -37,7 +38,7 @@ class TCPIntermediate(TCP):
     async def send(self, data: bytes, *args):
         await super().send(pack("<i", len(data)) + data)
 
-    async def recv(self, length: int = 0) -> Optional[bytes]:
+    async def recv(self, length: int = 0) -> bytes | None:
         length = await super().recv(4)
 
         return None if length is None else await super().recv(unpack("<i", length)[0])

@@ -17,8 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import os
-from typing import Optional
 
 import hydrogram
 from hydrogram import raw
@@ -27,7 +28,7 @@ from hydrogram.utils import btoi, compute_password_hash, itob
 
 class EnableCloudPassword:
     async def enable_cloud_password(
-        self: "hydrogram.Client", password: str, hint: str = "", email: Optional[str] = None
+        self: hydrogram.Client, password: str, hint: str = "", email: str | None = None
     ) -> bool:
         """Enable the Two-Step Verification security feature (Cloud Password) on your account.
 

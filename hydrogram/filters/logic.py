@@ -17,23 +17,26 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import inspect
-from asyncio import Future
-from collections.abc import Coroutine
 from functools import partial
 from typing import TYPE_CHECKING, Any
 
 from magic_filter import MagicFilter
 
 from hydrogram.filters import Filter
-from hydrogram.types import Update
 
 if TYPE_CHECKING:
+    from asyncio import Future
+    from collections.abc import Coroutine
+
     from hydrogram import Client
+    from hydrogram.types import Update
 
 
 def resolve_filter(
-    filter: Filter | MagicFilter, client: "Client", update: Update
+    filter: Filter | MagicFilter, client: Client, update: Update
 ) -> Future[Any] | Coroutine[Any, Any, bool]:
     if isinstance(filter, MagicFilter):
         return client.loop.run_in_executor(client.executor, filter.resolve, update)
@@ -50,7 +53,7 @@ class InvertFilter(Filter):
     def __init__(self, base: Filter) -> None:
         self.base = base
 
-    async def __call__(self, client: "Client", update: Update) -> bool:
+    async def __call__(self, client: Client, update: Update) -> bool:
         x = await resolve_filter(self.base, client, update)
         return not x
 
@@ -62,7 +65,7 @@ class AndFilter(Filter):
         self.base = base
         self.other = other
 
-    async def __call__(self, client: "Client", update: Update) -> Any | bool:
+    async def __call__(self, client: Client, update: Update) -> Any | bool:
         x = await resolve_filter(self.base, client, update)
 
         if not x:
@@ -79,7 +82,7 @@ class OrFilter(Filter):
         self.base = base
         self.other = other
 
-    async def __call__(self, client: "Client", update: Update) -> Any | bool:
+    async def __call__(self, client: Client, update: Update) -> Any | bool:
         x = await resolve_filter(self.base, client, update)
 
         if x:

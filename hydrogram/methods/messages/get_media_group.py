@@ -17,8 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
-from typing import Union
 
 import hydrogram
 from hydrogram import types
@@ -28,8 +29,8 @@ log = logging.getLogger(__name__)
 
 class GetMediaGroup:
     async def get_media_group(
-        self: "hydrogram.Client", chat_id: Union[int, str], message_id: int
-    ) -> list["types.Message"]:
+        self: hydrogram.Client, chat_id: int | str, message_id: int
+    ) -> list[types.Message]:
         """Get the media group a message belongs to.
 
         .. include:: /_includes/usable-by/users-bots.rst

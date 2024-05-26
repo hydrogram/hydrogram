@@ -16,20 +16,24 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
-from collections.abc import Iterable
-from typing import Union
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 log = logging.getLogger(__name__)
 
 
 class GetForumTopicsByID:
     async def get_forum_topics_by_id(
-        self: "hydrogram.Client", chat_id: Union[int, str], topic_ids: Union[int, Iterable[int]]
-    ) -> Union["types.ForumTopic", list["types.ForumTopic"]]:
+        self: hydrogram.Client, chat_id: int | str, topic_ids: int | Iterable[int]
+    ) -> types.ForumTopic | list[types.ForumTopic]:
         """Get one or more topic from a chat by using topic identifiers.
 
         .. include:: /_includes/usable-by/users.rst

@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -25,9 +25,9 @@ from hydrogram import raw
 
 class UnblockUser:
     async def unblock_user(
-        self: "hydrogram.Client",
-        user_id: Union[int, str],
-        my_stories_from: Union[bool, None] = None,
+        self: hydrogram.Client,
+        user_id: int | str,
+        my_stories_from: bool | None = None,
     ) -> bool:
         """Unblock a user.
 

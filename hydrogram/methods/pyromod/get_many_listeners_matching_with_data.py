@@ -18,8 +18,12 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import hydrogram
+from typing import TYPE_CHECKING
+
 from hydrogram.types import Identifier, Listener, ListenerTypes
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 class GetManyListenersMatchingWithData:

@@ -16,17 +16,19 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import re
 from collections.abc import Iterable, Sequence
 from contextlib import suppress
 from dataclasses import dataclass, field, replace
 from typing import TYPE_CHECKING, Any
 
-from magic_filter import MagicFilter
-
 from hydrogram.filters.base import Filter
 
 if TYPE_CHECKING:
+    from magic_filter import MagicFilter
+
     from hydrogram import Client
     from hydrogram.types import Message
 
@@ -49,7 +51,7 @@ class CommandObject:
     the parsed command object.
     """
 
-    message: "Message | None" = field(repr=False, default=None)
+    message: Message | None = field(repr=False, default=None)
     """The message object."""
     prefix: str = "/"
     """The command prefix."""
@@ -65,7 +67,7 @@ class CommandObject:
     """The magic result."""
 
     @staticmethod
-    def __extract(text: str) -> "CommandObject":
+    def __extract(text: str) -> CommandObject:
         try:
             full_command, *args = text.split(maxsplit=1)
         except ValueError as err:
@@ -80,7 +82,7 @@ class CommandObject:
             args=args[0] if args else None,
         )
 
-    def parse(self) -> "CommandObject":
+    def parse(self) -> CommandObject:
         """
         Parses the command from the given message.
 
@@ -179,7 +181,7 @@ class Command(Filter):
 
         return command
 
-    async def __call__(self, client: "Client", message: "Message") -> bool:
+    async def __call__(self, client: Client, message: Message) -> bool:
         if not message.text or message.caption:
             return False
 
@@ -194,7 +196,7 @@ class Command(Filter):
             msg = f"Invalid prefix: {command.prefix!r}"
             raise CommandError(msg)
 
-    async def validate_mention(self, client: "Client", command: CommandObject) -> None:
+    async def validate_mention(self, client: Client, command: CommandObject) -> None:
         if command.mention and not self.ignore_mention:
             me = client.me or await client.get_me()
 
@@ -217,7 +219,7 @@ class Command(Filter):
         msg = f"Invalid command: {command.command!r}"
         raise CommandError(msg)
 
-    async def parse_command(self, client: "Client", message: "Message") -> CommandObject:
+    async def parse_command(self, client: Client, message: Message) -> CommandObject:
         command = CommandObject(message).parse()
 
         self.validate_prefix(command)

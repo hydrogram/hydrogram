@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw
@@ -25,7 +25,7 @@ from hydrogram import raw
 
 class UnbanChatMember:
     async def unban_chat_member(
-        self: "hydrogram.Client", chat_id: Union[int, str], user_id: Union[int, str]
+        self: hydrogram.Client, chat_id: int | str, user_id: int | str
     ) -> bool:
         """Unban a previously banned user in a supergroup or channel.
         The user will **not** return to the group or channel automatically, but will be able to join via link, etc.

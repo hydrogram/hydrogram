@@ -17,8 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -30,6 +31,9 @@ from hydrogram.file_id import (
     ThumbnailSource,
 )
 from hydrogram.types.object import Object
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Photo(Object):
@@ -65,15 +69,15 @@ class Photo(Object):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         file_id: str,
         file_unique_id: str,
         width: int,
         height: int,
         file_size: int,
         date: datetime,
-        ttl_seconds: Optional[int] = None,
-        thumbs: Optional[list["types.Thumbnail"]] = None,
+        ttl_seconds: int | None = None,
+        thumbs: list[types.Thumbnail] | None = None,
     ):
         super().__init__(client)
 
@@ -87,7 +91,7 @@ class Photo(Object):
         self.thumbs = thumbs
 
     @staticmethod
-    def _parse(client, photo: "raw.types.Photo", ttl_seconds: Optional[int] = None) -> "Photo":
+    def _parse(client, photo: raw.types.Photo, ttl_seconds: int | None = None) -> Photo:
         if isinstance(photo, raw.types.Photo):
             photos: list[raw.types.PhotoSize] = []
 

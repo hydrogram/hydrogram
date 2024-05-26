@@ -17,14 +17,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from asyncio import iscoroutinefunction
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 from magic_filter import MagicFilter
 
-import hydrogram
-from hydrogram.filters import Filter
-from hydrogram.types import Update
+if TYPE_CHECKING:
+    import hydrogram
+    from hydrogram.filters import Filter
+    from hydrogram.types import Update
 
 
 class Handler:
@@ -32,7 +35,7 @@ class Handler:
         self.callback = callback
         self.filters = filters
 
-    async def check(self, client: "hydrogram.Client", update: Update):
+    async def check(self, client: hydrogram.Client, update: Update):
         if callable(self.filters):
             if isinstance(self.filters, MagicFilter):
                 filters = await client.loop.run_in_executor(

@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import asyncio
 import base64
 import functools
@@ -27,7 +29,6 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timezone
 from getpass import getpass
 from types import SimpleNamespace
-from typing import Optional, Union
 
 import hydrogram
 from hydrogram import enums, raw, types
@@ -50,8 +51,8 @@ async def ainput(prompt: str = "", *, hide: bool = False):
 
 
 def get_input_media_from_file_id(
-    file_id: str, expected_file_type: FileType = None, ttl_seconds: Optional[int] = None
-) -> Union["raw.types.InputMediaPhoto", "raw.types.InputMediaDocument"]:
+    file_id: str, expected_file_type: FileType = None, ttl_seconds: int | None = None
+) -> raw.types.InputMediaPhoto | raw.types.InputMediaDocument:
     try:
         decoded = FileId.decode(file_id)
     except Exception as e:
@@ -94,8 +95,8 @@ def get_input_media_from_file_id(
 
 
 async def parse_messages(
-    client, messages: "raw.types.messages.Messages", replies: int = 1
-) -> list["types.Message"]:
+    client, messages: raw.types.messages.Messages, replies: int = 1
+) -> list[types.Message]:
     users = {i.id: i for i in messages.users}
     chats = {i.id: i for i in messages.chats}
     topics = {i.id: i for i in messages.topics} if hasattr(messages, "topics") else None
@@ -137,7 +138,7 @@ async def parse_messages(
     return types.List(parsed_messages)
 
 
-def parse_deleted_messages(client, update) -> list["types.Message"]:
+def parse_deleted_messages(client, update) -> list[types.Message]:
     messages = update.messages
     channel_id = getattr(update, "channel_id", None)
 
@@ -158,7 +159,7 @@ def parse_deleted_messages(client, update) -> list["types.Message"]:
     return types.List(parsed_messages)
 
 
-def pack_inline_message_id(msg_id: "raw.base.InputBotInlineMessageID"):
+def pack_inline_message_id(msg_id: raw.base.InputBotInlineMessageID):
     if isinstance(msg_id, raw.types.InputBotInlineMessageID):
         inline_message_id_packed = struct.pack("<iqq", msg_id.dc_id, msg_id.id, msg_id.access_hash)
     else:
@@ -169,7 +170,7 @@ def pack_inline_message_id(msg_id: "raw.base.InputBotInlineMessageID"):
     return base64.urlsafe_b64encode(inline_message_id_packed).decode().rstrip("=")
 
 
-def unpack_inline_message_id(inline_message_id: str) -> "raw.base.InputBotInlineMessageID":
+def unpack_inline_message_id(inline_message_id: str) -> raw.base.InputBotInlineMessageID:
     padded = inline_message_id + "=" * (-len(inline_message_id) % 4)
     decoded = base64.urlsafe_b64decode(padded)
 
@@ -197,7 +198,7 @@ MAX_USER_ID_OLD = 2147483647
 MAX_USER_ID = 999999999999
 
 
-def get_raw_peer_id(peer: raw.base.Peer) -> Optional[int]:
+def get_raw_peer_id(peer: raw.base.Peer) -> int | None:
     """Get the raw peer id from a Peer object"""
     if isinstance(peer, raw.types.PeerUser):
         return peer.user_id
@@ -327,11 +328,11 @@ def compute_password_check(
 
 
 async def parse_text_entities(
-    client: "hydrogram.Client",
+    client: hydrogram.Client,
     text: str,
     parse_mode: enums.ParseMode,
-    entities: list["types.MessageEntity"],
-) -> dict[str, Union[str, list[raw.base.MessageEntity]]]:
+    entities: list[types.MessageEntity],
+) -> dict[str, str | list[raw.base.MessageEntity]]:
     if entities:
         # Inject the client instance because parsing user mentions requires it
         for entity in entities:
@@ -348,11 +349,11 @@ def zero_datetime() -> datetime:
     return datetime.fromtimestamp(0, timezone.utc)
 
 
-def timestamp_to_datetime(ts: Optional[int]) -> Optional[datetime]:
+def timestamp_to_datetime(ts: int | None) -> datetime | None:
     return datetime.fromtimestamp(ts) if ts else None
 
 
-def datetime_to_timestamp(dt: Optional[datetime]) -> Optional[int]:
+def datetime_to_timestamp(dt: datetime | None) -> int | None:
     return int(dt.timestamp()) if dt else None
 
 

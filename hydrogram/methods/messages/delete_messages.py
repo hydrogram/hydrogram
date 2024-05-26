@@ -17,18 +17,22 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import Iterable
-from typing import Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw
 
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
 
 class DeleteMessages:
     async def delete_messages(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        message_ids: Union[int, Iterable[int]],
+        self: hydrogram.Client,
+        chat_id: int | str,
+        message_ids: int | Iterable[int],
         revoke: bool = True,
     ) -> int:
         """Delete messages, including service messages.

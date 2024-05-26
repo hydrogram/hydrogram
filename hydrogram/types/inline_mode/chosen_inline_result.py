@@ -17,9 +17,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from base64 import b64encode
 from struct import pack
-from typing import Optional
 
 import hydrogram
 from hydrogram import raw, types
@@ -57,12 +58,12 @@ class ChosenInlineResult(Object, Update):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         result_id: str,
-        from_user: "types.User",
+        from_user: types.User,
         query: str,
-        location: "types.Location" = None,
-        inline_message_id: Optional[str] = None,
+        location: types.Location = None,
+        inline_message_id: str | None = None,
     ):
         super().__init__(client)
 
@@ -75,7 +76,7 @@ class ChosenInlineResult(Object, Update):
     @staticmethod
     def _parse(
         client, chosen_inline_result: raw.types.UpdateBotInlineSend, users
-    ) -> "ChosenInlineResult":
+    ) -> ChosenInlineResult:
         inline_message_id = None
 
         if isinstance(chosen_inline_result.msg_id, raw.types.InputBotInlineMessageID):

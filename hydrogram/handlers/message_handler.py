@@ -17,9 +17,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from inspect import iscoroutinefunction
 from re import Match
-from typing import Callable, Optional
+from typing import Callable
 
 from magic_filter import MagicFilter
 
@@ -58,8 +60,8 @@ class MessageHandler(Handler):
         super().__init__(self.resolve_future_or_callback, filters)
 
     async def check_if_has_matching_listener(
-        self, client: "hydrogram.Client", message: Message
-    ) -> tuple[bool, Optional[Listener]]:
+        self, client: hydrogram.Client, message: Message
+    ) -> tuple[bool, Listener | None]:
         """
         Checks if the message has a matching listener.
 
@@ -104,7 +106,7 @@ class MessageHandler(Handler):
 
         return listener_does_match, listener
 
-    async def check(self, client: "hydrogram.Client", message: Message) -> bool:
+    async def check(self, client: hydrogram.Client, message: Message) -> bool:
         """
         Checks if the message has a matching listener or handler and its filters does match with the Message.
 
@@ -142,9 +144,7 @@ class MessageHandler(Handler):
         # exists but its filters doesn't match
         return listener_does_match or handler_does_match
 
-    async def resolve_future_or_callback(
-        self, client: "hydrogram.Client", message: Message, *args
-    ):
+    async def resolve_future_or_callback(self, client: hydrogram.Client, message: Message, *args):
         """
         Resolves the future or calls the callback of the listener if the message has a matching listener.
 

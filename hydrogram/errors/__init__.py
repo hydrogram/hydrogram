@@ -17,7 +17,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import ClassVar, Optional
+from __future__ import annotations
+
+from typing import ClassVar
 
 from .exceptions import (
     AboutTooLong,
@@ -531,14 +533,14 @@ class SecurityError(Exception):
 class SecurityCheckMismatch(SecurityError):  # noqa: N818
     """Raised when a security check mismatch occurs."""
 
-    def __init__(self, msg: Optional[str] = None):
+    def __init__(self, msg: str | None = None):
         super().__init__("A security check mismatch has occurred." if msg is None else msg)
 
 
 class CDNFileHashMismatch(SecurityError):  # noqa: N818
     """Raised when a CDN file hash mismatch occurs."""
 
-    def __init__(self, msg: Optional[str] = None):
+    def __init__(self, msg: str | None = None):
         super().__init__("A CDN file hash mismatch has occurred." if msg is None else msg)
 
 

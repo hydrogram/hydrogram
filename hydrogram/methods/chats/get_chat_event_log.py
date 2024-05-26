@@ -17,23 +17,27 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import AsyncGenerator
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import raw, types
 
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+
 
 class GetChatEventLog:
     async def get_chat_event_log(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         query: str = "",
         offset_id: int = 0,
         limit: int = 0,
-        filters: "types.ChatEventFilter" = None,
-        user_ids: Optional[list[Union[int, str]]] = None,
-    ) -> Optional[AsyncGenerator["types.ChatEvent", None]]:
+        filters: types.ChatEventFilter = None,
+        user_ids: list[int | str] | None = None,
+    ) -> AsyncGenerator[types.ChatEvent, None] | None:
         """Get the actions taken by chat members and administrators in the last 48h.
 
         Only available for supergroups and channels. Requires administrator rights.

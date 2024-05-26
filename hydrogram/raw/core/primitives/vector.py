@@ -17,14 +17,18 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from io import BytesIO
-from typing import Any, Union, cast
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, cast
 
 from hydrogram.raw.core.list import List
 from hydrogram.raw.core.tl_object import TLObject
 
 from .bool import Bool, BoolFalse, BoolTrue
 from .int import Int, Long
+
+if TYPE_CHECKING:
+    from io import BytesIO
 
 
 class Vector(bytes, TLObject):
@@ -33,7 +37,7 @@ class Vector(bytes, TLObject):
     # Method added to handle the special case when a query returns a bare Vector (of Ints);
     # i.e., RpcResult body starts with 0x1cb5c415 (Vector Id) - e.g., messages.GetMessagesViews.
     @staticmethod
-    def read_bare(b: BytesIO, size: int) -> Union[int, Any]:
+    def read_bare(b: BytesIO, size: int) -> int | Any:
         if size == 4:
             e = int.from_bytes(b.read(4), "little")
             b.seek(-4, 1)

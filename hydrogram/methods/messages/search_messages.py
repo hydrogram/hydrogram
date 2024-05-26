@@ -17,22 +17,26 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import AsyncGenerator
-from typing import Optional, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
 
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+
 
 async def get_chunk(
     client,
-    chat_id: Union[int, str],
+    chat_id: int | str,
     query: str = "",
-    filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
+    filter: enums.MessagesFilter = enums.MessagesFilter.EMPTY,
     offset: int = 0,
     limit: int = 100,
-    from_user: Optional[Union[int, str]] = None,
-) -> list["types.Message"]:
+    from_user: int | str | None = None,
+) -> list[types.Message]:
     r = await client.invoke(
         raw.functions.messages.Search(
             peer=await client.resolve_peer(chat_id),
@@ -56,14 +60,14 @@ async def get_chunk(
 
 class SearchMessages:
     async def search_messages(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         query: str = "",
         offset: int = 0,
-        filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
+        filter: enums.MessagesFilter = enums.MessagesFilter.EMPTY,
         limit: int = 0,
-        from_user: Optional[Union[int, str]] = None,
-    ) -> Optional[AsyncGenerator["types.Message", None]]:
+        from_user: int | str | None = None,
+    ) -> AsyncGenerator[types.Message, None] | None:
         """Search for text and media messages inside a specific chat.
 
         If you want to get the messages count only, see :meth:`~hydrogram.Client.search_messages_count`.

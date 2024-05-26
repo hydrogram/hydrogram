@@ -17,13 +17,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from re import Match
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import enums, raw, types
 from hydrogram.types.object import Object
 from hydrogram.types.update import Update
+
+if TYPE_CHECKING:
+    from re import Match
 
 
 class InlineQuery(Object, Update):
@@ -58,14 +62,14 @@ class InlineQuery(Object, Update):
     def __init__(
         self,
         *,
-        client: "hydrogram.Client" = None,
+        client: hydrogram.Client = None,
         id: str,
-        from_user: "types.User",
+        from_user: types.User,
         query: str,
         offset: str,
-        chat_type: "enums.ChatType",
-        location: "types.Location" = None,
-        matches: Optional[list[Match]] = None,
+        chat_type: enums.ChatType,
+        location: types.Location = None,
+        matches: list[Match] | None = None,
     ):
         super().__init__(client)
 
@@ -78,7 +82,7 @@ class InlineQuery(Object, Update):
         self.matches = matches
 
     @staticmethod
-    def _parse(client, inline_query: raw.types.UpdateBotInlineQuery, users: dict) -> "InlineQuery":
+    def _parse(client, inline_query: raw.types.UpdateBotInlineQuery, users: dict) -> InlineQuery:
         peer_type = inline_query.peer_type
         chat_type = None
 
@@ -111,7 +115,7 @@ class InlineQuery(Object, Update):
 
     async def answer(
         self,
-        results: list["types.InlineQueryResult"],
+        results: list[types.InlineQueryResult],
         cache_time: int = 300,
         is_gallery: bool = False,
         is_personal: bool = False,

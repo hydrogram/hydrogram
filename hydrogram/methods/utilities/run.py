@@ -19,9 +19,12 @@
 
 import asyncio
 import inspect
+from typing import TYPE_CHECKING
 
-import hydrogram
 from hydrogram.methods.utilities.idle import idle
+
+if TYPE_CHECKING:
+    import hydrogram
 
 
 class Run:

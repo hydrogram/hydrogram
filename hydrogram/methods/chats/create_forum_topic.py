@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -24,12 +24,12 @@ from hydrogram import raw, types
 
 class CreateForumTopic:
     async def create_forum_topic(
-        self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        self: hydrogram.Client,
+        chat_id: int | str,
         title: str,
-        icon_color: Optional[int] = None,
-        icon_emoji_id: Optional[int] = None,
-    ) -> "types.ForumTopicCreated":
+        icon_color: int | None = None,
+        icon_emoji_id: int | None = None,
+    ) -> types.ForumTopicCreated:
         """Create a new forum topic.
 
         .. include:: /_includes/usable-by/users-bots.rst

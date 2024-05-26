@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from __future__ import annotations
 
 import hydrogram
 from hydrogram import raw, types
@@ -25,14 +25,14 @@ from hydrogram import raw, types
 
 class SetGameScore:
     async def set_game_score(
-        self: "hydrogram.Client",
-        user_id: Union[int, str],
+        self: hydrogram.Client,
+        user_id: int | str,
         score: int,
-        force: Optional[bool] = None,
-        disable_edit_message: Optional[bool] = None,
-        chat_id: Optional[Union[int, str]] = None,
-        message_id: Optional[int] = None,
-    ) -> Union["types.Message", bool]:
+        force: bool | None = None,
+        disable_edit_message: bool | None = None,
+        chat_id: int | str | None = None,
+        message_id: int | None = None,
+    ) -> types.Message | bool:
         # inline_message_id: str = None):  TODO Add inline_message_id
         """Set the score of the specified user in a game.
 

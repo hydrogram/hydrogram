@@ -19,13 +19,15 @@
 
 import html
 import re
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
-import hydrogram
 from hydrogram.enums import MessageEntityType
 
 from . import utils
 from .html import HTML
+
+if TYPE_CHECKING:
+    import hydrogram
 
 BOLD_DELIM = "**"
 ITALIC_DELIM = "__"
