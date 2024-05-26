@@ -60,11 +60,7 @@ log = logging.getLogger(__name__)
 
 
 class Dispatcher:
-    NEW_MESSAGE_UPDATES = (
-        UpdateNewMessage,
-        UpdateNewChannelMessage,
-        UpdateNewScheduledMessage,
-    )
+    NEW_MESSAGE_UPDATES = (UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage)
     EDIT_MESSAGE_UPDATES = (UpdateEditMessage, UpdateEditChannelMessage)
     DELETE_MESSAGES_UPDATES = (UpdateDeleteMessages, UpdateDeleteChannelMessages)
     CALLBACK_QUERY_UPDATES = (UpdateBotCallbackQuery, UpdateInlineBotCallbackQuery)
@@ -78,208 +74,157 @@ class Dispatcher:
     def __init__(self, client: "hydrogram.Client"):
         self.client = client
         self.loop = asyncio.get_event_loop()
-
         self.handler_worker_tasks = []
         self.locks_list = []
-
         self.updates_queue = asyncio.Queue()
         self.groups = OrderedDict()
+        self._init_update_parsers()
 
-        async def message_parser(update, users, chats):
-            return (
-                await hydrogram.types.Message._parse(
-                    client=self.client,
-                    message=update.message,
-                    users=users,
-                    chats=chats,
-                    is_scheduled=isinstance(update, UpdateNewScheduledMessage),
-                ),
-                MessageHandler,
-            )
-
-        async def edited_message_parser(update, users, chats):
-            # Edited messages are parsed the same way as new messages, but the handler is different
-            parsed, _ = await message_parser(update, users, chats)
-
-            return (parsed, EditedMessageHandler)
-
-        def deleted_messages_parser(update, users, chats):
-            return (
-                utils.parse_deleted_messages(self.client, update),
-                DeletedMessagesHandler,
-            )
-
-        async def callback_query_parser(update, users, chats):
-            return (
-                await hydrogram.types.CallbackQuery._parse(self.client, update, users),
-                CallbackQueryHandler,
-            )
-
-        def user_status_parser(update, users, chats):
-            return (
-                hydrogram.types.User._parse_user_status(self.client, update),
-                UserStatusHandler,
-            )
-
-        def inline_query_parser(update, users, chats):
-            return (
-                hydrogram.types.InlineQuery._parse(self.client, update, users),
-                InlineQueryHandler,
-            )
-
-        def poll_parser(update, users, chats):
-            return (
-                hydrogram.types.Poll._parse_update(self.client, update),
-                PollHandler,
-            )
-
-        def chosen_inline_result_parser(update, users, chats):
-            return (
-                hydrogram.types.ChosenInlineResult._parse(self.client, update, users),
-                ChosenInlineResultHandler,
-            )
-
-        def chat_member_updated_parser(update, users, chats):
-            return (
-                hydrogram.types.ChatMemberUpdated._parse(self.client, update, users, chats),
-                ChatMemberUpdatedHandler,
-            )
-
-        def chat_join_request_parser(update, users, chats):
-            return (
-                hydrogram.types.ChatJoinRequest._parse(self.client, update, users, chats),
-                ChatJoinRequestHandler,
-            )
-
+    def _init_update_parsers(self):
         self.update_parsers = {
-            Dispatcher.NEW_MESSAGE_UPDATES: message_parser,
-            Dispatcher.EDIT_MESSAGE_UPDATES: edited_message_parser,
-            Dispatcher.DELETE_MESSAGES_UPDATES: deleted_messages_parser,
-            Dispatcher.CALLBACK_QUERY_UPDATES: callback_query_parser,
-            Dispatcher.USER_STATUS_UPDATES: user_status_parser,
-            Dispatcher.BOT_INLINE_QUERY_UPDATES: inline_query_parser,
-            Dispatcher.POLL_UPDATES: poll_parser,
-            Dispatcher.CHOSEN_INLINE_RESULT_UPDATES: chosen_inline_result_parser,
-            Dispatcher.CHAT_MEMBER_UPDATES: chat_member_updated_parser,
-            Dispatcher.CHAT_JOIN_REQUEST_UPDATES: chat_join_request_parser,
+            Dispatcher.NEW_MESSAGE_UPDATES: self._message_parser,
+            Dispatcher.EDIT_MESSAGE_UPDATES: self._edited_message_parser,
+            Dispatcher.DELETE_MESSAGES_UPDATES: self._deleted_messages_parser,
+            Dispatcher.CALLBACK_QUERY_UPDATES: self._callback_query_parser,
+            Dispatcher.USER_STATUS_UPDATES: self._user_status_parser,
+            Dispatcher.BOT_INLINE_QUERY_UPDATES: self._inline_query_parser,
+            Dispatcher.POLL_UPDATES: self._poll_parser,
+            Dispatcher.CHOSEN_INLINE_RESULT_UPDATES: self._chosen_inline_result_parser,
+            Dispatcher.CHAT_MEMBER_UPDATES: self._chat_member_updated_parser,
+            Dispatcher.CHAT_JOIN_REQUEST_UPDATES: self._chat_join_request_parser,
         }
-
         self.update_parsers = {
             key: value for key_tuple, value in self.update_parsers.items() for key in key_tuple
         }
 
+    async def _message_parser(self, update, users, chats):
+        return (
+            await hydrogram.types.Message._parse(
+                client=self.client,
+                message=update.message,
+                users=users,
+                chats=chats,
+                is_scheduled=isinstance(update, UpdateNewScheduledMessage),
+            ),
+            MessageHandler,
+        )
+
+    async def _edited_message_parser(self, update, users, chats):
+        parsed, _ = await self._message_parser(update, users, chats)
+        return parsed, EditedMessageHandler
+
+    def _deleted_messages_parser(self, update, users, chats):
+        return utils.parse_deleted_messages(self.client, update), DeletedMessagesHandler
+
+    async def _callback_query_parser(self, update, users, chats):
+        return await hydrogram.types.CallbackQuery._parse(
+            self.client, update, users
+        ), CallbackQueryHandler
+
+    def _user_status_parser(self, update, users, chats):
+        return hydrogram.types.User._parse_user_status(self.client, update), UserStatusHandler
+
+    def _inline_query_parser(self, update, users, chats):
+        return hydrogram.types.InlineQuery._parse(self.client, update, users), InlineQueryHandler
+
+    def _poll_parser(self, update, users, chats):
+        return hydrogram.types.Poll._parse_update(self.client, update), PollHandler
+
+    def _chosen_inline_result_parser(self, update, users, chats):
+        return hydrogram.types.ChosenInlineResult._parse(
+            self.client, update, users
+        ), ChosenInlineResultHandler
+
+    def _chat_member_updated_parser(self, update, users, chats):
+        return hydrogram.types.ChatMemberUpdated._parse(
+            self.client, update, users, chats
+        ), ChatMemberUpdatedHandler
+
+    def _chat_join_request_parser(self, update, users, chats):
+        return hydrogram.types.ChatJoinRequest._parse(
+            self.client, update, users, chats
+        ), ChatJoinRequestHandler
+
     async def start(self):
         if not self.client.no_updates:
-            for _ in range(self.client.workers):
-                self.locks_list.append(asyncio.Lock())
-
-                self.handler_worker_tasks.append(
-                    self.loop.create_task(self.handler_worker(self.locks_list[-1]))
-                )
-
+            self.locks_list = [asyncio.Lock() for _ in range(self.client.workers)]
+            self.handler_worker_tasks = [
+                self.loop.create_task(self.handler_worker(lock)) for lock in self.locks_list
+            ]
             log.info("Started %s HandlerTasks", self.client.workers)
 
     async def stop(self):
         if not self.client.no_updates:
             for _ in range(self.client.workers):
                 self.updates_queue.put_nowait(None)
-
-            for i in self.handler_worker_tasks:
-                await i
-
+            await asyncio.gather(*self.handler_worker_tasks)
             self.handler_worker_tasks.clear()
             self.groups.clear()
-
             log.info("Stopped %s HandlerTasks", self.client.workers)
 
     def add_handler(self, handler, group: int):
         async def fn():
-            for lock in self.locks_list:
-                await lock.acquire()
-
-            try:
+            async with asyncio.Lock():
                 if group not in self.groups:
                     self.groups[group] = []
                     self.groups = OrderedDict(sorted(self.groups.items()))
-
                 self.groups[group].append(handler)
-            finally:
-                for lock in self.locks_list:
-                    lock.release()
 
         self.loop.create_task(fn())
 
     def remove_handler(self, handler, group: int):
         async def fn():
-            for lock in self.locks_list:
-                await lock.acquire()
-
-            try:
+            async with asyncio.Lock():
                 if group not in self.groups:
                     raise ValueError(f"Group {group} does not exist. Handler was not removed.")
-
                 self.groups[group].remove(handler)
-            finally:
-                for lock in self.locks_list:
-                    lock.release()
 
         self.loop.create_task(fn())
 
     async def handler_worker(self, lock):
         while True:
             packet = await self.updates_queue.get()
-
             if packet is None:
                 break
+            await self._process_packet(packet, lock)
 
-            try:
-                update, users, chats = packet
-                parser = self.update_parsers.get(type(update), None)
+    async def _process_packet(self, packet, lock):
+        try:
+            update, users, chats = packet
+            parser = self.update_parsers.get(type(update))
+            if not parser:
+                return
 
-                parsed_update, handler_type = (
-                    await parser(update, users, chats)
-                    if parser is not None
-                    else (None, type(None))
-                )
+            parsed_update, handler_type = await parser(update, users, chats)
+            async with lock:
+                for group in self.groups.values():
+                    for handler in group:
+                        await self._handle_update(
+                            handler, handler_type, parsed_update, update, users, chats
+                        )
+        except hydrogram.StopPropagation:
+            pass
+        except Exception as e:
+            log.exception(e)
 
-                async with lock:
-                    for group in self.groups.values():
-                        for handler in group:
-                            args = None
+    async def _handle_update(self, handler, handler_type, parsed_update, update, users, chats):
+        try:
+            if isinstance(handler, handler_type):
+                if await handler.check(self.client, parsed_update):
+                    await self._execute_callback(handler, parsed_update)
+            elif isinstance(handler, RawUpdateHandler):
+                await self._execute_callback(handler, update, users, chats)
+        except hydrogram.StopPropagation:
+            raise
+        except hydrogram.ContinuePropagation:
+            pass
+        except Exception as e:
+            log.exception(e)
 
-                            if isinstance(handler, handler_type):
-                                try:
-                                    if await handler.check(self.client, parsed_update):
-                                        args = (parsed_update,)
-                                except Exception as e:
-                                    log.exception(e)
-                                    continue
-
-                            elif isinstance(handler, RawUpdateHandler):
-                                args = (update, users, chats)
-
-                            if args is None:
-                                continue
-
-                            try:
-                                if inspect.iscoroutinefunction(handler.callback):
-                                    await handler.callback(self.client, *args)
-                                else:
-                                    await self.loop.run_in_executor(
-                                        self.client.executor,
-                                        handler.callback,
-                                        self.client,
-                                        *args,
-                                    )
-                            except hydrogram.StopPropagation:
-                                raise
-                            except hydrogram.ContinuePropagation:
-                                continue
-                            except Exception as e:
-                                log.exception(e)
-
-                            break
-            except hydrogram.StopPropagation:
-                pass
-            except Exception as e:
-                log.exception(e)
+    async def _execute_callback(self, handler, *args):
+        if inspect.iscoroutinefunction(handler.callback):
+            await handler.callback(self.client, *args)
+        else:
+            await self.loop.run_in_executor(
+                self.client.executor, handler.callback, self.client, *args
+            )
