@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import base64
-import inspect
+import logging
 import struct
 import time
 from pathlib import Path
@@ -29,10 +29,10 @@ from typing import Any
 import aiosqlite
 
 from hydrogram import raw, utils
+from hydrogram.enums import ChatType
 
-from .base import BaseStorage
+from .base import BaseStorage, InputPeer
 
-# language=SQLite
 SCHEMA = """
 CREATE TABLE sessions
 (
@@ -75,18 +75,15 @@ END;
 """
 
 
-def get_input_peer(peer_id: int, access_hash: int, peer_type: str):
+def get_input_peer(peer_id: int, access_hash: int, peer_type: str) -> InputPeer:
     if peer_type in {"user", "bot"}:
         return raw.types.InputPeerUser(user_id=peer_id, access_hash=access_hash)
-
-    if peer_type == "group":
+    if peer_type == ChatType.GROUP:
         return raw.types.InputPeerChat(chat_id=-peer_id)
-
     if peer_type in {"channel", "supergroup"}:
         return raw.types.InputPeerChannel(
             channel_id=utils.get_channel_id(peer_id), access_hash=access_hash
         )
-
     raise ValueError(f"Invalid peer type: {peer_type}")
 
 
@@ -103,43 +100,49 @@ class SQLiteStorage(BaseStorage):
         use_memory: bool = False,
     ):
         super().__init__(name)
+        self.database: str | Path = (
+            ":memory:"
+            if use_memory
+            else (workdir / (self.name + self.FILE_EXTENSION) if workdir else ":memory:")
+        )
+        self.session_string: str | None = session_string
+        self.conn: aiosqlite.Connection | None = None
 
-        self.conn: aiosqlite.Connection = None
+    async def update(self) -> None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return
 
-        if workdir and not use_memory:
-            self.database = workdir / (self.name + self.FILE_EXTENSION)
-        else:
-            self.database = ":memory:"
-
-        self.session_string = session_string
-
-    async def update(self):
-        version = await self.version()
+        version: int | None = await self.version()
 
         if version == 1:
             await self.conn.execute("DELETE FROM peers")
-            await self.conn.commit()
-
             version += 1
 
         if version == 2:
             await self.conn.execute("ALTER TABLE sessions ADD api_id INTEGER")
-            await self.conn.commit()
-
             version += 1
 
         await self.version(version)
+        await self.conn.commit()
 
-    async def create(self):
+    async def create(self) -> None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return
+
         await self.conn.executescript(SCHEMA)
-        await self.conn.execute("INSERT INTO version VALUES (?)", (self.VERSION,))
+        await self.conn.execute(
+            "INSERT INTO version VALUES (?)",
+            (self.VERSION,),
+        )
         await self.conn.execute(
             "INSERT INTO sessions VALUES (?, ?, ?, ?, ?, ?, ?)",
             (2, None, None, None, 0, None, None),
         )
         await self.conn.commit()
 
-    async def open(self):
+    async def open(self) -> None:
         path = self.database
         file_exists = isinstance(path, Path) and path.is_file()
 
@@ -149,11 +152,19 @@ class SQLiteStorage(BaseStorage):
 
         if file_exists:
             await self.update()
-
             await self.conn.execute("VACUUM")
-            await self.conn.commit()
         else:
             await self.create()
+
+        await self.conn.commit()
+
+        if self.session_string:
+            await self._load_session_string()
+
+    async def _load_session_string(self) -> None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return
 
         if self.session_string:
             dc_id, api_id, test_mode, auth_key, user_id, is_bot = struct.unpack(
@@ -171,44 +182,64 @@ class SQLiteStorage(BaseStorage):
             await self.is_bot(is_bot)
             await self.date(0)
 
-    async def save(self):
+    async def save(self) -> None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return
+
         await self.date(int(time.time()))
         await self.conn.commit()
 
-    async def close(self):
-        await self.conn.close()
+    async def close(self) -> None:
+        if self.conn:
+            await self.conn.close()
 
-    async def delete(self):
+    async def delete(self) -> None:
         if self.database != ":memory:":
             Path(self.database).unlink()
 
-    async def update_peers(self, peers: list[tuple[int, int, str, str, str]]):
+    async def update_peers(
+        self, peers: list[tuple[int, int, str, str | None, str | None]]
+    ) -> None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return
+
         await self.conn.executemany(
-            "REPLACE INTO peers (id, access_hash, type, username, phone_number)"
+            "REPLACE INTO peers (id, access_hash, type, username, phone_number) "
             "VALUES (?, ?, ?, ?, ?)",
             peers,
         )
+        await self.conn.commit()
 
-    async def get_peer_by_id(self, peer_id: int):
+    async def get_peer_by_id(self, peer_id: int) -> InputPeer | None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return None
+
         q = await self.conn.execute(
             "SELECT id, access_hash, type FROM peers WHERE id = ?", (peer_id,)
         )
         r = await q.fetchone()
-
-        if r is None:
+        if not r:
             raise KeyError(f"ID not found: {peer_id}")
 
         return get_input_peer(*r)
 
-    async def get_peer_by_username(self, username: str):
+    async def get_peer_by_username(self, username: str) -> InputPeer | None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return None
+
         q = await self.conn.execute(
-            "SELECT id, access_hash, type, last_update_on FROM peers WHERE username = ?"
+            "SELECT id, access_hash, type, last_update_on "
+            "FROM peers "
+            "WHERE username = ? "
             "ORDER BY last_update_on DESC",
             (username,),
         )
         r = await q.fetchone()
-
-        if r is None:
+        if not r:
             raise KeyError(f"Username not found: {username}")
 
         if abs(time.time() - r[3]) > self.USERNAME_TTL:
@@ -216,59 +247,79 @@ class SQLiteStorage(BaseStorage):
 
         return get_input_peer(*r[:3])
 
-    async def get_peer_by_phone_number(self, phone_number: str):
+    async def get_peer_by_phone_number(self, phone_number: str) -> InputPeer | None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return None
+
         q = await self.conn.execute(
-            "SELECT id, access_hash, type FROM peers WHERE phone_number = ?",
-            (phone_number,),
+            "SELECT id, access_hash, type FROM peers WHERE phone_number = ?", (phone_number,)
         )
         r = await q.fetchone()
-
-        if r is None:
+        if not r:
             raise KeyError(f"Phone number not found: {phone_number}")
 
         return get_input_peer(*r)
 
-    async def _get(self):
-        attr = inspect.stack()[2].function
+    async def _get(self, attr: str) -> Any:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return None
 
         q = await self.conn.execute(f"SELECT {attr} FROM sessions")
         row = await q.fetchone()
         return row[0] if row else None
 
-    async def _set(self, value: Any):
-        attr = inspect.stack()[2].function
+    async def _set(self, attr: str, value: Any) -> None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return
+
         await self.conn.execute(f"UPDATE sessions SET {attr} = ?", (value,))
         await self.conn.commit()
 
-    async def _accessor(self, value: Any = object):
-        return await self._get() if value is object else await self._set(value)
+    async def _accessor(self, attr: str, value: Any = object) -> Any | None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return None
 
-    async def dc_id(self, value: int = object):
-        return await self._accessor(value)
+        if value is object:
+            return await self._get(attr)
 
-    async def api_id(self, value: int = object):
-        return await self._accessor(value)
+        await self._set(attr, value)
+        return None
 
-    async def test_mode(self, value: bool = object):
-        return await self._accessor(value)
+    async def dc_id(self, value: int | object = object) -> int | None:
+        return await self._accessor("dc_id", value)
 
-    async def auth_key(self, value: bytes = object):
-        return await self._accessor(value)
+    async def api_id(self, value: int | object = object) -> int | None:
+        return await self._accessor("api_id", value)
 
-    async def date(self, value: int = object):
-        return await self._accessor(value)
+    async def test_mode(self, value: bool | object = object) -> bool | None:
+        return await self._accessor("test_mode", value)
 
-    async def user_id(self, value: int = object):
-        return await self._accessor(value)
+    async def auth_key(self, value: bytes | object = object) -> bytes | None:
+        return await self._accessor("auth_key", value)
 
-    async def is_bot(self, value: bool = object):
-        return await self._accessor(value)
+    async def date(self, value: int | object = object) -> int | None:
+        return await self._accessor("date", value)
 
-    async def version(self, value: int = object):
+    async def user_id(self, value: int | object = object) -> int | None:
+        return await self._accessor("user_id", value)
+
+    async def is_bot(self, value: bool | object = object) -> bool | None:
+        return await self._accessor("is_bot", value)
+
+    async def version(self, value: int | object = object) -> int | None:
+        if not self.conn:
+            logging.warning("Database connection is not available.")
+            return None
+
         if value is object:
             q = await self.conn.execute("SELECT number FROM version")
             row = await q.fetchone()
             return row[0] if row else None
+
         await self.conn.execute("UPDATE version SET number = ?", (value,))
         await self.conn.commit()
         return None
