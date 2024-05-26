@@ -54,13 +54,15 @@ pip install hydrogram -U
 Here is a basic example of how to use Hydrogram:
 
 ```python
-from hydrogram import Client, filters
+from hydrogram import Client
+from hydrogram.types import Message
+from hydrogram.filters import Command
 
-app = Client("my_account")
+app = Client(name="my_client")
 
 
-@app.on_message(filters.private)
-async def hello(client, message):
+@app.on_message(Command("start"))
+async def hello(client: Client, message: Message):
     await message.reply("Hello from Hydrogram!")
 
 
