@@ -205,7 +205,7 @@ class Client(Methods):
     WORKDIR = PARENT_DIR
 
     # Interval of seconds in which the updates watchdog will kick in
-    UPDATES_WATCHDOG_INTERVAL = 5 * 60
+    UPDATES_WATCHDOG_INTERVAL = 15 * 60
 
     MAX_CONCURRENT_TRANSMISSIONS = 1
 
@@ -316,13 +316,6 @@ class Client(Methods):
 
         self.loop = asyncio.get_event_loop()
         self.listeners = {listener_type: [] for listener_type in ListenerTypes}
-
-    def __enter__(self):
-        return self.start()
-
-    def __exit__(self, *args):
-        with contextlib.suppress(ConnectionError):
-            self.stop()
 
     async def __aenter__(self):
         return await self.start()

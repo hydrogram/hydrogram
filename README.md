@@ -73,7 +73,7 @@ app.run()
 - **Elegant:** Low-level details are abstracted and re-presented in a more convenient way, making the Telegram API more accessible.
 - **Fast:** Hydrogram is boosted by [TgCrypto](https://github.com/pyrogram/tgcrypto), a high-performance cryptography library written in C, which makes it faster than other Python Telegram libraries.
 - **Type-hinted:** Types and methods are all type-hinted, enabling excellent editor support and making it easier to write and maintain code.
-- **Async:** Hydrogram is fully asynchronous, which means it can handle multiple requests at the same time, making it faster and more efficient (also usable synchronously if wanted, for convenience).
+- **Async:** Hydrogram is fully asynchronous, which means it can handle multiple requests at the same time, making it faster and more efficient.
 - **Powerful:** Hydrogram provides full access to Telegram's API to execute any official client action and more, giving developers the flexibility to build powerful applications.
 
 ## Resources

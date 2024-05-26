@@ -148,7 +148,6 @@ Meta
     topics/client-settings
     topics/speedups
     topics/text-formatting
-    topics/synchronous
     topics/smart-plugins
     topics/storage-engines
     topics/serializing
