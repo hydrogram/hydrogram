@@ -191,11 +191,14 @@ class Dispatcher:
     async def _process_packet(self, packet, lock):
         try:
             update, users, chats = packet
-            parser = self.update_parsers.get(type(update), None)
+            parser = self.update_parsers.get(type(update))
+            if not parser:
+                return
 
-            parsed_update, handler_type = (
-                await parser(update, users, chats) if parser is not None else (None, type(None))
-            )
+            if inspect.iscoroutinefunction(parser):
+                parsed_update, handler_type = await parser(update, users, chats)
+            else:
+                parsed_update, handler_type = parser(update, users, chats)
 
             async with lock:
                 for group in self.groups.values():
