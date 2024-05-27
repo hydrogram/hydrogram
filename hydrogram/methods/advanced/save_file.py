@@ -163,7 +163,7 @@ class SaveFile:
 
                     if not chunk:
                         if not is_big and not is_missing_part:
-                            md5_sum = "".join([hex(i)[2:].zfill(2) for i in md5_sum.digest()])
+                            md5_sum = "".join([f"{i:x}".zfill(2) for i in md5_sum.digest()])
                         break
 
                     if is_big:

@@ -892,14 +892,13 @@ class Client(Methods):
                     peer = raw.types.InputPeerUser(
                         user_id=file_id.chat_id, access_hash=file_id.chat_access_hash
                     )
+                elif file_id.chat_access_hash == 0:
+                    peer = raw.types.InputPeerChat(chat_id=-file_id.chat_id)
                 else:
-                    if file_id.chat_access_hash == 0:
-                        peer = raw.types.InputPeerChat(chat_id=-file_id.chat_id)
-                    else:
-                        peer = raw.types.InputPeerChannel(
-                            channel_id=utils.get_channel_id(file_id.chat_id),
-                            access_hash=file_id.chat_access_hash,
-                        )
+                    peer = raw.types.InputPeerChannel(
+                        channel_id=utils.get_channel_id(file_id.chat_id),
+                        access_hash=file_id.chat_access_hash,
+                    )
 
                 location = raw.types.InputPeerPhotoFileLocation(
                     peer=peer,

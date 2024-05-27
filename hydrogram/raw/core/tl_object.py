@@ -79,3 +79,11 @@ class TLObject:
 
     def __call__(self, *args: Any, **kwargs: Any) -> Any:
         pass
+
+    def __hash__(self) -> int:
+        return hash((
+            self.__class__,
+            *tuple(
+                getattr(self, attr) for attr in self.__slots__ if getattr(self, attr) is not None
+            ),
+        ))

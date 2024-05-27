@@ -98,9 +98,10 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = [
+    "FURB", # refurb
     "I",    # isort
-    "E",    # pycodestyle
-    "W",    # pycodestyle
+    "E",    # pycodestyle: error
+    "W",    # pycodestyle: warning
     "UP",   # pyupgrade
     "F",    # pyflakes
     "SIM",  # flake8-simplify
@@ -114,8 +115,21 @@ select = [
     "TID",  # flake8-tidy-imports
     "TCH",  # flake8-type-checking
     "FA",   # flake8-future-annotations
+    "PL",   # pylint
 ]
-ignore = ["RUF001", "RUF002", "RUF003", "E203", "PERF203"]
+ignore = [
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "E203",
+    "PERF203",
+    "PLR09",
+    "PLR2004",
+    "PLR1702",
+    "PLW1514",
+    "PLW2901",
+    "PLW0603",
+]
 preview = true
 
 [tool.ruff.lint.isort]

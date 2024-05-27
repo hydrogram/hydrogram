@@ -97,6 +97,9 @@ class Object:
 
         return True
 
+    def __hash__(self):
+        return hash(tuple(sorted(self.__dict__.items())))
+
     def __setstate__(self, state):
         for attr in state:
             obj = state[attr]

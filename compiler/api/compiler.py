@@ -121,7 +121,7 @@ def get_type_hint(type: str) -> str:
     if type in {"Object", "!X"}:
         return "TLObject"
 
-    if re.match("^vector", type, re.I):
+    if re.match("^vector", type, re.IGNORECASE):
         is_core = True
 
         sub_type = type.split("<")[1][:-1]

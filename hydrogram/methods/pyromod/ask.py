@@ -84,7 +84,7 @@ class Ask:
             Same as :meth:`hydrogram.Client.listen`. The sent message is returned as the attribute ``sent_message``.
         """
         sent_message = None
-        if text.strip() != "":
+        if text.strip():
             chat_to_ask = chat_id[0] if isinstance(chat_id, list) else chat_id
             sent_message = await self.send_message(chat_to_ask, text, *args, **kwargs)
 
