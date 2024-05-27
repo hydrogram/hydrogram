@@ -263,7 +263,7 @@ class Session:
             elif isinstance(msg.body, raw.types.Pong):
                 msg_id = msg.body.msg_id
             elif self.client is not None:
-                await self.loop.create_task(self.client.handle_updates(msg.body))
+                self.loop.create_task(self.client.handle_updates(msg.body))
 
             if msg_id in self.results:
                 self.results[msg_id].value = getattr(msg.body, "result", msg.body)
@@ -317,11 +317,11 @@ class Session:
                     )
 
                 if self.is_started.is_set():
-                    await self.loop.create_task(self.restart())
+                    self.loop.create_task(self.restart())
 
                 break
 
-            await self.loop.create_task(self.handle_packet(packet))
+            self.loop.create_task(self.handle_packet(packet))
 
         log.info("NetworkTask stopped")
 
