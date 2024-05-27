@@ -57,7 +57,8 @@ class CallbackQueryHandler(Handler):
         self.original_callback = callback
         super().__init__(self.resolve_future_or_callback, filters)
 
-    def compose_data_identifier(self, query: CallbackQuery) -> Identifier:
+    @staticmethod
+    def compose_data_identifier(query: CallbackQuery) -> Identifier:
         """
         Composes an Identifier object from a CallbackQuery object.
 

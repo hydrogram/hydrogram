@@ -29,5 +29,6 @@ class BotCommandScopeAllChatAdministrators(BotCommandScope):
     def __init__(self):
         super().__init__("all_chat_administrators")
 
-    async def write(self, client: "hydrogram.Client") -> "raw.base.BotCommandScope":
+    @staticmethod
+    async def write(client: "hydrogram.Client") -> "raw.base.BotCommandScope":
         return raw.types.BotCommandScopeChatAdmins()

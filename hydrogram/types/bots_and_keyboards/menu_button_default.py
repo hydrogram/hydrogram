@@ -29,5 +29,6 @@ class MenuButtonDefault(MenuButton):
     def __init__(self):
         super().__init__("default")
 
-    async def write(self, client: "hydrogram.Client") -> "raw.types.BotMenuButtonDefault":
+    @staticmethod
+    async def write(client: "hydrogram.Client") -> "raw.types.BotMenuButtonDefault":
         return raw.types.BotMenuButtonDefault()

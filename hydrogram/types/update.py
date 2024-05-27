@@ -21,8 +21,10 @@ import hydrogram
 
 
 class Update:
-    def stop_propagation(self):
+    @staticmethod
+    def stop_propagation():
         raise hydrogram.StopPropagation
 
-    def continue_propagation(self):
+    @staticmethod
+    def continue_propagation():
         raise hydrogram.ContinuePropagation

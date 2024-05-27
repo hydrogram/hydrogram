@@ -56,8 +56,9 @@ class MessageHandler(Handler):
         self.original_callback = callback
         super().__init__(self.resolve_future_or_callback, filters)
 
+    @staticmethod
     async def check_if_has_matching_listener(
-        self, client: hydrogram.Client, message: Message
+        client: hydrogram.Client, message: Message
     ) -> tuple[bool, Listener | None]:
         """
         Checks if the message has a matching listener.

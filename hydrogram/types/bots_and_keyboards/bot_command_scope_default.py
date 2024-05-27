@@ -31,5 +31,6 @@ class BotCommandScopeDefault(BotCommandScope):
     def __init__(self):
         super().__init__("default")
 
-    async def write(self, client: "hydrogram.Client") -> "raw.base.BotCommandScope":
+    @staticmethod
+    async def write(client: "hydrogram.Client") -> "raw.base.BotCommandScope":
         return raw.types.BotCommandScopeDefault()

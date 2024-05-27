@@ -29,5 +29,6 @@ class MenuButtonCommands(MenuButton):
     def __init__(self):
         super().__init__("commands")
 
-    async def write(self, client: "hydrogram.Client") -> "raw.types.BotMenuButtonCommands":
+    @staticmethod
+    async def write(client: "hydrogram.Client") -> "raw.types.BotMenuButtonCommands":
         return raw.types.BotMenuButtonCommands()
