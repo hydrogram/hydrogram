@@ -46,13 +46,10 @@ def ikb(rows: list[list[str | tuple[str, str]]] | None = None) -> InlineKeyboard
     for row in rows:
         line = []
         for button in row:
-            button = (
-                btn(button, button) if isinstance(button, str) else btn(*button)
-            )  # InlineKeyboardButton
+            button = btn(button, button) if isinstance(button, str) else btn(*button)
             line.append(button)
         lines.append(line)
     return InlineKeyboardMarkup(inline_keyboard=lines)
-    # return {'inline_keyboard': lines}
 
 
 def btn(text: str, value: str, type="callback_data") -> InlineKeyboardButton:
@@ -73,7 +70,6 @@ def btn(text: str, value: str, type="callback_data") -> InlineKeyboardButton:
         :obj:`~hydrogram.types.InlineKeyboardButton`: An InlineKeyboardButton object.
     """
     return InlineKeyboardButton(text, **{type: value})
-    # return {'text': text, type: value}
 
 
 # The inverse of ikb()
@@ -92,11 +88,10 @@ def bki(keyboard: InlineKeyboardButton) -> list[list[str | tuple[str, str]]]:
     for row in keyboard.inline_keyboard:
         line = []
         for button in row:
-            button = ntb(button)  # btn() format
+            button = ntb(button)
             line.append(button)
         lines.append(line)
     return lines
-    # return ikb() format
 
 
 def ntb(button: InlineKeyboardButton) -> list:
@@ -124,7 +119,6 @@ def ntb(button: InlineKeyboardButton) -> list:
     if btn_type != "callback_data":
         button.append(btn_type)
     return button
-    # return {'text': text, type: value}
 
 
 def kb(rows=None, **kwargs) -> ReplyKeyboardMarkup:

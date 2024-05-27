@@ -55,12 +55,3 @@ class InlineKeyboardMarkup(Object):
             rows.append(raw.types.KeyboardButtonRow(buttons=buttons))
 
         return raw.types.ReplyInlineMarkup(rows=rows)
-
-        # There seems to be a Python issues with nested async comprehensions.
-        # See: https://bugs.python.org/issue33346
-        #
-        # return raw.types.ReplyInlineMarkup(
-        #     rows=[raw.types.KeyboardButtonRow(
-        #         buttons=[await j.write(client) for j in i]
-        #     ) for i in self.inline_keyboard]
-        # )

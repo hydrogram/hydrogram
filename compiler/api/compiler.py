@@ -25,9 +25,6 @@ from functools import partial
 from pathlib import Path
 from typing import NamedTuple
 
-# from autoflake import fix_code
-# from black import format_str, FileMode
-
 HOME_PATH = Path("compiler/api")
 DESTINATION_PATH = Path("hydrogram/raw")
 NOTICE_PATH = "NOTICE"
@@ -297,9 +294,6 @@ def start(format: bool = False):
         for i in v:
             with contextlib.suppress(KeyError):
                 constructors_to_functions[i] = types_to_functions[k]
-
-    # import json
-    # print(json.dumps(namespaces_to_types, indent=2))
 
     for qualtype in types_to_constructors:
         typespace, type = qualtype.split(".") if "." in qualtype else ("", qualtype)
