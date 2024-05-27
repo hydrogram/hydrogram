@@ -40,6 +40,8 @@ log = logging.getLogger(__name__)
 
 
 class Str(str):
+    __slots__ = ("entities",)
+
     def __init__(self, *args):
         super().__init__()
 
@@ -657,13 +659,12 @@ class Message(Object, Update):
                 elif action.closed:
                     forum_topic_closed = types.ForumTopicClosed()
                     service_type = enums.MessageServiceType.FORUM_TOPIC_CLOSED
+                elif hasattr(action, "hidden"):
+                    general_topic_unhidden = types.GeneralTopicUnhidden()
+                    service_type = enums.MessageServiceType.GENERAL_TOPIC_UNHIDDEN
                 else:
-                    if hasattr(action, "hidden"):
-                        general_topic_unhidden = types.GeneralTopicUnhidden()
-                        service_type = enums.MessageServiceType.GENERAL_TOPIC_UNHIDDEN
-                    else:
-                        forum_topic_reopened = types.ForumTopicReopened()
-                        service_type = enums.MessageServiceType.FORUM_TOPIC_REOPENED
+                    forum_topic_reopened = types.ForumTopicReopened()
+                    service_type = enums.MessageServiceType.FORUM_TOPIC_REOPENED
             elif isinstance(action, raw.types.MessageActionGroupCallScheduled):
                 video_chat_scheduled = types.VideoChatScheduled._parse(action)
                 service_type = enums.MessageServiceType.VIDEO_CHAT_SCHEDULED

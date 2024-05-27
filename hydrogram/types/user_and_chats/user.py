@@ -33,6 +33,8 @@ if TYPE_CHECKING:
 
 
 class Link(str):
+    __slots__ = ("style", "text", "url")
+
     HTML = "<a href={url}>{text}</a>"
     MARKDOWN = "[{text}]({url})"
 
