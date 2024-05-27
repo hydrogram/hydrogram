@@ -22,10 +22,11 @@ from __future__ import annotations
 import base64
 import struct
 from abc import ABC, abstractmethod
+from typing import Union
 
 from hydrogram import raw
 
-InputPeer = raw.types.InputPeerUser | raw.types.InputPeerChat | raw.types.InputPeerChannel
+InputPeer = Union[raw.types.InputPeerUser, raw.types.InputPeerChat, raw.types.InputPeerChannel]
 
 
 class BaseStorage(ABC):
