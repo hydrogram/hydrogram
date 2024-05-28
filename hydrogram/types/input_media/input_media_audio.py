@@ -72,7 +72,7 @@ class InputMediaAudio(InputMedia):
         self,
         media: str | BinaryIO,
         thumb: str | BinaryIO | None = None,
-        caption: str | None = None,
+        caption: str = "",
         parse_mode: enums.ParseMode | None = None,
         caption_entities: list[MessageEntity] | None = None,
         duration: int = 0,
