@@ -26,8 +26,10 @@ import inspect
 import logging
 import os
 import platform
+import random
 import re
 import shutil
+import string
 import sys
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timedelta
@@ -293,6 +295,7 @@ class Client(Methods):
         self.media_sessions = {}
         self.media_sessions_lock = asyncio.Lock()
 
+        self.file_lock = asyncio.Lock()
         self.save_file_semaphore = asyncio.Semaphore(self.max_concurrent_transmissions)
         self.get_file_semaphore = asyncio.Semaphore(self.max_concurrent_transmissions)
 
@@ -848,7 +851,9 @@ class Client(Methods):
 
         None if in_memory else Path(directory).mkdir(parents=True, exist_ok=True)
         file_path = Path(directory).resolve() / file_name
-        temp_file_path = file_path.with_suffix(".temp")
+
+        random_suffix = "".join(random.choices(string.ascii_letters + string.digits, k=8))
+        temp_file_path = file_path.with_name(file_path.stem + "_" + random_suffix + ".temp")
 
         file = BytesIO() if in_memory else Path(temp_file_path).open("wb")  # noqa: SIM115 file is closed manually
 
@@ -871,9 +876,21 @@ class Client(Methods):
             if in_memory:
                 file.name = file_name
                 return file
+
             file.close()
-            shutil.move(temp_file_path, file_path)
-            return file_path
+
+            async with self.file_lock:
+                final_file_path: Path = file_path
+                counter = 1
+                while final_file_path.exists():
+                    final_file_path = file_path.with_name(
+                        f"{file_path.stem}({counter}){file_path.suffix}"
+                    )
+                    counter += 1
+
+                shutil.move(temp_file_path, final_file_path)
+
+            return final_file_path
 
     async def get_file(
         self,
