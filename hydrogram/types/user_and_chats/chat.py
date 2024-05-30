@@ -276,37 +276,28 @@ class Chat(Object):
     @staticmethod
     def _parse_channel_chat(client, channel: raw.types.Channel) -> Chat:
         peer_id = utils.get_channel_id(channel.id)
-        restriction_reason = getattr(channel, "restriction_reason", [])
-        usernames = getattr(channel, "usernames", [])
 
         return Chat(
             id=peer_id,
-            type=enums.ChatType.SUPERGROUP
-            if getattr(channel, "megagroup", None)
-            else enums.ChatType.CHANNEL,
-            is_verified=getattr(channel, "verified", None),
-            is_restricted=getattr(channel, "restricted", None),
-            is_creator=getattr(channel, "creator", None),
-            is_scam=getattr(channel, "scam", None),
-            is_fake=getattr(channel, "fake", None),
-            is_forum=getattr(channel, "forum", None),
+            type=enums.ChatType.SUPERGROUP if channel.megagroup else enums.ChatType.CHANNEL,
+            is_verified=channel.verified,
+            is_restricted=channel.restricted,
+            is_creator=channel.creator,
+            is_scam=channel.scam,
+            is_fake=channel.fake,
+            is_forum=channel.forum,
             title=channel.title,
-            username=getattr(channel, "username", None),
-            photo=types.ChatPhoto._parse(
-                client,
-                getattr(channel, "photo", None),
-                peer_id,
-                getattr(channel, "access_hash", 0),
-            ),
-            restrictions=types.List([types.Restriction._parse(r) for r in restriction_reason])
+            username=channel.username,
+            photo=types.ChatPhoto._parse(client, channel.photo, peer_id, channel.access_hash),
+            restrictions=types.List([
+                types.Restriction._parse(r) for r in channel.restriction_reason
+            ])
             or None,
-            permissions=types.ChatPermissions._parse(
-                getattr(channel, "default_banned_rights", None)
-            ),
-            members_count=getattr(channel, "participants_count", None),
-            dc_id=getattr(getattr(channel, "photo", None), "dc_id", None),
-            has_protected_content=getattr(channel, "noforwards", None),
-            usernames=types.List([types.Username._parse(r) for r in usernames]) or None,
+            permissions=types.ChatPermissions._parse(channel.default_banned_rights),
+            members_count=channel.participants_count,
+            dc_id=getattr(channel.photo, "dc_id", None),
+            has_protected_content=channel.noforwards,
+            usernames=types.List([types.Username._parse(r) for r in channel.usernames]) or None,
             client=client,
         )
 
