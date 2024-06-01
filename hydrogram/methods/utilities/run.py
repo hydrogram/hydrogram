@@ -18,7 +18,6 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
-import inspect
 from typing import TYPE_CHECKING
 
 from hydrogram.methods.utilities.idle import idle
@@ -32,12 +31,12 @@ class Run:
         """Start the client, idle the main script and finally stop the client.
 
         When calling this method without any argument it acts as a convenience method that calls
-        :meth:`~hydrogram.Client.start`, :meth:`~hydrogram.idle` and :meth:`~hydrogram.Client.stop` in sequence.
-        It makes running a single client less verbose.
+        :meth:`~hydrogram.Client.start`, :meth:`~hydrogram.idle` and :meth:`~hydrogram.Client.stop`
+        in sequence. It makes running a single client less verbose.
 
-        In case a coroutine is passed as argument, runs the coroutine until it's completed and doesn't do any client
-        operation. This is almost the same as :py:obj:`asyncio.run` except for the fact that Hydrogram's ``run`` uses the
-        current event loop instead of a new one.
+        In case a coroutine is passed as argument, runs the coroutine until it's completed and
+        doesn't do any client operation. This is almost the same as :py:obj:`asyncio.run` except
+        for the fact that Hydrogram's ``run`` uses the current event loop instead of a new one.
 
         If you want to run multiple clients at once, see :meth:`hydrogram.compose`.
 
@@ -76,11 +75,14 @@ class Run:
 
         if coroutine is not None:
             run(coroutine)
-        elif inspect.iscoroutinefunction(self.start):
+        else:
+            if loop.is_running():
+                raise RuntimeError(
+                    "You must call client.run() method outside of an asyncio event loop. "
+                    "Otherwise, you can use client.start(), client.idle(), and client.stop() "
+                    "methods. Refer to https://docs.hydrogram.org/en/latest/api/methods/run.html"
+                )
+
             run(self.start())
             run(idle())
             run(self.stop())
-        else:
-            self.start()
-            run(idle())
-            self.stop()
