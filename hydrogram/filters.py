@@ -455,8 +455,14 @@ media_spoiler = create(media_spoiler_filter)
 
 
 # region private_filter
-def private_filter(_, __, m: Message):
-    return bool(m.chat and m.chat.type in {enums.ChatType.PRIVATE, enums.ChatType.BOT})
+def private_filter(_, __, m: CallbackQuery | Message):
+    if isinstance(m, Message):
+        value = m.chat
+    elif isinstance(m, CallbackQuery):
+        value = m.message.chat
+    else:
+        raise ValueError(f"Private filter doesn't work with {type(m)}")
+    return bool(value and value.type in {enums.ChatType.PRIVATE, enums.ChatType.BOT})
 
 
 private = create(private_filter)
@@ -467,8 +473,14 @@ private = create(private_filter)
 
 
 # region group_filter
-def group_filter(_, __, m: Message):
-    return bool(m.chat and m.chat.type in {enums.ChatType.GROUP, enums.ChatType.SUPERGROUP})
+def group_filter(_, __, m: CallbackQuery | Message):
+    if isinstance(m, Message):
+        value = m.chat
+    elif isinstance(m, CallbackQuery):
+        value = m.message.chat
+    else:
+        raise ValueError(f"Group filter doesn't work with {type(m)}")
+    return bool(value and value.type in {enums.ChatType.GROUP, enums.ChatType.SUPERGROUP})
 
 
 group = create(group_filter)
@@ -479,8 +491,14 @@ group = create(group_filter)
 
 
 # region channel_filter
-def channel_filter(_, __, m: Message):
-    return bool(m.chat and m.chat.type == enums.ChatType.CHANNEL)
+def channel_filter(_, __, m: CallbackQuery | Message):
+    if isinstance(m, Message):
+        value = m.chat
+    elif isinstance(m, CallbackQuery):
+        value = m.message.chat
+    else:
+        raise ValueError(f"Channel filter doesn't work with {type(m)}")
+    return bool(value and value.type == enums.ChatType.CHANNEL)
 
 
 channel = create(channel_filter)
