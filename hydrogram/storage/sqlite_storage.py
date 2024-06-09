@@ -29,7 +29,6 @@ from typing import Any
 import aiosqlite
 
 from hydrogram import raw, utils
-from hydrogram.enums import ChatType
 
 from .base import BaseStorage, InputPeer
 
