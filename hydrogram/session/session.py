@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import asyncio
 import bisect
 import contextlib
@@ -25,11 +27,10 @@ import os
 from datetime import datetime, timedelta
 from hashlib import sha1
 from io import BytesIO
-from typing import ClassVar
+from typing import TYPE_CHECKING, ClassVar
 
 import hydrogram
 from hydrogram import raw
-from hydrogram.connection import Connection
 from hydrogram.crypto import mtproto
 from hydrogram.errors import (
     AuthKeyDuplicated,
@@ -44,6 +45,9 @@ from hydrogram.raw.all import layer
 from hydrogram.raw.core import FutureSalts, Int, MsgContainer, TLObject
 
 from .internals import MsgFactory, MsgId
+
+if TYPE_CHECKING:
+    from hydrogram.connection import Connection
 
 log = logging.getLogger(__name__)
 
@@ -72,7 +76,7 @@ class Session:
 
     def __init__(
         self,
-        client: "hydrogram.Client",
+        client: hydrogram.Client,
         dc_id: int,
         auth_key: bytes,
         test_mode: bool,
@@ -86,7 +90,7 @@ class Session:
         self.is_media = is_media
         self.is_cdn = is_cdn
 
-        self.connection = None
+        self.connection: Connection | None = None
 
         self.auth_key_id = sha1(auth_key).digest()[-8:]
 
@@ -114,12 +118,13 @@ class Session:
 
     async def start(self):
         while True:
-            self.connection = Connection(
-                self.dc_id,
-                self.test_mode,
-                self.client.ipv6,
-                self.client.proxy,
-                self.is_media,
+            self.connection = self.client.connection_factory(
+                dc_id=self.dc_id,
+                test_mode=self.test_mode,
+                ipv6=self.client.ipv6,
+                proxy=self.client.proxy,
+                media=self.is_media,
+                protocol_factory=self.client.protocol_factory,
             )
 
             try:

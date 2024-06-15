@@ -25,7 +25,7 @@ import os
 import hydrogram
 from hydrogram.crypto import aes
 
-from .tcp import TCP
+from .tcp import TCP, Proxy
 
 log = logging.getLogger(__name__)
 
@@ -33,13 +33,13 @@ log = logging.getLogger(__name__)
 class TCPAbridgedO(TCP):
     RESERVED = (b"HEAD", b"POST", b"GET ", b"OPTI", b"\xee" * 4)
 
-    def __init__(self, ipv6: bool, proxy: dict):
+    def __init__(self, ipv6: bool, proxy: Proxy) -> None:
         super().__init__(ipv6, proxy)
 
         self.encrypt = None
         self.decrypt = None
 
-    async def connect(self, address: tuple):
+    async def connect(self, address: tuple[str, int]) -> None:
         await super().connect(address)
 
         while True:
@@ -62,7 +62,7 @@ class TCPAbridgedO(TCP):
 
         await super().send(nonce)
 
-    async def send(self, data: bytes, *args):
+    async def send(self, data: bytes, *args) -> None:
         length = len(data) // 4
         data = (
             bytes([length]) if length <= 126 else b"\x7f" + length.to_bytes(3, "little")

@@ -25,7 +25,7 @@ from struct import pack, unpack
 
 from hydrogram.crypto import aes
 
-from .tcp import TCP
+from .tcp import TCP, Proxy
 
 log = logging.getLogger(__name__)
 
@@ -33,13 +33,13 @@ log = logging.getLogger(__name__)
 class TCPIntermediateO(TCP):
     RESERVED = (b"HEAD", b"POST", b"GET ", b"OPTI", b"\xee" * 4)
 
-    def __init__(self, ipv6: bool, proxy: dict):
+    def __init__(self, ipv6: bool, proxy: Proxy) -> None:
         super().__init__(ipv6, proxy)
 
         self.encrypt = None
         self.decrypt = None
 
-    async def connect(self, address: tuple):
+    async def connect(self, address: tuple[str, int]) -> None:
         await super().connect(address)
 
         while True:
@@ -62,7 +62,7 @@ class TCPIntermediateO(TCP):
 
         await super().send(nonce)
 
-    async def send(self, data: bytes, *args):
+    async def send(self, data: bytes, *args) -> None:
         await super().send(aes.ctr256_encrypt(pack("<i", len(data)) + data, *self.encrypt))
 
     async def recv(self, length: int = 0) -> bytes | None:

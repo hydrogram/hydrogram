@@ -21,10 +21,14 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from typing import TYPE_CHECKING
 
 from hydrogram.session.internals import DataCenter
 
 from .transport import TCP, TCPAbridged
+
+if TYPE_CHECKING:
+    from .transport.tcp.tcp import Proxy
 
 log = logging.getLogger(__name__)
 
@@ -32,19 +36,28 @@ log = logging.getLogger(__name__)
 class Connection:
     MAX_CONNECTION_ATTEMPTS = 3
 
-    def __init__(self, dc_id: int, test_mode: bool, ipv6: bool, proxy: dict, media: bool = False):
+    def __init__(
+        self,
+        dc_id: int,
+        test_mode: bool,
+        ipv6: bool,
+        proxy: Proxy,
+        media: bool = False,
+        protocol_factory: type[TCP] = TCPAbridged,
+    ) -> None:
         self.dc_id = dc_id
         self.test_mode = test_mode
         self.ipv6 = ipv6
         self.proxy = proxy
         self.media = media
+        self.protocol_factory = protocol_factory
 
         self.address = DataCenter(dc_id, test_mode, ipv6, media)
-        self.protocol: TCP = None
+        self.protocol: TCP | None = None
 
-    async def connect(self):
+    async def connect(self) -> None:
         for i in range(Connection.MAX_CONNECTION_ATTEMPTS):
-            self.protocol = TCPAbridged(self.ipv6, self.proxy)
+            self.protocol = self.protocol_factory(ipv6=self.ipv6, proxy=self.proxy)
 
             try:
                 log.info("Connecting...")
@@ -66,11 +79,11 @@ class Connection:
             log.warning("Connection failed! Trying again...")
             raise ConnectionError
 
-    async def close(self):
+    async def close(self) -> None:
         await self.protocol.close()
         log.info("Disconnected")
 
-    async def send(self, data: bytes):
+    async def send(self, data: bytes) -> None:
         await self.protocol.send(data)
 
     async def recv(self) -> bytes | None:
