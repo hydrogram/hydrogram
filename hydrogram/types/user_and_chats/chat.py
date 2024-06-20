@@ -180,7 +180,7 @@ class Chat(Object):
         dc_id: int | None = None,
         has_protected_content: bool | None = None,
         invite_link: str | None = None,
-        pinned_message=None,
+        pinned_message: types.Message | None = None,
         background: types.ChatBackground | None = None,
         sticker_set_name: str | None = None,
         can_set_sticker_set: bool | None = None,
