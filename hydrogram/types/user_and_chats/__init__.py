@@ -50,6 +50,7 @@ from .video_chat_ended import VideoChatEnded
 from .video_chat_members_invited import VideoChatMembersInvited
 from .video_chat_scheduled import VideoChatScheduled
 from .video_chat_started import VideoChatStarted
+from .chat_background import ChatBackground
 
 __all__ = [
     "Chat",
@@ -85,4 +86,5 @@ __all__ = [
     "VideoChatMembersInvited",
     "VideoChatScheduled",
     "VideoChatStarted",
+    "ChatBackground"
 ]
