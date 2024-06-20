@@ -115,6 +115,9 @@ class Chat(Object):
             Pinned message, for groups, supergroups channels and own chat.
             Returned only in :meth:`~hydrogram.Client.get_chat`.
 
+        background (:obj:`~hydrogram.types.ChatBackground`, *optional*):
+            A chat background.
+
         sticker_set_name (``str``, *optional*):
             For supergroups, name of group sticker set.
             Returned only in :meth:`~hydrogram.Client.get_chat`.
@@ -178,6 +181,7 @@ class Chat(Object):
         has_protected_content: bool | None = None,
         invite_link: str | None = None,
         pinned_message=None,
+        background: types.ChatBackground | None = None,
         sticker_set_name: str | None = None,
         can_set_sticker_set: bool | None = None,
         members_count: int | None = None,
@@ -213,6 +217,7 @@ class Chat(Object):
         self.has_protected_content = has_protected_content
         self.invite_link = invite_link
         self.pinned_message = pinned_message
+        self.background = background
         self.sticker_set_name = sticker_set_name
         self.can_set_sticker_set = can_set_sticker_set
         self.members_count = members_count
@@ -346,6 +351,9 @@ class Chat(Object):
                 parsed_chat.pinned_message = await client.get_messages(
                     parsed_chat.id, message_ids=full_user.pinned_msg_id
                 )
+
+            if getattr(full_user, "wallpaper", None):
+                parsed_chat.background = types.ChatBackground._parse(client, full_user.wallpaper)
         else:
             full_chat = chat_full.full_chat
             chat_raw = chats[full_chat.id]
@@ -374,6 +382,9 @@ class Chat(Object):
                         send_as_raw = chats[default_send_as.channel_id]
 
                     parsed_chat.send_as_chat = Chat._parse_chat(client, send_as_raw)
+
+            if getattr(full_chat, "wallpaper", None):
+                parsed_chat.background = types.ChatBackground._parse(client, full_chat.wallpaper)
 
             parsed_chat.description = full_chat.about or None
 
