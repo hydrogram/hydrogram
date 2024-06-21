@@ -86,5 +86,5 @@ __all__ = [
     "VideoChatMembersInvited",
     "VideoChatScheduled",
     "VideoChatStarted",
-    "ChatBackground"
+    "ChatBackground",
 ]
