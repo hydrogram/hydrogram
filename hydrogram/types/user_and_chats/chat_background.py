@@ -1,20 +1,20 @@
-#  Pyrogram - Telegram MTProto API Client Library for Python
-#  Copyright (C) 2017-present Dan <https://github.com/delivrance>
+#  Hydrogram - Telegram MTProto API Client Library for Python
+#  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
-#  This file is part of Pyrogram.
+#  This file is part of Hydrogram.
 #
-#  Pyrogram is free software: you can redistribute it and/or modify
+#  Hydrogram is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published
 #  by the Free Software Foundation, either version 3 of the License, or
 #  (at your option) any later version.
 #
-#  Pyrogram is distributed in the hope that it will be useful,
+#  Hydrogram is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU Lesser General Public License for more details.
 #
 #  You should have received a copy of the GNU Lesser General Public License
-#  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
+#  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
 from typing import List
@@ -29,7 +29,7 @@ from hydrogram.file_id import (
     FileUniqueType,
     ThumbnailSource,
 )
-from ..object import Object
+from hydrogram.types.object import Object
 
 
 class ChatBackground(Object):
