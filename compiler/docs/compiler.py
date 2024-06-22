@@ -645,8 +645,7 @@ def hydrogram_api():
 
 
 def start():
-    global page_template
-    global toctree
+    global page_template, toctree
 
     shutil.rmtree(DESTINATION, ignore_errors=True)
 
