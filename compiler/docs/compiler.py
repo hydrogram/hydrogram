@@ -22,37 +22,39 @@ import re
 import shutil
 from pathlib import Path
 
-HOME = "compiler/docs"
-DESTINATION = "docs/source/telegram"
-HYDROGRAM_API_DEST = "docs/source/api"
+DOCS_HOME_PATH = Path(__file__).parent.resolve()
+REPO_HOME_PATH = DOCS_HOME_PATH.parent.parent
 
-FUNCTIONS_PATH = "hydrogram/raw/functions"
-TYPES_PATH = "hydrogram/raw/types"
-BASE_PATH = "hydrogram/raw/base"
+DOCS_DEST_PATH = REPO_HOME_PATH / "docs" / "source" / "telegram"
+API_DOCS_DEST_PATH = REPO_HOME_PATH / "docs" / "source" / "api"
+
+FUNCTIONS_PATH = REPO_HOME_PATH / "hydrogram" / "raw" / "functions"
+TYPES_PATH = REPO_HOME_PATH / "hydrogram" / "raw" / "types"
+BASE_PATH = REPO_HOME_PATH / "hydrogram" / "raw" / "base"
 
 FUNCTIONS_BASE = "functions"
 TYPES_BASE = "types"
 BASE_BASE = "base"
 
 
-def snek(s: str):
+def snake(s: str):
     s = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", s)
     return re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s).lower()
 
 
-def generate(source_path, base):
-    all_entities = {}
+def generate(source_path: Path, base_name: str):
+    all_entities: dict[str, list[str]] = {}
 
-    def build(path, level=0):
-        last = Path(path).name
+    def build(path: Path, level=0):
+        last = path.name
 
         for i in os.listdir(path):
             if not i.startswith("__"):
-                item_path = Path(path, i)
-                if Path(item_path).is_dir():
+                item_path = path / i
+                if item_path.is_dir():
                     build(item_path, level=level + 1)
-                elif Path(item_path).is_file():
-                    with Path(item_path).open(encoding="utf-8") as f:
+                elif item_path.is_file():
+                    with item_path.open(encoding="utf-8") as f:
                         p = ast.parse(f.read())
 
                     for node in ast.walk(p):
@@ -62,28 +64,24 @@ def generate(source_path, base):
                     else:
                         continue
 
-                    full_path = f"{Path(path).name}/" + snek(name).replace("_", "-") + ".rst"
+                    full_path = Path(last, snake(name).replace("_", "-") + ".rst")
 
                     if level:
-                        full_path = f"{base}/{full_path}"
+                        full_path = Path(base_name, full_path)
 
-                    namespace = Path(path).name
-                    if namespace in {"base", "types", "functions"}:
-                        namespace = ""
+                    namespace = "" if last in {"base", "types", "functions"} else last
 
                     full_name = f"{f'{namespace}.' if namespace else ''}{name}"
 
-                    Path(Path(f"{DESTINATION}/{full_path}").parent).mkdir(
-                        parents=True, exist_ok=True
-                    )
+                    (DOCS_DEST_PATH / full_path).parent.mkdir(parents=True, exist_ok=True)
 
-                    with Path(f"{DESTINATION}/{full_path}").open("w", encoding="utf-8") as f:
+                    with (DOCS_DEST_PATH / full_path).open("w", encoding="utf-8") as f:
                         f.write(
                             page_template.format(
                                 title=full_name,
                                 title_markup="=" * len(full_name),
                                 full_class_path="hydrogram.raw.{}".format(
-                                    ".".join(full_path.split("/")[:-1]) + "." + name
+                                    ".".join(full_path.parts[:-1]) + "." + name
                                 ),
                             )
                         )
@@ -99,21 +97,21 @@ def generate(source_path, base):
         v = sorted(v)
         entities = []
 
-        entities = [f'{i} <{snek(i).replace("_", "-")}>' for i in v]
+        entities = [f'{i} <{snake(i).replace("_", "-")}>' for i in v]
 
-        if k != base:
-            inner_path = f"{base}/{k}/index.rst"
-            module = f"hydrogram.raw.{base}.{k}"
+        if k != base_name:
+            inner_path = Path(base_name, k, "index.rst")
+            module = f"hydrogram.raw.{base_name}.{k}"
         else:
             for i in sorted(all_entities, reverse=True):
-                if i != base:
+                if i != base_name:
                     entities.insert(0, f"{i}/index")
 
-            inner_path = f"{base}/index.rst"
-            module = f"hydrogram.raw.{base}"
+            inner_path = Path(base_name, "index.rst")
+            module = f"hydrogram.raw.{base_name}"
 
-        with Path(f"{DESTINATION}/{inner_path}").open("w", encoding="utf-8") as f:
-            if k == base:
+        with (DOCS_DEST_PATH / inner_path).open("w", encoding="utf-8") as f:
+            if k == base_name:
                 f.write(":tocdepth: 1\n\n")
                 k = f"Raw {k}"
 
@@ -130,7 +128,7 @@ def generate(source_path, base):
 
 
 def hydrogram_api():
-    def get_title_list(s: str) -> list:
+    def get_title_list(s: str) -> list[str]:
         return [i.strip() for i in [j.strip() for j in s.split("\n") if j] if i]
 
     # Methods
@@ -336,15 +334,15 @@ def hydrogram_api():
         """,
     }
 
-    root = f"{HYDROGRAM_API_DEST}/methods"
+    root = API_DOCS_DEST_PATH / "methods"
 
     shutil.rmtree(root, ignore_errors=True)
-    Path(root).mkdir(parents=True)
+    root.mkdir(parents=True)
 
-    with Path(f"{HOME}/template/methods.rst").open() as f:
+    with (DOCS_HOME_PATH / "template" / "methods.rst").open() as f:
         template = f.read()
 
-    with Path(f"{root}/index.rst").open("w") as f:
+    with (root / "index.rst").open("w") as f:
         fmt_keys = {}
 
         for k, v in categories.items():
@@ -352,7 +350,7 @@ def hydrogram_api():
             fmt_keys[k] = "\n    ".join(f"{m} <{m}>" for m in methods)
 
             for method in methods:
-                with Path(f"{root}/{method}.rst").open("w") as f2:
+                with (root / f"{method}.rst").open("w") as f2:
                     title = f"{method}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
@@ -361,7 +359,7 @@ def hydrogram_api():
             functions = ["idle", "compose"]
 
             for func in functions:
-                with Path(f"{root}/{func}.rst").open("w") as f2:
+                with (root / f"{func}.rst").open("w") as f2:
                     title = f"{func}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
@@ -498,15 +496,15 @@ def hydrogram_api():
         """,
     }
 
-    root = f"{HYDROGRAM_API_DEST}/types"
+    root = API_DOCS_DEST_PATH / "types"
 
     shutil.rmtree(root, ignore_errors=True)
-    Path(root).mkdir(parents=True)
+    root.mkdir(parents=True)
 
-    with Path(f"{HOME}/template/types.rst").open() as f:
+    with (DOCS_HOME_PATH / "template" / "types.rst").open() as f:
         template = f.read()
 
-    with Path(f"{root}/index.rst").open("w") as f:
+    with (root / "index.rst").open("w") as f:
         fmt_keys = {}
 
         for k, v in categories.items():
@@ -515,10 +513,8 @@ def hydrogram_api():
             fmt_keys[k] = "\n    ".join(types)
 
             for type in types:
-                with Path(f"{root}/{type}.rst").open("w") as f2:
-                    title = f"{type}"
-
-                    f2.write(title + "\n" + "=" * len(title) + "\n\n")
+                with (root / f"{type}.rst").open("w") as f2:
+                    f2.write(f"{type}\n" + "=" * len(type) + "\n\n")
                     f2.write(f".. autoclass:: hydrogram.types.{type}()\n")
 
         f.write(template.format(**fmt_keys))
@@ -614,15 +610,15 @@ def hydrogram_api():
         """,
     }
 
-    root = f"{HYDROGRAM_API_DEST}/bound-methods"
+    root = API_DOCS_DEST_PATH / "bound-methods"
 
     shutil.rmtree(root, ignore_errors=True)
-    Path(root).mkdir(parents=True)
+    root.mkdir(parents=True)
 
-    with Path(f"{HOME}/template/bound-methods.rst").open() as f:
+    with (DOCS_HOME_PATH / "template" / "bound-methods.rst").open() as f:
         template = f.read()
 
-    with Path(f"{root}/index.rst").open("w") as f:
+    with (root / "index.rst").open("w") as f:
         fmt_keys = {}
 
         for k, v in categories.items():
@@ -635,7 +631,7 @@ def hydrogram_api():
             )
 
             for bm in bound_methods:
-                with Path(f"{root}/{bm}.rst").open("w") as f2:
+                with (root / f"{bm}.rst").open("w") as f2:
                     title = f"{bm}()"
 
                     f2.write(title + "\n" + "=" * len(title) + "\n\n")
@@ -647,12 +643,12 @@ def hydrogram_api():
 def start():
     global page_template, toctree
 
-    shutil.rmtree(DESTINATION, ignore_errors=True)
+    shutil.rmtree(DOCS_DEST_PATH, ignore_errors=True)
 
-    with Path(f"{HOME}/template/page.txt").open(encoding="utf-8") as f:
+    with (DOCS_HOME_PATH / "template" / "page.txt").open(encoding="utf-8") as f:
         page_template = f.read()
 
-    with Path(f"{HOME}/template/toctree.txt").open(encoding="utf-8") as f:
+    with (DOCS_HOME_PATH / "template" / "toctree.txt").open(encoding="utf-8") as f:
         toctree = f.read()
 
     generate(TYPES_PATH, TYPES_BASE)
@@ -662,11 +658,4 @@ def start():
 
 
 if __name__ == "__main__":
-    FUNCTIONS_PATH = "../../hydrogram/raw/functions"
-    TYPES_PATH = "../../hydrogram/raw/types"
-    BASE_PATH = "../../hydrogram/raw/base"
-    HOME = "."
-    DESTINATION = "../../docs/source/telegram"
-    HYDROGRAM_API_DEST = "../../docs/source/api"
-
     start()
