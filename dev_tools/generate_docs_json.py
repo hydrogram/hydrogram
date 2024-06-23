@@ -89,7 +89,7 @@ async def get_object_data(it_type: str, it_name: str, doc_dict: dict[str, dict])
 
         tree = html.fromstring(request.text)
 
-        page_content = tree.xpath("//div[@id='dev_page_content']")[0]
+        page_content = tree.xpath("//div[@id='dev_page_content'][1]")[0]
 
         # Get the description of the object - always used
         desc_xp = page_content.xpath("./p[1]")
@@ -104,10 +104,10 @@ async def get_object_data(it_type: str, it_name: str, doc_dict: dict[str, dict])
             doc_dict["type"][it_name] = {"desc": desc}
         elif it_type in {"constructor", "method"}:
             params_xp = (
-                page_content.xpath("//a[@id='parameters']")[0]
+                page_content.xpath("./h3/a[@id='parameters'][1]")[0]
                 .getparent()
                 .getnext()
-                .xpath("./tbody")
+                .xpath("./tbody[1]")
             )
 
             if params_xp:

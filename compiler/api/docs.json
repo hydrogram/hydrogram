@@ -1598,7 +1598,7 @@
         "include_peers": "Include the following chats in this folder",
         "non_contacts": "Whether to include all non-contacts in this folder",
         "pinned_peers": "Pinned chats, folders can have unlimited pinned chats",
-        "title": "Folder name"
+        "title": "Folder name (max 12 UTF-8 chars)"
       }
     },
     "DialogFilterChatlist": {
@@ -1611,7 +1611,7 @@
         "id": "ID of the folder",
         "include_peers": "Chats to include in the folder",
         "pinned_peers": "Pinned chats, folders can have unlimited pinned chats",
-        "title": "Name of the folder"
+        "title": "Name of the folder (max 12 UTF-8 chars)"
       }
     },
     "DialogFilterDefault": {
@@ -10659,19 +10659,19 @@
     "account.GetChannelDefaultEmojiStatuses": {
       "desc": "Get a list of default suggested channel emoji statuses.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the account.emojiStatuses.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetChannelRestrictedStatusEmojis": {
       "desc": "Returns fetch the full list of custom emoji IDs \u00bb that cannot be used in channel emoji statuses \u00bb.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the emojiList.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetChatThemes": {
       "desc": "Get all available chat themes \u00bb.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the account.themes.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetConnectedBots": {
@@ -10689,25 +10689,25 @@
     "account.GetDefaultBackgroundEmojis": {
       "desc": "Get a set of suggested custom emoji stickers that can be used in an accent color pattern.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the emojiList.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetDefaultEmojiStatuses": {
       "desc": "Get a list of default suggested emoji statuses",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the account.emojiStatuses.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetDefaultGroupPhotoEmojis": {
       "desc": "Get a set of suggested custom emoji stickers that can be used as group picture",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the emojiList.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetDefaultProfilePhotoEmojis": {
       "desc": "Get a set of suggested custom emoji stickers that can be used as profile picture",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the emojiList.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetGlobalPrivacySettings": {
@@ -10758,13 +10758,13 @@
     "account.GetRecentEmojiStatuses": {
       "desc": "Get recently used emoji statuses",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the account.emojiStatuses.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetSavedRingtones": {
       "desc": "Fetch saved notification sounds",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the account.savedRingtones.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetSecureValue": {
@@ -10784,7 +10784,7 @@
       "desc": "Get installed themes",
       "params": {
         "format": "Theme format, a string that identifies the theming engines supported by the client",
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the account.themes.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetTmpPassword": {
@@ -10803,7 +10803,7 @@
     "account.GetWallPapers": {
       "desc": "Returns a list of available wallpapers.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the account.wallPapers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "account.GetWebAuthorizations": {
@@ -12172,7 +12172,7 @@
     "contacts.GetContacts": {
       "desc": "Returns the current user's contact list.",
       "params": {
-        "hash": "If there already is a full contact list on the client, a hash of a the list of contact IDs in ascending order may be passed in this parameter. If the contact set was not changed, (contacts.contactsNotModified) will be returned."
+        "hash": "Hash for pagination, for more info click here.Note that the hash is computed using the usual algorithm, passing to the algorithm first the previously returned contacts.contacts.saved_count field, then max 100000 sorted user IDs from the contact list, including the ID of the currently logged in user if it is saved as a contact. Example: tdlib implementation."
       }
     },
     "contacts.GetLocated": {
@@ -12310,7 +12310,7 @@
     "help.GetAppConfig": {
       "desc": "Get app-specific configuration, see client configuration for more info on the result.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the help.appConfig.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "help.GetAppUpdate": {
@@ -12330,7 +12330,7 @@
     "help.GetCountriesList": {
       "desc": "Get name, ISO code, localized name and phone codes/patterns of all available countries",
       "params": {
-        "hash": "Hash for pagination, for more info click here",
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the help.countriesList.hash field returned by a previous call to the method, or pass 0 if this is the first call.",
         "lang_code": "Language code of the current user"
       }
     },
@@ -12351,19 +12351,19 @@
     "help.GetPassportConfig": {
       "desc": "Get passport configuration",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the help.passportConfig.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "help.GetPeerColors": {
       "desc": "Get the set of accent color palettes \u00bb that can be used for message accents.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the help.peerColors.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "help.GetPeerProfileColors": {
       "desc": "Get the set of accent color palettes \u00bb that can be used in profile page backgrounds.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the help.peerColors.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "help.GetPremiumPromo": {
@@ -12395,7 +12395,7 @@
     "help.GetTimezonesList": {
       "desc": "{schema}",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the help.timezonesList.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "help.GetUserInfo": {
@@ -12780,7 +12780,7 @@
     "messages.GetAllStickers": {
       "desc": "Get all installed stickers",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.allStickers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetArchivedStickers": {
@@ -12802,7 +12802,7 @@
     "messages.GetAttachMenuBots": {
       "desc": "Returns installed attachment menu bot mini apps \u00bb",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the attachMenuBots.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetAttachedStickers": {
@@ -12814,13 +12814,13 @@
     "messages.GetAvailableEffects": {
       "desc": "{schema}",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.availableEffects.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetAvailableReactions": {
       "desc": "Obtain available message reactions \u00bb",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.availableReactions.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetBotApp": {
@@ -12879,9 +12879,9 @@
       "params": {}
     },
     "messages.GetDefaultTagReactions": {
-      "desc": "{schema}",
+      "desc": "Fetch a default recommended list of saved message tag reactions.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.reactions.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetDhConfig": {
@@ -12930,7 +12930,7 @@
     "messages.GetEmojiGroups": {
       "desc": "Represents a list of emoji categories, to be used when selecting custom emojis.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.emojiGroups.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetEmojiKeywords": {
@@ -12955,25 +12955,25 @@
     "messages.GetEmojiProfilePhotoGroups": {
       "desc": "Represents a list of emoji categories, to be used when selecting custom emojis to set as profile picture.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.emojiGroups.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetEmojiStatusGroups": {
       "desc": "Represents a list of emoji categories, to be used when selecting custom emojis to set as custom emoji status.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.emojiGroups.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetEmojiStickerGroups": {
       "desc": "{schema}",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.emojiGroups.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetEmojiStickers": {
       "desc": "Gets the list of currently installed custom emoji stickersets.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.allStickers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetEmojiURL": {
@@ -13018,19 +13018,19 @@
     "messages.GetFavedStickers": {
       "desc": "Get faved stickers",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.favedStickers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetFeaturedEmojiStickers": {
       "desc": "Gets featured custom emoji stickersets.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.featuredStickers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetFeaturedStickers": {
       "desc": "Get featured stickers",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.featuredStickers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetFullChat": {
@@ -13081,7 +13081,7 @@
     "messages.GetMaskStickers": {
       "desc": "Get installed mask stickers",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.allStickers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetMessageEditData": {
@@ -13140,7 +13140,7 @@
     "messages.GetOldFeaturedStickers": {
       "desc": "Method for fetching previously featured stickers",
       "params": {
-        "hash": "Hash for pagination, for more info click here",
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.featuredStickers.hash field returned by a previous call to the method, or pass 0 if this is the first call.",
         "limit": "Maximum number of results to return, see pagination",
         "offset": "Offset"
       }
@@ -13224,7 +13224,7 @@
     "messages.GetRecentReactions": {
       "desc": "Get recently used message reactions",
       "params": {
-        "hash": "Hash for pagination, for more info click here",
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.reactions.hash field returned by a previous call to the method, or pass 0 if this is the first call.",
         "limit": "Maximum number of results to return, see pagination"
       }
     },
@@ -13233,7 +13233,7 @@
       "params": {
         "attached": "Get stickers recently attached to photo or video files",
         "flags": "Flags, see TL conditional fields",
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.recentStickers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetReplies": {
@@ -13263,9 +13263,9 @@
       }
     },
     "messages.GetSavedGifs": {
-      "desc": "Get saved GIFs",
+      "desc": "Get saved GIFs.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.savedGifs.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetSavedHistory": {
@@ -13285,7 +13285,7 @@
       "desc": "Fetch the full list of saved message tags created by the user.",
       "params": {
         "flags": "Flags, see TL conditional fields",
-        "hash": "Hash for pagination, for more info click here",
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.savedReactionTags.hash field returned by a previous call to the method, or pass 0 if this is the first call.",
         "peer": "If set, returns tags only used in the specified saved message dialog."
       }
     },
@@ -13350,7 +13350,7 @@
       "desc": "Get stickers by emoji",
       "params": {
         "emoticon": "The emoji",
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.stickers.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.GetSuggestedDialogFilters": {
@@ -13360,7 +13360,7 @@
     "messages.GetTopReactions": {
       "desc": "Got popular message reactions",
       "params": {
-        "hash": "Hash for pagination, for more info click here",
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.reactions.hash field returned by a previous call to the method, or pass 0 if this is the first call.",
         "limit": "Maximum number of results to return, see pagination"
       }
     },
@@ -13728,7 +13728,7 @@
       "desc": "Look for custom emojis associated to a UTF8 emoji",
       "params": {
         "emoticon": "The emoji",
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the emojiList.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
     },
     "messages.SearchEmojiStickerSets": {
@@ -13736,7 +13736,7 @@
       "params": {
         "exclude_featured": "Exclude featured stickersets from results",
         "flags": "Flags, see TL conditional fields",
-        "hash": "Hash for pagination, for more info click here",
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.foundStickerSets.hash field returned by a previous call to the method, or pass 0 if this is the first call.",
         "q": "Query string"
       }
     },
@@ -13769,7 +13769,7 @@
       "params": {
         "exclude_featured": "Exclude featured stickersets from results",
         "flags": "Flags, see TL conditional fields",
-        "hash": "Hash for pagination, for more info click here",
+        "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the messages.foundStickerSets.hash field returned by a previous call to the method, or pass 0 if this is the first call.",
         "q": "Query string"
       }
     },
@@ -14211,7 +14211,7 @@
       }
     },
     "messages.UpdateSavedReactionTag": {
-      "desc": "Update the description of a saved message tag.",
+      "desc": "Update the description of a saved message tag \u00bb.",
       "params": {
         "flags": "Flags, see TL conditional fields",
         "reaction": "Reaction associated to the tag",
