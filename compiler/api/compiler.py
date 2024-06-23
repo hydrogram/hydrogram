@@ -25,9 +25,12 @@ from functools import partial
 from pathlib import Path
 from typing import NamedTuple
 
-HOME_PATH = Path("compiler/api")
-DESTINATION_PATH = Path("hydrogram/raw")
-NOTICE_PATH = "NOTICE"
+API_HOME_PATH = Path(__file__).parent.resolve()
+REPO_HOME_PATH = API_HOME_PATH.parent.parent
+
+DESTINATION_PATH = REPO_HOME_PATH / "hydrogram" / "raw"
+NOTICE_PATH = REPO_HOME_PATH / "NOTICE"
+
 
 SECTION_RE = re.compile(r"---(\w+)---")
 LAYER_RE = re.compile(r"//\sLAYER\s(\d+)")
@@ -60,15 +63,15 @@ WARNING = """
 
 open = partial(open, encoding="utf-8")
 
-types_to_constructors = {}
-types_to_functions = {}
-constructors_to_functions = {}
-namespaces_to_types = {}
-namespaces_to_constructors = {}
-namespaces_to_functions = {}
+types_to_constructors: dict[str, list[str]] = {}
+types_to_functions: dict[str, list[str]] = {}
+constructors_to_functions: dict[str, list[str]] = {}
+namespaces_to_types: dict[str, list[str]] = {}
+namespaces_to_constructors: dict[str, list[str]] = {}
+namespaces_to_functions: dict[str, list[str]] = {}
 
 try:
-    with open("docs.json") as f:
+    with open(API_HOME_PATH / "docs.json") as f:
         docs = json.load(f)
 except FileNotFoundError:
     docs = {"type": {}, "constructor": {}, "method": {}}
@@ -94,7 +97,7 @@ def snake(s: str):
 
 
 def camel(s: str):
-    return "".join([i[0].upper() + i[1:] for i in s.split("_")])
+    return "".join(i[0].upper() + i[1:] for i in s.split("_"))
 
 
 def get_type_hint(type: str) -> str:
@@ -135,7 +138,7 @@ def get_type_hint(type: str) -> str:
     return f'{type}{" = None" if is_flag else ""}'
 
 
-def sort_args(args):
+def sort_args(args: list[tuple[str, str]]):
     """Put flags at the end"""
     args = args.copy()
     flags = [i for i in args if FLAGS_RE.match(i[1])]
@@ -186,13 +189,13 @@ def get_docstring_arg_type(t: str):
 
 def get_references(t: str, kind: str):
     if kind == "constructors":
-        t = constructors_to_functions.get(t)
+        items = constructors_to_functions.get(t)
     elif kind == "types":
-        t = types_to_functions.get(t)
+        items = types_to_functions.get(t)
     else:
         raise ValueError("Invalid kind")
 
-    return ("\n            ".join(t), len(t)) if t else (None, 0)
+    return ("\n            ".join(items), len(items)) if items else (None, 0)
 
 
 def start(format: bool = False):
@@ -201,25 +204,25 @@ def start(format: bool = False):
     shutil.rmtree(DESTINATION_PATH / "base", ignore_errors=True)
 
     with (
-        open(HOME_PATH / "source/auth_key.tl") as f1,
-        open(HOME_PATH / "source/sys_msgs.tl") as f2,
-        open(HOME_PATH / "source/main_api.tl") as f3,
+        open(API_HOME_PATH / "source/auth_key.tl") as f1,
+        open(API_HOME_PATH / "source/sys_msgs.tl") as f2,
+        open(API_HOME_PATH / "source/main_api.tl") as f3,
     ):
         schema = (f1.read() + f2.read() + f3.read()).splitlines()
 
     with (
-        open(HOME_PATH / "template/type.txt") as f1,
-        open(HOME_PATH / "template/combinator.txt") as f2,
+        open(API_HOME_PATH / "template/type.txt") as f1,
+        open(API_HOME_PATH / "template/combinator.txt") as f2,
     ):
         type_tmpl = f1.read()
         combinator_tmpl = f2.read()
 
-    with open(NOTICE_PATH, encoding="utf-8") as f:
+    with open(NOTICE_PATH) as f:
         notice = [f"#  {line}".strip() for line in f]
         notice = "\n".join(notice)
 
     layer = None
-    combinators = []
+    combinators: list[Combinator] = []
 
     section = None
     for line in schema:
@@ -295,7 +298,7 @@ def start(format: bool = False):
             with contextlib.suppress(KeyError):
                 constructors_to_functions[i] = types_to_functions[k]
 
-    for qualtype in types_to_constructors:
+    for qualtype, qualval in types_to_constructors.items():
         typespace, type = qualtype.split(".") if "." in qualtype else ("", qualtype)
         dir_path = DESTINATION_PATH / "base" / typespace
 
@@ -304,9 +307,9 @@ def start(format: bool = False):
         if module == "Updates":
             module = "UpdatesT"
 
-        Path(dir_path).mkdir(parents=True, exist_ok=True)
+        dir_path.mkdir(parents=True, exist_ok=True)
 
-        constructors = sorted(types_to_constructors[qualtype])
+        constructors = sorted(qualval)
         constr_count = len(constructors)
         items = "\n            ".join([f"{c}" for c in constructors])
 
@@ -508,7 +511,7 @@ def start(format: bool = False):
 
         dir_path = DESTINATION_PATH / directory / c.namespace
 
-        Path(dir_path).mkdir(exist_ok=True, parents=True)
+        dir_path.mkdir(exist_ok=True, parents=True)
 
         module = c.name
 
@@ -530,37 +533,61 @@ def start(format: bool = False):
             f.write(f"{notice}\n\n")
             f.write(f"{WARNING}\n\n")
 
+            all = []
+
             for t in types:
                 module = t
 
                 if module == "Updates":
                     module = "UpdatesT"
+
+                all.append(t)
 
                 f.write(f"from .{snake(module)} import {t}\n")
 
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_types))}")
 
+            all.extend(filter(bool, namespaces_to_types))
+
+            f.write("\n\n__all__ = [\n")
+            for it in all:
+                f.write(f'    "{it}",\n')
+            f.write("]\n")
+
     for namespace, types in namespaces_to_constructors.items():
         with open(DESTINATION_PATH / "types" / namespace / "__init__.py", "w") as f:
             f.write(f"{notice}\n\n")
             f.write(f"{WARNING}\n\n")
+
+            all = []
 
             for t in types:
                 module = t
 
                 if module == "Updates":
                     module = "UpdatesT"
+
+                all.append(t)
 
                 f.write(f"from .{snake(module)} import {t}\n")
 
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_constructors))}\n")
 
+            all.extend(filter(bool, namespaces_to_constructors))
+
+            f.write("\n\n__all__ = [\n")
+            for it in all:
+                f.write(f'    "{it}",\n')
+            f.write("]\n")
+
     for namespace, types in namespaces_to_functions.items():
         with open(DESTINATION_PATH / "functions" / namespace / "__init__.py", "w") as f:
             f.write(f"{notice}\n\n")
             f.write(f"{WARNING}\n\n")
+
+            all = []
 
             for t in types:
                 module = t
@@ -568,10 +595,19 @@ def start(format: bool = False):
                 if module == "Updates":
                     module = "UpdatesT"
 
+                all.append(t)
+
                 f.write(f"from .{snake(module)} import {t}\n")
 
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_functions))}")
+
+            all.extend(filter(bool, namespaces_to_functions))
+
+            f.write("\n\n__all__ = [\n")
+            for it in all:
+                f.write(f'    "{it}",\n')
+            f.write("]\n")
 
     with open(DESTINATION_PATH / "all.py", "w", encoding="utf-8") as f:
         f.write(notice + "\n\n")
@@ -595,8 +631,4 @@ def start(format: bool = False):
 
 
 if __name__ == "__main__":
-    HOME_PATH = Path()
-    DESTINATION_PATH = Path("../../hydrogram/raw")
-    NOTICE_PATH = Path("../../NOTICE")
-
     start(format=False)
