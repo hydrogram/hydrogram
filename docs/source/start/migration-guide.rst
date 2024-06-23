@@ -24,12 +24,28 @@ For example:
 Breaking changes
 ----------------
 
+While the majority of the migration involves direct substitution, it's important to note that there are a few breaking
+changes in Hydrogram compared to Pyrogram. We'll discuss these changes in detail below:
+
+Drop the async-to-sync API wrapper (aka synchronous mode)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The async-to-sync API wrapper has been removed from Hydrogram. This decision was made to align with the asynchronous
+nature of Python's asyncio library and to promote best practices for writing asynchronous code. If you're using Pyrogram
+in synchronous mode, it's recommended that you switch to asynchronous mode before migrating to Hydrogram.
+
+Drop the ``emoji`` module
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``emoji`` module has been removed from Hydrogram due to its limited use and the availability of more comprehensive
+emoji handling libraries such as `emoji <https://pypi.org/project/emoji/>`_, which provides lots of emoji-related features.
+This change aims to streamline the library and reduce its footprint. As the Unix philosophy says, "Do one thing and do it well".
+
 Optional arguments as keyword-only arguments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-While the majority of the migration involves direct substitution, it's important to note that if you currently pass optional
-arguments as positional arguments in Pyrogram, another change is required to use Hydrogram. The change involves converting
-optional arguments to keyword arguments in order to prevent potential disruptions in future updates.
+If you currently pass optional arguments as positional arguments in Pyrogram, another change is required to use Hydrogram.
+The change involves converting optional arguments to keyword arguments in order to prevent potential disruptions in future updates.
 
 Let's see a practical example to better understand this change:
 
