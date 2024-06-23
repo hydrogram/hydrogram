@@ -63,18 +63,21 @@ async def main():
 
     for it_type, items in tl_data.items():
         for it_name in items:
+            it_count_done += 1
             print(f"Parsing items {it_count_done}/{it_count}", end="\r", flush=True)
             await sem.acquire()
             tasks.append(asyncio.create_task(get_object_data(it_type, it_name, doc_dict)))
-            it_count_done += 1
 
     # Be sure that all tasks are done before continuing
     for task in tasks:
         await task
 
+    await client.aclose()
+
     json.dump(
         doc_dict, (ROOT_DIR / "compiler" / "api" / "docs.json").open("w"), indent=2, sort_keys=True
     )
+    print("\nDone!")
 
 
 async def get_object_data(it_type: str, it_name: str, doc_dict: dict[str, dict]):
