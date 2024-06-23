@@ -80,12 +80,14 @@ allow-direct-references = true
 [tool.hatch.build.targets.sdist]
 exclude = [
     ".github/",
+    "dev_tools/",
     "docs/",
     "news/",
     "tests/",
     ".editorconfig",
     ".gitignore",
     ".pre-commit-config.yaml",
+    "compiler/api/docs.json",
     "CONTRIBUTING.md",
     "NEWS.rst",
     "requirements.lock",
