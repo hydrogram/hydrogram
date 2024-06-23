@@ -87,7 +87,6 @@ exclude = [
     ".editorconfig",
     ".gitignore",
     ".pre-commit-config.yaml",
-    "compiler/api/docs.json",
     "CONTRIBUTING.md",
     "NEWS.rst",
     "requirements.lock",
