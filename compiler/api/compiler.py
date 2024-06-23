@@ -533,37 +533,61 @@ def start(format: bool = False):
             f.write(f"{notice}\n\n")
             f.write(f"{WARNING}\n\n")
 
+            all = []
+
             for t in types:
                 module = t
 
                 if module == "Updates":
                     module = "UpdatesT"
+
+                all.append(t)
 
                 f.write(f"from .{snake(module)} import {t}\n")
 
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_types))}")
 
+            all.extend(filter(bool, namespaces_to_types))
+
+            f.write("\n\n__all__ = [\n")
+            for it in all:
+                f.write(f'    "{it}",\n')
+            f.write("]\n")
+
     for namespace, types in namespaces_to_constructors.items():
         with open(DESTINATION_PATH / "types" / namespace / "__init__.py", "w") as f:
             f.write(f"{notice}\n\n")
             f.write(f"{WARNING}\n\n")
+
+            all = []
 
             for t in types:
                 module = t
 
                 if module == "Updates":
                     module = "UpdatesT"
+
+                all.append(t)
 
                 f.write(f"from .{snake(module)} import {t}\n")
 
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_constructors))}\n")
 
+            all.extend(filter(bool, namespaces_to_constructors))
+
+            f.write("\n\n__all__ = [\n")
+            for it in all:
+                f.write(f'    "{it}",\n')
+            f.write("]\n")
+
     for namespace, types in namespaces_to_functions.items():
         with open(DESTINATION_PATH / "functions" / namespace / "__init__.py", "w") as f:
             f.write(f"{notice}\n\n")
             f.write(f"{WARNING}\n\n")
+
+            all = []
 
             for t in types:
                 module = t
@@ -571,10 +595,19 @@ def start(format: bool = False):
                 if module == "Updates":
                     module = "UpdatesT"
 
+                all.append(t)
+
                 f.write(f"from .{snake(module)} import {t}\n")
 
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_functions))}")
+
+            all.extend(filter(bool, namespaces_to_functions))
+
+            f.write("\n\n__all__ = [\n")
+            for it in all:
+                f.write(f'    "{it}",\n')
+            f.write("]\n")
 
     with open(DESTINATION_PATH / "all.py", "w", encoding="utf-8") as f:
         f.write(notice + "\n\n")
