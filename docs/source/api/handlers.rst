@@ -41,6 +41,7 @@ Index
     - :class:`PollHandler`
     - :class:`DisconnectHandler`
     - :class:`RawUpdateHandler`
+    - :class:`ErrorHandler`
 
 -----
 
@@ -59,3 +60,4 @@ Details
 .. autoclass:: PollHandler()
 .. autoclass:: DisconnectHandler()
 .. autoclass:: RawUpdateHandler()
+.. autoclass:: ErrorHandler()

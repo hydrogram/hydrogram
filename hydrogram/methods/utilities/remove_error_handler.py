@@ -1,5 +1,4 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
-#  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
 #  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
@@ -17,26 +16,26 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .add_handler import AddHandler
-from .export_session_string import ExportSessionString
-from .remove_error_handler import RemoveErrorHandler
-from .remove_handler import RemoveHandler
-from .restart import Restart
-from .run import Run
-from .start import Start
-from .stop import Stop
-from .stop_transmission import StopTransmission
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    import hydrogram
 
 
-class Utilities(
-    AddHandler,
-    ExportSessionString,
-    RemoveHandler,
-    RemoveErrorHandler,
-    Restart,
-    Run,
-    Start,
-    Stop,
-    StopTransmission,
-):
-    pass
+class RemoveErrorHandler:
+    def remove_error_handler(
+        self: hydrogram.Client, error: type[Exception] | Iterable[type[Exception]] = Exception
+    ):
+        """Remove a previously-registered error handler. (using exception classes)
+
+        Parameters:
+            error (``Exception`` | Iterable of ``Exception``, *optional*):
+                The error(s) for handlers to be removed.
+        """
+        for handler in self.dispatcher.error_handlers:
+            if handler.check_remove(error):
+                self.dispatcher.error_handlers.remove(handler)
