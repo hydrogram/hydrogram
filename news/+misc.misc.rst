@@ -1,1 +1,1 @@
-Misc fixes, improvements and micro optimizations.
+Various fixes, improvements and micro-optimizations.
