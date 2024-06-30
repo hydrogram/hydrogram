@@ -1,0 +1,1 @@
+Added a tool to extract documentation parameters from the Telegram documentation, allowing us to self-host raw API documentation.
