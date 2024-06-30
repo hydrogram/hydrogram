@@ -389,6 +389,7 @@ def hydrogram_api():
             Dialog
             Restriction
             EmojiStatus
+            ChatBackground
         """,
         "messages_media": """
         Messages & Media

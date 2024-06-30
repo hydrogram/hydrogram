@@ -19,6 +19,7 @@
 
 from .chat import Chat
 from .chat_admin_with_invite_links import ChatAdminWithInviteLinks
+from .chat_background import ChatBackground
 from .chat_event import ChatEvent
 from .chat_event_filter import ChatEventFilter
 from .chat_invite_link import ChatInviteLink
@@ -54,6 +55,7 @@ from .video_chat_started import VideoChatStarted
 __all__ = [
     "Chat",
     "ChatAdminWithInviteLinks",
+    "ChatBackground",
     "ChatEvent",
     "ChatEventFilter",
     "ChatInviteLink",
