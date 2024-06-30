@@ -21,5 +21,5 @@ from .discard_grou_call import DiscardGroupCall
 from .invite_group_call_members import InviteGroupCallMembers
 
 
-class Phone(CreateVideoChat, DiscardGroupCall):
+class Phone(CreateVideoChat, DiscardGroupCall, InviteGroupCallMembers):
     pass
