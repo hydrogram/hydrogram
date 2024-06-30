@@ -21,17 +21,19 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     import hydrogram
 
 
 class RemoveErrorHandler:
     def remove_error_handler(
-        self: hydrogram.Client, error: Exception | tuple[Exception] = Exception
+        self: hydrogram.Client, error: type[Exception] | Iterable[type[Exception]] = Exception
     ):
         """Remove a previously-registered error handler. (using exception classes)
 
         Parameters:
-            error (``Exception``):
+            error (``Exception`` | Iterable of ``Exception``, *optional*):
                 The error(s) for handlers to be removed.
         """
         for handler in self.dispatcher.error_handlers:

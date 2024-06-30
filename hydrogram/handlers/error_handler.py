@@ -16,6 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from collections.abc import Iterable
 from typing import TYPE_CHECKING, Callable
 
 from .handler import Handler
@@ -29,38 +32,40 @@ class ErrorHandler(Handler):
     It is intended to be used with :meth:`~hydrogram.Client.add_handler`
 
     For a nicer way to register this handler, have a look at the
-    :meth:`~hydrogram.Client.on_message` decorator.
+    :meth:`~hydrogram.Client.on_error` decorator.
 
     Parameters:
         callback (``Callable``):
             Pass a function that will be called when a new Error arrives. It takes *(client, error)*
             as positional arguments (look at the section below for a detailed description).
 
-        errors (:obj:`Exception` | List of :obj:`Exception`):
+        errors (``Exception`` | Iterable of ``Exception``, *optional*):
             Pass one or more exception classes to allow only a subset of errors to be passed
             in your callback function.
 
     Other parameters:
         client (:obj:`~hydrogram.Client`):
-            The Client itself, useful when you want to call other API methods inside the message handler.
+            The Client itself, useful when you want to call other API methods inside the error handler.
 
-        error (:obj:`~Exception`):
+        error (``Exception``):
             The error that was raised.
 
         update (:obj:`~hydrogram.Update`):
             The update that caused the error.
     """
 
-    def __init__(self, callback: Callable, errors=None):
+    def __init__(
+        self, callback: Callable, errors: type[Exception] | Iterable[type[Exception]] | None = None
+    ):
         if errors is None:
             errors = [Exception]
-        elif not isinstance(errors, list):
+        elif not isinstance(errors, Iterable):
             errors = [errors]
 
         self.errors = errors
         super().__init__(callback)
 
-    async def check(self, client: "hydrogram.Client", error: Exception):
+    async def check(self, client: hydrogram.Client, error: Exception):
         return any(isinstance(error, e) for e in self.errors)
 
     def check_remove(self, error: Exception):
