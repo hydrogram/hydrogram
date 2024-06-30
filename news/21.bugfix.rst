@@ -1,1 +1,1 @@
-Make the quiz explanation an optional parameter
+Make the quiz explanation an optional parameter.
