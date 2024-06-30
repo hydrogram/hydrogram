@@ -1,0 +1,1 @@
+Allowed the use of filters.{private,group,channel} in callback queries.

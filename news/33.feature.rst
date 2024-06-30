@@ -1,0 +1,1 @@
+Added the `ChatBackground` type and the `background` field for the `Chat` object.
