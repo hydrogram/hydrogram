@@ -1,1 +1,0 @@
-Support newly-created chats by increating `MIN_CHANNEL_ID` and `MIN_CHAT_ID`.

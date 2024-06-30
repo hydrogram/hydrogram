@@ -1,1 +1,0 @@
-Added `if TYPE_CHECKING` to import modules for type checking only when needed. This flag avoids importing modules that are not needed for runtime execution. This change reduces the number of imports in the module and improves the performance of the code.

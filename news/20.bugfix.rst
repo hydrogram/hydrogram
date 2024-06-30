@@ -1,1 +1,0 @@
-Fixed an issue with the bool parsing of the raw api that was causing the wrong value to be returned.
