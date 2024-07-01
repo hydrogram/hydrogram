@@ -17,7 +17,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from .create_video_chat import CreateVideoChat
-from .discard_grou_call import DiscardGroupCall
+from .discard_group_call import DiscardGroupCall
 from .invite_group_call_members import InviteGroupCallMembers
 
 
