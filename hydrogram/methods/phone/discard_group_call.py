@@ -16,7 +16,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
 
 import hydrogram
 from hydrogram import types, raw
@@ -25,7 +24,7 @@ from hydrogram import types, raw
 class DiscardGroupCall:
     async def discard_group_call(
         self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        chat_id: int | str,
     ) -> "types.Message":
         """Terminate a group/channel call or livestream
 

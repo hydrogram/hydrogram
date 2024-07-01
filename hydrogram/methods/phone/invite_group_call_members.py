@@ -1,5 +1,4 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
-#  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
 #  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
@@ -17,8 +16,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List
-
 import hydrogram
 from hydrogram import types, raw
 
@@ -26,8 +23,8 @@ from hydrogram import types, raw
 class InviteGroupCallMembers:
     async def invite_group_call_members(
         self: "hydrogram.Client",
-        chat_id: Union[int, str],
-        user_ids: Union[Union[int, str], List[Union[int, str]]],
+        chat_id: int | str,
+        user_ids: int | str | list[int | str],
     ) -> "types.Message":
         """Invites users to an active group call. Sends a service message of type :obj:`~pyrogram.enums.MessageServiceType.VIDEO_CHAT_PARTICIPANTS_INVITED` for video chats.
 

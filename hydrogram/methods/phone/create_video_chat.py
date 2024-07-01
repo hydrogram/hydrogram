@@ -16,7 +16,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
 
 from datetime import datetime
 
@@ -27,7 +26,7 @@ from hydrogram import types, raw, utils
 class CreateVideoChat:
     async def create_video_chat(
         self: "hydrogram.Client",
-        chat_id: Union[int, str],
+        chat_id: int | str,
         title: str = None,
         start_date: datetime = utils.zero_datetime(),
         is_rtmp_stream: bool = None,
