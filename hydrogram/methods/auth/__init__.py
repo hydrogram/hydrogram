@@ -50,5 +50,6 @@ class Auth(
     SignInBot,
     SignUp,
     Terminate,
+    GetSessions,
 ):
     pass
