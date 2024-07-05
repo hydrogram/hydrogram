@@ -29,11 +29,9 @@ class GetSessions:
     async def get_sessions(
         self: "hydrogram.Client",
     ) -> str:
-        """Get your Two-Step Verification password hint.
-
-        .. include:: /_includes/usable-by/users.rst
+        """Get your info data by other sessions .
 
         Returns:
-            ``str``: On success, the password hint as string is returned.
+            ``str``: On success, the info data by other sessions is returned.
         """
         return (await self.invoke(raw.functions.account.GetAuthorizations()))
