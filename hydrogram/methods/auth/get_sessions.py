@@ -32,6 +32,6 @@ class GetSessions:
         """Get your info data by other sessions .
 
         Returns:
-            ``str``: On success, the info data by other sessions is returned.
+            :obj:`account.Authorizations <hydrogram.raw.base.account.Authorizations>`
         """
         return (await self.invoke(raw.functions.account.GetAuthorizations()))
