@@ -72,7 +72,7 @@ Misc
 - Added the `from __future__ import annotations` statement to the codebase in order to simplify the usage of the typing module. This statement allows for the use of forward references in type hints, which can improve code readability and maintainability.
   `#24 <https://github.com/hydrogram/hydrogram/issues/24>`_
 - Various fixes, improvements and micro-optimizations.
-  
+
 
 
 0.1.4 (2023-12-04)
