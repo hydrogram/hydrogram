@@ -68,6 +68,7 @@ from .unban_chat_member import UnbanChatMember
 from .unhide_general_topic import UnhideGeneralTopic
 from .unpin_all_chat_messages import UnpinAllChatMessages
 from .unpin_chat_message import UnpinChatMessage
+from .transfer_chat_ownership import TransferChatOwnership
 
 
 class Chats(
@@ -122,5 +123,6 @@ class Chats(
     GetSendAsChats,
     SetSendAsChat,
     SetChatProtectedContent,
+    TransferChatOwnership,
 ):
     pass
