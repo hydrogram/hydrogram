@@ -103,7 +103,7 @@ async def get_object_data(it_type: str, it_name: str, doc_dict: dict[str, dict])
             desc = desc_xp[0].text_content().strip()
         else:
             print(f"No description for {it_type}/{it_name}")
-            desc = None
+            desc = ""
 
         if it_type == "type":
             doc_dict["type"][it_name] = {"desc": desc}

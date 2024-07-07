@@ -2051,7 +2051,7 @@
       }
     },
     "FoundStory": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "Game": {
@@ -2078,7 +2078,7 @@
       }
     },
     "GeoPointAddress": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "GeoPointEmpty": {
@@ -2845,7 +2845,7 @@
       }
     },
     "InputMediaPaidMedia": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "InputMediaPhoto": {
@@ -3409,7 +3409,7 @@
       }
     },
     "InputStarsTransaction": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "InputStickerSetAnimatedEmoji": {
@@ -3927,7 +3927,7 @@
       }
     },
     "MediaAreaUrl": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "MediaAreaVenue": {
@@ -4160,7 +4160,7 @@
       }
     },
     "MessageActionPaymentRefunded": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "MessageActionPaymentSent": {
@@ -4588,7 +4588,7 @@
       }
     },
     "MessageMediaPaidMedia": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "MessageMediaPhoto": {
@@ -6318,7 +6318,7 @@
       }
     },
     "StarsRevenueStatus": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "StarsTopupOption": {
@@ -6353,7 +6353,7 @@
       }
     },
     "StarsTransactionPeerAds": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "StarsTransactionPeerAppStore": {
@@ -7019,7 +7019,7 @@
       }
     },
     "UpdateBusinessBotCallbackQuery": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "UpdateChannel": {
@@ -7849,7 +7849,7 @@
       }
     },
     "UpdateStarsRevenueStatus": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "UpdateStickerSets": {
@@ -9958,15 +9958,15 @@
       }
     },
     "payments.StarsRevenueAdsAccountUrl": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "payments.StarsRevenueStats": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "payments.StarsRevenueWithdrawalUrl": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "payments.StarsStatus": {
@@ -10284,7 +10284,7 @@
       }
     },
     "stories.FoundStories": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "stories.PeerStories": {
@@ -14377,15 +14377,15 @@
       "params": {}
     },
     "payments.GetStarsRevenueAdsAccountUrl": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "payments.GetStarsRevenueStats": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "payments.GetStarsRevenueWithdrawalUrl": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "payments.GetStarsStatus": {
@@ -14409,7 +14409,7 @@
       }
     },
     "payments.GetStarsTransactionsByID": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "payments.LaunchPrepaidGiveaway": {
@@ -15144,7 +15144,7 @@
       }
     },
     "stories.SearchPosts": {
-      "desc": null,
+      "desc": "",
       "params": {}
     },
     "stories.SendReaction": {
@@ -15615,7 +15615,7 @@
       "desc": "Contains information about a forum topic"
     },
     "FoundStory": {
-      "desc": null
+      "desc": ""
     },
     "Game": {
       "desc": "Indicates an already sent game"
@@ -15624,7 +15624,7 @@
       "desc": "Object defines a GeoPoint."
     },
     "GeoPointAddress": {
-      "desc": null
+      "desc": ""
     },
     "GlobalPrivacySettings": {
       "desc": "Global privacy settings"
@@ -15792,7 +15792,7 @@
       "desc": "A single media in an album or grouped media sent with messages.sendMultiMedia."
     },
     "InputStarsTransaction": {
-      "desc": null
+      "desc": ""
     },
     "InputStickerSet": {
       "desc": "Represents a stickerset"
@@ -16149,7 +16149,7 @@
       "desc": ""
     },
     "StarsRevenueStatus": {
-      "desc": null
+      "desc": ""
     },
     "StarsTopupOption": {
       "desc": ""
@@ -16695,13 +16695,13 @@
       "desc": "Saved payment info"
     },
     "payments.StarsRevenueAdsAccountUrl": {
-      "desc": null
+      "desc": ""
     },
     "payments.StarsRevenueStats": {
-      "desc": null
+      "desc": ""
     },
     "payments.StarsRevenueWithdrawalUrl": {
-      "desc": null
+      "desc": ""
     },
     "payments.StarsStatus": {
       "desc": ""
@@ -16785,7 +16785,7 @@
       "desc": "Full list of active (or active and hidden) stories."
     },
     "stories.FoundStories": {
-      "desc": null
+      "desc": ""
     },
     "stories.PeerStories": {
       "desc": "Active story list of a specific peer."
