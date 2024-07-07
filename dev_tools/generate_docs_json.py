@@ -89,7 +89,12 @@ async def get_object_data(it_type: str, it_name: str, doc_dict: dict[str, dict])
 
         tree = html.fromstring(request.text)
 
-        page_content = tree.xpath("//div[@id='dev_page_content'][1]")[0]
+        page_content_xp = tree.xpath("//div[@id='dev_page_content'][1]")
+        if not page_content_xp:
+            print(f"No page content for {it_type}/{it_name}")
+            return
+
+        page_content = page_content_xp[0]
 
         # Get the description of the object - always used
         desc_xp = page_content.xpath("./p[1]")
@@ -103,22 +108,21 @@ async def get_object_data(it_type: str, it_name: str, doc_dict: dict[str, dict])
         if it_type == "type":
             doc_dict["type"][it_name] = {"desc": desc}
         elif it_type in {"constructor", "method"}:
-            params_xp = (
-                page_content.xpath("./h3/a[@id='parameters'][1]")[0]
-                .getparent()
-                .getnext()
-                .xpath("./tbody[1]")
-            )
-
-            if params_xp:
-                params = {
-                    x.getchildren()[0].text_content().strip(): x.getchildren()[2]
-                    .text_content()
-                    .strip()
-                    for x in params_xp[0].xpath("./tr")
-                }
+            params_link_xp = page_content.xpath("./h3/a[@id='parameters'][1]")
+            if params_link_xp:
+                params_xp = params_link_xp[0].getparent().getnext().xpath("./tbody[1]")
+                if params_xp:
+                    params = {
+                        x.getchildren()[0].text_content().strip(): x.getchildren()[2]
+                        .text_content()
+                        .strip()
+                        for x in params_xp[0].xpath("./tr")
+                    }
+                else:
+                    print(f"No parameters for {it_type}/{it_name}")
+                    params = {}
             else:
-                print(f"No parameters for {it_type}/{it_name}")
+                print(f"No parameters section for {it_type}/{it_name}")
                 params = {}
 
             doc_dict[it_type][it_name] = {"desc": desc, "params": params}

@@ -6,12 +6,6 @@
         "days": "This account will self-destruct in the specified number of days"
       }
     },
-    "AppWebViewResultUrl": {
-      "desc": "Contains the link that must be used to open a direct link Mini App.",
-      "params": {
-        "url": "The URL to open"
-      }
-    },
     "AttachMenuBot": {
       "desc": "Represents a bot mini app that can be launched from the attachment/side menu \u00bb",
       "params": {
@@ -197,12 +191,12 @@
       "params": {}
     },
     "Birthday": {
-      "desc": "{schema}",
+      "desc": "Birthday information for a user.",
       "params": {
-        "day": "",
+        "day": "Birth day",
         "flags": "Flags, see TL conditional fields",
-        "month": "",
-        "year": ""
+        "month": "Birth month",
+        "year": "(Optional) birth year."
       }
     },
     "Boost": {
@@ -211,8 +205,8 @@
         "date": "When was the boost applied",
         "expires": "When does the boost expire",
         "flags": "Flags, see TL conditional fields",
-        "gift": "Whether this boost was applied because the channel directly gifted a subscription to the user.",
-        "giveaway": "Whether this boost was applied because the user was chosen in a giveaway started by the channel.",
+        "gift": "Whether this boost was applied because the channel/supergroup directly gifted a subscription to the user.",
+        "giveaway": "Whether this boost was applied because the user was chosen in a giveaway started by the channel/supergroup.",
         "giveaway_msg_id": "The message ID of the giveaway",
         "id": "Unique ID for this set of boosts.",
         "multiplier": "If set, this boost counts as multiplier boosts, otherwise it counts as a single boost.",
@@ -240,15 +234,15 @@
       "params": {}
     },
     "BotBusinessConnection": {
-      "desc": "{schema}",
+      "desc": "Contains info about a bot business connection.",
       "params": {
-        "can_reply": "",
-        "connection_id": "",
-        "date": "",
-        "dc_id": "",
-        "disabled": "",
+        "can_reply": "Whether the bot can reply on behalf of the user to messages it receives through the business connection",
+        "connection_id": "Business connection ID, used to identify messages coming from the connection and to reply to them as specified here \u00bb.",
+        "date": "When was the connection created.",
+        "dc_id": "ID of the datacenter where to send queries wrapped in a invokeWithBusinessConnection as specified here \u00bb.",
+        "disabled": "Whether this business connection is currently disabled",
         "flags": "Flags, see TL conditional fields",
-        "user_id": ""
+        "user_id": "ID of the user that the bot is connected to via this connection."
       }
     },
     "BotCommand": {
@@ -470,60 +464,60 @@
       }
     },
     "BusinessAwayMessage": {
-      "desc": "{schema}",
+      "desc": "Describes a Telegram Business away message, automatically sent to users writing to us when we're offline, during closing hours, while we're on vacation, or in some other custom time period when we cannot immediately answer to the user.",
       "params": {
         "flags": "Flags, see TL conditional fields",
-        "offline_only": "",
-        "recipients": "",
-        "schedule": "",
-        "shortcut_id": ""
+        "offline_only": "If set, the messages will not be sent if the account was online in the last 10 minutes.",
+        "recipients": "Allowed recipients for the away messages.",
+        "schedule": "Specifies when should the away messages be sent.",
+        "shortcut_id": "ID of a quick reply shorcut, containing the away messages to send, see here \u00bb for more info."
       }
     },
     "BusinessAwayMessageScheduleAlways": {
-      "desc": "{schema}",
+      "desc": "Always send Telegram Business away messages to users writing to us in private.",
       "params": {}
     },
     "BusinessAwayMessageScheduleCustom": {
-      "desc": "{schema}",
+      "desc": "Send Telegram Business away messages to users writing to us in private in the specified time span.",
       "params": {
-        "end_date": "",
-        "start_date": ""
+        "end_date": "End date (UNIX timestamp).",
+        "start_date": "Start date (UNIX timestamp)."
       }
     },
     "BusinessAwayMessageScheduleOutsideWorkHours": {
-      "desc": "{schema}",
+      "desc": "Send Telegram Business away messages to users writing to us in private outside of the configured Telegram Business working hours.",
       "params": {}
     },
     "BusinessBotRecipients": {
-      "desc": "{schema}",
+      "desc": "Specifies the private chats that a connected business bot \u00bb may receive messages and interact with.",
       "params": {
-        "contacts": "",
-        "exclude_selected": "",
-        "exclude_users": "",
-        "existing_chats": "",
+        "contacts": "Selects all private chats with contacts.",
+        "exclude_selected": "If set, then all private chats except the ones selected by existing_chats, new_chats, contacts, non_contacts and users are chosen. Note that if this flag is set, any values passed in exclude_users will be merged and moved into users by the server, thus exclude_users will always be empty.",
+        "exclude_users": "Identifiers of private chats that are always excluded.",
+        "existing_chats": "Selects all existing private chats.",
         "flags": "Flags, see TL conditional fields",
-        "new_chats": "",
-        "non_contacts": "",
-        "users": ""
+        "new_chats": "Selects all new private chats.",
+        "non_contacts": "Selects all private chats with non-contacts.",
+        "users": "Explicitly selected private chats."
       }
     },
     "BusinessChatLink": {
-      "desc": "{schema}",
+      "desc": "Contains info about a business chat deep link \u00bb created by the current account.",
       "params": {
         "entities": "Message entities for styled text",
         "flags": "Flags, see TL conditional fields",
-        "link": "",
-        "message": "",
-        "title": "",
-        "views": ""
+        "link": "Business chat deep link.",
+        "message": "Message to pre-fill in the message input field.",
+        "title": "Human-readable name of the link, to simplify management in the UI (only visible to the creator of the link).",
+        "views": "Number of times the link was resolved (clicked/scanned/etc...)."
       }
     },
     "BusinessGreetingMessage": {
-      "desc": "{schema}",
+      "desc": "Describes a Telegram Business greeting, automatically sent to new users writing to us in private for the first time, or after a certain inactivity period.",
       "params": {
-        "no_activity_days": "",
-        "recipients": "",
-        "shortcut_id": ""
+        "no_activity_days": "The number of days after which a private chat will be considered as inactive; currently, must be one of 7, 14, 21, or 28.",
+        "recipients": "Allowed recipients for the greeting messages.",
+        "shortcut_id": "ID of a quick reply shorcut, containing the greeting messages to send, see here \u00bb for more info."
       }
     },
     "BusinessIntro": {
@@ -536,39 +530,39 @@
       }
     },
     "BusinessLocation": {
-      "desc": "{schema}",
+      "desc": "Represents the location of a Telegram Business \u00bb.",
       "params": {
-        "address": "",
+        "address": "Textual description of the address (mandatory).",
         "flags": "Flags, see TL conditional fields",
-        "geo_point": ""
+        "geo_point": "Geographical coordinates (optional)."
       }
     },
     "BusinessRecipients": {
-      "desc": "{schema}",
+      "desc": "Specifies the chats that can receive Telegram Business away \u00bb and greeting \u00bb messages.",
       "params": {
-        "contacts": "",
-        "exclude_selected": "",
-        "existing_chats": "",
+        "contacts": "All private chats with contacts.",
+        "exclude_selected": "If set, inverts the selection.",
+        "existing_chats": "All existing private chats.",
         "flags": "Flags, see TL conditional fields",
-        "new_chats": "",
-        "non_contacts": "",
-        "users": ""
+        "new_chats": "All new private chats.",
+        "non_contacts": "All private chats with non-contacts.",
+        "users": "Only private chats with the specified users."
       }
     },
     "BusinessWeeklyOpen": {
-      "desc": "{schema}",
+      "desc": "A time interval, indicating the opening hours of a business.",
       "params": {
-        "end_minute": "",
-        "start_minute": ""
+        "end_minute": "End minute in minutes of the week, 1 to 8*24*60 inclusively (8 and not 7 because this allows to specify intervals that, for example, start on Sunday 21:00 and end on Monday 04:00 (6*24*60+21*60 to 7*24*60+4*60) without passing an invalid end_minute < start_minute). See here \u00bb for more info.",
+        "start_minute": "Start minute in minutes of the week, 0 to 7*24*60 inclusively."
       }
     },
     "BusinessWorkHours": {
-      "desc": "{schema}",
+      "desc": "Specifies a set of Telegram Business opening hours.",
       "params": {
         "flags": "Flags, see TL conditional fields",
-        "open_now": "",
-        "timezone_id": "",
-        "weekly_open": ""
+        "open_now": "Ignored if set while invoking account.updateBusinessWorkHours, only returned by the server in userFull.business_work_hours, indicating whether the business is currently open according to the current time and the values in weekly_open and timezone.",
+        "timezone_id": "An ID of one of the timezones returned by help.getTimezonesList.    The timezone ID is contained timezone.id, a human-readable, localized name of the timezone is available in timezone.name and the timezone.utc_offset field contains the UTC offset in seconds, which may be displayed in hh:mm format by the client together with the human-readable name (i.e. $name UTC -01:00).",
+        "weekly_open": "A list of time intervals (max 28) represented by businessWeeklyOpen \u00bb, indicating the opening hours of their business."
       }
     },
     "CdnConfig": {
@@ -662,10 +656,10 @@
       }
     },
     "ChannelAdminLogEventActionChangeEmojiStickerSet": {
-      "desc": "{schema}",
+      "desc": "The supergroup's custom emoji stickerset was changed.",
       "params": {
-        "new_stickerset": "",
-        "prev_stickerset": ""
+        "new_stickerset": "New value",
+        "prev_stickerset": "Old value"
       }
     },
     "ChannelAdminLogEventActionChangeHistoryTTL": {
@@ -997,7 +991,7 @@
         "available_reactions": "Allowed message reactions \u00bb",
         "banned_count": "Number of users banned from the channel",
         "blocked": "Whether any anonymous admin of this supergroup was blocked: if set, you won't receive messages from anonymous group admins in discussion replies via @replies",
-        "boosts_applied": "",
+        "boosts_applied": "The number of boosts the current user has applied to the current supergroup.",
         "boosts_unrestrict": "",
         "bot_info": "Info about bots in the channel/supergroup",
         "call": "Livestream or group call information",
@@ -1010,7 +1004,7 @@
         "can_view_stats": "Can the user view channel/supergroup statistics",
         "chat_photo": "Channel picture",
         "default_send_as": "Default peer used for sending messages to this channel",
-        "emojiset": "",
+        "emojiset": "Custom emoji stickerset associated to the current supergroup, set using channels.setEmojiStickers after reaching the appropriate boost level, see here \u00bb for more info.",
         "exported_invite": "Invite link",
         "flags": "Flags, see TL conditional fields",
         "flags2": "Flags, see TL conditional fields",
@@ -1502,12 +1496,12 @@
       }
     },
     "ConnectedBot": {
-      "desc": "{schema}",
+      "desc": "Contains info about a connected business bot \u00bb.",
       "params": {
-        "bot_id": "",
-        "can_reply": "",
+        "bot_id": "ID of the connected bot",
+        "can_reply": "Whether the the bot can reply to messages it receives through the connection",
         "flags": "Flags, see TL conditional fields",
-        "recipients": ""
+        "recipients": "Specifies the private chats that a connected business bot \u00bb may receive messages and interact with."
       }
     },
     "Contact": {
@@ -1518,10 +1512,10 @@
       }
     },
     "ContactBirthday": {
-      "desc": "{schema}",
+      "desc": "Birthday information of a contact.",
       "params": {
-        "birthday": "",
-        "contact_id": ""
+        "birthday": "Birthday information.",
+        "contact_id": "User ID."
       }
     },
     "ContactStatus": {
@@ -2056,6 +2050,10 @@
         "id": "The ID of the deleted forum topic."
       }
     },
+    "FoundStory": {
+      "desc": null,
+      "params": {}
+    },
     "Game": {
       "desc": "Indicates an already sent game",
       "params": {
@@ -2079,6 +2077,10 @@
         "long": "Longitude"
       }
     },
+    "GeoPointAddress": {
+      "desc": null,
+      "params": {}
+    },
     "GeoPointEmpty": {
       "desc": "Empty constructor.",
       "params": {}
@@ -2088,10 +2090,10 @@
       "params": {
         "archive_and_mute_new_noncontact_peers": "Whether to archive and mute new chats from non-contacts",
         "flags": "Flags, see TL conditional fields",
-        "hide_read_marks": "",
+        "hide_read_marks": "If set, (only) users that cannot see our exact last online date due to the current value of the inputPrivacyKeyStatusTimestamp key will receive a 403 USER_PRIVACY_RESTRICTED error when invoking messages.getOutboxReadDate to fetch the exact read date of one of their messages. The userFull.read_dates_private flag will be set for users that have this flag enabled.",
         "keep_archived_folders": "Whether unmuted chats that are always included or pinned in a folder, will be kept in the Archive chat list when they get a new message. Ignored if keep_archived_unmuted is set.",
         "keep_archived_unmuted": "Whether unmuted chats will be kept in the Archive chat list when they get a new message.",
-        "new_noncontact_peers_require_premium": ""
+        "new_noncontact_peers_require_premium": "If set, only users that have a premium account, are in our contact list, or already have a private chat with us can write to us; a 403 PRIVACY_PREMIUM_REQUIRED error will be emitted otherwise.  The userFull.contact_require_premium flag will be set for users that have this flag enabled.  To check whether we can write to a user with this flag enabled, if we haven't yet cached all the required information (for example we don't have the userFull or history of all users while displaying the chat list in the sharing UI) the users.getIsPremiumRequiredToContact method may be invoked, passing the list of users currently visible in the UI, returning a list of booleans that directly specify whether we can or cannot write to each user. Premium users only, non-Premium users will receive a PREMIUM_ACCOUNT_REQUIRED error when trying to enable this flag."
       }
     },
     "GroupCall": {
@@ -2404,43 +2406,43 @@
       }
     },
     "InputBusinessAwayMessage": {
-      "desc": "{schema}",
+      "desc": "Describes a Telegram Business away message, automatically sent to users writing to us when we're offline, during closing hours, while we're on vacation, or in some other custom time period when we cannot immediately answer to the user.",
       "params": {
         "flags": "Flags, see TL conditional fields",
-        "offline_only": "",
-        "recipients": "",
-        "schedule": "",
-        "shortcut_id": ""
+        "offline_only": "If set, the messages will not be sent if the account was online in the last 10 minutes.",
+        "recipients": "Allowed recipients for the away messages.",
+        "schedule": "Specifies when should the away messages be sent.",
+        "shortcut_id": "ID of a quick reply shorcut, containing the away messages to send, see here \u00bb for more info."
       }
     },
     "InputBusinessBotRecipients": {
-      "desc": "{schema}",
+      "desc": "Specifies the private chats that a connected business bot \u00bb may interact with.",
       "params": {
-        "contacts": "",
-        "exclude_selected": "",
-        "exclude_users": "",
-        "existing_chats": "",
+        "contacts": "Selects all private chats with contacts.",
+        "exclude_selected": "If set, then all private chats except the ones selected by existing_chats, new_chats, contacts, non_contacts and users are chosen. Note that if this flag is set, any values passed in exclude_users will be merged and moved into users by the server.",
+        "exclude_users": "Identifiers of private chats that are always excluded.",
+        "existing_chats": "Selects all existing private chats.",
         "flags": "Flags, see TL conditional fields",
-        "new_chats": "",
-        "non_contacts": "",
-        "users": ""
+        "new_chats": "Selects all new private chats.",
+        "non_contacts": "Selects all private chats with non-contacts.",
+        "users": "Explicitly selected private chats."
       }
     },
     "InputBusinessChatLink": {
-      "desc": "{schema}",
+      "desc": "Contains info about a business chat deep link \u00bb to be created by the current account.",
       "params": {
         "entities": "Message entities for styled text",
         "flags": "Flags, see TL conditional fields",
-        "message": "",
-        "title": ""
+        "message": "Message to pre-fill in the message input field.",
+        "title": "Human-readable name of the link, to simplify management in the UI (only visible to the creator of the link)."
       }
     },
     "InputBusinessGreetingMessage": {
-      "desc": "{schema}",
+      "desc": "Describes a Telegram Business greeting, automatically sent to new users writing to us in private for the first time, or after a certain inactivity period.",
       "params": {
-        "no_activity_days": "",
-        "recipients": "",
-        "shortcut_id": ""
+        "no_activity_days": "The number of days after which a private chat will be considered as inactive; currently, must be one of 7, 14, 21, or 28.",
+        "recipients": "Allowed recipients for the greeting messages.",
+        "shortcut_id": "ID of a quick reply shorcut, containing the greeting messages to send, see here \u00bb for more info."
       }
     },
     "InputBusinessIntro": {
@@ -2453,15 +2455,15 @@
       }
     },
     "InputBusinessRecipients": {
-      "desc": "{schema}",
+      "desc": "Specifies the chats that can receive Telegram Business away \u00bb and greeting \u00bb messages.",
       "params": {
-        "contacts": "",
-        "exclude_selected": "",
-        "existing_chats": "",
+        "contacts": "All private chats with contacts.",
+        "exclude_selected": "If set, inverts the selection.",
+        "existing_chats": "All existing private chats.",
         "flags": "Flags, see TL conditional fields",
-        "new_chats": "",
-        "non_contacts": "",
-        "users": ""
+        "new_chats": "All new private chats.",
+        "non_contacts": "All private chats with non-contacts.",
+        "users": "Only private chats with the specified users."
       }
     },
     "InputChannel": {
@@ -2701,7 +2703,7 @@
       }
     },
     "InputInvoicePremiumGiftCode": {
-      "desc": "Used if the user wishes to start a channel giveaway or send some giftcodes to members of a channel, in exchange for boosts.",
+      "desc": "Used if the user wishes to start a channel/supergroup giveaway or send some giftcodes to members of a channel/supergroup, in exchange for boosts.",
       "params": {
         "option": "Should be populated with one of the giveaway options returned by payments.getPremiumGiftCodeOptions, see the giveaways \u00bb documentation for more info.",
         "purpose": "Should be populated with inputStorePaymentPremiumGiveaway for giveaways and inputStorePaymentPremiumGiftCode for gifts."
@@ -2841,6 +2843,10 @@
         "start_param": "Unique bot deep links start parameter. If present, forwarded copies of the sent message will have a URL button with a deep link to the bot (instead of a Pay button), with the value used as the start parameter. If absent, forwarded copies of the sent message will have a Pay button, allowing multiple users to pay directly from the forwarded message, using the same invoice.",
         "title": "Product name, 1-32 characters"
       }
+    },
+    "InputMediaPaidMedia": {
+      "desc": null,
+      "params": {}
     },
     "InputMediaPhoto": {
       "desc": "Forwarded photo",
@@ -3200,7 +3206,7 @@
       "params": {}
     },
     "InputPrivacyKeyBirthday": {
-      "desc": "{schema}",
+      "desc": "Whether the user can see our birthday.",
       "params": {}
     },
     "InputPrivacyKeyChatInvite": {
@@ -3228,7 +3234,7 @@
       "params": {}
     },
     "InputPrivacyKeyStatusTimestamp": {
-      "desc": "Whether people will be able to see your exact last online timestamp",
+      "desc": "Whether people will be able to see our exact last online timestamp.",
       "params": {}
     },
     "InputPrivacyKeyVoiceMessages": {
@@ -3284,15 +3290,15 @@
       }
     },
     "InputQuickReplyShortcut": {
-      "desc": "{schema}",
+      "desc": "Selects a quick reply shortcut by name.",
       "params": {
-        "shortcut": ""
+        "shortcut": "Shortcut name."
       }
     },
     "InputQuickReplyShortcutId": {
-      "desc": "{schema}",
+      "desc": "Selects a quick reply shortcut by its numeric ID.",
       "params": {
-        "shortcut_id": ""
+        "shortcut_id": "Shortcut ID."
       }
     },
     "InputReplyToMessage": {
@@ -3310,7 +3316,7 @@
     "InputReplyToStory": {
       "desc": "Reply to a story.",
       "params": {
-        "peer": "",
+        "peer": "Sender of the story",
         "story_id": "ID of the story to reply to."
       }
     },
@@ -3402,6 +3408,10 @@
         "random_id": "Unique client media ID required to prevent message resending"
       }
     },
+    "InputStarsTransaction": {
+      "desc": null,
+      "params": {}
+    },
     "InputStickerSetAnimatedEmoji": {
       "desc": "Animated emojis stickerset",
       "params": {}
@@ -3491,10 +3501,10 @@
       }
     },
     "InputStorePaymentPremiumGiftCode": {
-      "desc": "Used to gift Telegram Premium subscriptions only to some specific subscribers of a channel or to some of our contacts, see here \u00bb for more info on giveaways and gifts.",
+      "desc": "Used to gift Telegram Premium subscriptions only to some specific subscribers of a channel/supergroup or to some of our contacts, see here \u00bb for more info on giveaways and gifts.",
       "params": {
         "amount": "Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).",
-        "boost_peer": "If set, the gifts will be sent on behalf of a channel we are an admin of, which will also assign some boosts to it. Otherwise, the gift will be sent directly from the currently logged in users, and we will gain some extra boost slots. See here \u00bb for more info on giveaways and gifts.",
+        "boost_peer": "If set, the gifts will be sent on behalf of a channel/supergroup we are an admin of, which will also assign some boosts to it. Otherwise, the gift will be sent directly from the currently logged in user, and we will gain some extra boost slots. See here \u00bb for more info on giveaways and gifts.",
         "currency": "Three-letter ISO 4217 currency code",
         "flags": "Flags, see TL conditional fields",
         "users": "The users that will receive the Telegram Premium subscriptions."
@@ -3505,7 +3515,7 @@
       "params": {
         "additional_peers": "Additional channels that the user must join to participate to the giveaway can be specified here.",
         "amount": "Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).",
-        "boost_peer": "The channel starting the giveaway, that the user must join to participate, that will receive the giveaway boosts; see here \u00bb for more info on giveaways.",
+        "boost_peer": "The channel/supergroup starting the giveaway, that the user must join to participate, that will receive the giveaway boosts; see here \u00bb for more info on giveaways.",
         "countries_iso2": "The set of users that can participate to the giveaway can be restricted by passing here an explicit whitelist of up to giveaway_countries_max countries, specified as two-letter ISO 3166-1 alpha-2 country codes.",
         "currency": "Three-letter ISO 4217 currency code",
         "flags": "Flags, see TL conditional fields",
@@ -3916,6 +3926,10 @@
         "reaction": "The reaction that should be sent when this area is clicked."
       }
     },
+    "MediaAreaUrl": {
+      "desc": null,
+      "params": {}
+    },
     "MediaAreaVenue": {
       "desc": "Represents a location tag attached to a story, with additional venue information.",
       "params": {
@@ -3938,9 +3952,9 @@
         "entities": "Message entities for styled text",
         "factcheck": "",
         "flags": "Flags, see TL conditional fields",
-        "flags2": "",
+        "flags2": "Flags, see TL conditional fields",
         "forwards": "Forward counter",
-        "from_boosts_applied": "",
+        "from_boosts_applied": "Supergroups only, contains the number of boosts this user has given the current supergroup, and should be shown in the UI in the header of the message. Only present for incoming messages from non-anonymous supergroup members that have boosted the supergroup. Note that this counter should be locally overridden for non-anonymous outgoing messages, according to the current value of channelFull.boosts_applied, to ensure the value is correct even for messages sent by the current user before a supergroup was boosted (or after a boost has expired or the number of boosts has changed); do not update this value for incoming messages from other users, even if their boosts have changed.",
         "from_id": "ID of the sender of the message",
         "from_scheduled": "Whether this is a scheduled message",
         "fwd_from": "Info about forwarded messages",
@@ -3959,7 +3973,7 @@
         "pinned": "Whether this message is pinned",
         "post": "Whether this is a channel post",
         "post_author": "Name of the author of this message for channel posts (with signatures enabled)",
-        "quick_reply_shortcut_id": "",
+        "quick_reply_shortcut_id": "If set, this message is a quick reply shortcut message \u00bb (note that quick reply shortcut messages sent to a private chat will not have this field set).",
         "reactions": "Reactions to this message",
         "replies": "Info about post comments (for channels) or message replies (for groups)",
         "reply_markup": "Reply markup (bot/inline keyboards)",
@@ -3969,14 +3983,14 @@
         "silent": "Whether this is a silent message (no notification triggered)",
         "ttl_period": "Time To Live of the message, once message.date+message.ttl_period === time(), the message will be deleted on the server, and must be deleted locally as well.",
         "via_bot_id": "ID of the inline bot that generated the message",
-        "via_business_bot_id": "",
+        "via_business_bot_id": "Whether the message was sent by the business bot specified in via_bot_id on behalf of the user.",
         "views": "View count for channel posts"
       }
     },
     "MessageActionBoostApply": {
-      "desc": "{schema}",
+      "desc": "Some boosts \u00bb were applied to the channel or supergroup.",
       "params": {
-        "boosts": ""
+        "boosts": "Number of applied boosts."
       }
     },
     "MessageActionBotAllowed": {
@@ -4086,7 +4100,7 @@
       "desc": "Contains a Telegram Premium giftcode link.",
       "params": {
         "amount": "Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).",
-        "boost_peer": "Identifier of the channel that created the gift code either directly or through a giveaway: if we import this giftcode link, we will also automatically boost this channel.",
+        "boost_peer": "Identifier of the channel/supergroup that created the gift code either directly or through a giveaway: if we import this giftcode link, we will also automatically boost this channel/supergroup.",
         "crypto_amount": "If crypto_currency is set, contains the paid amount, in the smallest units of the cryptocurrency.",
         "crypto_currency": "If set, the gift was made using the specified cryptocurrency.",
         "currency": "Three-letter ISO 4217 currency code",
@@ -4094,7 +4108,7 @@
         "months": "Duration in months of the gifted Telegram Premium subscription.",
         "slug": "Slug of the Telegram Premium giftcode link",
         "unclaimed": "If set, the link was not redeemed yet.",
-        "via_giveaway": "If set, this gift code was received from a giveaway \u00bb started by a channel we're subscribed to."
+        "via_giveaway": "If set, this gift code was received from a giveaway \u00bb started by a channel/supergroup we're subscribed to."
       }
     },
     "MessageActionGiftPremium": {
@@ -4144,6 +4158,10 @@
         "call": "The group call",
         "users": "The invited users"
       }
+    },
+    "MessageActionPaymentRefunded": {
+      "desc": null,
+      "params": {}
     },
     "MessageActionPaymentSent": {
       "desc": "A payment was sent",
@@ -4294,7 +4312,7 @@
     "MessageEntityBlockquote": {
       "desc": "Message entity representing a block quote.",
       "params": {
-        "collapsed": "",
+        "collapsed": "Whether the quote is collapsed by default.",
         "flags": "Flags, see TL conditional fields",
         "length": "Length of message entity within message (in UTF-16 code units)",
         "offset": "Offset of message entity within message (in UTF-16 code units)"
@@ -4540,7 +4558,7 @@
       "desc": "A giveaway with public winners has finished, this constructor contains info about the winners.",
       "params": {
         "additional_peers_count": "Number of other channels that participated in the giveaway.",
-        "channel_id": "ID of the channel that was automatically boosted by the winners of the giveaway for duration of the Premium subscription.",
+        "channel_id": "ID of the channel/supergroup that was automatically boosted by the winners of the giveaway for duration of the Premium subscription.",
         "flags": "Flags, see TL conditional fields",
         "launch_msg_id": "Identifier of the message with the giveaway in channel_id.",
         "months": "Duration in months of each Telegram Premium subscription in the giveaway.",
@@ -4568,6 +4586,10 @@
         "title": "Product name, 1-32 characters",
         "total_amount": "Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies)."
       }
+    },
+    "MessageMediaPaidMedia": {
+      "desc": null,
+      "params": {}
     },
     "MessageMediaPhoto": {
       "desc": "Attached photo.",
@@ -4669,7 +4691,7 @@
         "can_see_list": "Whether messages.getMessageReactionsList can be used to see how each specific peer reacted to the message",
         "flags": "Flags, see TL conditional fields",
         "min": "Similar to min objects, used for message reaction \u00bb constructors that are the same for all users so they don't have the reactions sent by the current user (you can use messages.getMessagesReactions to get the full reaction info).",
-        "reactions_as_tags": "",
+        "reactions_as_tags": "If set or if there are no reactions, all present and future reactions should be treated as message tags, see here \u00bb for more info.",
         "recent_reactions": "List of recent peers and their reactions",
         "results": "Reactions"
       }
@@ -4707,7 +4729,7 @@
     "MessageReplyStoryHeader": {
       "desc": "Represents a reply to a story",
       "params": {
-        "peer": "",
+        "peer": "Sender of the story.",
         "story_id": "Story ID"
       }
     },
@@ -4740,12 +4762,12 @@
       }
     },
     "MissingInvitee": {
-      "desc": "{schema}",
+      "desc": "Info about why a specific user could not be invited \u00bb.",
       "params": {
         "flags": "Flags, see TL conditional fields",
-        "premium_required_for_pm": "",
-        "premium_would_allow_invite": "",
-        "user_id": ""
+        "premium_required_for_pm": "If set, we could not add the user because of their privacy settings, and additionally, the current account needs to purchase a Telegram Premium subscription to directly share an invite link with the user via a private message.",
+        "premium_would_allow_invite": "If set, we could not add the user only because the current account needs to purchase a Telegram Premium subscription to complete the operation.",
+        "user_id": "ID of the user. If neither of the flags below are set, we could not add the user because of their privacy settings, and we can create and directly share an invite link with them using a normal message, instead."
       }
     },
     "MyBoost": {
@@ -5218,10 +5240,10 @@
         "add_contact": "Whether we can add the user as contact",
         "autoarchived": "Whether this peer was automatically archived according to privacy settings and can be unarchived",
         "block_contact": "Whether we can block the user",
-        "business_bot_can_reply": "",
-        "business_bot_id": "",
-        "business_bot_manage_url": "",
-        "business_bot_paused": "",
+        "business_bot_can_reply": "This flag is set if both business_bot_id and business_bot_manage_url are set and connected business bots \u00bb can reply to messages in this chat, as specified by the settings during initial configuration.",
+        "business_bot_id": "Contains the ID of the business bot \u00bb managing this chat, used to display info about the bot in the action bar.",
+        "business_bot_manage_url": "Contains a deep link \u00bb, used to open a management menu in the business bot. This flag is set if and only if business_bot_id is set.",
+        "business_bot_paused": "This flag is set if both business_bot_id and business_bot_manage_url are set and all connected business bots \u00bb were paused in this chat using account.toggleConnectedBotPaused \u00bb.",
         "flags": "Flags, see TL conditional fields",
         "geo_distance": "Distance in meters between us and this peer",
         "invite_members": "If set, this is a recently created group chat to which new members can be invited",
@@ -5583,7 +5605,7 @@
       "params": {}
     },
     "PrivacyKeyBirthday": {
-      "desc": "{schema}",
+      "desc": "Whether the user can see our birthday.",
       "params": {}
     },
     "PrivacyKeyChatInvite": {
@@ -5611,7 +5633,7 @@
       "params": {}
     },
     "PrivacyKeyStatusTimestamp": {
-      "desc": "Whether we can see the last online timestamp of this user",
+      "desc": "Whether we can see the last online timestamp of this user.",
       "params": {}
     },
     "PrivacyKeyVoiceMessages": {
@@ -5680,12 +5702,12 @@
       }
     },
     "QuickReply": {
-      "desc": "{schema}",
+      "desc": "A quick reply shortcut.",
       "params": {
-        "count": "",
-        "shortcut": "",
-        "shortcut_id": "",
-        "top_message": ""
+        "count": "Total number of messages in the shortcut.",
+        "shortcut": "Shortcut name.",
+        "shortcut_id": "Unique shortcut ID.",
+        "top_message": "ID of the last message in the shortcut."
       }
     },
     "ReactionCount": {
@@ -5900,12 +5922,12 @@
       }
     },
     "SavedReactionTag": {
-      "desc": "{schema}",
+      "desc": "Info about a saved message reaction tag \u00bb.",
       "params": {
-        "count": "",
+        "count": "Number of messages tagged with this tag.",
         "flags": "Flags, see TL conditional fields",
-        "reaction": "",
-        "title": ""
+        "reaction": "Reaction associated to the tag.",
+        "title": "Custom tag name assigned by the user (max 12 UTF-8 chars)."
       }
     },
     "SearchResultPosition": {
@@ -6258,18 +6280,12 @@
         "title": "Title"
       }
     },
-    "SimpleWebViewResultUrl": {
-      "desc": "Contains the webview URL with appropriate theme parameters added",
-      "params": {
-        "url": "URL"
-      }
-    },
     "SmsJob": {
-      "desc": "{schema}",
+      "desc": "Info about an SMS job.",
       "params": {
-        "job_id": "",
-        "phone_number": "",
-        "text": ""
+        "job_id": "Job ID",
+        "phone_number": "Destination phone number",
+        "text": "Text"
       }
     },
     "SpeakingInGroupCallAction": {
@@ -6301,6 +6317,10 @@
         "text": ""
       }
     },
+    "StarsRevenueStatus": {
+      "desc": null,
+      "params": {}
+    },
     "StarsTopupOption": {
       "desc": "{schema}",
       "params": {
@@ -6331,6 +6351,10 @@
       "params": {
         "peer": ""
       }
+    },
+    "StarsTransactionPeerAds": {
+      "desc": null,
+      "params": {}
     },
     "StarsTransactionPeerAppStore": {
       "desc": "{schema}",
@@ -6442,9 +6466,9 @@
       "params": {
         "access_hash": "Access hash of stickerset",
         "archived": "Whether this stickerset was archived (due to too many saved stickers in the current account)",
-        "channel_emoji_status": "If set, this custom emoji stickerset can be used in channel emoji statuses.",
+        "channel_emoji_status": "If set, this custom emoji stickerset can be used in channel/supergroup emoji statuses.",
         "count": "Number of stickers in pack",
-        "creator": "",
+        "creator": "Whether we created this stickerset",
         "emojis": "This is a custom emoji stickerset",
         "flags": "Flags, see TL conditional fields",
         "hash": "Hash",
@@ -6519,7 +6543,7 @@
         "entities": "Message entities for styled text",
         "expire_date": "When does the story expire.",
         "flags": "Flags, see TL conditional fields",
-        "from_id": "",
+        "from_id": "Sender of the story.",
         "fwd_from": "For reposted stories \u00bb, contains info about the original story.",
         "id": "ID of the story.",
         "media": "Story media.",
@@ -6752,11 +6776,11 @@
       }
     },
     "Timezone": {
-      "desc": "{schema}",
+      "desc": "Timezone information.",
       "params": {
-        "id": "",
-        "name": "",
-        "utc_offset": ""
+        "id": "Unique timezone ID.",
+        "name": "Human-readable and localized timezone name.",
+        "utc_offset": "UTC offset in seconds, which may be displayed in hh:mm format by the client together with the human-readable name (i.e. $name UTC -01:00)."
       }
     },
     "TopPeer": {
@@ -6835,7 +6859,7 @@
       }
     },
     "UpdateBotChatBoost": {
-      "desc": "A channel boost has changed (bots only)",
+      "desc": "A channel/supergroup boost has changed (bots only)",
       "params": {
         "boost": "New boost information",
         "peer": "Channel",
@@ -6993,6 +7017,10 @@
         "balances": "",
         "peer": ""
       }
+    },
+    "UpdateBusinessBotCallbackQuery": {
+      "desc": null,
+      "params": {}
     },
     "UpdateChannel": {
       "desc": "A new channel or supergroup is available, or info about an existing channel has changed and must be refeteched.",
@@ -7199,16 +7227,16 @@
       }
     },
     "UpdateDeleteQuickReply": {
-      "desc": "{schema}",
+      "desc": "A quick reply shortcut \u00bb was deleted. This will not emit updateDeleteQuickReplyMessages updates, even if all the messages in the shortcut are also deleted by this update.",
       "params": {
-        "shortcut_id": ""
+        "shortcut_id": "ID of the quick reply shortcut that was deleted."
       }
     },
     "UpdateDeleteQuickReplyMessages": {
-      "desc": "{schema}",
+      "desc": "One or more messages in a quick reply shortcut \u00bb were deleted.",
       "params": {
-        "messages": "",
-        "shortcut_id": ""
+        "messages": "IDs of the deleted messages.",
+        "shortcut_id": "Quick reply shortcut ID."
       }
     },
     "UpdateDeleteScheduledMessages": {
@@ -7456,9 +7484,9 @@
       }
     },
     "UpdateNewQuickReply": {
-      "desc": "{schema}",
+      "desc": "A new quick reply shortcut \u00bb was created.",
       "params": {
-        "quick_reply": ""
+        "quick_reply": "Quick reply shortcut."
       }
     },
     "UpdateNewScheduledMessage": {
@@ -7597,15 +7625,15 @@
       "params": {}
     },
     "UpdateQuickReplies": {
-      "desc": "{schema}",
+      "desc": "Info about or the order of quick reply shortcuts \u00bb was changed.",
       "params": {
-        "quick_replies": ""
+        "quick_replies": "New quick reply shortcut order and information."
       }
     },
     "UpdateQuickReplyMessage": {
-      "desc": "{schema}",
+      "desc": "A new message was added to a quick reply shortcut \u00bb.",
       "params": {
-        "message": ""
+        "message": "The message that was added (the message.quick_reply_shortcut_id field will contain the shortcut ID)."
       }
     },
     "UpdateReadChannelDiscussionInbox": {
@@ -7716,7 +7744,7 @@
       "params": {}
     },
     "UpdateSavedReactionTags": {
-      "desc": "{schema}",
+      "desc": "The list of reaction tag \u00bb names assigned by the user has changed and should be refetched using messages.getSavedReactionTags \u00bb.",
       "params": {}
     },
     "UpdateSavedRingtones": {
@@ -7820,6 +7848,10 @@
         "balance": ""
       }
     },
+    "UpdateStarsRevenueStatus": {
+      "desc": null,
+      "params": {}
+    },
     "UpdateStickerSets": {
       "desc": "Installed stickersets have changed, the client should refetch them as described in the docs.",
       "params": {
@@ -7875,7 +7907,7 @@
       }
     },
     "UpdateUser": {
-      "desc": "User information was updated, it must be refetched using users.getFullUser.",
+      "desc": "User (user and/or userFull) information was updated, it must be refetched using users.getFullUser.",
       "params": {
         "user_id": "User ID"
       }
@@ -8046,16 +8078,16 @@
         "business_work_hours": "",
         "can_pin_message": "Whether you can pin messages in the chat with this user, you can do this only for a chat with yourself",
         "common_chats_count": "Chats in common with this user",
-        "contact_require_premium": "",
+        "contact_require_premium": "If set, we can only write to this user if they have already sent some messages to us, if we are subscribed to Telegram Premium, or if they're a mutual contact (user.mutual_contact).  All the secondary conditions listed above must be checked separately to verify whether we can still write to the user, even if this flag is set (i.e. a mutual contact will have this flag set even if we can still write to them, and so on...); to avoid doing these extra checks if we haven't yet cached all the required information (for example while displaying the chat list in the sharing UI) the users.getIsPremiumRequiredToContact method may be invoked instead, passing the list of users currently visible in the UI, returning a list of booleans that directly specify whether we can or cannot write to each user. To set this flag for ourselves invoke account.setGlobalPrivacySettings, setting the settings.new_noncontact_peers_require_premium flag.",
         "fallback_photo": "Fallback profile photo, displayed if no photo is present in profile_photo or personal_photo, due to privacy settings.",
         "flags": "Flags, see TL conditional fields",
-        "flags2": "",
+        "flags2": "Flags, see TL conditional fields",
         "folder_id": "Peer folder ID, for more info click here",
         "has_scheduled": "Whether scheduled messages are available",
         "id": "User ID",
         "notify_settings": "Notification settings",
-        "personal_channel_id": "",
-        "personal_channel_message": "",
+        "personal_channel_id": "ID of the associated personal channel \u00bb, that should be shown in the profile page.",
+        "personal_channel_message": "ID of the latest message of the associated personal channel \u00bb, that should be previewed in the profile page.",
         "personal_photo": "Personal profile photo, to be shown instead of profile_photo.",
         "phone_calls_available": "Whether this user can make VoIP calls",
         "phone_calls_private": "Whether this user's privacy settings allow you to call them",
@@ -8063,7 +8095,7 @@
         "premium_gifts": "Telegram Premium subscriptions gift options",
         "private_forward_name": "Anonymized text to be shown instead of the user's name on forwarded messages",
         "profile_photo": "Profile photo",
-        "read_dates_private": "",
+        "read_dates_private": "If set, we cannot fetch the exact read date of messages we send to this user using messages.getOutboxReadDate.  The exact read date of messages might still be unavailable for other reasons, see here \u00bb for more info.  To set this flag for ourselves invoke account.setGlobalPrivacySettings, setting the settings.hide_read_marks flag.",
         "settings": "Peer settings",
         "sponsored_enabled": "",
         "stories": "Active stories \u00bb",
@@ -8364,18 +8396,18 @@
       }
     },
     "account.BusinessChatLinks": {
-      "desc": "{schema}",
+      "desc": "Contains info about business chat deep links \u00bb created by the current account.",
       "params": {
-        "chats": "",
-        "links": "",
-        "users": ""
+        "chats": "Mentioned chats",
+        "links": "Links",
+        "users": "Mentioned users"
       }
     },
     "account.ConnectedBots": {
-      "desc": "{schema}",
+      "desc": "Info about currently connected business bots.",
       "params": {
-        "connected_bots": "",
-        "users": ""
+        "connected_bots": "Info about the connected bots",
+        "users": "Bot information"
       }
     },
     "account.ContentSettings": {
@@ -8473,14 +8505,14 @@
       }
     },
     "account.ResolvedBusinessChatLinks": {
-      "desc": "{schema}",
+      "desc": "Contains info about a single resolved business chat deep link \u00bb.",
       "params": {
-        "chats": "",
+        "chats": "Mentioned chats",
         "entities": "Message entities for styled text",
         "flags": "Flags, see TL conditional fields",
-        "message": "",
-        "peer": "",
-        "users": ""
+        "message": "Message to pre-fill in the message input field.",
+        "peer": "Destination peer",
+        "users": "Mentioned users"
       }
     },
     "account.SavedRingtone": {
@@ -8717,16 +8749,16 @@
       }
     },
     "auth.SentCodeTypeSmsPhrase": {
-      "desc": "{schema}",
+      "desc": "The code was sent via SMS as a secret phrase starting with the word specified in beginning,",
       "params": {
-        "beginning": "",
+        "beginning": "The secret phrase (and the SMS) starts with this word.",
         "flags": "Flags, see TL conditional fields"
       }
     },
     "auth.SentCodeTypeSmsWord": {
-      "desc": "{schema}",
+      "desc": "The code was sent via SMS as a secret word, starting with the letter specified in beginning",
       "params": {
-        "beginning": "",
+        "beginning": "The secret word in the sent SMS (which may contain multiple words) starts with this letter.",
         "flags": "Flags, see TL conditional fields"
       }
     },
@@ -8852,10 +8884,10 @@
       }
     },
     "contacts.ContactBirthdays": {
-      "desc": "{schema}",
+      "desc": "Birthday information of our contacts.",
       "params": {
-        "contacts": "",
-        "users": ""
+        "contacts": "Birthday info",
+        "users": "User information"
       }
     },
     "contacts.Contacts": {
@@ -9021,7 +9053,7 @@
         "colors": "Light mode palette. Will be empty for IDs 0 to 6 inclusive, in which case a palette containing a single color from the following colors should be used: red, orange, violet, green, cyan, blue, pink for indexes 0 to 6.",
         "dark_colors": "Dark mode palette. Optional, defaults to the palette in colors (or the autogenerated palette for IDs 0 to 6) if absent.",
         "flags": "Flags, see TL conditional fields",
-        "group_min_level": "",
+        "group_min_level": "Supergroups can use this palette only after reaching at least the boost level specified in this field.",
         "hidden": "Whether this palette should not be displayed as an option to the user when choosing a palette to apply to profile pages or message accents."
       }
     },
@@ -9126,14 +9158,14 @@
       }
     },
     "help.TimezonesList": {
-      "desc": "{schema}",
+      "desc": "Timezone information that may be used elsewhere in the API, such as to set Telegram Business opening hours \u00bb.",
       "params": {
         "hash": "Hash for pagination, for more info click here",
-        "timezones": ""
+        "timezones": "Timezones"
       }
     },
     "help.TimezonesListNotModified": {
-      "desc": "{schema}",
+      "desc": "The timezone list has not changed.",
       "params": {}
     },
     "help.UserInfo": {
@@ -9485,10 +9517,10 @@
       }
     },
     "messages.InvitedUsers": {
-      "desc": "{schema}",
+      "desc": "Contains info about successfully or unsuccessfully invited \u00bb users.",
       "params": {
-        "missing_invitees": "",
-        "updates": ""
+        "missing_invitees": "A list of users that could not be invited, along with the reason why they couldn't be invited.",
+        "updates": "List of updates about successfully invited users (and eventually info about the created group)"
       }
     },
     "messages.MessageEditData": {
@@ -9570,16 +9602,16 @@
       }
     },
     "messages.QuickReplies": {
-      "desc": "{schema}",
+      "desc": "Info about quick reply shortcuts \u00bb.",
       "params": {
-        "chats": "",
-        "messages": "",
-        "quick_replies": "",
-        "users": ""
+        "chats": "Mentioned chats",
+        "messages": "Messages mentioned in quick_replies.",
+        "quick_replies": "Quick reply shortcuts.",
+        "users": "Mentioned users"
       }
     },
     "messages.QuickRepliesNotModified": {
-      "desc": "{schema}",
+      "desc": "Info about quick reply shortcuts \u00bb hasn't changed.",
       "params": {}
     },
     "messages.Reactions": {
@@ -9643,14 +9675,14 @@
       "params": {}
     },
     "messages.SavedReactionTags": {
-      "desc": "{schema}",
+      "desc": "List of reaction tag \u00bb names assigned by the user.",
       "params": {
         "hash": "Hash for pagination, for more info click here",
-        "tags": ""
+        "tags": "Saved reaction tags."
       }
     },
     "messages.SavedReactionTagsNotModified": {
-      "desc": "{schema}",
+      "desc": "The list of reaction tag \u00bb names assigned by the user hasn't changed.",
       "params": {}
     },
     "messages.SearchCounter": {
@@ -9925,6 +9957,18 @@
         "saved_info": "Saved server-side order information"
       }
     },
+    "payments.StarsRevenueAdsAccountUrl": {
+      "desc": null,
+      "params": {}
+    },
+    "payments.StarsRevenueStats": {
+      "desc": null,
+      "params": {}
+    },
+    "payments.StarsRevenueWithdrawalUrl": {
+      "desc": null,
+      "params": {}
+    },
     "payments.StarsStatus": {
       "desc": "{schema}",
       "params": {
@@ -10038,13 +10082,13 @@
         "boosts": "Total number of boosts acquired so far.",
         "current_level_boosts": "The number of boosts acquired so far in the current level.",
         "flags": "Flags, see TL conditional fields",
-        "gift_boosts": "The number of boosts acquired from created Telegram Premium gift codes and giveaways; only returned to channel admins.",
-        "level": "The current boost level of the channel.",
-        "my_boost": "Whether we're currently boosting this channel, my_boost_slots will also be set.",
+        "gift_boosts": "The number of boosts acquired from created Telegram Premium gift codes and giveaways; only returned to channel/supergroup admins.",
+        "level": "The current boost level of the channel/supergroup.",
+        "my_boost": "Whether we're currently boosting this channel/supergroup, my_boost_slots will also be set.",
         "my_boost_slots": "Indicates which of our boost slots we've assigned to this peer (populated if my_boost is set).",
         "next_level_boosts": "Total number of boosts needed to reach the next level; if absent, the next level isn't available.",
-        "premium_audience": "Only returned to channel admins: contains the approximated number of Premium users subscribed to the channel, related to the total number of subscribers.",
-        "prepaid_giveaways": "A list of prepaid giveaways available for the chat; only returned to channel admins."
+        "premium_audience": "Only returned to channel/supergroup admins: contains the approximated number of Premium users subscribed to the channel/supergroup, related to the total number of subscribers.",
+        "prepaid_giveaways": "A list of prepaid giveaways available for the chat; only returned to channel/supergroup admins."
       }
     },
     "premium.MyBoosts": {
@@ -10056,24 +10100,24 @@
       }
     },
     "smsjobs.EligibleToJoin": {
-      "desc": "{schema}",
+      "desc": "SMS jobs eligibility",
       "params": {
-        "monthly_sent_sms": "",
-        "terms_url": ""
+        "monthly_sent_sms": "Monthly sent SMSes",
+        "terms_url": "Terms of service URL"
       }
     },
     "smsjobs.Status": {
-      "desc": "{schema}",
+      "desc": "Status",
       "params": {
-        "allow_international": "",
+        "allow_international": "Allow international numbers",
         "flags": "Flags, see TL conditional fields",
-        "last_gift_slug": "",
-        "recent_remains": "",
-        "recent_sent": "",
-        "recent_since": "",
-        "terms_url": "",
-        "total_sent": "",
-        "total_since": ""
+        "last_gift_slug": "Last gift deep link",
+        "recent_remains": "Remaining",
+        "recent_sent": "Recently sent",
+        "recent_since": "Since",
+        "terms_url": "Terms of service URL",
+        "total_sent": "Total sent",
+        "total_since": "Total since"
       }
     },
     "stats.BroadcastRevenueStats": {
@@ -10239,6 +10283,10 @@
         "stealth_mode": "Current stealth mode information"
       }
     },
+    "stories.FoundStories": {
+      "desc": null,
+      "params": {}
+    },
     "stories.PeerStories": {
       "desc": "Active story list of a specific peer.",
       "params": {
@@ -10253,7 +10301,7 @@
         "chats": "Mentioned chats",
         "count": "Total number of stories that can be fetched",
         "flags": "Flags, see TL conditional fields",
-        "pinned_to_top": "",
+        "pinned_to_top": "IDs of pinned stories.",
         "stories": "Stories",
         "users": "Mentioned users"
       }
@@ -10458,10 +10506,10 @@
       }
     },
     "InvokeWithBusinessConnection": {
-      "desc": "{schema}",
+      "desc": "Invoke a method using a Telegram Business Bot connection, see here \u00bb for more info, including a list of the methods that can be wrapped in this constructor.",
       "params": {
-        "connection_id": "",
-        "query": ""
+        "connection_id": "Business connection ID.",
+        "query": "The actual query."
       }
     },
     "InvokeWithGooglePlayIntegrity": {
@@ -10555,9 +10603,9 @@
       }
     },
     "account.CreateBusinessChatLink": {
-      "desc": "{schema}",
+      "desc": "Create a business chat deep link \u00bb.",
       "params": {
-        "link": ""
+        "link": "Info about the link to create."
       }
     },
     "account.CreateTheme": {
@@ -10587,9 +10635,9 @@
       "params": {}
     },
     "account.DeleteBusinessChatLink": {
-      "desc": "{schema}",
+      "desc": "Delete a business chat deep link \u00bb.",
       "params": {
-        "slug": ""
+        "slug": "Slug of the link, obtained as specified here \u00bb."
       }
     },
     "account.DeleteSecureValue": {
@@ -10599,16 +10647,16 @@
       }
     },
     "account.DisablePeerConnectedBot": {
-      "desc": "{schema}",
+      "desc": "Permanently disconnect a specific chat from all business bots \u00bb (equivalent to specifying it in recipients.exclude_users during initial configuration with account.updateConnectedBot \u00bb); to reconnect of a chat disconnected using this method the user must reconnect the entire bot by invoking account.updateConnectedBot \u00bb.",
       "params": {
-        "peer": ""
+        "peer": "The chat to disconnect"
       }
     },
     "account.EditBusinessChatLink": {
-      "desc": "{schema}",
+      "desc": "Edit a created business chat deep link \u00bb.",
       "params": {
-        "link": "",
-        "slug": ""
+        "link": "New link information.",
+        "slug": "Slug of the link, obtained as specified here \u00bb."
       }
     },
     "account.FinishTakeoutSession": {
@@ -10647,13 +10695,13 @@
       "params": {}
     },
     "account.GetBotBusinessConnection": {
-      "desc": "{schema}",
+      "desc": "Bots may invoke this method to re-fetch the updateBotBusinessConnect constructor associated with a specific business connection_id, see here \u00bb for more info on connected business bots.\nThis is needed for example for freshly logged in bots that are receiving some updateBotNewBusinessMessage, etc. updates because some users have already connected to the bot before it could login.\nIn this case, the bot is receiving messages from the business connection, but it hasn't cached the associated updateBotBusinessConnect with info about the connection (can it reply to messages? etc.) yet, and cannot receive the old ones because they were sent when the bot wasn't logged into the session yet.\nThis method can be used to fetch info about a not-yet-cached business connection, and should not be invoked if the info is already cached or to fetch changes, as eventual changes will automatically be sent as new updateBotBusinessConnect updates to the bot using the usual update delivery methods \u00bb.",
       "params": {
-        "connection_id": ""
+        "connection_id": "Business connection ID \u00bb."
       }
     },
     "account.GetBusinessChatLinks": {
-      "desc": "{schema}",
+      "desc": "List all created business chat deep links \u00bb.",
       "params": {}
     },
     "account.GetChannelDefaultEmojiStatuses": {
@@ -10675,7 +10723,7 @@
       }
     },
     "account.GetConnectedBots": {
-      "desc": "{schema}",
+      "desc": "List all currently connected business bots \u00bb",
       "params": {}
     },
     "account.GetContactSignUpNotification": {
@@ -10914,9 +10962,9 @@
       "params": {}
     },
     "account.ResolveBusinessChatLink": {
-      "desc": "{schema}",
+      "desc": "Resolve a business chat deep link \u00bb.",
       "params": {
-        "slug": ""
+        "slug": "Slug of the link, obtained as specified here \u00bb."
       }
     },
     "account.SaveAutoDownloadSettings": {
@@ -11041,10 +11089,10 @@
       }
     },
     "account.ToggleConnectedBotPaused": {
-      "desc": "{schema}",
+      "desc": "Pause or unpause a specific chat, temporarily disconnecting it from all business bots \u00bb.",
       "params": {
-        "paused": "",
-        "peer": ""
+        "paused": "Whether to pause or unpause the chat",
+        "peer": "The chat to pause"
       }
     },
     "account.ToggleSponsoredMessages": {
@@ -11069,24 +11117,24 @@
       }
     },
     "account.UpdateBirthday": {
-      "desc": "{schema}",
+      "desc": "Update our birthday, see here \u00bb for more info.",
       "params": {
-        "birthday": "",
+        "birthday": "Birthday.",
         "flags": "Flags, see TL conditional fields"
       }
     },
     "account.UpdateBusinessAwayMessage": {
-      "desc": "{schema}",
+      "desc": "Set a list of Telegram Business away messages.",
       "params": {
         "flags": "Flags, see TL conditional fields",
-        "message": ""
+        "message": "Away message configuration and contents."
       }
     },
     "account.UpdateBusinessGreetingMessage": {
-      "desc": "{schema}",
+      "desc": "Set a list of Telegram Business greeting messages.",
       "params": {
         "flags": "Flags, see TL conditional fields",
-        "message": ""
+        "message": "Greeting message configuration and contents."
       }
     },
     "account.UpdateBusinessIntro": {
@@ -11097,17 +11145,17 @@
       }
     },
     "account.UpdateBusinessLocation": {
-      "desc": "{schema}",
+      "desc": "Businesses \u00bb may advertise their location using this method, see here \u00bb for more info.",
       "params": {
-        "address": "",
+        "address": "Mandatory when setting/updating the location, contains a textual description of the address (max 96 UTF-8 chars).",
         "flags": "Flags, see TL conditional fields",
-        "geo_point": ""
+        "geo_point": "Optional, contains a set of geographical coordinates."
       }
     },
     "account.UpdateBusinessWorkHours": {
-      "desc": "{schema}",
+      "desc": "Specify a set of Telegram Business opening hours.\nThis info will be contained in userFull.business_work_hours.",
       "params": {
-        "business_work_hours": "",
+        "business_work_hours": "Opening hours (optional, if not set removes all opening hours).",
         "flags": "Flags, see TL conditional fields"
       }
     },
@@ -11121,13 +11169,13 @@
       }
     },
     "account.UpdateConnectedBot": {
-      "desc": "{schema}",
+      "desc": "Connect a business bot \u00bb to the current account, or to change the current connection settings.",
       "params": {
-        "bot": "",
-        "can_reply": "",
-        "deleted": "",
+        "bot": "The bot to connect or disconnect",
+        "can_reply": "Whether the bot can reply to messages it receives from us, on behalf of us using the business connection.",
+        "deleted": "Whether to fully disconnect the bot from the current account.",
         "flags": "Flags, see TL conditional fields",
-        "recipients": ""
+        "recipients": "Configuration for the business connection"
       }
     },
     "account.UpdateDeviceLocked": {
@@ -11157,9 +11205,9 @@
       }
     },
     "account.UpdatePersonalChannel": {
-      "desc": "{schema}",
+      "desc": "Associate (or remove) a personal channel \u00bb, that will be listed on our personal profile page \u00bb.",
       "params": {
-        "channel": ""
+        "channel": "The channel, pass inputChannelEmpty to remove it."
       }
     },
     "account.UpdateProfile": {
@@ -11349,7 +11397,7 @@
         "ios_push_secret": "Secret token received via an apple push notification",
         "phone_code_hash": "Phone code hash returned by auth.sendCode",
         "phone_number": "Phone number",
-        "play_integrity_token": "",
+        "play_integrity_token": "On Android, an object obtained as described in the auth documentation \u00bb",
         "safety_net_token": "On Android, a JWS object obtained as described in the auth documentation \u00bb"
       }
     },
@@ -11894,10 +11942,10 @@
       }
     },
     "channels.SetEmojiStickers": {
-      "desc": "{schema}",
+      "desc": "Set a custom emoji stickerset for supergroups. Only usable after reaching at least the boost level \u00bb specified in the group_emoji_stickers_level_min \u00bb config parameter.",
       "params": {
-        "channel": "",
-        "stickerset": ""
+        "channel": "The supergroup",
+        "stickerset": "The custom emoji stickerset to associate to the supergroup"
       }
     },
     "channels.SetStickers": {
@@ -11985,13 +12033,13 @@
         "channel": "Channel whose accent color should be changed.",
         "color": "ID of the accent color palette \u00bb to use (not RGB24, see here \u00bb for more info); if not set, the default palette is used.",
         "flags": "Flags, see TL conditional fields",
-        "for_profile": "Whether to change the accent color emoji pattern of the profile page; otherwise, the accent color and emoji pattern of messages will be changed."
+        "for_profile": "Whether to change the accent color emoji pattern of the profile page; otherwise, the accent color and emoji pattern of messages will be changed. Channels can change both message and profile palettes; supergroups can only change the profile palette, of course after reaching the appropriate boost level."
       }
     },
     "channels.UpdateEmojiStatus": {
-      "desc": "Set an emoji status for a channel.",
+      "desc": "Set an emoji status for a channel or supergroup.",
       "params": {
-        "channel": "The channel, must have at least channel_emoji_status_level_min boosts.",
+        "channel": "The channel/supergroup, must have at least channel_emoji_status_level_min/group_emoji_status_level_min boosts.",
         "emoji_status": "Emoji status to set"
       }
     },
@@ -12151,7 +12199,7 @@
       "params": {}
     },
     "contacts.GetBirthdays": {
-      "desc": "{schema}",
+      "desc": "Fetch all users with birthdays that fall within +1/-1 days, relative to the current day: this method should be invoked by clients every 6-8 hours, and if the result is non-empty, it should be used to appropriately update locally cached birthday information in user.birthday.",
       "params": {}
     },
     "contacts.GetBlocked": {
@@ -12393,7 +12441,7 @@
       "params": {}
     },
     "help.GetTimezonesList": {
-      "desc": "{schema}",
+      "desc": "Returns timezone information that may be used elsewhere in the API, such as to set Telegram Business opening hours \u00bb.",
       "params": {
         "hash": "Hash for pagination, for more info click here.Note: the usual hash generation algorithm cannot be used in this case, please re-use the help.timezonesList.hash field returned by a previous call to the method, or pass 0 if this is the first call."
       }
@@ -12505,9 +12553,9 @@
       }
     },
     "messages.CheckQuickReplyShortcut": {
-      "desc": "{schema}",
+      "desc": "Before offering the user the choice to add a message to a quick reply shortcut, to make sure that none of the limits specified here \u00bb were reached.",
       "params": {
-        "shortcut": ""
+        "shortcut": "Shorcut name (not ID!)."
       }
     },
     "messages.ClearAllDrafts": {
@@ -12591,16 +12639,16 @@
       }
     },
     "messages.DeleteQuickReplyMessages": {
-      "desc": "{schema}",
+      "desc": "Delete one or more messages from a quick reply shortcut. This will also emit an updateDeleteQuickReplyMessages update.",
       "params": {
-        "id": "",
-        "shortcut_id": ""
+        "id": "IDs of shortcut messages to delete.",
+        "shortcut_id": "Shortcut ID."
       }
     },
     "messages.DeleteQuickReplyShortcut": {
-      "desc": "{schema}",
+      "desc": "Completely delete a quick reply shortcut.\nThis will also emit an updateDeleteQuickReply update to other logged-in sessions (and no updateDeleteQuickReplyMessages updates, even if all the messages in the shortcuts are also deleted by this method).",
       "params": {
-        "shortcut_id": ""
+        "shortcut_id": "Shortcut ID"
       }
     },
     "messages.DeleteRevokedExportedChatInvites": {
@@ -12716,16 +12764,16 @@
         "message": "New message",
         "no_webpage": "Disable webpage preview",
         "peer": "Where was the message sent",
-        "quick_reply_shortcut_id": "",
+        "quick_reply_shortcut_id": "If specified, edits a quick reply shortcut message, instead \u00bb.",
         "reply_markup": "Reply markup for inline keyboards",
         "schedule_date": "Scheduled message date for scheduled messages"
       }
     },
     "messages.EditQuickReplyShortcut": {
-      "desc": "{schema}",
+      "desc": "Rename a quick reply shortcut.\nThis will emit an updateQuickReplies update to other logged-in sessions.",
       "params": {
-        "shortcut": "",
-        "shortcut_id": ""
+        "shortcut": "New shortcut name.",
+        "shortcut_id": "Shortcut ID."
       }
     },
     "messages.ExportChatInvite": {
@@ -12757,7 +12805,7 @@
         "from_peer": "Source of messages",
         "id": "IDs of messages",
         "noforwards": "Only for bots, disallows further re-forwarding and saving of the messages, even if the destination chat doesn't have content protection enabled",
-        "quick_reply_shortcut": "",
+        "quick_reply_shortcut": "Add the messages to the specified quick reply shortcut \u00bb, instead.",
         "random_id": "Random ID to prevent resending of messages",
         "schedule_date": "Scheduled message date for scheduled messages",
         "send_as": "Forward the messages as the specified peer",
@@ -13199,18 +13247,18 @@
       }
     },
     "messages.GetQuickReplies": {
-      "desc": "{schema}",
+      "desc": "Fetch basic info about all existing quick reply shortcuts.",
       "params": {
-        "hash": "Hash for pagination, for more info click here"
+        "hash": "Hash for pagination, generated as specified here \u00bb (not the usual algorithm used for hash generation.)"
       }
     },
     "messages.GetQuickReplyMessages": {
-      "desc": "{schema}",
+      "desc": "Fetch (a subset or all) messages in a quick reply shortcut \u00bb.",
       "params": {
         "flags": "Flags, see TL conditional fields",
         "hash": "Hash for pagination, for more info click here",
-        "id": "",
-        "shortcut_id": ""
+        "id": "IDs of the messages to fetch, if empty fetches all of them.",
+        "shortcut_id": "Quick reply shortcut ID."
       }
     },
     "messages.GetRecentLocations": {
@@ -13565,9 +13613,9 @@
       }
     },
     "messages.ReorderQuickReplies": {
-      "desc": "{schema}",
+      "desc": "Reorder quick reply shortcuts.",
       "params": {
-        "order": ""
+        "order": "IDs of all created quick reply shortcuts, in the desired order."
       }
     },
     "messages.ReorderStickerSets": {
@@ -13821,7 +13869,7 @@
         "id": "Result ID from messages.getInlineBotResults",
         "peer": "Destination",
         "query_id": "Query ID from messages.getInlineBotResults",
-        "quick_reply_shortcut": "",
+        "quick_reply_shortcut": "Add the message to the specified quick reply shortcut \u00bb, instead.",
         "random_id": "Random ID to avoid resending the same query",
         "reply_to": "If set, indicates that the message should be sent in reply to the specified message or story.",
         "schedule_date": "Scheduled message date for scheduled messages",
@@ -13842,7 +13890,7 @@
         "message": "Caption",
         "noforwards": "Only for bots, disallows forwarding and saving of the messages, even if the destination chat doesn't have content protection enabled",
         "peer": "Destination",
-        "quick_reply_shortcut": "",
+        "quick_reply_shortcut": "Add the message to the specified quick reply shortcut \u00bb, instead.",
         "random_id": "Random ID to avoid resending the same message",
         "reply_markup": "Reply markup for bot keyboards",
         "reply_to": "If set, indicates that the message should be sent in reply to the specified message or story.",
@@ -13865,7 +13913,7 @@
         "no_webpage": "Set this flag to disable generation of the webpage preview",
         "noforwards": "Only for bots, disallows forwarding and saving of the messages, even if the destination chat doesn't have content protection enabled",
         "peer": "The destination where the message will be sent",
-        "quick_reply_shortcut": "",
+        "quick_reply_shortcut": "Add the message to the specified quick reply shortcut \u00bb, instead.",
         "random_id": "Unique client message ID required to prevent message resending",
         "reply_markup": "Reply markup for sending bot buttons",
         "reply_to": "If set, indicates that the message should be sent in reply to the specified message or story. Also used to quote other messages.",
@@ -13886,7 +13934,7 @@
         "multi_media": "The medias to send: note that they must be separately uploaded using messages.uploadMedia first, using raw inputMediaUploaded* constructors is not supported.",
         "noforwards": "Only for bots, disallows forwarding and saving of the messages, even if the destination chat doesn't have content protection enabled",
         "peer": "The destination chat",
-        "quick_reply_shortcut": "",
+        "quick_reply_shortcut": "Add the message to the specified quick reply shortcut \u00bb, instead.",
         "reply_to": "If set, indicates that the message should be sent in reply to the specified message or story.",
         "schedule_date": "Scheduled message date for scheduled messages",
         "send_as": "Send this message as the specified peer",
@@ -13895,12 +13943,12 @@
       }
     },
     "messages.SendQuickReplyMessages": {
-      "desc": "{schema}",
+      "desc": "Send a quick reply shortcut \u00bb.",
       "params": {
-        "id": "",
-        "peer": "",
-        "random_id": "",
-        "shortcut_id": ""
+        "id": "Specify a subset of messages from the shortcut to send; if empty, defaults to all of them.",
+        "peer": "The peer where to send the shortcut (users only, for now).",
+        "random_id": "Unique client IDs required to prevent message resending, one for each message we're sending, may be empty (but not recommended).",
+        "shortcut_id": "The ID of the quick reply shortcut to send."
       }
     },
     "messages.SendReaction": {
@@ -14237,7 +14285,7 @@
     "messages.UploadMedia": {
       "desc": "Upload a file and associate it to a chat (without actually sending it to the chat)",
       "params": {
-        "business_connection_id": "",
+        "business_connection_id": "Whether the media will be used only in the specified business connection \u00bb, and not directly by the bot.",
         "flags": "Flags, see TL conditional fields",
         "media": "File uploaded in chunks as described in files \u00bb",
         "peer": "The chat, can be inputPeerEmpty for bots and inputPeerSelf for users."
@@ -14328,6 +14376,18 @@
       "desc": "Get saved payment information",
       "params": {}
     },
+    "payments.GetStarsRevenueAdsAccountUrl": {
+      "desc": null,
+      "params": {}
+    },
+    "payments.GetStarsRevenueStats": {
+      "desc": null,
+      "params": {}
+    },
+    "payments.GetStarsRevenueWithdrawalUrl": {
+      "desc": null,
+      "params": {}
+    },
     "payments.GetStarsStatus": {
       "desc": "{schema}",
       "params": {
@@ -14347,6 +14407,10 @@
         "outbound": "",
         "peer": ""
       }
+    },
+    "payments.GetStarsTransactionsByID": {
+      "desc": null,
+      "params": {}
     },
     "payments.LaunchPrepaidGiveaway": {
       "desc": "Launch a prepaid giveaway \u00bb.",
@@ -14698,17 +14762,17 @@
       }
     },
     "premium.GetBoostsList": {
-      "desc": "Obtains info about the boosts that were applied to a certain channel (admins only)",
+      "desc": "Obtains info about the boosts that were applied to a certain channel or supergroup (admins only)",
       "params": {
         "flags": "Flags, see TL conditional fields",
-        "gifts": "Whether to return only info about boosts received from gift codes and giveaways created by the channel \u00bb",
+        "gifts": "Whether to return only info about boosts received from gift codes and giveaways created by the channel/supergroup \u00bb",
         "limit": "Maximum number of results to return, see pagination",
         "offset": "Offset for pagination, obtained from premium.boostsList.next_offset",
-        "peer": "The channel"
+        "peer": "The channel/supergroup"
       }
     },
     "premium.GetBoostsStatus": {
-      "desc": "Gets the current number of boosts of a channel.",
+      "desc": "Gets the current number of boosts of a channel/supergroup.",
       "params": {
         "peer": "The peer."
       }
@@ -14718,46 +14782,46 @@
       "params": {}
     },
     "premium.GetUserBoosts": {
-      "desc": "Returns the lists of boost that were applied to a channel by a specific user (admins only)",
+      "desc": "Returns the lists of boost that were applied to a channel/supergroup by a specific user (admins only)",
       "params": {
-        "peer": "The channel",
+        "peer": "The channel/supergroup",
         "user_id": "The user"
       }
     },
     "smsjobs.FinishJob": {
-      "desc": "{schema}",
+      "desc": "Finish an SMS job (official clients only).",
       "params": {
-        "error": "",
+        "error": "If failed, the error.",
         "flags": "Flags, see TL conditional fields",
-        "job_id": ""
+        "job_id": "Job ID."
       }
     },
     "smsjobs.GetSmsJob": {
-      "desc": "{schema}",
+      "desc": "Get info about an SMS job (official clients only).",
       "params": {
         "job_id": ""
       }
     },
     "smsjobs.GetStatus": {
-      "desc": "{schema}",
+      "desc": "Get SMS jobs status (official clients only).",
       "params": {}
     },
     "smsjobs.IsEligibleToJoin": {
-      "desc": "{schema}",
+      "desc": "Check if we can process SMS jobs (official clients only).",
       "params": {}
     },
     "smsjobs.Join": {
-      "desc": "{schema}",
+      "desc": "Enable SMS jobs (official clients only).",
       "params": {}
     },
     "smsjobs.Leave": {
-      "desc": "{schema}",
+      "desc": "Disable SMS jobs (official clients only).",
       "params": {}
     },
     "smsjobs.UpdateSettings": {
-      "desc": "{schema}",
+      "desc": "Update SMS job settings (official clients only).",
       "params": {
-        "allow_international": "",
+        "allow_international": "Allow international numbers?",
         "flags": "Flags, see TL conditional fields"
       }
     },
@@ -14909,10 +14973,10 @@
       }
     },
     "stickers.ReplaceSticker": {
-      "desc": "{schema}",
+      "desc": "Replace a sticker in a stickerset \u00bb.",
       "params": {
-        "new_sticker": "",
-        "sticker": ""
+        "new_sticker": "New sticker.",
+        "sticker": "Old sticker document."
       }
     },
     "stickers.SetStickerSetThumb": {
@@ -15079,6 +15143,10 @@
         "reason": "Why are these storeis being reported."
       }
     },
+    "stories.SearchPosts": {
+      "desc": null,
+      "params": {}
+    },
     "stories.SendReaction": {
       "desc": "React to a story.",
       "params": {
@@ -15235,9 +15303,9 @@
       }
     },
     "users.GetIsPremiumRequiredToContact": {
-      "desc": "{schema}",
+      "desc": "Check whether we can write to the specified user (non-Premium users only).",
       "params": {
-        "id": ""
+        "id": "Users to fetch info about."
       }
     },
     "users.GetUsers": {
@@ -15257,9 +15325,6 @@
   "type": {
     "AccountDaysTTL": {
       "desc": "Time-to-live of current account"
-    },
-    "AppWebViewResult": {
-      "desc": "Contains the link that must be used to open a direct link Mini App."
     },
     "AttachMenuBot": {
       "desc": "Represents a bot mini app that can be launched from the attachment menu \u00bb"
@@ -15549,11 +15614,17 @@
     "ForumTopic": {
       "desc": "Contains information about a forum topic"
     },
+    "FoundStory": {
+      "desc": null
+    },
     "Game": {
       "desc": "Indicates an already sent game"
     },
     "GeoPoint": {
       "desc": "Object defines a GeoPoint."
+    },
+    "GeoPointAddress": {
+      "desc": null
     },
     "GlobalPrivacySettings": {
       "desc": "Global privacy settings"
@@ -15719,6 +15790,9 @@
     },
     "InputSingleMedia": {
       "desc": "A single media in an album or grouped media sent with messages.sendMultiMedia."
+    },
+    "InputStarsTransaction": {
+      "desc": null
     },
     "InputStickerSet": {
       "desc": "Represents a stickerset"
@@ -16065,9 +16139,6 @@
     "ShippingOption": {
       "desc": "Shipping options"
     },
-    "SimpleWebViewResult": {
-      "desc": "Contains the webview URL with appropriate theme parameters added"
-    },
     "SmsJob": {
       "desc": ""
     },
@@ -16076,6 +16147,9 @@
     },
     "SponsoredMessageReportOption": {
       "desc": ""
+    },
+    "StarsRevenueStatus": {
+      "desc": null
     },
     "StarsTopupOption": {
       "desc": ""
@@ -16620,6 +16694,15 @@
     "payments.SavedInfo": {
       "desc": "Saved payment info"
     },
+    "payments.StarsRevenueAdsAccountUrl": {
+      "desc": null
+    },
+    "payments.StarsRevenueStats": {
+      "desc": null
+    },
+    "payments.StarsRevenueWithdrawalUrl": {
+      "desc": null
+    },
     "payments.StarsStatus": {
       "desc": ""
     },
@@ -16700,6 +16783,9 @@
     },
     "stories.AllStories": {
       "desc": "Full list of active (or active and hidden) stories."
+    },
+    "stories.FoundStories": {
+      "desc": null
     },
     "stories.PeerStories": {
       "desc": "Active story list of a specific peer."
