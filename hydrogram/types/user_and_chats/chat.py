@@ -264,6 +264,9 @@ class Chat(Object):
         peer_id = -chat.id
         usernames = getattr(chat, "usernames", [])
 
+        if isinstance(chat, raw.types.ChatForbidden):
+            return Chat(id=peer_id, type=enums.ChatType.GROUP, title=chat.title, client=client)
+
         return Chat(
             id=peer_id,
             type=enums.ChatType.GROUP,
@@ -281,6 +284,14 @@ class Chat(Object):
     @staticmethod
     def _parse_channel_chat(client, channel: raw.types.Channel) -> Chat:
         peer_id = utils.get_channel_id(channel.id)
+
+        if isinstance(channel, raw.types.ChannelForbidden):
+            return Chat(
+                id=peer_id,
+                type=enums.ChatType.SUPERGROUP if channel.megagroup else enums.ChatType.CHANNEL,
+                title=channel.title,
+                client=client,
+            )
 
         return Chat(
             id=peer_id,
