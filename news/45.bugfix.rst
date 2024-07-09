@@ -1,0 +1,1 @@
+Fixes a bug that caused the get_chat_history method to return `ChatForbidden` or `ChannelForbidden`
