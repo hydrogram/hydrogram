@@ -2729,6 +2729,7 @@ class Message(Object, Update):
         supports_streaming: bool = True,
         disable_notification: bool | None = None,
         reply_to_message_id: int | None = None,
+        no_sound: bool | None = False,
         reply_markup: types.InlineKeyboardMarkup
         | types.ReplyKeyboardMarkup
         | types.ReplyKeyboardRemove
@@ -2806,6 +2807,10 @@ class Message(Object, Update):
             reply_to_message_id (``int``, *optional*):
                 If the message is a reply, ID of the original message.
 
+            no_sound (``bool``, *optional*):
+                Pass True if the video you are uploading is a video message with no sound.
+                Does not work for external links.
+
             reply_markup (:obj:`~hydrogram.types.InlineKeyboardMarkup` | :obj:`~hydrogram.types.ReplyKeyboardMarkup` | :obj:`~hydrogram.types.ReplyKeyboardRemove` | :obj:`~hydrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -2862,6 +2867,7 @@ class Message(Object, Update):
             supports_streaming=supports_streaming,
             disable_notification=disable_notification,
             reply_to_message_id=reply_to_message_id,
+            no_sound=no_sound,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,

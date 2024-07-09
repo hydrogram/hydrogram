@@ -43,6 +43,7 @@ class SendVideo:
         parse_mode: enums.ParseMode | None = None,
         caption_entities: list[types.MessageEntity] | None = None,
         has_spoiler: bool | None = None,
+        no_sound: bool | None = None,
         ttl_seconds: int | None = None,
         duration: int = 0,
         width: int = 0,
@@ -94,6 +95,10 @@ class SendVideo:
 
             has_spoiler (``bool``, *optional*):
                 Pass True if the video needs to be covered with a spoiler animation.
+
+            no_sound (``bool``, *optional*):
+                Pass True if the video you are uploading is a video message with no sound.
+                Does not work for external links.
 
             ttl_seconds (``int``, *optional*):
                 Self-Destruct Timer.
@@ -201,6 +206,7 @@ class SendVideo:
                         ttl_seconds=ttl_seconds,
                         spoiler=has_spoiler,
                         thumb=thumb,
+                        nosound_video=no_sound,
                         attributes=[
                             raw.types.DocumentAttributeVideo(
                                 supports_streaming=supports_streaming or None,
@@ -230,6 +236,7 @@ class SendVideo:
                     ttl_seconds=ttl_seconds,
                     spoiler=has_spoiler,
                     thumb=thumb,
+                    nosound_video=no_sound,
                     attributes=[
                         raw.types.DocumentAttributeVideo(
                             supports_streaming=supports_streaming or None,
