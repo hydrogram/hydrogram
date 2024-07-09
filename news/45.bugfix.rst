@@ -1,0 +1,1 @@
+Fixes a bug that caused the chat parser to return `ChatForbidden` or `ChannelForbidden` which caused some methods like `get_chat_history` to throw `AttributeError`.
