@@ -63,12 +63,12 @@ from .set_chat_title import SetChatTitle
 from .set_chat_username import SetChatUsername
 from .set_send_as_chat import SetSendAsChat
 from .set_slow_mode import SetSlowMode
+from .transfer_chat_ownership import TransferChatOwnership
 from .unarchive_chats import UnarchiveChats
 from .unban_chat_member import UnbanChatMember
 from .unhide_general_topic import UnhideGeneralTopic
 from .unpin_all_chat_messages import UnpinAllChatMessages
 from .unpin_chat_message import UnpinChatMessage
-from .transfer_chat_ownership import TransferChatOwnership
 
 
 class Chats(

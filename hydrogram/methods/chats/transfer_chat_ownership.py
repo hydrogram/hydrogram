@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
+
 from __future__ import annotations
 
 import hydrogram
@@ -58,7 +59,7 @@ class TransferChatOwnership:
         if not isinstance(peer_channel, raw.types.InputPeerChannel):
             raise ValueError("The chat_id must belong to a channel/supergroup.")
 
-        elif not isinstance(peer_user, raw.types.InputPeerUser):
+        if not isinstance(peer_user, raw.types.InputPeerUser):
             raise ValueError("The user_id must belong to a user.")
 
         r = await self.invoke(
