@@ -63,6 +63,7 @@ from .set_chat_title import SetChatTitle
 from .set_chat_username import SetChatUsername
 from .set_send_as_chat import SetSendAsChat
 from .set_slow_mode import SetSlowMode
+from .transfer_chat_ownership import TransferChatOwnership
 from .unarchive_chats import UnarchiveChats
 from .unban_chat_member import UnbanChatMember
 from .unhide_general_topic import UnhideGeneralTopic
@@ -122,5 +123,6 @@ class Chats(
     GetSendAsChats,
     SetSendAsChat,
     SetChatProtectedContent,
+    TransferChatOwnership,
 ):
     pass
