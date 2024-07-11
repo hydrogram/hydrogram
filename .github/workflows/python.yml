@@ -13,23 +13,33 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install the latest version of rye
+        uses: eifinger/setup-rye@v4
+        id: setup-rye
+        with:
+          enable-cache: true
+          cache-prefix: ${{ matrix.python-version }}
+
+      - name: Pin python-version ${{ matrix.python-version }}
+        if: steps.setup-rye.outputs.cache-hit != 'true'
+        run: rye pin ${{ matrix.python-version }}
+
       - name: Install dependencies
+        if: steps.setup-rye.outputs.cache-hit != 'true'
         run: |
-          python -m pip install --upgrade pip
-          pip install tox
+          rye sync --no-lock
 
       - name: Generate API
         run: |
-          make venv
-          make api
+          rye run api
 
       - name: Run tests
         run: |
-          tox
+          rye run python -m pytest
