@@ -6,13 +6,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
+
+    - name: Install the latest version of rye
+      uses: eifinger/setup-rye@v4
+      id: setup-rye
+      with:
+        enable-cache: true
+
     - name: Install dependencies
+      if: steps.setup-rye.outputs.cache-hit != 'true'
       run: |
-        python -m pip install --upgrade pip
-        pip install ruff
-    - name: Analysing the code with pylint
+        rye sync
+
+    - name: Analysing the code with Ruff
       run: |
         ruff format --check .
+        ruff check . --ignore=E501
