@@ -61,3 +61,4 @@ Details
 .. autodecorator:: hydrogram.Client.on_poll()
 .. autodecorator:: hydrogram.Client.on_disconnect()
 .. autodecorator:: hydrogram.Client.on_raw_update()
+.. autodecorator:: hydrogram.Client.on_error()

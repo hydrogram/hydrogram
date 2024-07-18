@@ -25,6 +25,7 @@ from .handler import Handler
 
 if TYPE_CHECKING:
     import hydrogram
+    from hydrogram.types import Update
 
 
 class ErrorHandler(Handler):
@@ -47,26 +48,29 @@ class ErrorHandler(Handler):
         client (:obj:`~hydrogram.Client`):
             The Client itself, useful when you want to call other API methods inside the error handler.
 
-        error (``Exception``):
-            The error that was raised.
-
         update (:obj:`~hydrogram.Update`):
             The update that caused the error.
+
+        error (``Exception``):
+            The error that was raised.
     """
 
     def __init__(
-        self, callback: Callable, errors: type[Exception] | Iterable[type[Exception]] | None = None
+        self,
+        callback: Callable,
+        errors: type[Exception] | Iterable[type[Exception]] | None = None,
     ):
-        if errors is None:
-            errors = [Exception]
-        elif not isinstance(errors, Iterable):
-            errors = [errors]
-
-        self.errors = errors
+        self.errors = (
+            tuple(errors)
+            if isinstance(errors, Iterable)
+            else (errors,)
+            if errors
+            else (Exception,)
+        )
         super().__init__(callback)
 
-    async def check(self, client: hydrogram.Client, error: Exception):
-        return any(isinstance(error, e) for e in self.errors)
+    async def check(self, client: hydrogram.Client, update: Update, error: Exception) -> bool:
+        return isinstance(error, self.errors)
 
-    def check_remove(self, error: Exception):
-        return self.errors == error or any(isinstance(error, e) for e in self.errors)
+    def check_remove(self, error: Exception) -> bool:
+        return isinstance(error, self.errors)

@@ -50,6 +50,7 @@ try:
             len(a),
             "big",
         )
+
 except ImportError:
     import pyaes
 
