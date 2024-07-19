@@ -990,28 +990,29 @@ class Message(Object, Update):
             )
 
             if message.reply_to:
-                if message.reply_to.forum_topic:
-                    if message.reply_to.reply_to_top_id:
-                        thread_id = message.reply_to.reply_to_top_id
+                if isinstance(message.reply_to, raw.types.MessageReplyHeader):
+                    if message.reply_to.forum_topic:
+                        if message.reply_to.reply_to_top_id:
+                            thread_id = message.reply_to.reply_to_top_id
+                            parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
+                        else:
+                            thread_id = message.reply_to.reply_to_msg_id
+                        parsed_message.message_thread_id = thread_id
+                        parsed_message.is_topic_message = True
+                        if topics:
+                            parsed_message.topics = types.ForumTopic._parse(topics[thread_id])
+                        else:
+                            try:
+                                msg = await client.get_messages(parsed_message.chat.id, message.id)
+                                if getattr(msg, "topics"):
+                                    parsed_message.topics = msg.topics
+                            except Exception:
+                                pass
+                    else:
                         parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
-                    else:
-                        thread_id = message.reply_to.reply_to_msg_id
-                    parsed_message.message_thread_id = thread_id
-                    parsed_message.is_topic_message = True
-                    if topics:
-                        parsed_message.topics = types.ForumTopic._parse(topics[thread_id])
-                    else:
-                        try:
-                            msg = await client.get_messages(parsed_message.chat.id, message.id)
-                            if getattr(msg, "topics"):
-                                parsed_message.topics = msg.topics
-                        except Exception:
-                            pass
-                else:
-                    parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
-                    parsed_message.reply_to_top_message_id = message.reply_to.reply_to_top_id
-                    if isinstance(message.reply_to, raw.types.MessageReplyStoryHeader):
-                        parsed_message.reply_to_message_id = message.reply_to.story_id
+                        parsed_message.reply_to_top_message_id = message.reply_to.reply_to_top_id
+                if isinstance(message.reply_to, raw.types.MessageReplyStoryHeader):
+                    parsed_message.reply_to_message_id = message.reply_to.story_id
 
                 if replies:
                     try:
