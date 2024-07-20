@@ -232,10 +232,9 @@ class Dispatcher:
 
     async def _handle_update(self, handler, handler_type, parsed_update, update, users, chats):
         try:
-            if isinstance(handler, handler_type) and await handler.check(
-                self.client, parsed_update
-            ):
-                await self._execute_callback(handler, parsed_update)
+            if isinstance(handler, handler_type):
+                if await handler.check(self.client, parsed_update):
+                    await self._execute_callback(handler, parsed_update)
             elif isinstance(handler, RawUpdateHandler):
                 await self._execute_callback(handler, update, users, chats)
         except (hydrogram.StopPropagation, hydrogram.ContinuePropagation) as e:
@@ -249,17 +248,17 @@ class Dispatcher:
         for error_handler in self.error_handlers:
             try:
                 if await error_handler.check(self.client, parsed_update, exception):
-                    await error_handler.callback(self.client, parsed_update, exception)
                     handled_error = True
                     break
             except hydrogram.StopPropagation:
                 raise
-            except (hydrogram.ContinuePropagation, Exception) as inner_exception:
-                if isinstance(inner_exception, Exception):
-                    log.exception(inner_exception)
+            except hydrogram.ContinuePropagation:
+                continue
+            except Exception as inner_exception:
+                log.exception("Error in error handler: %s", inner_exception)
 
         if not handled_error:
-            log.exception(exception)
+            log.exception("Unhandled exception: %s", exception)
 
     async def _execute_callback(self, handler, *args):
         if inspect.iscoroutinefunction(handler.callback):

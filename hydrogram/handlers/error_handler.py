@@ -40,7 +40,7 @@ class ErrorHandler(Handler):
             Pass a function that will be called when a new Error arrives. It takes *(client, error)*
             as positional arguments (look at the section below for a detailed description).
 
-        errors (``Exception`` | Iterable of ``Exception``, *optional*):
+        exceptions (``Exception`` | Iterable of ``Exception``, *optional*):
             Pass one or more exception classes to allow only a subset of errors to be passed
             in your callback function.
 
@@ -58,19 +58,22 @@ class ErrorHandler(Handler):
     def __init__(
         self,
         callback: Callable,
-        errors: type[Exception] | Iterable[type[Exception]] | None = None,
+        exceptions: type[Exception] | Iterable[type[Exception]] | None = None,
     ):
-        self.errors = (
-            tuple(errors)
-            if isinstance(errors, Iterable)
-            else (errors,)
-            if errors
+        self.exceptions = (
+            tuple(exceptions)
+            if isinstance(exceptions, Iterable)
+            else (exceptions,)
+            if exceptions
             else (Exception,)
         )
         super().__init__(callback)
 
-    async def check(self, client: hydrogram.Client, update: Update, error: Exception) -> bool:
-        return isinstance(error, self.errors)
+    async def check(self, client: hydrogram.Client, update: Update, exception: Exception) -> bool:
+        if isinstance(exception, self.exceptions):
+            await self.callback(client, update, exception)
+            return True
+        return False
 
-    def check_remove(self, error: Exception) -> bool:
-        return isinstance(error, self.errors)
+    def check_remove(self, error: type[Exception] | Iterable[type[Exception]]) -> bool:
+        return isinstance(error, self.exceptions)
