@@ -330,7 +330,6 @@ class Client(Methods):
         self.updates_watchdog_event = asyncio.Event()
         self.last_update_time = datetime.now()
 
-        self.loop = asyncio.get_event_loop()
         self.listeners = {listener_type: [] for listener_type in ListenerTypes}
 
     async def __aenter__(self):
@@ -339,6 +338,10 @@ class Client(Methods):
     async def __aexit__(self, *args):
         with contextlib.suppress(ConnectionError):
             await self.stop()
+
+    @functools.cached_property
+    def loop(self):
+        return asyncio.get_running_loop()
 
     async def updates_watchdog(self):
         while True:

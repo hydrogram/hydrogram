@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import asyncio
 from typing import TYPE_CHECKING
 
 from hydrogram.methods.utilities.idle import idle
@@ -70,13 +69,12 @@ class Run:
 
                 app.run(main())
         """
-        loop = asyncio.get_event_loop()
-        run = loop.run_until_complete
+        run = self.loop.run_until_complete
 
         if coroutine is not None:
             run(coroutine)
         else:
-            if loop.is_running():
+            if self.loop.is_running():
                 raise RuntimeError(
                     "You must call client.run() method outside of an asyncio event loop. "
                     "Otherwise, you can use client.start(), client.idle(), and client.stop() "
