@@ -341,7 +341,12 @@ class Client(Methods):
 
     @functools.cached_property
     def loop(self):
-        return asyncio.get_running_loop()
+        try:
+            return asyncio.get_running_loop()
+        except RuntimeError:
+            _loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(_loop)
+            return _loop
 
     async def updates_watchdog(self):
         while True:
