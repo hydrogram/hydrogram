@@ -47,7 +47,7 @@ async def ainput(prompt: str = "", *, hide: bool = False):
     """Just like the built-in input, but async"""
     with ThreadPoolExecutor(1) as executor:
         func = functools.partial(getpass if hide else input, prompt)
-        return await asyncio.get_event_loop().run_in_executor(executor, func)
+        return await asyncio.get_running_loop().run_in_executor(executor, func)
 
 
 def get_input_media_from_file_id(

@@ -55,7 +55,7 @@ class TCP:
         self.writer: asyncio.StreamWriter | None = None
 
         self.lock = asyncio.Lock()
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio.get_running_loop()
 
     async def _connect_via_proxy(self, destination: tuple[str, int]) -> None:
         scheme = self.proxy.get("scheme")

@@ -84,8 +84,7 @@ class Listen:
             inline_message_id=inline_message_id,
         )
 
-        loop = asyncio.get_event_loop()
-        future = loop.create_future()
+        future = self.loop.create_future()
 
         listener = Listener(
             future=future,

@@ -83,7 +83,6 @@ class Dispatcher:
 
     def __init__(self, client: hydrogram.Client):
         self.client = client
-        self.loop = asyncio.get_event_loop()
         self.handler_worker_tasks: list[asyncio.Task] = []
         self.locks_list: list[asyncio.Lock] = []
         self.updates_queue = asyncio.Queue()
@@ -223,7 +222,7 @@ class Dispatcher:
         if not self.client.no_updates:
             self.locks_list = [asyncio.Lock() for _ in range(self.client.workers)]
             self.handler_worker_tasks = [
-                self.loop.create_task(self.handler_worker(lock)) for lock in self.locks_list
+                self.client.loop.create_task(self.handler_worker(lock)) for lock in self.locks_list
             ]
             log.info("Started %s HandlerTasks", self.client.workers)
 
@@ -239,35 +238,27 @@ class Dispatcher:
             log.info("Stopped %s HandlerTasks", self.client.workers)
 
     def add_handler(self, handler: Handler, group: int):
-        async def fn():
-            async with asyncio.Lock():
-                if isinstance(handler, ErrorHandler):
-                    if handler not in self.error_handlers:
-                        self.error_handlers.append(handler)
-                else:
-                    if group not in self.groups:
-                        self.groups[group] = []
-                        self.groups = OrderedDict(sorted(self.groups.items()))
-                    self.groups[group].append(handler)
-
-        self.loop.create_task(fn())
+        if isinstance(handler, ErrorHandler):
+            if handler not in self.error_handlers:
+                self.error_handlers.append(handler)
+        else:
+            if group not in self.groups:
+                self.groups[group] = []
+                self.groups = OrderedDict(sorted(self.groups.items()))
+            self.groups[group].append(handler)
 
     def remove_handler(self, handler: Handler, group: int):
-        async def fn():
-            async with asyncio.Lock():
-                if isinstance(handler, ErrorHandler):
-                    if handler not in self.error_handlers:
-                        raise ValueError(
-                            f"Error handler {handler} does not exist. Handler was not removed."
-                        )
+        if isinstance(handler, ErrorHandler):
+            if handler not in self.error_handlers:
+                raise ValueError(
+                    f"Error handler {handler} does not exist. Handler was not removed."
+                )
 
-                    self.error_handlers.remove(handler)
-                else:
-                    if group not in self.groups:
-                        raise ValueError(f"Group {group} does not exist. Handler was not removed.")
-                    self.groups[group].remove(handler)
-
-        self.loop.create_task(fn())
+            self.error_handlers.remove(handler)
+        else:
+            if group not in self.groups:
+                raise ValueError(f"Group {group} does not exist. Handler was not removed.")
+            self.groups[group].remove(handler)
 
     async def handler_worker(self, lock: asyncio.Lock):
         while True:
@@ -341,6 +332,6 @@ class Dispatcher:
         if inspect.iscoroutinefunction(handler.callback):
             await handler.callback(self.client, *args)
         else:
-            await self.loop.run_in_executor(
+            await self.client.loop.run_in_executor(
                 self.client.executor, handler.callback, self.client, *args
             )
