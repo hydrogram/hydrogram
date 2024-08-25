@@ -104,6 +104,15 @@ async def get_object_data(it_type: str, it_name: str, doc_dict: dict[str, dict])
         else:
             print(f"No description for {it_type}/{it_name}")
             desc = ""
+        
+        # Get the optional ul tags (only if available)
+        desc_ul_xp = page_content.xpath("./ul[1]")
+        if desc_ul_xp:
+            opt_al_ul_ts = desc_ul_xp[0].text_content().strip().split("\n")
+            desc += "\n\n"
+            for ulat in opt_al_ul_ts:
+                desc += f"\n\t\t- {ulat} \n"
+            desc += "\n\n"
 
         if it_type == "type":
             doc_dict["type"][it_name] = {"desc": desc}
