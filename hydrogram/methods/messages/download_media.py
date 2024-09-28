@@ -19,7 +19,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import os
 from datetime import datetime
 from pathlib import Path
@@ -196,5 +195,5 @@ class DownloadMedia:
 
         if block:
             return await downloader
-        asyncio.get_event_loop().create_task(downloader)
+        self.loop.create_task(downloader)
         return None
