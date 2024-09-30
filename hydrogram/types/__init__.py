@@ -438,7 +438,7 @@ __all__ = [
     "input_message_content",
     "input_phone_contact",
     "input_text_message_content",
-    "input_text_message_content",
+    "input_poll_option",
     "invite_link_importer",
     "keyboard_button",
     "location",

@@ -23,7 +23,6 @@ from typing import TYPE_CHECKING
 from hydrogram.types.object import Object
 
 if TYPE_CHECKING:
-    import hydrogram
     from hydrogram import types, enums
 
 
