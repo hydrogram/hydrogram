@@ -2376,7 +2376,7 @@ class Message(Object, Update):
     async def reply_poll(
         self,
         question: str,
-        options: list[str],
+        options: list["types.InputPollOption"],
         is_anonymous: bool = True,
         type: enums.PollType = enums.PollType.REGULAR,
         allows_multiple_answers: bool | None = None,
@@ -2405,22 +2405,32 @@ class Message(Object, Update):
 
             await client.send_poll(
                 chat_id=message.chat.id,
-                message_thread_id=message.message_thread_id,
                 question="This is a poll",
-                options=["A", "B", "C]
+                options=[
+                    InputPollOption(text="A"),
+                    InputPollOption(text="B"),
+                    InputPollOption(text= "C"),
+                ]
             )
 
         Example:
             .. code-block:: python
 
-                await message.reply_poll("This is a poll", ["A", "B", "C"])
+                await message.reply_poll(
+                    question="This is a poll",
+                    options=[
+                        InputPollOption(text="A"),
+                        InputPollOption(text="B"),
+                        InputPollOption(text= "C"),
+                    ]
+                )
 
         Parameters:
             question (``str``):
                 Poll question, 1-255 characters.
 
-            options (List of ``str``):
-                List of answer options, 2-10 strings 1-100 characters each.
+            options (List of :obj:`~pyrogram.types.InputPollOption`):
+                List of answer options, 2-10 answer options,  1-100 characters for each option.
 
             is_anonymous (``bool``, *optional*):
                 True, if the poll needs to be anonymous.
