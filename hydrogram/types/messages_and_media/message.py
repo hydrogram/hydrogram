@@ -2378,7 +2378,7 @@ class Message(Object, Update):
         question: str,
         options: list[types.InputPollOption],
         question_parse_mode: "enums.ParseMode" = None,
-        question_entities: list["types.MessageEntity"] = None,
+        question_entities: list["types.MessageEntity"] | None = None,
         is_anonymous: bool = True,
         type: enums.PollType = enums.PollType.REGULAR,
         allows_multiple_answers: bool | None = None,

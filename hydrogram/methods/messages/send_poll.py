@@ -36,7 +36,7 @@ class SendPoll:
         options: list[ypes.InputPollOption],
         *,
         question_parse_mode: enums.ParseMode = None,
-        question_entities: list[types.MessageEntity] = None,
+        question_entities: list[types.MessageEntity] | None = None,
         message_thread_id: int | None = None,
         is_anonymous: bool = True,
         type: enums.PollType = enums.PollType.REGULAR,
