@@ -35,6 +35,8 @@ class SendPoll:
         question: str,
         options: list[ypes.InputPollOption],
         *,
+        question_parse_mode: enums.ParseMode = None,
+        question_entities: List[types.MessageEntity] = None,
         message_thread_id: int | None = None,
         is_anonymous: bool = True,
         type: enums.PollType = enums.PollType.REGULAR,
@@ -68,8 +70,15 @@ class SendPoll:
             question (``str``):
                 Poll question, 1-255 characters.
 
-            options (List of :obj:`~pyrogram.types.InputPollOption`):
+            options (List of :obj:`~hydrogram.types.InputPollOption`):
                 List of answer options, 2-10 answer options,  1-100 characters for each option.
+
+            question_parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
+                By default, texts are parsed using both Markdown and HTML styles.
+                You can combine both syntaxes together.
+
+            question_entities (List of :obj:`~hydrogram.types.MessageEntity`):
+                List of special entities that appear in the poll question, which can be specified instead of *question_parse_mode*.
 
             message_thread_id (``int``, *optional*):
                 Unique identifier for the target message thread (topic) of the forum.
@@ -153,7 +162,12 @@ class SendPoll:
 
         reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
 
-        question, question_entities = (await utils.parse_text_entities(self, question, question_parse_mode, question_entities)).values()
+        question, question_entities = (await utils.parse_text_entities(
+            self,
+            question,
+            question_parse_mode,
+            question_entities
+        )).values()
         if not question_entities:
             question_entities = []
 
@@ -162,7 +176,12 @@ class SendPoll:
             if isinstance(answer_, str):
                 answer, answer_entities = answer_, []
             else:
-                answer, answer_entities = (await utils.parse_text_entities(self, answer_.text, answer_.text_parse_mode, answer_.text_entities)).values()
+                answer, answer_entities = (await utils.parse_text_entities(
+                    self,
+                    answer_.text,
+                    answer_.text_parse_mode,
+                    answer_.text_entities
+                )).values()
                 if not answer_entities:
                     answer_entities = []
             answers.append(
@@ -181,7 +200,10 @@ class SendPoll:
                 media=raw.types.InputMediaPoll(
                     poll=raw.types.Poll(
                         id=self.rnd_id(),
-                        question=question,
+                        question=raw.types.TextWithEntities(
+                            text=question,
+                            entities=question_entities
+                        ),
                         answers=answers,
                         closed=is_closed,
                         public_voters=not is_anonymous,

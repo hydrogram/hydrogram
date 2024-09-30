@@ -2377,6 +2377,8 @@ class Message(Object, Update):
         self,
         question: str,
         options: list[types.InputPollOption],
+        question_parse_mode: "enums.ParseMode" = None,
+        question_entities: List["types.MessageEntity"] = None,
         is_anonymous: bool = True,
         type: enums.PollType = enums.PollType.REGULAR,
         allows_multiple_answers: bool | None = None,
@@ -2429,8 +2431,15 @@ class Message(Object, Update):
             question (``str``):
                 Poll question, 1-255 characters.
 
-            options (List of :obj:`~pyrogram.types.InputPollOption`):
+            options (List of :obj:`~hydrogram.types.InputPollOption`):
                 List of answer options, 2-10 answer options,  1-100 characters for each option.
+
+            question_parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
+                By default, texts are parsed using both Markdown and HTML styles.
+                You can combine both syntaxes together.
+
+            question_entities (List of :obj:`~hydrogram.types.MessageEntity`):
+                List of special entities that appear in the poll question, which can be specified instead of *question_parse_mode*.
 
             is_anonymous (``bool``, *optional*):
                 True, if the poll needs to be anonymous.
@@ -2511,6 +2520,8 @@ class Message(Object, Update):
             message_thread_id=self.message_thread_id,
             question=question,
             options=options,
+            question_parse_mode=question_parse_mode,
+            question_entities=question_entities,
             is_anonymous=is_anonymous,
             type=type,
             allows_multiple_answers=allows_multiple_answers,
