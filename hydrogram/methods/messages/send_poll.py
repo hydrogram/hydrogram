@@ -33,7 +33,7 @@ class SendPoll:
         self: hydrogram.Client,
         chat_id: int | str,
         question: str,
-        options: list["types.InputPollOption"],
+        options: list[ypes.InputPollOption],
         *,
         message_thread_id: int | None = None,
         is_anonymous: bool = True,

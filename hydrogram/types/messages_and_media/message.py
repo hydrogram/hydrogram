@@ -2376,7 +2376,7 @@ class Message(Object, Update):
     async def reply_poll(
         self,
         question: str,
-        options: list["types.InputPollOption"],
+        options: list[types.InputPollOption],
         is_anonymous: bool = True,
         type: enums.PollType = enums.PollType.REGULAR,
         allows_multiple_answers: bool | None = None,
