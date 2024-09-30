@@ -33,7 +33,7 @@ class SendPoll:
         self: hydrogram.Client,
         chat_id: int | str,
         question: str,
-        options: list[ypes.InputPollOption],
+        options: list[types.InputPollOption],
         *,
         question_parse_mode: enums.ParseMode = None,
         question_entities: list[types.MessageEntity] | None = None,
