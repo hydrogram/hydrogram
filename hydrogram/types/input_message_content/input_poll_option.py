@@ -20,11 +20,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from hydrogram import types, enums
-
 from hydrogram.types.object import Object
 
+if TYPE_CHECKING:
+    import hydrogram
 
 class InputPollOption(Object):
     """This object contains information about one answer option in a poll to send.
@@ -47,8 +46,8 @@ class InputPollOption(Object):
         self,
         *,
         text: str,
-        text_parse_mode: enums.ParseMode = None,
-        text_entities: list[types.MessageEntity] | None = None,
+        text_parse_mode: hydrogram.enums.ParseMode = None,
+        text_entities: list[hydrogram.types.MessageEntity] | None = None,
     ):
         super().__init__()
 
