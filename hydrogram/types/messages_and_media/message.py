@@ -2411,7 +2411,7 @@ class Message(Object, Update):
                 options=[
                     InputPollOption(text="A"),
                     InputPollOption(text="B"),
-                    InputPollOption(text= "C"),
+                    InputPollOption(text="C"),
                 ],
             )
 
