@@ -19,5 +19,6 @@
 
 from .input_message_content import InputMessageContent
 from .input_text_message_content import InputTextMessageContent
+from .input_poll_option import InputPollOption
 
-__all__ = ["InputMessageContent", "InputTextMessageContent"]
+__all__ = ["InputMessageContent", "InputPollOption", "InputTextMessageContent"]

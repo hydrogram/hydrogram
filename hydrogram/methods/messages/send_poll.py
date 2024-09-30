@@ -33,7 +33,7 @@ class SendPoll:
         self: hydrogram.Client,
         chat_id: int | str,
         question: str,
-        options: list[str],
+        options: list["types.InputPollOption"],
         *,
         message_thread_id: int | None = None,
         is_anonymous: bool = True,
@@ -68,8 +68,8 @@ class SendPoll:
             question (``str``):
                 Poll question, 1-255 characters.
 
-            options (List of ``str``):
-                List of answer options, 2-10 strings 1-100 characters each.
+            options (List of :obj:`~pyrogram.types.InputPollOption`):
+                List of answer options, 2-10 answer options,  1-100 characters for each option.
 
             message_thread_id (``int``, *optional*):
                 Unique identifier for the target message thread (topic) of the forum.
@@ -153,6 +153,28 @@ class SendPoll:
 
         reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
 
+        question, question_entities = (await utils.parse_text_entities(self, question, question_parse_mode, question_entities)).values()
+        if not question_entities:
+            question_entities = []
+
+        answers = []
+        for i, answer_ in enumerate(options):
+            if isinstance(answer_, str):
+                answer, answer_entities = answer_, []
+            else:
+                answer, answer_entities = (await utils.parse_text_entities(self, answer_.text, answer_.text_parse_mode, answer_.text_entities)).values()
+                if not answer_entities:
+                    answer_entities = []
+            answers.append(
+                raw.types.PollAnswer(
+                    text=raw.types.TextWithEntities(
+                        text=answer,
+                        entities=answer_entities
+                    ),
+                    option=bytes([i])
+                )
+            )
+
         r = await self.invoke(
             raw.functions.messages.SendMedia(
                 peer=await self.resolve_peer(chat_id),
@@ -160,10 +182,7 @@ class SendPoll:
                     poll=raw.types.Poll(
                         id=self.rnd_id(),
                         question=question,
-                        answers=[
-                            raw.types.PollAnswer(text=text, option=bytes([i]))
-                            for i, text in enumerate(options)
-                        ],
+                        answers=answers,
                         closed=is_closed,
                         public_voters=not is_anonymous,
                         multiple_choice=allows_multiple_answers,

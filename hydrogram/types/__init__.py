@@ -135,8 +135,10 @@ from .input_media import (
 )
 from .input_message_content import (
     InputMessageContent,
+    InputPollOption,
     InputTextMessageContent,
     input_message_content,
+    input_poll_option,
     input_text_message_content,
 )
 from .list import List
