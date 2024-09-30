@@ -2412,7 +2412,7 @@ class Message(Object, Update):
                     InputPollOption(text="A"),
                     InputPollOption(text="B"),
                     InputPollOption(text= "C"),
-                ]
+                ],
             )
 
         Example:
@@ -2424,7 +2424,7 @@ class Message(Object, Update):
                         InputPollOption(text="A"),
                         InputPollOption(text="B"),
                         InputPollOption(text= "C"),
-                    ]
+                    ],
                 )
 
         Parameters:

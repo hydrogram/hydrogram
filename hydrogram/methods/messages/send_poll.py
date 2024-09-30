@@ -162,12 +162,9 @@ class SendPoll:
 
         reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
 
-        question, question_entities = (await utils.parse_text_entities(
-            self,
-            question,
-            question_parse_mode,
-            question_entities
-        )).values()
+        question, question_entities = (
+            await utils.parse_text_entities(self, question, question_parse_mode, question_entities)
+        ).values()
         if not question_entities:
             question_entities = []
 
@@ -176,21 +173,17 @@ class SendPoll:
             if isinstance(answer_, str):
                 answer, answer_entities = answer_, []
             else:
-                answer, answer_entities = (await utils.parse_text_entities(
-                    self,
-                    answer_.text,
-                    answer_.text_parse_mode,
-                    answer_.text_entities
-                )).values()
+                answer, answer_entities = (
+                    await utils.parse_text_entities(
+                        self, answer_.text, answer_.text_parse_mode, answer_.text_entities
+                    )
+                ).values()
                 if not answer_entities:
                     answer_entities = []
             answers.append(
                 raw.types.PollAnswer(
-                    text=raw.types.TextWithEntities(
-                        text=answer,
-                        entities=answer_entities
-                    ),
-                    option=bytes([i])
+                    text=raw.types.TextWithEntities(text=answer, entities=answer_entities),
+                    option=bytes([i]),
                 )
             )
 
@@ -201,8 +194,7 @@ class SendPoll:
                     poll=raw.types.Poll(
                         id=self.rnd_id(),
                         question=raw.types.TextWithEntities(
-                            text=question,
-                            entities=question_entities
+                            text=question, entities=question_entities
                         ),
                         answers=answers,
                         closed=is_closed,

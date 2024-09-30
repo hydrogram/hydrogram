@@ -67,7 +67,7 @@ class StopPoll:
                         id=int(poll.id),
                         closed=True,
                         question=raw.types.TextWithEntities(text="", entities=[]),
-                        answers=[]
+                        answers=[],
                     )
                 ),
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
