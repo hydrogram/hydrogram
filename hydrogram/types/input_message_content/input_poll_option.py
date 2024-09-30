@@ -16,13 +16,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from hydrogram.types.object import Object
 
 if TYPE_CHECKING:
     import hydrogram
-    from hydrogram import raw, utils, types, enums
+    from hydrogram import types, enums
 
 
 class InputPollOption(Object):
@@ -32,12 +32,12 @@ class InputPollOption(Object):
         text (``str``):
             Option text, 1-100 characters
 
-        text_parse_mode (:obj:`~pyrogram.enums.ParseMode`, *optional*):
+        text_parse_mode (:obj:`~hydrogram.enums.ParseMode`, *optional*):
             By default, texts are parsed using both Markdown and HTML styles.
             You can combine both syntaxes together.
             Currently, only custom emoji entities are allowed.
 
-        text_entities (List of :obj:`~pyrogram.types.MessageEntity`, *optional*):
+        text_entities (List of :obj:`~hydrogram.types.MessageEntity`, *optional*):
             List of special entities that appear in the poll option text, which can be specified instead of *text_parse_mode*.
 
     """
@@ -46,8 +46,8 @@ class InputPollOption(Object):
         self,
         *,
         text: str,
-        text_parse_mode: "enums.ParseMode" = None,
-        text_entities: List["types.MessageEntity"] = None,
+        text_parse_mode: enums.ParseMode = None,
+        text_entities: list[types.MessageEntity] | None = None,
     ):
         super().__init__()
 
