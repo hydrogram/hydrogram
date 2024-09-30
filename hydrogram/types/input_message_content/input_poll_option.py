@@ -25,6 +25,7 @@ from hydrogram.types.object import Object
 if TYPE_CHECKING:
     import hydrogram
 
+
 class InputPollOption(Object):
     """This object contains information about one answer option in a poll to send.
 
