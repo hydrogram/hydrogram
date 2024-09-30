@@ -20,10 +20,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from hydrogram.types.object import Object
-
 if TYPE_CHECKING:
     from hydrogram import types, enums
+
+from hydrogram.types.object import Object
 
 
 class InputPollOption(Object):
