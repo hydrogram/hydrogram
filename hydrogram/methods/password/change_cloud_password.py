@@ -58,7 +58,9 @@ class ChangeCloudPassword:
                 await app.change_cloud_password("current_password", "new_password")
 
                 # Change password and hint
-                await app.change_cloud_password("current_password", "new_password", new_hint="hint")
+                await app.change_cloud_password(
+                    "current_password", "new_password", new_hint="hint"
+                )
         """
         r = await self.invoke(raw.functions.account.GetPassword())
 

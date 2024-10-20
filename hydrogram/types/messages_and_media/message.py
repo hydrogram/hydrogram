@@ -756,7 +756,7 @@ class Message(Object, Update):
                     except MessageIdsEmpty:
                         pass
 
-            client.message_cache[(parsed_message.chat.id, parsed_message.id)] = parsed_message
+            client.message_cache[parsed_message.chat.id, parsed_message.id] = parsed_message
 
             if message.reply_to and message.reply_to.forum_topic:
                 if message.reply_to.reply_to_top_id:
@@ -1031,7 +1031,7 @@ class Message(Object, Update):
                         pass
 
             if not parsed_message.poll:  # Do not cache poll messages
-                client.message_cache[(parsed_message.chat.id, parsed_message.id)] = parsed_message
+                client.message_cache[parsed_message.chat.id, parsed_message.id] = parsed_message
 
             return parsed_message
         return None
@@ -1649,7 +1649,9 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_cached_media(
-                chat_id=message.chat.id, message_thread_id=message.message_thread_id, file_id=file_id
+                chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
+                file_id=file_id,
             )
 
         Example:
@@ -1861,7 +1863,9 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_document(
-                chat_id=message.chat.id, message_thread_id=message.message_thread_id, document=document
+                chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
+                document=document,
             )
 
         Example:
@@ -2559,7 +2563,9 @@ class Message(Object, Update):
         .. code-block:: python
 
             await client.send_sticker(
-                chat_id=message.chat.id, message_thread_id=message.message_thread_id, sticker=sticker
+                chat_id=message.chat.id,
+                message_thread_id=message.message_thread_id,
+                sticker=sticker,
             )
 
         Example:
@@ -3628,7 +3634,9 @@ class Message(Object, Update):
 
         .. code-block:: python
 
-            await client.send_message(chat_id=message.chat.id, text=message.reply_markup[i][j].text)
+            await client.send_message(
+                chat_id=message.chat.id, text=message.reply_markup[i][j].text
+            )
 
         Example:
             This method can be used in three different ways:

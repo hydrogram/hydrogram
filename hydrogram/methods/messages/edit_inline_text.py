@@ -67,7 +67,9 @@ class EditInlineText:
                 await app.edit_inline_text(inline_message_id, "new text")
 
                 # Take the same text message, remove the web page preview only
-                await app.edit_inline_text(inline_message_id, message.text, disable_web_page_preview=True)
+                await app.edit_inline_text(
+                    inline_message_id, message.text, disable_web_page_preview=True
+                )
         """
 
         unpacked = utils.unpack_inline_message_id(inline_message_id)

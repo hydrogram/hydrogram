@@ -72,7 +72,9 @@ class SearchGlobal:
                     print(message.text)
 
                 # Search for recent photos from Global. Get the first 20 results
-                async for message in app.search_global(filter=enums.MessagesFilter.PHOTO, limit=20):
+                async for message in app.search_global(
+                    filter=enums.MessagesFilter.PHOTO, limit=20
+                ):
                     print(message.photo)
         """
         current = 0

@@ -38,6 +38,8 @@ class StopTransmission:
 
 
                 async with app:
-                    await app.send_document("me", "file.zip", progress=progress, progress_args=(app,))
+                    await app.send_document(
+                        "me", "file.zip", progress=progress, progress_args=(app,)
+                    )
         """
         raise hydrogram.StopTransmission

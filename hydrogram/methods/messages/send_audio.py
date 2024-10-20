@@ -163,7 +163,9 @@ class SendAudio:
                 await app.send_audio("me", "audio.mp3", caption="audio caption")
 
                 # Set audio metadata
-                await app.send_audio("me", "audio.mp3", title="Title", performer="Performer", duration=234)
+                await app.send_audio(
+                    "me", "audio.mp3", title="Title", performer="Performer", duration=234
+                )
 
 
                 # Keep track of the progress while uploading

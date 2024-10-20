@@ -137,7 +137,7 @@ class Sticker(Object):
                 )
             ).set.short_name
 
-            Sticker.cache[(set_id, set_access_hash)] = name
+            Sticker.cache[set_id, set_access_hash] = name
 
             if len(Sticker.cache) > 250:
                 for _ in range(50):

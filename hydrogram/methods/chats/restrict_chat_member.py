@@ -77,7 +77,9 @@ class RestrictChatMember:
                 )
 
                 # Chat member can only send text messages
-                await app.restrict_chat_member(chat_id, user_id, ChatPermissions(can_send_messages=True))
+                await app.restrict_chat_member(
+                    chat_id, user_id, ChatPermissions(can_send_messages=True)
+                )
         """
         r = await self.invoke(
             raw.functions.channels.EditBanned(

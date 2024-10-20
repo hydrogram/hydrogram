@@ -114,7 +114,9 @@ class SearchMessages:
                     print(message.text)
 
                 # Search for pinned messages in chat
-                async for message in app.search_messages(chat_id, filter=enums.MessagesFilter.PINNED):
+                async for message in app.search_messages(
+                    chat_id, filter=enums.MessagesFilter.PINNED
+                ):
                     print(message.text)
 
                 # Search for messages containing "hello" sent by yourself in chat
