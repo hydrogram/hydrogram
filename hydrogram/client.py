@@ -199,6 +199,10 @@ class Client(Methods):
 
         protocol_factory (:obj:`~hydrogram.connection.transport.TCP`, *optional*):
             Pass a custom protocol factory to the client.
+
+        message_cache_size (``int``, *optional*):
+            Size of the message cache used to store already processed messages.
+            Defaults to 1000.
     """
 
     APP_VERSION = f"Hydrogram {__version__}"
@@ -253,6 +257,7 @@ class Client(Methods):
         max_concurrent_transmissions: int = MAX_CONCURRENT_TRANSMISSIONS,
         connection_factory: builtins.type[Connection] = Connection,
         protocol_factory: builtins.type[TCP] = TCPAbridged,
+        message_cache_size: int = 1000,
     ):
         super().__init__()
 
@@ -283,6 +288,7 @@ class Client(Methods):
         self.max_concurrent_transmissions = max_concurrent_transmissions
         self.connection_factory = connection_factory
         self.protocol_factory = protocol_factory
+        self.message_cache_size = message_cache_size
 
         self.executor = ThreadPoolExecutor(self.workers, thread_name_prefix="Handler")
 
@@ -321,7 +327,7 @@ class Client(Methods):
 
         self.me: User | None = None
 
-        self.message_cache = Cache(10000)
+        self.message_cache = Cache(message_cache_size)
 
         # Sometimes, for some reason, the server will stop sending updates and will only respond to pings.
         # This watchdog will invoke updates.GetState in order to wake up the server and enable it sending updates again
