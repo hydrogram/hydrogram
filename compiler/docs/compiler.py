@@ -333,6 +333,12 @@ def hydrogram_api():
             resolve_peer
             save_file
         """,
+        "phone": """
+        Phone:
+            create_group_call
+            discard_group_call
+            invite_group_call_members
+        """,
     }
 
     root = API_DOCS_DEST_PATH / "methods"

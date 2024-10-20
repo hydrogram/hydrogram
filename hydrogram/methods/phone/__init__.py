@@ -1,5 +1,4 @@
 #  Hydrogram - Telegram MTProto API Client Library for Python
-#  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
 #  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
 #  This file is part of Hydrogram.
@@ -17,34 +16,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .advanced import Advanced
-from .auth import Auth
-from .bots import Bots
-from .chats import Chats
-from .contacts import Contacts
-from .decorators import Decorators
-from .invite_links import InviteLinks
-from .messages import Messages
-from .password import Password
-from .pyromod import Pyromod
-from .users import Users
-from .utilities import Utilities
-from .phone import Phone
+from .create_video_chat import CreateVideoChat
+from .discard_group_call import DiscardGroupCall
+from .invite_group_call_members import InviteGroupCallMembers
 
 
-class Methods(
-    Advanced,
-    Auth,
-    Bots,
-    Contacts,
-    Password,
-    Chats,
-    Users,
-    Messages,
-    Pyromod,
-    Decorators,
-    Utilities,
-    InviteLinks,
-    Phone,
-):
+class Phone(CreateVideoChat, DiscardGroupCall, InviteGroupCallMembers):
     pass
