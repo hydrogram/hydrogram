@@ -24,7 +24,6 @@ extensions = [
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    "aiosqlite": ("https://aiosqlite.omnilib.dev/en/stable/", None),
 }
 
 html_use_modindex = False
