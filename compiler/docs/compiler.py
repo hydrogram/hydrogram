@@ -489,6 +489,7 @@ def hydrogram_api():
         "input_message_content": """
         InputMessageContent
             InputMessageContent
+            InputPollOption
             InputTextMessageContent
         """,
         "authorization": """

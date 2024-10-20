@@ -18,6 +18,7 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from .input_message_content import InputMessageContent
+from .input_poll_option import InputPollOption
 from .input_text_message_content import InputTextMessageContent
 
-__all__ = ["InputMessageContent", "InputTextMessageContent"]
+__all__ = ["InputMessageContent", "InputPollOption", "InputTextMessageContent"]

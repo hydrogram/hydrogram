@@ -135,8 +135,10 @@ from .input_media import (
 )
 from .input_message_content import (
     InputMessageContent,
+    InputPollOption,
     InputTextMessageContent,
     input_message_content,
+    input_poll_option,
     input_text_message_content,
 )
 from .list import List
@@ -324,6 +326,7 @@ __all__ = [
     "InputMediaVideo",
     "InputMessageContent",
     "InputPhoneContact",
+    "InputPollOption",
     "InputTextMessageContent",
     "InviteLinkImporter",
     "KeyboardButton",
@@ -435,7 +438,7 @@ __all__ = [
     "input_media_video",
     "input_message_content",
     "input_phone_contact",
-    "input_text_message_content",
+    "input_poll_option",
     "input_text_message_content",
     "invite_link_importer",
     "keyboard_button",
