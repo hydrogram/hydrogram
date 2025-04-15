@@ -313,14 +313,15 @@ class Dispatcher:
             for group in self.groups.values():
                 for handler in group:
                     try:
-                        if parsed_update is not None and handler_type is not None:
-                            if isinstance(handler, handler_type) and await handler.check(
-                                self.client, parsed_update
-                            ):
-                                await self._execute_callback(handler, parsed_update)
-                                break
-                        elif isinstance(handler, RawUpdateHandler):
+                        if isinstance(handler, RawUpdateHandler):
                             await self._execute_callback(handler, raw_update, users, chats)
+                            continue
+                        if (
+                            parsed_update is not None
+                            and isinstance(handler, handler_type)
+                            and await handler.check(self.client, parsed_update)
+                        ):
+                            await self._execute_callback(handler, parsed_update)
                             break
                     except (hydrogram.StopPropagation, hydrogram.ContinuePropagation) as e:
                         if isinstance(e, hydrogram.StopPropagation):
