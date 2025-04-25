@@ -19,11 +19,9 @@
 
 from __future__ import annotations
 
-from base64 import b64encode
-from struct import pack
 
 import hydrogram
-from hydrogram import raw, types
+from hydrogram import raw, types, utils
 from hydrogram.types.object import Object
 from hydrogram.types.update import Update
 
@@ -77,22 +75,9 @@ class ChosenInlineResult(Object, Update):
     def _parse(
         client, chosen_inline_result: raw.types.UpdateBotInlineSend, users
     ) -> ChosenInlineResult:
-        inline_message_id = None
-
-        if isinstance(chosen_inline_result.msg_id, raw.types.InputBotInlineMessageID):
-            inline_message_id = (
-                b64encode(
-                    pack(
-                        "<iqq",
-                        chosen_inline_result.msg_id.dc_id,
-                        chosen_inline_result.msg_id.id,
-                        chosen_inline_result.msg_id.access_hash,
-                    ),
-                    b"-_",
-                )
-                .decode()
-                .rstrip("=")
-            )
+        inline_message_id = utils.pack_inline_message_id(
+            chosen_inline_result.msg_id
+        ) if chosen_inline_result.msg_id else None
 
         return ChosenInlineResult(
             result_id=str(chosen_inline_result.id),
@@ -106,4 +91,5 @@ class ChosenInlineResult(Object, Update):
             if chosen_inline_result.geo
             else None,
             inline_message_id=inline_message_id,
+            client=client
         )
