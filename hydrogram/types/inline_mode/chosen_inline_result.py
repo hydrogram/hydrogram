@@ -19,7 +19,6 @@
 
 from __future__ import annotations
 
-
 import hydrogram
 from hydrogram import raw, types, utils
 from hydrogram.types.object import Object
