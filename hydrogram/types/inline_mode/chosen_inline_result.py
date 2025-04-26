@@ -74,9 +74,11 @@ class ChosenInlineResult(Object, Update):
     def _parse(
         client, chosen_inline_result: raw.types.UpdateBotInlineSend, users
     ) -> ChosenInlineResult:
-        inline_message_id = utils.pack_inline_message_id(
-            chosen_inline_result.msg_id
-        ) if chosen_inline_result.msg_id else None
+        inline_message_id = (
+            utils.pack_inline_message_id(chosen_inline_result.msg_id)
+            if chosen_inline_result.msg_id
+            else None
+        )
 
         return ChosenInlineResult(
             result_id=str(chosen_inline_result.id),
