@@ -90,5 +90,5 @@ class ChosenInlineResult(Object, Update):
             if chosen_inline_result.geo
             else None,
             inline_message_id=inline_message_id,
-            client=client
+            client=client,
         )
