@@ -43,6 +43,9 @@ class InlineQueryResultAudio(InlineQueryResult):
             Unique identifier for this result, 1-64 bytes.
             Defaults to a randomly generated UUID4.
 
+        description (``str``, *optional*):
+            Short description of the result.
+
         performer (``str``, *optional*):
             Audio performer.
 
@@ -74,6 +77,7 @@ class InlineQueryResultAudio(InlineQueryResult):
         audio_url: str,
         title: str,
         id: str | None = None,
+        description: str = "",
         performer: str = "",
         audio_duration: int = 0,
         caption: str = "",
@@ -87,6 +91,7 @@ class InlineQueryResultAudio(InlineQueryResult):
 
         self.audio_url = audio_url
         self.title = title
+        self.description = description
         self.performer = performer
         self.audio_duration = audio_duration
         self.caption = caption
@@ -119,6 +124,7 @@ class InlineQueryResultAudio(InlineQueryResult):
             type=self.type,
             title=self.title,
             content=audio,
+            description=self.description,
             send_message=(
                 await self.input_message_content.write(client, self.reply_markup)
                 if self.input_message_content
