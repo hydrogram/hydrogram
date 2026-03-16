@@ -16,7 +16,8 @@
 #
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
-
+import asyncio
+import contextlib
 import logging
 
 import hydrogram
@@ -33,29 +34,28 @@ class Terminate:
 
         This method does the opposite of :meth:`~hydrogram.Client.initialize`.
         It will stop the dispatcher and shut down updates and download workers.
-
-        Raises:
-            ConnectionError: In case you try to terminate a client that is already terminated.
         """
-        if not self.is_initialized:
-            raise ConnectionError("Client is already terminated")
-
         if self.takeout_id:
-            await self.invoke(raw.functions.account.FinishTakeoutSession())
-            log.info("Takeout session %s finished", self.takeout_id)
+            with contextlib.suppress(Exception):
+                await self.invoke(raw.functions.account.FinishTakeoutSession())
+                log.info("Takeout session %s finished", self.takeout_id)
 
-        await self.storage.save()
-        await self.dispatcher.stop()
+        if self.storage:
+            await self.storage.save()
 
-        for media_session in self.media_sessions.values():
-            await media_session.stop()
+        if self.dispatcher:
+            await self.dispatcher.stop()
 
-        self.media_sessions.clear()
+        if self.media_sessions:
+            for media_session in self.media_sessions.values():
+                await media_session.stop()
+            self.media_sessions.clear()
 
         self.updates_watchdog_event.set()
 
         if self.updates_watchdog_task is not None:
-            await self.updates_watchdog_task
+            with contextlib.suppress(asyncio.TimeoutError, asyncio.CancelledError):
+                await asyncio.wait_for(self.updates_watchdog_task, timeout=1.0)
 
         self.updates_watchdog_event.clear()
 
