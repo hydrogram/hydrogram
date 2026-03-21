@@ -40,6 +40,9 @@ class Reaction(Object):
         chosen_order (``int``, *optional*):
             Chosen reaction order.
             Available for chosen reactions.
+
+        is_paid (``bool``, *optional*):
+            True, if the reaction is a paid star reaction.
     """
 
     def __init__(
@@ -50,6 +53,7 @@ class Reaction(Object):
         custom_emoji_id: int | None = None,
         count: int | None = None,
         chosen_order: int | None = None,
+        is_paid: bool | None = None,
     ):
         super().__init__(client)
 
@@ -57,6 +61,7 @@ class Reaction(Object):
         self.custom_emoji_id = custom_emoji_id
         self.count = count
         self.chosen_order = chosen_order
+        self.is_paid = is_paid
 
     @staticmethod
     def _parse(client: hydrogram.Client, reaction: raw.base.Reaction) -> Reaction:
@@ -65,7 +70,11 @@ class Reaction(Object):
 
         if isinstance(reaction, raw.types.ReactionCustomEmoji):
             return Reaction(client=client, custom_emoji_id=reaction.document_id)
-        return None
+
+        if isinstance(reaction, raw.types.ReactionPaid):
+            return Reaction(client=client, is_paid=True)
+
+        return Reaction(client=client)
 
     @staticmethod
     def _parse_count(client: hydrogram.Client, reaction_count: raw.base.ReactionCount) -> Reaction:
