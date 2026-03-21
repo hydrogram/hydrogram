@@ -309,7 +309,7 @@ class Client(Methods):
 
         self.parser = Parser(self)
 
-        self.session = None
+        self.session: Session | None = None
 
         self.media_sessions = {}
         self.media_sessions_lock = asyncio.Lock()
@@ -318,8 +318,8 @@ class Client(Methods):
         self.save_file_semaphore = asyncio.Semaphore(self.max_concurrent_transmissions)
         self.get_file_semaphore = asyncio.Semaphore(self.max_concurrent_transmissions)
 
-        self.is_connected = None
-        self.is_initialized = None
+        self.is_connected: bool | None = None
+        self.is_initialized: bool | None = None
 
         self.takeout_id = None
 

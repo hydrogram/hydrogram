@@ -176,6 +176,14 @@ class Session:
 
         self.stored_msg_ids.clear()
 
+        if self.recv_task and not self.recv_task.done():
+            self.recv_task.cancel()
+
+            with contextlib.suppress(asyncio.CancelledError, asyncio.TimeoutError, RuntimeError):
+                await asyncio.wait_for(self.recv_task, timeout=1.0)
+
+            self.recv_task = None
+
         self.ping_task_event.set()
 
         if self.ping_task is not None:
@@ -185,14 +193,6 @@ class Session:
 
         if self.connection:
             await self.connection.close()
-
-        if self.recv_task and not self.recv_task.done():
-            self.recv_task.cancel()
-
-            with contextlib.suppress(asyncio.CancelledError, asyncio.TimeoutError, RuntimeError):
-                await asyncio.wait_for(self.recv_task, timeout=1.0)
-
-            self.recv_task = None
 
         if not self.is_media and callable(self.client.disconnect_handler):
             try:
