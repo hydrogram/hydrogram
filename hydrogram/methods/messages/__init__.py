@@ -65,6 +65,7 @@ from .send_voice import SendVoice
 from .stop_poll import StopPoll
 from .stream_media import StreamMedia
 from .vote_poll import VotePoll
+from .action import Action
 
 
 class Messages(
@@ -116,5 +117,6 @@ class Messages(
     GetDiscussionRepliesCount,
     StreamMedia,
     GetCustomEmojiStickers,
+    Action,
 ):
     pass
