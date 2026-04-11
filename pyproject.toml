@@ -3,7 +3,7 @@ name = "Hydrogram"
 dynamic = ["version"]
 description = "Sleek, advanced, and asynchronous Telegram MTProto API framework in Python, designed for fluid user and bot interactions."
 authors = [{ name = "Hydrogram", email = "contact@hydrogram.org" }]
-dependencies = ["pyaes==1.6.1", "pysocks==1.7.1", "aiosqlite>=0.19.0"]
+dependencies = ["pyaes==1.6.1", "pysocks==1.7.1"]
 readme = "README.md"
 license = "LGPL-3.0-or-later"
 requires-python = ">=3.9"

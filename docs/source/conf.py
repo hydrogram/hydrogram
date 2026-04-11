@@ -46,7 +46,6 @@ extensions = [
 # Intersphinx mapping for external documentation
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    "aiosqlite": ("https://aiosqlite.omnilib.dev/en/stable/", None),
 }
 
 # Basic configuration

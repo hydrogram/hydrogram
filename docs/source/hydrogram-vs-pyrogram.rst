@@ -17,7 +17,6 @@ Key changes
 - Completely refactored, optimized and modernized codebase (utilizing Ruff)
 - Open-source documentation
 - Adopt modern packaging technologies and standards, such as pyproject.toml
-- Use aiosqlite instead of sqlite3 for storage handling.
 - Added the property `full_name` for User and Chat objects.
 - Added the possibility to define a custom storage class
 
