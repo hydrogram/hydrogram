@@ -1,4 +1,4 @@
-#  Hydrogram - Telegram MTProto API Client Library for Python
+#  Hydrogram - Telegram MTProto API Client for Python
 #  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
 #  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
@@ -17,28 +17,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .add_handler import AddHandler
-from .export_session_string import ExportSessionString
-from .remove_error_handler import RemoveErrorHandler
-from .remove_handler import RemoveHandler
-from .close import Close
-from .restart import Restart
-from .run import Run
-from .start import Start
-from .stop import Stop
-from .stop_transmission import StopTransmission
+import hydrogram
 
 
-class Utilities(
-    AddHandler,
-    ExportSessionString,
-    RemoveHandler,
-    Close,
-    RemoveErrorHandler,
-    Restart,
-    Run,
-    Start,
-    Stop,
-    StopTransmission,
-):
-    pass
+class CloseGeneralForumTopic:
+    async def close_general_forum_topic(self: hydrogram.Client, chat_id: int | str) -> bool:
+        """Close a general forum topic.
+
+        This is an alias of :meth:`~Client.close_general_topic` for Bot API compatibility.
+        """
+        return await self.close_general_topic(chat_id)

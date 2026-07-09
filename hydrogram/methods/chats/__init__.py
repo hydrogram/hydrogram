@@ -26,6 +26,7 @@ from .create_channel import CreateChannel
 from .create_forum_topic import CreateForumTopic
 from .create_group import CreateGroup
 from .create_supergroup import CreateSupergroup
+from .edit_general_forum_topic import EditGeneralForumTopic
 from .delete_channel import DeleteChannel
 from .delete_chat_photo import DeleteChatPhoto
 from .delete_forum_topic import DeleteForumTopic
@@ -33,10 +34,18 @@ from .delete_supergroup import DeleteSupergroup
 from .delete_user_history import DeleteUserHistory
 from .edit_forum_topic import EditForumTopic
 from .edit_general_topic import EditGeneralTopic
+from .close_general_forum_topic import CloseGeneralForumTopic
+from .reopen_general_forum_topic import ReopenGeneralForumTopic
+from .hide_general_forum_topic import HideGeneralForumTopic
+from .unhide_general_forum_topic import UnhideGeneralForumTopic
+from .unpin_all_forum_topic_messages import UnpinAllForumTopicMessages
+from .unpin_all_general_forum_topic_messages import UnpinAllGeneralForumTopicMessages
 from .get_chat import GetChat
+from .get_chat_administrators import GetChatAdministrators
 from .get_chat_event_log import GetChatEventLog
 from .get_chat_member import GetChatMember
 from .get_chat_members import GetChatMembers
+from .get_chat_member_count import GetChatMemberCount
 from .get_chat_members_count import GetChatMembersCount
 from .get_chat_online_count import GetChatOnlineCount
 from .get_dialogs import GetDialogs
@@ -55,6 +64,7 @@ from .reopen_forum_topic import ReopenForumTopic
 from .reopen_general_topic import ReopenGeneralTopic
 from .restrict_chat_member import RestrictChatMember
 from .set_administrator_title import SetAdministratorTitle
+from .set_chat_administrator_custom_title import SetChatAdministratorCustomTitle
 from .set_chat_description import SetChatDescription
 from .set_chat_permissions import SetChatPermissions
 from .set_chat_photo import SetChatPhoto
@@ -81,6 +91,7 @@ class Chats(
     PromoteChatMember,
     GetChatMembers,
     GetChatMember,
+    GetChatMemberCount,
     SetChatPhoto,
     DeleteChatPhoto,
     SetChatTitle,
@@ -100,6 +111,14 @@ class Chats(
     CreateSupergroup,
     CreateChannel,
     CreateForumTopic,
+    GetChatAdministrators,
+    CloseGeneralForumTopic,
+    ReopenGeneralForumTopic,
+    HideGeneralForumTopic,
+    UnhideGeneralForumTopic,
+    EditGeneralForumTopic,
+    UnpinAllForumTopicMessages,
+    UnpinAllGeneralForumTopicMessages,
     CloseForumTopic,
     CloseGeneralTopic,
     AddChatMembers,
@@ -113,6 +132,7 @@ class Chats(
     HideGeneralTopic,
     UnhideGeneralTopic,
     GetNearbyChats,
+    SetChatAdministratorCustomTitle,
     SetAdministratorTitle,
     SetSlowMode,
     DeleteUserHistory,

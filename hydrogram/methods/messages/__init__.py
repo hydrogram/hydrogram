@@ -19,7 +19,9 @@
 
 from .copy_media_group import CopyMediaGroup
 from .copy_message import CopyMessage
+from .copy_messages import CopyMessages
 from .delete_messages import DeleteMessages
+from .delete_message import DeleteMessage
 from .download_media import DownloadMedia
 from .edit_inline_caption import EditInlineCaption
 from .edit_inline_media import EditInlineMedia
@@ -29,6 +31,7 @@ from .edit_message_caption import EditMessageCaption
 from .edit_message_media import EditMessageMedia
 from .edit_message_reply_markup import EditMessageReplyMarkup
 from .edit_message_text import EditMessageText
+from .forward_message import ForwardMessage
 from .forward_messages import ForwardMessages
 from .get_chat_history import GetChatHistory
 from .get_chat_history_count import GetChatHistoryCount
@@ -57,6 +60,7 @@ from .send_message import SendMessage
 from .send_photo import SendPhoto
 from .send_poll import SendPoll
 from .send_reaction import SendReaction
+from .set_message_reaction import SetMessageReaction
 from .send_sticker import SendSticker
 from .send_venue import SendVenue
 from .send_video import SendVideo
@@ -74,6 +78,7 @@ class Messages(
     EditMessageMedia,
     EditMessageText,
     ForwardMessages,
+    ForwardMessage,
     GetMediaGroup,
     GetMessages,
     SendAudio,
@@ -107,11 +112,14 @@ class Messages(
     SearchMessages,
     SearchGlobal,
     CopyMessage,
+    CopyMessages,
+    DeleteMessage,
     CopyMediaGroup,
     SearchMessagesCount,
     SearchGlobalCount,
     GetDiscussionMessage,
     SendReaction,
+    SetMessageReaction,
     GetDiscussionReplies,
     GetDiscussionRepliesCount,
     StreamMedia,

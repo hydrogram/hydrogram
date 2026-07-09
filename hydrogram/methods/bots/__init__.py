@@ -21,7 +21,9 @@ from .answer_callback_query import AnswerCallbackQuery
 from .answer_inline_query import AnswerInlineQuery
 from .answer_web_app_query import AnswerWebAppQuery
 from .delete_bot_commands import DeleteBotCommands
+from .delete_my_commands import DeleteMyCommands
 from .get_bot_commands import GetBotCommands
+from .get_my_commands import GetMyCommands
 from .get_bot_default_privileges import GetBotDefaultPrivileges
 from .get_chat_menu_button import GetChatMenuButton
 from .get_game_high_scores import GetGameHighScores
@@ -30,6 +32,7 @@ from .request_callback_answer import RequestCallbackAnswer
 from .send_game import SendGame
 from .send_inline_bot_result import SendInlineBotResult
 from .set_bot_commands import SetBotCommands
+from .set_my_commands import SetMyCommands
 from .set_bot_default_privileges import SetBotDefaultPrivileges
 from .set_chat_menu_button import SetChatMenuButton
 from .set_game_score import SetGameScore
@@ -46,11 +49,14 @@ class Bots(
     GetGameHighScores,
     SetBotCommands,
     GetBotCommands,
+    GetMyCommands,
     DeleteBotCommands,
+    DeleteMyCommands,
     SetBotDefaultPrivileges,
     GetBotDefaultPrivileges,
     SetChatMenuButton,
     GetChatMenuButton,
     AnswerWebAppQuery,
+    SetMyCommands,
 ):
     pass
