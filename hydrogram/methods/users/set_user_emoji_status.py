@@ -1,4 +1,4 @@
-#  Hydrogram - Telegram MTProto API Client Library for Python
+#  Hydrogram - Telegram MTProto API Client for Python
 #  Copyright (C) 2017-2023 Dan <https://github.com/delivrance>
 #  Copyright (C) 2023-present Hydrogram <https://hydrogram.org>
 #
@@ -17,28 +17,18 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .add_handler import AddHandler
-from .export_session_string import ExportSessionString
-from .remove_error_handler import RemoveErrorHandler
-from .remove_handler import RemoveHandler
-from .close import Close
-from .restart import Restart
-from .run import Run
-from .start import Start
-from .stop import Stop
-from .stop_transmission import StopTransmission
+from __future__ import annotations
+
+import hydrogram
+from hydrogram import types
 
 
-class Utilities(
-    AddHandler,
-    ExportSessionString,
-    RemoveHandler,
-    Close,
-    RemoveErrorHandler,
-    Restart,
-    Run,
-    Start,
-    Stop,
-    StopTransmission,
-):
-    pass
+class SetUserEmojiStatus:
+    async def set_user_emoji_status(
+        self: "hydrogram.Client", emoji_status: types.EmojiStatus | None = None
+    ) -> bool:
+        """Set the user's emoji status.
+
+        This is an alias of :meth:`~Client.set_emoji_status` for Bot API compatibility.
+        """
+        return await self.set_emoji_status(emoji_status=emoji_status)

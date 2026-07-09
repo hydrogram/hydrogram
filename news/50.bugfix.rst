@@ -1,0 +1,10 @@
+Added compatibility wrappers for multiple Bot API methods that were previously missing from
+``Client``.
+Implemented compatibility aliases include chat/forum aliases and selected API shims such as
+``close``, ``forward_message``, ``copy_messages``, ``delete_message``,
+``get_chat_member_count``, ``get_chat_administrators``,
+``set_chat_administrator_custom_title``, ``set_my_commands``, ``get_my_commands``,
+``delete_my_commands``, ``set_user_emoji_status``, ``close_general_forum_topic``,
+``edit_general_forum_topic``, ``reopen_general_forum_topic``, ``hide_general_forum_topic``,
+``unhide_general_forum_topic``, ``unpin_all_forum_topic_messages``,
+``unpin_all_general_forum_topic_messages`` and ``set_message_reaction``.
