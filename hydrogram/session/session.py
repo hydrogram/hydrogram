@@ -436,8 +436,8 @@ class Session:
             inner_query = query
 
         query_name = ".".join(inner_query.QUALNAME.split(".")[1:])
-
-        while retries > 0:
+        tries = retries + 1
+        while tries > 0:
             try:
                 if (
                     self.connection is None
@@ -468,18 +468,18 @@ class Session:
 
                 await asyncio.sleep(amount)
             except (OSError, InternalServerError, ServiceUnavailable) as e:
-                retries -= 1
-                if retries == 0:
+                tries -= 1
+                if tries == 0:
                     raise e
 
-                (log.warning if retries < 2 else log.info)(
+                (log.warning if tries < 2 else log.info)(
                     '[%s] Retrying "%s" due to: %s',
-                    Session.MAX_RETRIES - retries,
+                    Session.MAX_RETRIES - tries,
                     query_name,
                     str(e) or repr(e),
                 )
 
-                if isinstance(e, OSError) and retries > 1:
+                if isinstance(e, OSError) and tries > 1:
                     try:
                         await self.restart()
                     except Exception as restart_error:
