@@ -23,7 +23,7 @@ import asyncio
 import ipaddress
 import logging
 import socket
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 import socks
 
@@ -40,8 +40,9 @@ class Proxy(TypedDict):
     scheme: str
     hostname: str
     port: int
-    username: str | None
-    password: str | None
+    username: NotRequired[str | None]
+    password: NotRequired[str | None]
+    secret: NotRequired[str]
 
 
 class TCP:

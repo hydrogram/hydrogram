@@ -61,6 +61,7 @@ from hydrogram.update_manager import UpdateManager
 from hydrogram.utils import ainput
 
 from .connection import Connection
+from .connection.proxy import validate_mtproxy
 from .connection.transport import TCP, TCPAbridged
 from .dispatcher import Dispatcher
 from .file_id import FileId, FileType, ThumbnailSource
@@ -114,6 +115,10 @@ class Client(Methods):
             The Proxy settings as dict.
             E.g.: *dict(scheme="socks5", hostname="11.22.33.44", port=1234, username="user", password="pass")*.
             The *username* and *password* can be omitted if the proxy doesn't require authorization.
+            For MTProxy, use *dict(scheme="mtproxy", hostname="proxy.example.com", port=443,
+            secret="0123456789abcdef0123456789abcdef")*. Only standard 32-character hexadecimal
+            secrets are supported; padded (``dd``) and fake-TLS (``ee``) secrets are unsupported.
+            MTProxy selects obfuscated abridged transport automatically. See :doc:`/topics/proxy`.
 
         test_mode (``bool``, *optional*):
             Enable or disable login to the test servers.
@@ -205,7 +210,8 @@ class Client(Methods):
             Pass a custom connection factory to the client.
 
         protocol_factory (:obj:`~hydrogram.connection.transport.TCP`, *optional*):
-            Pass a custom protocol factory to the client.
+            Pass a custom protocol factory to the client. MTProxy settings automatically
+            select obfuscated abridged transport instead.
 
         message_cache_size (``int``, *optional*):
             Size of the message cache used to store already processed messages.
@@ -277,6 +283,7 @@ class Client(Methods):
         self.system_version = system_version
         self.lang_code = lang_code.lower()
         self.ipv6 = ipv6
+        validate_mtproxy(proxy)
         self.proxy = proxy
         self.test_mode = test_mode
         self.bot_token = bot_token

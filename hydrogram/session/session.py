@@ -258,7 +258,7 @@ class Session:
             test_mode=self.test_mode,
             ipv6=self.client.ipv6,
             proxy=self.client.proxy,
-            media=self.is_media,
+            media=self.is_media and not self.is_cdn,
             protocol_factory=self.client.protocol_factory,
         )
         await self.connection.connect()

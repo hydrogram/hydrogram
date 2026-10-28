@@ -26,7 +26,9 @@ from typing import TYPE_CHECKING
 
 from hydrogram.session.internals import DataCenter
 
+from .proxy import is_mtproxy, validate_mtproxy
 from .transport import TCP, TCPAbridged
+from .transport.tcp.tcp_mtproxy import TCPMTProxy
 
 if TYPE_CHECKING:
     from .transport.tcp.tcp import Proxy
@@ -46,6 +48,7 @@ class Connection:
         media: bool = False,
         protocol_factory: type[TCP] = TCPAbridged,
     ) -> None:
+        validate_mtproxy(proxy)
         self.dc_id = dc_id
         self.test_mode = test_mode
         self.ipv6 = ipv6
@@ -58,7 +61,13 @@ class Connection:
 
     async def connect(self) -> None:
         for i in range(self.MAX_CONNECTION_ATTEMPTS):
-            self.protocol = self.protocol_factory(ipv6=self.ipv6, proxy=self.proxy)
+            if is_mtproxy(self.proxy):
+                dc_id = self.dc_id + (10000 if self.test_mode else 0)
+                if self.media:
+                    dc_id = -dc_id
+                self.protocol = TCPMTProxy(ipv6=self.ipv6, proxy=self.proxy, dc_id=dc_id)
+            else:
+                self.protocol = self.protocol_factory(ipv6=self.ipv6, proxy=self.proxy)
 
             try:
                 log.info("Connecting...")
