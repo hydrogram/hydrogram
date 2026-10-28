@@ -12,6 +12,12 @@ Hydrogram is an async Telegram MTProto client library supporting Python 3.9+.
 
 See `CONTRIBUTING.md` for the full workflow.
 
+## References
+
+- [Hydrogram documentation](https://docs.hydrogram.org): public API behavior, usage examples, and library conventions. Prefer the local sources in `docs/source/` when working against this checkout.
+- [Corefork Telegram API documentation](https://corefork.telegram.org/api) and [MTProto documentation](https://corefork.telegram.org/mtproto): API methods, constructors, and protocol details, including authorization, transport, and update handling.
+- Schemas in `compiler/`: reference for the API layer implemented by this checkout. Check that external documentation matches the supported layer before applying changes; newer methods, constructors, or fields may require a schema update and regeneration.
+
 ## Build, Test, and Development Commands
 
 Run from the repository root:
