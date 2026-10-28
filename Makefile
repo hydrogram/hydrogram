@@ -1,3 +1,4 @@
+UV = uv
 PYTHON = python
 SPHINX_BUILD = sphinx-build
 SPHINX_AUTOBUILD = sphinx-autobuild
@@ -10,9 +11,13 @@ DOCS_BUILD = $(DOCS_DIR)/build
 API_DIRS = $(HYDROGRAM_DIR)/errors/exceptions $(HYDROGRAM_DIR)/raw/all.py $(HYDROGRAM_DIR)/raw/base $(HYDROGRAM_DIR)/raw/functions $(HYDROGRAM_DIR)/raw/types
 DOCS_API_DIRS = $(DOCS_SOURCE)/api/bound-methods $(DOCS_SOURCE)/api/methods $(DOCS_SOURCE)/api/types $(DOCS_SOURCE)/telegram
 
-.PHONY: all clean clean-api clean-docs api api-raw api-errors docs docs-compile docs-serve live-docs towncrier towncrier-draft dev-tools check-api-schema generate-docs-json compare-bot-api cherry-pick-pyro help
+.PHONY: all build clean clean-api clean-docs api api-raw api-errors docs docs-compile docs-serve live-docs towncrier towncrier-draft dev-tools check-api-schema generate-docs-json compare-bot-api cherry-pick-pyro help
 
 all: api docs
+
+# Hatchling generates the API automatically when building the wheel.
+build:
+	@$(UV) build --no-sources
 
 clean: clean-api clean-docs
 	@echo "All directories cleaned successfully"
@@ -77,6 +82,7 @@ cherry-pick-pyro:
 help:
 	@echo "Available targets:"
 	@echo "  all            : Compile API and documentation"
+	@echo "  build          : Generate API and build source and wheel distributions"
 	@echo "  clean          : Remove all generated files"
 	@echo "  api            : Compile all API components"
 	@echo "  docs           : Compile and serve documentation"

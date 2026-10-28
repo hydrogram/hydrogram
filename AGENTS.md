@@ -27,7 +27,7 @@ Run from the repository root:
 - `uv run pytest tests`: run tests.
 - `uv run ruff format .`: format; `uv run ruff check . --ignore=E501`: lint as CI does.
 - `uv run pre-commit install`: enable hooks; `uv run pre-commit run --all-files`: check everything.
-- `uv build`: build distributions with Hatchling.
+- `uv build`: build distributions with Hatchling; the wheel hook generates the API automatically.
 - `uv run make docs`: generate references and build HTML; `uv run make live-docs`: preview.
 
 ## Coding Style & Naming Conventions

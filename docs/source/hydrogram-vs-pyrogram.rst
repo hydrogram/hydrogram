@@ -26,7 +26,7 @@ More technical changes
 
 - Declared the special variable `__all__` in all files so now we have a better IDE support.
 - Specify optional parameters in methods as keyword-only to prevent potential breakage in the future when introducing new parameters.
-- Migrated from setuptools to `hatchling <https://hatch.pypa.io/latest/>`_ with `uv <https://docs.astral.sh/uv/>`_.
+- Uses `Hatchling <https://hatch.pypa.io/latest/>`_ for builds and `uv <https://docs.astral.sh/uv/>`_ for project management.
 - Transitioned from using `os.path` to utilizing `Pathlib`.
 - Start utilizing towncrier to generate changelogs.
 

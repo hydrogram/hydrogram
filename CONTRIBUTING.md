@@ -25,14 +25,23 @@ git clone https://github.com/YOUR_USERNAME/hydrogram.git
 cd hydrogram
 git remote add upstream https://github.com/hydrogram/hydrogram.git
 git switch -c fix/describe-your-change
-uv sync --all-extras --dev
+uv sync --locked --all-extras --dev
 uv run make api
 uv run pre-commit install
 ```
 
 Run subsequent commands from the repository root. `uv run` uses the project's virtual environment without requiring activation.
 
-`--dev` installs testing and development tools. `--all-extras` also installs Sphinx documentation dependencies and the optional `fast` dependencies, including TgCrypto and, on supported platforms, uvloop. The performance extras are optional for using Hydrogram. For a smaller development environment, use `uv sync --dev`; add `--extra docs` when working on documentation.
+`--locked` checks that `uv.lock` matches the project without updating it. The standard
+`dependency-groups.dev` group installs testing and development tools and is included by
+default; `--dev` makes that selection explicit. Use `uv add --dev` to add development
+dependencies and commit both `pyproject.toml` and `uv.lock`.
+
+`--all-extras` also installs Sphinx documentation dependencies and the optional
+`fast` dependencies, including TgCrypto and, on supported platforms, uvloop. The
+performance extras are optional for using Hydrogram. For a smaller development
+environment, use `uv sync --locked --dev`; add `--extra docs` when working on
+documentation.
 
 ## Find and Change the Right Code
 
@@ -96,10 +105,22 @@ uv run make live-docs
 To build source and wheel distributions in `dist/`:
 
 ```bash
-uv build
+uv run --locked make build
 ```
 
-The Hatchling build hook generates raw API bindings and exceptions for wheel builds.
+Hatchling's custom wheel hook generates raw API bindings and exceptions for both
+regular and editable installations. `make build` runs `uv build --no-sources`;
+`uv build`, `pip install .`, and Git/archive installations also work directly.
+Source distributions include the compiler inputs and build hook, and regenerate
+the API when a wheel is built from them. Generated modules are explicitly included
+as wheel artifacts even though Git ignores them. Both distributions use core
+metadata 2.4 for compatibility with the validation tools pinned in `uv.lock`.
+
+The package version is read from `__version__` in `hydrogram/__init__.py`; update
+that value for a release, then update `uv.lock`. Hatchling is an isolated build
+dependency and does not need to be installed as a development or runtime dependency.
+The uv cache tracks the version source, build hook, compiler inputs, and NOTICE;
+rerun `uv run make api` after compiler changes if regenerating manually.
 
 ## Commits and Release Notes
 

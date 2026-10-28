@@ -6,12 +6,12 @@ authors = [{ name = "Hydrogram", email = "contact@hydrogram.org" }]
 dependencies = ["pyaes==1.6.1", "pysocks==1.7.1", "aiosqlite>=0.19.0"]
 readme = "README.md"
 license = "LGPL-3.0-or-later"
+license-files = ["COPYING", "COPYING.lesser", "NOTICE"]
 requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Natural Language :: English",
-    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
@@ -32,12 +32,6 @@ classifiers = [
 ]
 keywords = ["telegram chat messenger mtproto api client library python"]
 
-[tool.hatch.version]
-path = "hydrogram/__init__.py"
-
-# Used to call hatch_build.py
-[tool.hatch.build.hooks.custom]
-
 [project.urls]
 homepage = "https://hydrogram.org"
 tracker = "https://github.com/hydrogram/hydrogram/issues"
@@ -47,12 +41,29 @@ documentation = "https://docs.hydrogram.org"
 changelog = "https://docs.hydrogram.org/en/latest/releases.html"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27.0"]
 build-backend = "hatchling.build"
 
 [tool.uv]
-managed = true
-dev-dependencies = [
+required-version = ">=0.12.24"
+# Local builds depend on the version source, hook, and compiler inputs.
+cache-keys = [
+    { file = "pyproject.toml" },
+    { file = "hydrogram/__init__.py" },
+    { file = "hatch_build.py" },
+    { file = "compiler/__init__.py" },
+    { file = "compiler/api/*.py" },
+    { file = "compiler/api/docs.json" },
+    { file = "compiler/api/source/*.tl" },
+    { file = "compiler/api/template/*.txt" },
+    { file = "compiler/errors/*.py" },
+    { file = "compiler/errors/source/*.tsv" },
+    { file = "compiler/errors/template/*.txt" },
+    { file = "NOTICE" },
+]
+
+[dependency-groups]
+dev = [
     "ruff>=0.15.7",
     "pytest>=7.4.3",
     "pytest-asyncio>=0.23.2",
@@ -61,7 +72,6 @@ dev-dependencies = [
     "pre-commit>=4.2.0",
     "httpx[http2]>=0.28.1",
     "lxml>=5.3.2",
-    "hatchling>=1.27.0",
 ]
 
 [project.optional-dependencies]
@@ -79,29 +89,47 @@ fast = [
     "uvloop>=0.19.0; (sys_platform == 'darwin' or sys_platform == 'linux') and platform_python_implementation != 'PyPy'",
 ]
 
-[tool.hatch.metadata]
-allow-direct-references = true
+[tool.hatch.version]
+path = "hydrogram/__init__.py"
 
 [tool.hatch.build.targets.sdist]
+# Compatible with the packaging/Twine versions in uv.lock.
+core-metadata-version = "2.4"
+only-include = [
+    "hydrogram",
+    "compiler",
+    "hatch_build.py",
+    "Makefile",
+    "README.md",
+    "COPYING",
+    "COPYING.lesser",
+    "NOTICE",
+]
+# Always regenerate these from the compiler inputs when building a wheel.
 exclude = [
-    ".github/",
-    "dev_tools/",
-    "docs/",
-    "news/",
-    "tests/",
-    ".editorconfig",
-    ".gitignore",
-    ".pre-commit-config.yaml",
-    "CONTRIBUTING.md",
-    "NEWS.rst",
-    "requirements.lock",
-    "requirements-dev.lock",
-    "ruff.toml",
+    "/hydrogram/errors/exceptions",
+    "/hydrogram/raw/all.py",
+    "/hydrogram/raw/base",
+    "/hydrogram/raw/functions",
+    "/hydrogram/raw/types",
 ]
 
 [tool.hatch.build.targets.wheel]
-ignore-vcs = true
-package = "hydrogram"
+core-metadata-version = "2.4"
+packages = ["hydrogram"]
+artifacts = [
+    "/hydrogram/errors/exceptions/**",
+    "/hydrogram/raw/all.py",
+    "/hydrogram/raw/base/**",
+    "/hydrogram/raw/functions/**",
+    "/hydrogram/raw/types/**",
+    "!**/__pycache__/**",
+    "!**/*.pyc",
+    "!**/*.pyo",
+]
+
+[tool.hatch.build.targets.wheel.hooks.custom]
+path = "hatch_build.py"
 
 [tool.towncrier]
 package = "hydrogram"
