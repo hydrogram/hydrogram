@@ -44,7 +44,7 @@ def start():
     shutil.rmtree(ERRORS_DEST_PATH, ignore_errors=True)
     ERRORS_DEST_PATH.mkdir(parents=True)
 
-    files = [i.name for i in (ERRORS_HOME_PATH / "source").iterdir()]
+    files = sorted(i.name for i in (ERRORS_HOME_PATH / "source").glob("*.tsv"))
 
     with NOTICE_PATH.open(encoding="utf-8") as f:
         notice = [f"# {line}".strip() for line in f]

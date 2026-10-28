@@ -4,161 +4,89 @@ on:
   schedule:
     - cron: '0 */12 * * *'
   workflow_dispatch:
-    inputs:
-      force_update:
-        description: 'Force update even if no changes detected'
-        required: false
-        default: false
-        type: boolean
+  push:
+    paths:
+      - 'compiler/**'
+      - 'dev_tools/check_api_schema_updates.py'
+      - 'tests/test_*schema*.py'
+      - 'tests/test_layer_compatibility.py'
+      - '.github/workflows/check_api_updates.yml'
+  pull_request:
+    paths:
+      - 'compiler/**'
+      - 'dev_tools/check_api_schema_updates.py'
+      - 'tests/test_*schema*.py'
+      - 'tests/test_layer_compatibility.py'
+      - '.github/workflows/check_api_updates.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mtproto-schema-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check-schema-updates:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-
+    timeout-minutes: 20
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
         with:
           version: '0.13.6'
           python-version: '3.11'
           enable-cache: true
-
       - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
+      - name: Validate checked-in generation and compatibility offline
+        run: uv run --locked python dev_tools/check_api_schema_updates.py --validate
+      - name: Detect upstream drift
+        id: drift
         run: |
-          uv sync --locked --dev
+          status=0
+          uv run --locked python dev_tools/check_api_schema_updates.py \
+            --report schema-update.md --json-report schema-update.json || status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          case "$status" in
+            0|2) ;;
+            *) exit "$status" ;;
+          esac
+      - name: Validate the pinned candidate before producing a patch
+        if: steps.drift.outputs.status == '2'
+        run: |
+          uv run --locked python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
 
-      - name: Check for API schema updates
-        id: check-updates
+          source = json.loads(Path('schema-update.json').read_text())['provenance']
+          subprocess.run([
+              'uv', 'run', '--locked', 'python', 'dev_tools/check_api_schema_updates.py',
+              '--apply', '--revision', source['desktop']['revision'],
+              '--tdlib-revision', source['tdlib']['revision'],
+              '--report', 'schema-update.md', '--json-report', 'schema-update.json',
+          ], check=True)
+          PY
+          git diff --binary -- compiler/api/source > schema-update.patch
+      - name: Publish adoption report and validation results
+        if: always()
         run: |
-          FORCE_UPDATE=""
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.force_update }}" == "true" ]]; then
-            FORCE_UPDATE="--force-update"
+          if [ -f schema-update.md ]; then
+            cat schema-update.md >> "$GITHUB_STEP_SUMMARY"
           fi
-
-          uv run --locked python dev_tools/check_api_schema_updates.py $FORCE_UPDATE
-          EXIT_CODE=$?
-
-          if [ $EXIT_CODE -eq 0 ]; then
-            echo "updates_detected=true" >> $GITHUB_OUTPUT
-            CURRENT_LAYER=$(grep -o "// LAYER [0-9]*" compiler/api/source/main_api.tl | awk '{print $3}')
-            echo "layer_version=$CURRENT_LAYER" >> $GITHUB_OUTPUT
-          elif [ $EXIT_CODE -eq 2 ]; then
-            echo "updates_detected=false" >> $GITHUB_OUTPUT
-          else
-            echo "Error checking for updates"
-            exit 1
-          fi
-
-      - name: Set up Git config
-        if: steps.check-updates.outputs.updates_detected == 'true'
+      - name: Upload report and validated candidate patch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtproto-schema-report
+          path: |
+            schema-update.md
+            schema-update.json
+            schema-update.patch
+          if-no-files-found: ignore
+      - name: Signal protocol drift for maintainer review
+        if: steps.drift.outputs.status == '2'
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Check existing PR
-        if: steps.check-updates.outputs.updates_detected == 'true'
-        id: check-pr
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          BRANCH_NAME="update/mtproto-api-updates"
-
-          # Check if there's an open PR for this branch
-          PR_NUMBER=$(gh pr list --head "$BRANCH_NAME" --state open --json number -q '.[0].number')
-
-          if [ -n "$PR_NUMBER" ]; then
-            echo "existing_pr=true" >> $GITHUB_OUTPUT
-            echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          else
-            echo "existing_pr=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Create API update news entry
-        if: steps.check-updates.outputs.updates_detected == 'true'
-        run: |
-          LAYER_VERSION="${{ steps.check-updates.outputs.layer_version }}"
-          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
-          NEWS_FILE="news/${TIMESTAMP}.misc.rst"
-
-          mkdir -p news
-
-          echo "API Layer Update" > $NEWS_FILE
-          echo "================" >> $NEWS_FILE
-          echo "" >> $NEWS_FILE
-          echo "Updated MTProto API schema to Layer $LAYER_VERSION." >> $NEWS_FILE
-
-      - name: Compile API
-        if: steps.check-updates.outputs.updates_detected == 'true'
-        run: |
-          uv run --locked python -m compiler.api.compiler
-
-      - name: Compile errors
-        if: steps.check-updates.outputs.updates_detected == 'true'
-        run: |
-          uv run --locked python -m compiler.errors.compiler
-
-      - name: Create branch and commit changes
-        if: steps.check-updates.outputs.updates_detected == 'true' && steps.check-pr.outputs.existing_pr == 'false'
-        run: |
-          LAYER_VERSION="${{ steps.check-updates.outputs.layer_version }}"
-          BRANCH_NAME="update/mtproto-api-updates"
-
-          git checkout -b $BRANCH_NAME
-          git add compiler/api/source/main_api.tl hydrogram/raw/ hydrogram/errors/ news/
-          git commit -m "Update MTProto API schema to Layer ${LAYER_VERSION}"
-          git push origin $BRANCH_NAME
-
-      - name: Update existing branch
-        if: steps.check-updates.outputs.updates_detected == 'true' && steps.check-pr.outputs.existing_pr == 'true'
-        run: |
-          LAYER_VERSION="${{ steps.check-updates.outputs.layer_version }}"
-          BRANCH_NAME="update/mtproto-api-updates"
-
-          # Create a new branch based on the current main branch
-          git checkout -b $BRANCH_NAME-temp origin/main
-
-          # Add the changes and commit
-          git add compiler/api/source/main_api.tl hydrogram/raw/ hydrogram/errors/ news/
-          git commit -m "Update MTProto API schema to Layer ${LAYER_VERSION}"
-
-          # Force push to update the branch
-          git push --force origin $BRANCH_NAME-temp:$BRANCH_NAME
-
-      - name: Create Pull Request
-        if: steps.check-updates.outputs.updates_detected == 'true' && steps.check-pr.outputs.existing_pr == 'false'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          LAYER_VERSION="${{ steps.check-updates.outputs.layer_version }}"
-          BRANCH_NAME="update/mtproto-api-updates"
-          PR_TITLE="Update MTProto API schema"
-          PR_BODY="This PR automatically updates the MTProto API schema to Layer ${LAYER_VERSION}.\n\n- Updated main schema file\n- Recompiled raw and errors modules\n- Created news entry for changelog"
-
-          gh pr create \
-            --title "$PR_TITLE" \
-            --body "$PR_BODY" \
-            --base main \
-            --head "$BRANCH_NAME" \
-            --label "enhancement" \
-            --label "automated"
-
-      - name: Update Pull Request Title and Description
-        if: steps.check-updates.outputs.updates_detected == 'true' && steps.check-pr.outputs.existing_pr == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          LAYER_VERSION="${{ steps.check-updates.outputs.layer_version }}"
-          PR_NUMBER="${{ steps.check-pr.outputs.pr_number }}"
-          PR_TITLE="Update MTProto API schema"
-          PR_BODY="This PR automatically updates the MTProto API schema to Layer ${LAYER_VERSION}.\n\n- Updated main schema file\n- Recompiled raw and errors modules\n- Created news entry for changelog"
-
-          gh pr edit $PR_NUMBER --title "$PR_TITLE" --body "$PR_BODY"
-
-          PR_COMMENT="Updated the MTProto API schema to Layer ${LAYER_VERSION}.\n\n- Updated main schema file\n- Recompiled raw and errors modules\n- Added new news entry for changelog"
-          gh pr comment $PR_NUMBER --body "$PR_COMMENT"
+          echo '::error::MTProto schema drift detected. Review the report, compatibility tests, RPC errors, and candidate patch in the workflow artifacts.'
+          exit 1

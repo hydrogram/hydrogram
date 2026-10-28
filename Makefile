@@ -11,7 +11,7 @@ DOCS_BUILD = $(DOCS_DIR)/build
 API_DIRS = $(HYDROGRAM_DIR)/errors/exceptions $(HYDROGRAM_DIR)/raw/all.py $(HYDROGRAM_DIR)/raw/base $(HYDROGRAM_DIR)/raw/functions $(HYDROGRAM_DIR)/raw/types
 DOCS_API_DIRS = $(DOCS_SOURCE)/api/bound-methods $(DOCS_SOURCE)/api/methods $(DOCS_SOURCE)/api/types $(DOCS_SOURCE)/telegram
 
-.PHONY: all build clean clean-api clean-docs api api-raw api-errors docs docs-compile docs-serve live-docs towncrier towncrier-draft dev-tools check-api-schema generate-docs-json compare-bot-api cherry-pick-pyro help
+.PHONY: all build clean clean-api clean-docs api api-raw api-errors docs docs-compile docs-serve live-docs towncrier towncrier-draft dev-tools check-api-schema update-api-schema validate-api-schema generate-docs-json compare-bot-api cherry-pick-pyro help
 
 all: api docs
 
@@ -67,6 +67,12 @@ check-api-schema:
 	@echo "Checking Telegram API schema for updates..."
 	@$(PYTHON) dev_tools/check_api_schema_updates.py
 
+update-api-schema:
+	@$(PYTHON) dev_tools/check_api_schema_updates.py --apply
+
+validate-api-schema:
+	@$(PYTHON) dev_tools/check_api_schema_updates.py --validate
+
 generate-docs-json:
 	@echo "Generating API documentation JSON..."
 	@$(PYTHON) dev_tools/generate_docs_json.py
@@ -90,6 +96,8 @@ help:
 	@echo "  towncrier      : Generate release notes"
 	@echo "  towncrier-draft: Generate draft release notes"
 	@echo "  check-api-schema: Check Telegram API schema for updates"
+	@echo "  update-api-schema: Validate and apply the latest verified schema"
+	@echo "  validate-api-schema: Validate local schema and deterministic generation offline"
 	@echo "  generate-docs-json: Generate API documentation JSON"
 	@echo "  compare-bot-api: Compare implementation against Bot API"
 	@echo "  cherry-pick-pyro: Cherry-pick code from Pyrogram (usage: make cherry-pick-pyro TYPE=<pr|branch|commit> ID=<number|name|hash>)"

@@ -169,7 +169,7 @@ class SendPoll:
             question_entities = []
 
         answers = []
-        for i, answer_ in enumerate(options):
+        for answer_ in options:
             if isinstance(answer_, str):
                 answer, answer_entities = answer_, []
             else:
@@ -181,9 +181,8 @@ class SendPoll:
                 if not answer_entities:
                     answer_entities = []
             answers.append(
-                raw.types.PollAnswer(
+                raw.types.InputPollAnswer(
                     text=raw.types.TextWithEntities(text=answer, entities=answer_entities),
-                    option=bytes([i]),
                 )
             )
 
@@ -193,6 +192,7 @@ class SendPoll:
                 media=raw.types.InputMediaPoll(
                     poll=raw.types.Poll(
                         id=self.rnd_id(),
+                        hash=0,
                         question=raw.types.TextWithEntities(
                             text=question, entities=question_entities
                         ),
@@ -204,9 +204,7 @@ class SendPoll:
                         close_period=open_period,
                         close_date=utils.datetime_to_timestamp(close_date),
                     ),
-                    correct_answers=[bytes([correct_option_id])]
-                    if correct_option_id is not None
-                    else None,
+                    correct_answers=[correct_option_id] if correct_option_id is not None else None,
                     solution=solution,
                     solution_entities=None if solution is None else (solution_entities or []),
                 ),

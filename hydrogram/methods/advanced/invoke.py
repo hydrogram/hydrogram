@@ -94,7 +94,9 @@ class Invoke:
             (sleep_threshold if sleep_threshold is not None else self.sleep_threshold),
         )
 
-        await self.fetch_peers(getattr(r, "users", []))
-        await self.fetch_peers(getattr(r, "chats", []))
+        # Join methods wrap Updates in a ChatInviteJoinResult at newer layers.
+        peers = r.updates if isinstance(r, raw.types.messages.ChatInviteJoinResultOk) else r
+        await self.fetch_peers(getattr(peers, "users", None) or [])
+        await self.fetch_peers(getattr(peers, "chats", None) or [])
 
         return r

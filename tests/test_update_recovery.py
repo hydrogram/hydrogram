@@ -260,6 +260,7 @@ async def test_channel_too_long_snapshot_is_not_new_messages(manager, caplog):
             unread_count=0,
             unread_mentions_count=0,
             unread_reactions_count=0,
+            unread_poll_votes_count=0,
             notify_settings=raw.types.PeerNotifySettings(),
             pts=30,
         ),

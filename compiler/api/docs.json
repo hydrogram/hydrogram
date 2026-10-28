@@ -3213,11 +3213,13 @@
     "InputMediaPoll": {
       "desc": "A poll",
       "params": {
-        "correct_answers": "Correct answer IDs (for quiz polls)",
+        "attached_media": "Optional media attachment to display alongside the poll",
+        "correct_answers": "0-based indices of the correct answers in the answers vector (for quiz polls)",
         "flags": "Flags, see TL conditional fields",
         "poll": "The poll to send",
-        "solution": "Explanation of quiz solution",
-        "solution_entities": "Message entities for styled text"
+        "solution": "Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters with at most 2 line feeds.",
+        "solution_entities": "Styled text message entities for the solution explanation.",
+        "solution_media": "Optional media attachment shown alongside the quiz solution explanation"
       }
     },
     "InputMediaStakeDice": {
@@ -3593,6 +3595,14 @@
         "local_id": "Local ID",
         "secret": "Secret",
         "volume_id": "Volume ID"
+      }
+    },
+    "InputPollAnswer": {
+      "desc": "An answer option to add to an open-answer poll \u00bb",
+      "params": {
+        "flags": "Flags, see TL conditional fields",
+        "media": "Optional media attachment to display alongside the answer",
+        "text": "The answer text"
       }
     },
     "InputPrivacyKeyAbout": {
@@ -5429,6 +5439,8 @@
     "MessageMediaPoll": {
       "desc": "Poll",
       "params": {
+        "attached_media": "Optional media attachment displayed alongside the poll",
+        "flags": "Flags, see TL conditional fields",
         "poll": "The poll",
         "results": "The results of the poll"
       }
@@ -6413,20 +6425,32 @@
       "desc": "Poll",
       "params": {
         "answers": "The possible answers (2-poll_answers_max), vote using messages.sendVote.",
-        "close_date": "Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 600 seconds in the future; can't be used together with close_period.",
-        "close_period": "Amount of time in seconds the poll will be active after creation, 5-600. Can't be used together with close_date.",
+        "close_date": "Point in time (Unix timestamp) when the poll will be automatically closed. Up to poll_close_period_max \u00bb seconds in the future; can't be used together with close_period.",
+        "close_period": "Amount of time in seconds the poll will be active after creation, up to poll_close_period_max \u00bb seconds. Can't be used together with close_date.",
         "closed": "Whether the poll is closed and doesn't accept any more answers",
+        "countries_iso2": "If set, only users from the specified ISO 3166-1 alpha-2 country codes may vote, see country-restricted polls \u00bb; a user may vote only if the phone_country_iso2 \u00bb configuration parameter is contained in this list.",
+        "creator": "Whether the current user created this poll",
         "flags": "Flags, see TL conditional fields",
+        "hash": "Hash for use with messages.getPollResults",
+        "hide_results_until_close": "Whether vote results are hidden from all participants until the poll is closed",
         "id": "ID of the poll",
         "multiple_choice": "Whether multiple options can be chosen as answer",
+        "open_answers": "Whether users can add new answer options after the poll is created, see open-answer polls \u00bb",
         "public_voters": "Whether cast votes are publicly visible to all users (non-anonymous poll)",
         "question": "The question of the poll (only Premium users can use custom emoji entities here).",
-        "quiz": "Whether this is a quiz (with wrong and correct answers, results shown in the return type)"
+        "quiz": "Whether this is a quiz (with wrong and correct answers, results shown in the return type). When creating a poll, the correct answers are specified in inputMediaPoll.correct_answers.",
+        "revoting_disabled": "If set, users cannot change their vote after casting it",
+        "shuffle_answers": "Whether answer options are displayed in a randomized order to each user",
+        "subscribers_only": "Whether only subscribers can vote: a user may vote only if they are currently a member of the channel/supergroup and joined it at least 24 hours before the poll was posted, see subscriber-only polls \u00bb."
       }
     },
     "PollAnswer": {
       "desc": "A possible answer of a poll",
       "params": {
+        "added_by": "The peer who added this answer; only set for answers dynamically added to an open-answer poll, see polls \u00bb",
+        "date": "When this answer was added; only set for answers dynamically added to an open-answer poll",
+        "flags": "Flags, see TL conditional fields",
+        "media": "Optional media attachment displayed alongside the answer",
         "option": "The param that has to be passed to messages.sendVote.",
         "text": "Textual representation of the answer (only Premium users can use custom emoji entities here)."
       }
@@ -6438,18 +6462,22 @@
         "correct": "For quizzes, whether the option we have chosen is correct",
         "flags": "Flags, see TL conditional fields",
         "option": "The param that has to be passed to messages.sendVote.",
+        "recent_voters": "Peers of the most recent voters for this option",
         "voters": "How many users voted for this option"
       }
     },
     "PollResults": {
       "desc": "Results of poll",
       "params": {
+        "can_view_stats": "Whether the current user can view detailed poll statistics \u00bb",
         "flags": "Flags, see TL conditional fields",
+        "has_unread_votes": "Whether there are unread votes in this non-anonymous poll, see polls \u00bb",
         "min": "Similar to min objects, used for poll constructors that are the same for all users so they don't have the option chosen by the current user (you can use messages.getPollResults to get the full poll results).",
         "recent_voters": "IDs of the last users that recently voted in the poll",
         "results": "Poll results",
         "solution": "Explanation of quiz solution",
         "solution_entities": "Message entities for styled text in quiz solution",
+        "solution_media": "Optional media attachment shown alongside the quiz solution explanation",
         "total_voters": "Total number of people that voted in the poll"
       }
     },
@@ -15622,7 +15650,8 @@
       "desc": "Get poll results",
       "params": {
         "msg_id": "Message ID of poll message",
-        "peer": "Peer where the poll was found"
+        "peer": "Peer where the poll was found",
+        "poll_hash": "Pass the poll.hash from the last received poll state; the server skips returning unchanged data"
       }
     },
     "messages.GetPollVotes": {

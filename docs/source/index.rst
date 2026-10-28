@@ -157,6 +157,7 @@ Meta
     topics/debugging
     topics/test-servers
     topics/advanced-usage
+    topics/schema-updates
 
 .. toctree::
     :hidden:

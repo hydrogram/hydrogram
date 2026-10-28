@@ -129,12 +129,12 @@ class Poll(Object, Update):
         correct_option_id = None
         options = []
 
+        results_by_option = {result.option: result for result in results or []}
         for i, answer in enumerate(poll.answers):
             voter_count = 0
 
-            if results:
-                result = results[i]
-                voter_count = result.voters
+            if (result := results_by_option.get(answer.option)) is not None:
+                voter_count = result.voters or 0
 
                 if result.chosen:
                     chosen_option_id = i
@@ -144,7 +144,7 @@ class Poll(Object, Update):
 
             options.append(
                 types.PollOption(
-                    text=answer.text,
+                    text=answer.text.text,
                     voter_count=voter_count,
                     data=answer.option,
                     client=client,
@@ -153,9 +153,9 @@ class Poll(Object, Update):
 
         return Poll(
             id=str(poll.id),
-            question=poll.question,
+            question=poll.question.text,
             options=options,
-            total_voter_count=media_poll.results.total_voters,
+            total_voter_count=media_poll.results.total_voters or 0,
             is_closed=poll.closed,
             is_anonymous=not poll.public_voters,
             type=enums.PollType.QUIZ if poll.quiz else enums.PollType.REGULAR,
@@ -178,7 +178,7 @@ class Poll(Object, Update):
         if update.poll is not None:
             return Poll._parse(client, update)
 
-        results = update.results.results
+        results = update.results.results or []
         chosen_option_id = None
         correct_option_id = None
         options = []
@@ -193,7 +193,7 @@ class Poll(Object, Update):
             options.append(
                 types.PollOption(
                     text="",
-                    voter_count=result.voters,
+                    voter_count=result.voters or 0,
                     data=result.option,
                     client=client,
                 )
@@ -203,7 +203,7 @@ class Poll(Object, Update):
             id=str(update.poll_id),
             question="",
             options=options,
-            total_voter_count=update.results.total_voters,
+            total_voter_count=update.results.total_voters or 0,
             is_closed=False,
             chosen_option_id=chosen_option_id,
             correct_option_id=correct_option_id,

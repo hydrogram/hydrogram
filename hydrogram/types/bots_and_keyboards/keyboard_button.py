@@ -65,25 +65,24 @@ class KeyboardButton(Object):
         self.web_app = web_app
 
     @staticmethod
-    def read(b):
-        if isinstance(b, raw.types.KeyboardButton):
+    def read(b: raw.types.KeyboardButton):
+        if isinstance(b.type, raw.types.ButtonTypeDefault):
             return b.text
-
-        if isinstance(b, raw.types.KeyboardButtonRequestPhone):
+        if isinstance(b.type, raw.types.ButtonTypeRequestPhone):
             return KeyboardButton(text=b.text, request_contact=True)
-
-        if isinstance(b, raw.types.KeyboardButtonRequestGeoLocation):
+        if isinstance(b.type, raw.types.ButtonTypeRequestGeoLocation):
             return KeyboardButton(text=b.text, request_location=True)
-
-        if isinstance(b, raw.types.KeyboardButtonSimpleWebView):
-            return KeyboardButton(text=b.text, web_app=types.WebAppInfo(url=b.url))
+        if isinstance(b.type, raw.types.ButtonTypeSimpleWebView):
+            return KeyboardButton(text=b.text, web_app=types.WebAppInfo(url=b.type.url))
         return None
 
     def write(self):
         if self.request_contact:
-            return raw.types.KeyboardButtonRequestPhone(text=self.text)
-        if self.request_location:
-            return raw.types.KeyboardButtonRequestGeoLocation(text=self.text)
-        if self.web_app:
-            return raw.types.KeyboardButtonSimpleWebView(text=self.text, url=self.web_app.url)
-        return raw.types.KeyboardButton(text=self.text)
+            button_type = raw.types.ButtonTypeRequestPhone()
+        elif self.request_location:
+            button_type = raw.types.ButtonTypeRequestGeoLocation()
+        elif self.web_app:
+            button_type = raw.types.ButtonTypeSimpleWebView(url=self.web_app.url)
+        else:
+            button_type = raw.types.ButtonTypeDefault()
+        return raw.types.KeyboardButton(text=self.text, type=button_type)

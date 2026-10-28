@@ -198,10 +198,45 @@ def get_references(t: str, kind: str):
     return ("\n            ".join(items), len(items)) if items else (None, 0)
 
 
+def validate_schema(schema: list[str]) -> None:
+    """Reject unsupported declarations instead of silently omitting wire fields."""
+    seen_names = set()
+    seen_ids = set()
+    section = None
+    argument_re = re.compile(r"\w+:(?:flags\d?\.\d+\?)?(?:[\w.]+(?:<[\w.]+>)?|#|!X)")
+    for original in schema:
+        line = original.split("//", 1)[0].strip()
+        if not line:
+            continue
+        if line in {"---types---", "---functions---"}:
+            section = line
+            continue
+        match = COMBINATOR_RE.fullmatch(line)
+        if not match or section is None:
+            raise ValueError(f"Unsupported TL declaration: {line}")
+        name, constructor_id, _ = match.groups()
+        if name in seen_names or int(constructor_id, 16) in seen_ids:
+            raise ValueError(f"Duplicate TL declaration: {name}")
+        seen_names.add(name)
+        seen_ids.add(int(constructor_id, 16))
+        tokens = line.split()
+        for token in tokens[1 : tokens.index("=")]:
+            if token != "{X:Type}" and not argument_re.fullmatch(token):
+                raise ValueError(f"Unsupported TL argument in {name}: {token}")
+
+
 def start(format: bool = False):
-    shutil.rmtree(DESTINATION_PATH / "types", ignore_errors=True)
-    shutil.rmtree(DESTINATION_PATH / "functions", ignore_errors=True)
-    shutil.rmtree(DESTINATION_PATH / "base", ignore_errors=True)
+    # Compilations can run repeatedly in a build process. Never retain references
+    # (including constructors removed by a later schema) from an earlier run.
+    for mapping in (
+        types_to_constructors,
+        types_to_functions,
+        constructors_to_functions,
+        namespaces_to_types,
+        namespaces_to_constructors,
+        namespaces_to_functions,
+    ):
+        mapping.clear()
 
     with (
         open(API_HOME_PATH / "source/auth_key.tl") as f1,
@@ -209,6 +244,11 @@ def start(format: bool = False):
         open(API_HOME_PATH / "source/main_api.tl") as f3,
     ):
         schema = (f1.read() + f2.read() + f3.read()).splitlines()
+
+    validate_schema(schema)
+    shutil.rmtree(DESTINATION_PATH / "types", ignore_errors=True)
+    shutil.rmtree(DESTINATION_PATH / "functions", ignore_errors=True)
+    shutil.rmtree(DESTINATION_PATH / "base", ignore_errors=True)
 
     with (
         open(API_HOME_PATH / "template/type.txt") as f1,
@@ -420,7 +460,7 @@ def start(format: bool = False):
                         if arg_name != f"flags{flag.group(1)}":
                             continue
 
-                        if flag.group(3) == "true" or flag.group(3).startswith("Vector"):
+                        if flag.group(3) == "true":
                             write_flags.append(
                                 f"{arg_name} |= (1 << {flag.group(2)}) if self.{i[0]} else 0"
                             )
@@ -455,13 +495,14 @@ def start(format: bool = False):
                     read_types += f"{arg_name} = {flag_type.title()}.read(b) if flags{number} & (1 << {index}) else None"
                 elif "vector" in flag_type.lower():
                     sub_type = arg_type.split("<")[1][:-1]
+                    bare = flag_type.startswith("vector<")
 
                     write_types += "\n        "
                     write_types += f"if self.{arg_name} is not None:\n            "
-                    write_types += f"b.write(Vector(self.{arg_name}{f', {sub_type.title()}' if sub_type in CORE_TYPES else ''}))\n        "
+                    write_types += f"b.write(Vector(self.{arg_name}{f', {sub_type.title()}' if sub_type in CORE_TYPES else ''}){'[4:]' if bare else ''})\n        "
 
                     read_types += "\n        "
-                    read_types += f"{arg_name} = TLObject.read(b{f', {sub_type.title()}' if sub_type in CORE_TYPES else ''}) if flags{number} & (1 << {index}) else []\n        "
+                    read_types += f"{arg_name} = {'Vector' if bare else 'TLObject'}.read(b, {sub_type.title() if sub_type in CORE_TYPES else 'TLObject'}) if flags{number} & (1 << {index}) else None\n        "
                 else:
                     write_types += "\n        "
                     write_types += f"if self.{arg_name} is not None:\n            "
@@ -478,11 +519,12 @@ def start(format: bool = False):
                     read_types += f"{arg_name} = {arg_type.title()}.read(b)\n        "
                 elif "vector" in arg_type.lower():
                     sub_type = arg_type.split("<")[1][:-1]
+                    bare = arg_type.startswith("vector<")
 
-                    write_types += f"b.write(Vector(self.{arg_name}{f', {sub_type.title()}' if sub_type in CORE_TYPES else ''}))\n        "
+                    write_types += f"b.write(Vector(self.{arg_name}{f', {sub_type.title()}' if sub_type in CORE_TYPES else ''}){'[4:]' if bare else ''})\n        "
 
                     read_types += "\n        "
-                    read_types += f"{arg_name} = TLObject.read(b{f', {sub_type.title()}' if sub_type in CORE_TYPES else ''})\n        "
+                    read_types += f"{arg_name} = {'Vector' if bare else 'TLObject'}.read(b, {sub_type.title() if sub_type in CORE_TYPES else 'TLObject'})\n        "
                 else:
                     write_types += f"b.write(self.{arg_name}.write())\n        "
 

@@ -60,6 +60,12 @@ mode to retain the existing rules and style, so review their changes when upgrad
 
 Generated raw API modules and RPC exceptions are ignored by Git. Change sources or templates under `compiler/api/` or `compiler/errors/`, then run `uv run make api`. Do not patch generated output directly.
 
+For schema updates, follow [Updating the MTProto Schema](docs/source/topics/schema-updates.rst).
+The update checker is read-only by default; `make update-api-schema` validates a
+candidate in a temporary checkout before applying it. `make validate-api-schema`
+checks pinned provenance, deterministic generation, and the complete offline suite.
+Raw layer support and high-level Client feature coverage are distinct.
+
 When adding a client method, follow the existing method-class pattern and import and register the class in `hydrogram/methods/<category>/__init__.py`. Export new public types through the relevant package `__init__.py` files. Keep asynchronous operations nonblocking and preserve Python 3.11 compatibility.
 
 ## Coding Style

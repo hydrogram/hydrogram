@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import hydrogram
-from hydrogram import raw, types
+from hydrogram import errors, raw, types
 
 
 class JoinChat:
@@ -51,6 +51,7 @@ class JoinChat:
         """
         if match := self.INVITE_LINK_RE.match(str(chat_id)):
             chat = await self.invoke(raw.functions.messages.ImportChatInvite(hash=match.group(1)))
+            chat = self._unwrap_chat_join_result(chat)
             if isinstance(chat.chats[0], raw.types.Chat):
                 return types.Chat._parse_chat_chat(self, chat.chats[0])
             if isinstance(chat.chats[0], raw.types.Channel):
@@ -61,4 +62,16 @@ class JoinChat:
             raw.functions.channels.JoinChannel(channel=await self.resolve_peer(chat_id))
         )
 
+        chat = self._unwrap_chat_join_result(chat)
         return types.Chat._parse_channel_chat(self, chat.chats[0])
+
+    @staticmethod
+    def _unwrap_chat_join_result(
+        result: raw.base.messages.ChatInviteJoinResult,
+    ) -> raw.base.Updates:
+        if isinstance(result, raw.types.messages.ChatInviteJoinResultOk):
+            return result.updates
+        raise errors.NotAcceptable(
+            "Joining this chat requires bot verification in a Telegram webview. "
+            "Complete verification in an official Telegram client and try again."
+        )

@@ -1,0 +1,23 @@
+{
+  "comparison": {
+    "changed": [],
+    "missing_from_tdlib": [],
+    "shared": 2578
+  },
+  "desktop": {
+    "path": "Telegram/SourceFiles/mtproto/scheme/api.tl",
+    "repository": "telegramdesktop/tdesktop",
+    "revision": "f985723b552b30fe1c17d377d57f44e61a15a8c4",
+    "sha256": "76922ce265441d3f2f5188f56b69b41e1cb11354657ea547707507f8c3b93826",
+    "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/f985723b552b30fe1c17d377d57f44e61a15a8c4/Telegram/SourceFiles/mtproto/scheme/api.tl"
+  },
+  "layer": 232,
+  "normalized_sha256": "bae214875b52d4d1a52482ca3c644c5e5ce295306f7c43037b494313e3152782",
+  "tdlib": {
+    "path": "td/generate/scheme/telegram_api.tl",
+    "repository": "tdlib/td",
+    "revision": "4c6377aa7386c39217878a9a56d581922ad37ca4",
+    "sha256": "6628b4c4457112b819f4bd35104170b3610822eed4a54240a304adb28cb66ec6",
+    "url": "https://raw.githubusercontent.com/tdlib/td/4c6377aa7386c39217878a9a56d581922ad37ca4/td/generate/scheme/telegram_api.tl"
+  }
+}
