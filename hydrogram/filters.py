@@ -22,10 +22,10 @@ from __future__ import annotations
 import inspect
 import re
 from re import Pattern
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from collections.abc import Awaitable
+    from collections.abc import Awaitable, Callable
 
 import hydrogram
 from hydrogram import enums

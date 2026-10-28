@@ -45,7 +45,7 @@ class Terminate:
         if self.takeout_id:
             try:
                 await self.invoke(raw.functions.account.FinishTakeoutSession())
-            except (OSError, asyncio.TimeoutError, RPCError):
+            except (TimeoutError, OSError, RPCError):
                 log.warning("Could not finish takeout session during shutdown", exc_info=True)
             else:
                 log.info("Takeout session %s finished", self.takeout_id)

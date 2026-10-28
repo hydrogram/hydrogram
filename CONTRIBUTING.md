@@ -16,7 +16,7 @@ For feature requests, explain the use case, proposed behavior, and any relevant 
 
 ## Set Up the Development Environment
 
-Install [uv](https://docs.astral.sh/uv/) and Git. Hydrogram supports Python 3.9 and later; `.python-version` selects Python 3.13 for local development. The Makefile commands below also require `make`.
+Install [uv](https://docs.astral.sh/uv/) and Git. Hydrogram supports Python 3.11 and later; `.python-version` selects Python 3.14 for local development. The Makefile commands below also require `make`.
 
 Fork the repository, then run these commands, replacing `YOUR_USERNAME` with your GitHub username:
 
@@ -43,6 +43,11 @@ performance extras are optional for using Hydrogram. For a smaller development
 environment, use `uv sync --locked --dev`; add `--extra docs` when working on
 documentation.
 
+To refresh all locked dependencies, run `uv lock --upgrade`, then synchronize and
+validate the environment. Keep dependency lower bounds compatible with Python 3.11;
+the universal lockfile selects newer releases on Python versions that support them.
+Keep the Ruff pre-commit revision aligned with the version declared in `pyproject.toml`.
+
 ## Find and Change the Right Code
 
 - `hydrogram/`: the client library, including `methods/`, `types/`, filters, handlers, sessions, storage, and transports.
@@ -53,7 +58,7 @@ documentation.
 
 Generated raw API modules and RPC exceptions are ignored by Git. Change sources or templates under `compiler/api/` or `compiler/errors/`, then run `uv run make api`. Do not patch generated output directly.
 
-When adding a client method, follow the existing method-class pattern and import and register the class in `hydrogram/methods/<category>/__init__.py`. Export new public types through the relevant package `__init__.py` files. Keep asynchronous operations nonblocking and preserve Python 3.9 compatibility.
+When adding a client method, follow the existing method-class pattern and import and register the class in `hydrogram/methods/<category>/__init__.py`. Export new public types through the relevant package `__init__.py` files. Keep asynchronous operations nonblocking and preserve Python 3.11 compatibility.
 
 ## Coding Style
 
@@ -88,7 +93,7 @@ uv run pytest tests/filters/test_command.py::test_single
 uv run pytest tests --cov=hydrogram --cov-report=term-missing
 ```
 
-No minimum coverage percentage is configured. CI runs tests on Python 3.9–3.13 on Linux and macOS. Prefer isolated tests with local fixtures or test doubles, following the existing filter tests.
+No minimum coverage percentage is configured. CI runs tests on Python 3.11–3.14 on Linux and macOS. Prefer isolated tests with local fixtures or test doubles, following the existing filter tests.
 
 ## Documentation and Package Builds
 

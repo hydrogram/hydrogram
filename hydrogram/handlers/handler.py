@@ -20,9 +20,11 @@
 from __future__ import annotations
 
 import inspect
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import hydrogram
     from hydrogram.filters import Filter
     from hydrogram.types import Update

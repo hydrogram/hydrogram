@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-Hydrogram is an async Telegram MTProto client library supporting Python 3.9+.
+Hydrogram is an async Telegram MTProto client library supporting Python 3.11+.
 
 - `hydrogram/`: client, methods, types, filters, handlers, sessions, storage, transports, and crypto.
 - `compiler/`: API schemas, error definitions, templates, and generators.
@@ -34,13 +34,13 @@ Run from the repository root:
 
 Use four spaces (two for YAML), UTF-8, LF, and final newlines. Ruff targets 99-character lines. Use `snake_case` functions/modules, `PascalCase` classes, and `UPPER_SNAKE_CASE` constants.
 
-Type public APIs; use `from __future__ import annotations` for postponed annotations, including `str | None` on Python 3.9. Keep runtime expressions compatible with 3.9; move type-only imports into `TYPE_CHECKING` blocks. Follow neighboring Sphinx docstrings, including parameters, returns, and examples.
+Type public APIs; use `from __future__ import annotations` for postponed annotations, including `str | None`. Keep runtime expressions compatible with 3.11; move type-only imports into `TYPE_CHECKING` blocks. Follow neighboring Sphinx docstrings, including parameters, returns, and examples.
 
 Preserve existing copyright notices. New Python files need the LGPL header with Hydrogram's copyright; see `compiler/docs/compiler.py`.
 
 ## Testing Guidelines
 
-Use pytest, pytest-asyncio (`@pytest.mark.asyncio`), and pytest-cov. Name files `test_*.py` and functions `test_*`. Add regression/behavioral tests; run focused tests, then the suite. Coverage: `uv run pytest tests --cov=hydrogram`; no minimum is configured. CI covers Python 3.9–3.13 on Linux/macOS.
+Use pytest, pytest-asyncio (`@pytest.mark.asyncio`), and pytest-cov. Name files `test_*.py` and functions `test_*`. Add regression/behavioral tests; run focused tests, then the suite. Coverage: `uv run pytest tests --cov=hydrogram`; no minimum is configured. CI covers Python 3.11–3.14 on Linux/macOS.
 
 ## Commit & Pull Request Guidelines
 

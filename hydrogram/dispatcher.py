@@ -23,7 +23,7 @@ import asyncio
 import inspect
 import logging
 from collections import OrderedDict
-from typing import TYPE_CHECKING, Callable, TypeVar, cast
+from typing import TYPE_CHECKING, TypeVar, cast
 
 import hydrogram
 from hydrogram import raw, types, utils
@@ -61,7 +61,7 @@ from hydrogram.raw.types import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Awaitable
+    from collections.abc import Awaitable, Callable
 
     from hydrogram.handlers.handler import Handler
 

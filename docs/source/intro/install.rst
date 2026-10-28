@@ -1,7 +1,7 @@
 Install Guide
 =============
 
-Being a modern Python framework, Hydrogram requires an up to date version of Python to be installed in your system.
+Hydrogram requires Python 3.11 or later to be installed in your system.
 We recommend using the latest versions of both Python 3 and pip.
 
 -----

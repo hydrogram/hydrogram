@@ -63,7 +63,7 @@ class Connection:
             try:
                 log.info("Connecting...")
                 await self.protocol.connect(self.address)
-            except (OSError, asyncio.TimeoutError) as e:
+            except (TimeoutError, OSError) as e:
                 log.warning("Unable to connect due to network issues: %s", e)
                 await self.protocol.close()
                 if i + 1 == self.MAX_CONNECTION_ATTEMPTS:

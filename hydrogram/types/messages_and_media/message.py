@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import TYPE_CHECKING, BinaryIO, Callable
+from typing import TYPE_CHECKING, BinaryIO
 
 import hydrogram
 from hydrogram import enums, filters, raw, types, utils
@@ -33,6 +33,7 @@ from hydrogram.types.pyromod import ListenerTypes
 from hydrogram.types.update import Update
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from datetime import datetime
     from re import Match
 

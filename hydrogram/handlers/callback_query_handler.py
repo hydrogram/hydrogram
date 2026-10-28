@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 from asyncio import iscoroutinefunction
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram.types import CallbackQuery, Identifier, Listener, ListenerTypes
@@ -29,6 +29,8 @@ from hydrogram.utils import PyromodConfig
 from .handler import Handler
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from hydrogram.filters import Filter
 
 

@@ -19,11 +19,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from hydrogram.types import Identifier, Listener, ListenerTypes
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import hydrogram
     from hydrogram.filters import Filter
 

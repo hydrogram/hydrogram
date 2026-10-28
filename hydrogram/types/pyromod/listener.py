@@ -18,8 +18,9 @@
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from asyncio import Future
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from .identifier import Identifier
 from .listener_types import ListenerTypes

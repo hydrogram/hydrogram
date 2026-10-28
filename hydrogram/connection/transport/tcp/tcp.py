@@ -122,9 +122,7 @@ class TCP:
         try:
             await asyncio.wait_for(self._connect(address), TCP.TIMEOUT)
             self._closed = False
-        except (
-            asyncio.TimeoutError
-        ):  # Re-raise as TimeoutError. asyncio.TimeoutError is deprecated in 3.11
+        except TimeoutError:
             self._closed = True
             raise TimeoutError("Connection timed out")
 
@@ -162,7 +160,7 @@ class TCP:
         while len(data) < length:
             try:
                 chunk = await asyncio.wait_for(self.reader.read(length - len(data)), TCP.TIMEOUT)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 # A quiet socket is normal. Session pings detect unresponsive peers.
                 continue
             except OSError:

@@ -41,7 +41,7 @@ Hydrogram is a Python library for interacting with the Telegram MTProto API. It 
 
 ## Installation
 
-To install Hydrogram, you need Python 3 installed on your system. If you don't have Python installed, you can download it from the official website.
+To install Hydrogram, you need Python 3.11 or later installed on your system. If you don't have Python installed, you can download it from the official website.
 
 To install Hydrogram, use pip:
 

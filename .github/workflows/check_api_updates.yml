@@ -22,15 +22,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
+          version: '0.13.6'
           python-version: '3.11'
-          cache: 'pip'
+          enable-cache: true
 
       - name: Install dependencies
         run: |
-          pip install requests
+          uv sync --locked --dev
 
       - name: Check for API schema updates
         id: check-updates
@@ -40,7 +41,7 @@ jobs:
             FORCE_UPDATE="--force-update"
           fi
 
-          python dev_tools/check_api_schema_updates.py $FORCE_UPDATE
+          uv run --locked python dev_tools/check_api_schema_updates.py $FORCE_UPDATE
           EXIT_CODE=$?
 
           if [ $EXIT_CODE -eq 0 ]; then
@@ -95,13 +96,12 @@ jobs:
       - name: Compile API
         if: steps.check-updates.outputs.updates_detected == 'true'
         run: |
-          pip install .
-          python -m compiler.api.compiler
+          uv run --locked python -m compiler.api.compiler
 
       - name: Compile errors
         if: steps.check-updates.outputs.updates_detected == 'true'
         run: |
-          python -m compiler.errors.compiler
+          uv run --locked python -m compiler.errors.compiler
 
       - name: Create branch and commit changes
         if: steps.check-updates.outputs.updates_detected == 'true' && steps.check-pr.outputs.existing_pr == 'false'

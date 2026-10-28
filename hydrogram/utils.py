@@ -26,7 +26,7 @@ import hashlib
 import os
 import struct
 from concurrent.futures.thread import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from getpass import getpass
 from types import SimpleNamespace
 
@@ -348,7 +348,7 @@ async def parse_text_entities(
 
 
 def zero_datetime() -> datetime:
-    return datetime.fromtimestamp(0, timezone.utc)
+    return datetime.fromtimestamp(0, UTC)
 
 
 def timestamp_to_datetime(ts: int | None) -> datetime | None:

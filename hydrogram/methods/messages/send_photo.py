@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, BinaryIO, Callable
+from typing import TYPE_CHECKING, BinaryIO
 
 import hydrogram
 from hydrogram import enums, raw, types, utils
@@ -29,6 +29,7 @@ from hydrogram.errors import FilePartMissing
 from hydrogram.file_id import FileType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from datetime import datetime
 
 

@@ -429,7 +429,7 @@ async def test_new_session_updates_salt(harness):
 async def test_tcp_idle_read_is_not_failure():
     tcp = TCP(False, None)
     tcp._closed = False
-    tcp.reader = SimpleNamespace(read=AsyncMock(side_effect=[asyncio.TimeoutError(), b"x"]))
+    tcp.reader = SimpleNamespace(read=AsyncMock(side_effect=[TimeoutError(), b"x"]))
     assert await tcp.recv(1) == b"x"
     assert not tcp._closed
 

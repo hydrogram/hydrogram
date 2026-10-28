@@ -18,8 +18,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
-from typing import TYPE_CHECKING, Callable
+from collections.abc import Callable, Iterable
+from typing import TYPE_CHECKING
 
 from .handler import Handler
 

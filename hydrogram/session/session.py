@@ -327,8 +327,8 @@ class Session:
                 try:
                     await self._connect()
                 except (
+                    TimeoutError,
                     OSError,
-                    asyncio.TimeoutError,
                     InternalServerError,
                     ServiceUnavailable,
                     BadMsgNotification,
@@ -560,7 +560,7 @@ class Session:
                     ),
                     timeout=self.WAIT_TIMEOUT,
                 )
-        except (OSError, asyncio.TimeoutError, RPCError) as e:
+        except (TimeoutError, OSError, RPCError) as e:
             self._request_recovery(e, connection=self.connection)
         except Exception as e:
             log.exception("Session ping monitor failed: dc=%s", self.dc_id)
@@ -586,7 +586,7 @@ class Session:
                 self.last_received_at = datetime.now()
                 # Keep packet processing ordered and owned by the receiver task.
                 await self.handle_packet(packet)
-        except (OSError, asyncio.TimeoutError, SecurityCheckMismatch) as e:
+        except (TimeoutError, OSError, SecurityCheckMismatch) as e:
             self._request_recovery(e, connection=connection)
         except Exception as e:
             log.exception("Session packet processing failed: dc=%s", self.dc_id)
@@ -631,7 +631,7 @@ class Session:
                 self.results[msg_id] = result
             try:
                 await asyncio.wait_for(connection.send(payload), timeout)
-            except (OSError, asyncio.TimeoutError) as e:
+            except (TimeoutError, OSError) as e:
                 self.results.pop(msg_id, None)
                 self._request_recovery(e, connection=connection)
                 raise ConnectionLostError("Send failed; request delivery is uncertain") from e
@@ -647,7 +647,7 @@ class Session:
                 return None
             try:
                 await asyncio.wait_for(result.event.wait(), timeout)
-            except asyncio.TimeoutError as e:
+            except TimeoutError as e:
                 error = RequestTimeoutError(
                     "Request timed out; Telegram may have processed it. "
                     "Check the outcome before retrying."

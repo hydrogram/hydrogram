@@ -43,7 +43,7 @@ For documentation builds: uv run make docs
 <!-- Check applicable items and explain any exceptions. See CONTRIBUTING.md. -->
 
 - [ ] I reviewed my changes and followed the repository guidelines.
-- [ ] The code remains compatible with Python 3.9+.
+- [ ] The code remains compatible with Python 3.11+.
 - [ ] I added or updated tests for changed behavior, where applicable.
 - [ ] Tests and style checks pass, or limitations are explained above.
 - [ ] I updated affected public API docstrings and documentation, where applicable.

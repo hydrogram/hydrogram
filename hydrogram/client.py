@@ -38,7 +38,7 @@ from importlib import import_module
 from io import BytesIO, StringIO
 from mimetypes import MimeTypes
 from pathlib import Path
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 import hydrogram
 from hydrogram import __license__, __version__, enums, raw, utils
@@ -70,7 +70,7 @@ from .session.internals import MsgId
 
 if TYPE_CHECKING:
     import builtins
-    from collections.abc import AsyncGenerator
+    from collections.abc import AsyncGenerator, Callable
 
 log = logging.getLogger(__name__)
 
@@ -393,7 +393,7 @@ class Client(Methods):
                 await asyncio.wait_for(
                     self.updates_watchdog_event.wait(), self.UPDATES_WATCHDOG_INTERVAL
                 )
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 pass
             else:
                 break
@@ -406,7 +406,7 @@ class Client(Methods):
                 else:
                     try:
                         await self.invoke(raw.functions.updates.GetState())
-                    except (OSError, asyncio.TimeoutError, RPCError):
+                    except (TimeoutError, OSError, RPCError):
                         # An idle period is not a transport failure. Session pings
                         # own liveness checks and coordinate any necessary recovery.
                         log.warning("Update watchdog probe failed", exc_info=True)
