@@ -1,0 +1,3 @@
+interface:
+  display_name: "Hydrogram Bot API Audit"
+  short_description: "Compare Bot API features and investigate coverage"

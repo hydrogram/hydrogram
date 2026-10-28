@@ -1,0 +1,3 @@
+interface:
+  display_name: "Hydrogram API Update"
+  short_description: "Update MTProto schema and validate API bindings"
