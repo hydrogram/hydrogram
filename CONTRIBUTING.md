@@ -1,176 +1,132 @@
 # Contributing to Hydrogram
 
-Welcome, and thank you for your interest in contributing to Hydrogram!
+Contributions are welcome: bug reports, features, tests, documentation, and code reviews. Read the [Code of Conduct](https://github.com/hydrogram/.github/blob/main/CODE_OF_CONDUCT.md) and [repository guidelines](AGENTS.md) before contributing.
 
-Hydrogram is an open source project that depends on the generous help of contributors who volunteer their time and skills. We appreciate your involvement and support.
+## Questions, Feedback, and Issues
 
-You can contribute in many ways, not only by writing code. This document aims to give you a high-level overview of how you can get involved.
+Use [GitHub Discussions](https://github.com/orgs/hydrogram/discussions) for questions and general feedback. Search existing issues before reporting a bug or requesting a feature, then use the appropriate issue template.
 
-## Asking Questions
+For bug reports, include:
 
-If you have a question, please use the [discussions](https://github.com/orgs/hydrogram/discussions) instead of opening an issue. Simply start a discussion with the Q&A topic and our community will gladly answer.
+- A minimal reproducible example and the steps to run it.
+- Expected behavior, actual behavior, and relevant tracebacks.
+- Hydrogram and Python versions, operating system, and relevant optional dependencies.
 
-## Providing Feedback
+For feature requests, explain the use case, proposed behavior, and any relevant Telegram API references. Remove API hashes, bot tokens, session strings, and other credentials from examples and logs. Never attach session databases.
 
-Feedback from the community is very important to us at Hydrogram. If you have any suggestions, ideas, or concerns, please share them with us. You can use the [discussions](https://github.com/orgs/hydrogram/discussions) to start a conversation.
+## Set Up the Development Environment
 
-You might be wondering about the difference between asking questions, providing feedback, and making feature requests. Asking questions is about seeking help or clarification. Providing feedback involves sharing your thoughts and opinions on the existing features and the project as a whole. Feature requests, on the other hand, are about suggesting new features or improvements. See the next section for more details on feature requests.
+Install [uv](https://docs.astral.sh/uv/) and Git. Hydrogram supports Python 3.9 and later; `.python-version` selects Python 3.13 for local development. The Makefile commands below also require `make`.
 
-## Creating Issues
-
-Have you identified a reproducible problem in Hydrogram? Do you have a feature request? Here's how you can report your issue as efficiently as possible.
-
-### Look For an Existing Issue
-
-Before creating a new issue, check the open issues to see if someone else has already reported the same problem or requested the same feature.
-
-If you find an existing issue that is relevant to yours, you can comment on it and express your support or disagreement with a reaction:
-
-- upvote 👍
-- downvote 👎
-
-If none of the open issues match your case, then create a new issue following the guidelines below..
-
-### How to Write a Bug Report
-
-A bug report should contain the following information:
-
-- A clear and descriptive title that summarizes the problem.
-- A brief description of what you were doing when the bug occurred, and what you expected to happen.
-- A detailed description of the actual behavior and how it differs from the expected behavior.
-- Steps to reproduce the bug, preferably with screenshots or a video recording.
-- The version of Hydrogram and the operating system you are using.
-- Any relevant error messages or logs.
-
-### How to Write a Feature Request
-
-A feature request should contain the following information:
-
-- A clear and descriptive title that summarizes the feature.
-- A brief explanation of why you need this feature and how it would benefit the project and the community.
-- A detailed description of how the feature should work and what it should look like, preferably with mockups or examples.
-- Optionally any relevant links or references to similar features in other projects or applications.
-
-## Creating a Pull Request
-
-To contribute code to Hydrogram, simply open a pull request by following the guide below.
-
-You can read more about pull requests in the [GitHub docs](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
-
-### Setting Up Development Environment
-
-1. Fork the Hydrogram repository to your GitHub account.
-2. Clone your forked repository of Hydrogram to your computer:
+Fork the repository, then run these commands, replacing `YOUR_USERNAME` with your GitHub username:
 
 ```bash
-git clone https://github.com/<your username>/hydrogram
+git clone https://github.com/YOUR_USERNAME/hydrogram.git
 cd hydrogram
+git remote add upstream https://github.com/hydrogram/hydrogram.git
+git switch -c fix/describe-your-change
+uv sync --all-extras --dev
+uv run make api
+uv run pre-commit install
 ```
 
-4. Add a track to the original repository:
+Run subsequent commands from the repository root. `uv run` uses the project's virtual environment without requiring activation.
+
+`--dev` installs testing and development tools. `--all-extras` also installs Sphinx documentation dependencies and the optional `fast` dependencies, including TgCrypto and, on supported platforms, uvloop. The performance extras are optional for using Hydrogram. For a smaller development environment, use `uv sync --dev`; add `--extra docs` when working on documentation.
+
+## Find and Change the Right Code
+
+- `hydrogram/`: the client library, including `methods/`, `types/`, filters, handlers, sessions, storage, and transports.
+- `compiler/`: API schemas, RPC error definitions, templates, and generators.
+- `tests/`: unit tests, including filter, parser, and file identifier tests.
+- `docs/source/`: Sphinx sources and static assets.
+- `news/`: release note fragments; `dev_tools/` contains maintenance scripts.
+
+Generated raw API modules and RPC exceptions are ignored by Git. Change sources or templates under `compiler/api/` or `compiler/errors/`, then run `uv run make api`. Do not patch generated output directly.
+
+When adding a client method, follow the existing method-class pattern and import and register the class in `hydrogram/methods/<category>/__init__.py`. Export new public types through the relevant package `__init__.py` files. Keep asynchronous operations nonblocking and preserve Python 3.9 compatibility.
+
+## Coding Style
+
+Use four-space indentation, UTF-8, LF endings, and final newlines; YAML uses two spaces. Follow existing naming conventions: `snake_case` for modules and functions, `PascalCase` for classes, and `UPPER_SNAKE_CASE` for constants. Preserve license headers and document public APIs with type hints and docstrings matching neighboring code.
+
+Ruff handles formatting and linting, with a target line length of 99 characters. Format changes, then run the same style checks as CI:
 
 ```bash
-git remote add upstream https://github.com/hydrogram/hydrogram
+uv run ruff format .
+uv run ruff format --check .
+uv run ruff check . --ignore=E501
+uv run pre-commit run --all-files
 ```
 
-5. Install dependencies:
+Pre-commit also checks whitespace, merge conflicts, private keys, TOML/YAML, and release fragment filenames. Its Ruff hooks can modify files, including applying unsafe fixes; review the resulting diff and rerun checks after fixes.
 
-Hydrogram uses and recommends [uv](https://docs.astral.sh/uv/) for managing virtual environmens and dependencies.
+## Testing
+
+Add regression tests for bug fixes and behavioral tests for new features. Use `test_*.py` filenames and `test_*` functions, placing tests alongside related suites. For asynchronous tests, use pytest-asyncio with explicit `@pytest.mark.asyncio` markers.
+
+Generate the API before testing a fresh checkout or after compiler changes:
 
 ```bash
-uv sync --all-extras
+uv run make api
+uv run pytest tests
 ```
 
-> We use `--all-extras` to install all the optional dependencies, which are required to run the tests and build the documentation.
-
-6. Install pre-commit hooks:
-
-[Pre-commit](https://pre-commit.com/) is a tool that runs various checks before you make a commit. It helps you avoid committing any errors or warnings that might break your code or violate the coding standards.
+Run a focused test or collect coverage with:
 
 ```bash
-pre-commit install
+uv run pytest tests/filters/test_command.py::test_single
+uv run pytest tests --cov=hydrogram --cov-report=term-missing
 ```
 
-### Format the code (code-style)
+No minimum coverage percentage is configured. CI runs tests on Python 3.9–3.13 on Linux and macOS. Prefer isolated tests with local fixtures or test doubles, following the existing filter tests.
 
-Hydrogram uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting the code to maintain it consistent and clean. You should [install](https://docs.astral.sh/ruff/installation/) and run Ruff on your code before committing:
+## Documentation and Package Builds
+
+Update documentation when public behavior changes. Edit handwritten Sphinx sources under `docs/source/` and API docstrings in the library. Regenerate API reference pages before building or previewing:
 
 ```bash
-ruff check .
+uv run make api
+uv run make docs
+uv run make live-docs
 ```
 
-However, you can also rely on [pre-commit](https://pre-commit.com/) for it:
+`make docs` generates reference pages and builds HTML in `docs/build/html/`; it does not start a server. `make live-docs` starts the live preview and watches `hydrogram/`. Generated reference pages are ignored by Git; edit their source docstrings or compiler templates instead.
+
+To build source and wheel distributions in `dist/`:
 
 ```bash
-pre-commit run --run-all-files
+uv build
 ```
 
-### Run tests
+The Hatchling build hook generates raw API bindings and exceptions for wheel builds.
 
-All changes should be tested:
+## Commits and Release Notes
 
-```bash
-pytest tests
-```
+Use Conventional Commits:
 
-Remember to write tests for your new features or modify the existing tests to cover your code changes. Testing is essential to ensure the quality and reliability of your code.
-
-### Docs
-
-We use Sphinx to generate documentation in the `docs` directory. You can edit the sources and preview the changes using a live-preview server with:
-
-```bash
-sphinx-autobuild docs/source/ docs/build/ --watch hydrogram/
-```
-
-### Commit Messages
-
-We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), which provide a standardized and structured format for commit messages. This helps ensure clear and consistent communication about the changes made in each commit. The commit messages should have the following structure:
-
-```
+```text
 <type>[optional scope]: <description>
-
-[optional body]
-
-[optional footer(s)]
 ```
 
-where:
+Types include `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, and `revert`. Use a short imperative summary without a trailing period. Separate optional body and footer paragraphs with blank lines, and wrap body text at 72 characters. For example:
 
-- `<type>`: This is a keyword that indicates the kind of change that the commit introduces. It can be one of the following values: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, or `revert`.
-- `[optional scope]`: This is an optional identifier that specifies the scope of the change. It can be a module, a component, a file, or any other logical unit of the project.
-- `<description>`: This is a short and concise summary of the change in the present tense and imperative mood. It should not end with a period.
-- `[optional body]`: This is an optional section that provides more details and context about the change. It should be separated from the summary by a blank line and wrapped at 72 characters.
-- `[optional footer(s)]`: This is an optional section that provides additional information such as references to issues, breaking changes, or acknowledgments. It should be separated from the body by a blank line and follow the format `<key>: <value>`.
-
-For example:
-
-```
-feat(storage): support multiple database using orm
-
-This commit adds support for multiple databases using the tortoise-orm. It also updates the configuration file to allow the user to specify the database type and connection string.
-
-BREAKING CHANGE: The database configuration has changed. The user must update the configuration file to specify the database type and connection string.
+```text
+fix(session): prevent race condition during connection cleanup
 
 Closes #123
 ```
 
-### Describing Changes
+Add a concise, user-facing release note at `news/<issue-or-pr>.<category>.rst`. Categories are `feature`, `bugfix`, `doc`, `removal`, and `misc`. For example, `news/123.bugfix.rst` could contain:
 
-Write a concise summary of your changes in one or more sentences, so that bot developers can see what's new or updated in the library. Create a file named `<code>.<category>.rst` in the `news` directory and include your description there.
+```rst
+Prevent a race condition when closing a connection.
+```
 
-`<code>` is the issue or pull request number. After the release, a link to this issue will be added to the [changelog](https://docs.hydrogram.org/en/latest/releases.html) page.
+Preview release notes with `uv run make towncrier-draft`. Leave `NEWS.rst` assembly to the release process.
 
-`<category>` is a marker for the type of change, which can be one of:
+## Open a Pull Request
 
-- `feature` - when you add a new feature
-- `bugfix` - when you fix a bug
-- `doc` - when you improve the documentation
-- `removal` - when you remove something from the library
-- `misc` - when you change something in the core or the project configuration
+Follow `.github/PULL_REQUEST_TEMPLATE.md`. Include the motivation, behavior changes, linked issues, and any new dependencies. Describe the tests you ran, how to reproduce them, and your OS and Python version. Identify breaking changes and update affected documentation.
 
-If you are not sure which category to use, you can ask the core contributors for help.
-
-## Thank You
-
-Your contributions to open source, large or small, make great projects like this possible. Thank you for taking the time to contribute.
+Before submitting, review the diff, run the tests and style checks above, and ensure your release fragment describes the final change. Keep the pull request focused so reviewers can assess it independently.
