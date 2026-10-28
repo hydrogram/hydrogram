@@ -1,30 +1,33 @@
 name: Bug report
-description: Report issues affecting the framework or the documentation
+description: Report a reproducible problem with Hydrogram or its documentation
 body:
-  - type: checkboxes
+  - type: markdown
     attributes:
-      label: Checklist
-      description: Invalid, incomplete or inadequate issue reports may not be taken into consideration
+      value: |
+        For usage questions, use [GitHub Discussions](https://github.com/orgs/hydrogram/discussions).
+        Remove API hashes, bot tokens, session strings, phone numbers, and other private data from examples and logs. Do not upload session databases.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
       options:
-        - label: I am sure the error is coming from Hydrogram's code and not elsewhere
-          required: true
-        - label: I have searched in the issue tracker for similar bug reports, including closed ones
-          required: true
-        - label: I ran `pip3 install -U https://github.com/hydrogram/hydrogram/archive/dev.zip` and reproduced the issue using the latest development version
+        - label: I searched open and closed issues for an existing report of this problem.
           required: true
 
   - type: textarea
+    id: description
     attributes:
-      label: Description
-      description: Provide a clear and concise description of the issue
-      placeholder: Description...
+      label: Problem description
+      description: Describe the problem and what you were doing when it occurred. For documentation issues, include the affected page or section.
     validations:
       required: true
 
   - type: textarea
+    id: steps
     attributes:
       label: Steps to reproduce
-      description: Explain precisely how to reproduce the issue
+      description: List the steps, configuration, and inputs needed to reproduce the problem.
       placeholder: |
         1.
         2.
@@ -33,20 +36,54 @@ body:
       required: true
 
   - type: textarea
+    id: expected
     attributes:
-      label: Code example
-      description: Provide a [minimal, complete, consistently reproducible](https://stackoverflow.com/help/minimal-reproducible-example) and properly formatted example involving normal usages (if applicable)
+      label: Expected behavior
+      description: Explain what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Explain what happened instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Minimal code example
+      description: Include a small, self-contained example when applicable. Use placeholders for credentials.
       placeholder: |
         from hydrogram import Client
         ...
       render: python
 
   - type: textarea
+    id: environment
     attributes:
-      label: Logs
-      description: Provide the complete traceback (if applicable)
+      label: Environment
+      description: Include exact versions and the installation source (PyPI or a Git commit). For documentation-only issues, enter "Not applicable".
       placeholder: |
-        Traceback (most recent call last):
-        File "main.py", line 1, in <module>
-        ...
-      render: shell
+        Hydrogram version or commit:
+        Python version and implementation (CPython/PyPy):
+        Operating system:
+        TgCrypto/uvloop versions, if installed:
+        Installation source:
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Traceback and logs
+      description: Paste the full relevant traceback and logs, with credentials and personal data removed.
+      render: text
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Include related issues, workarounds, or the last working version. If you tested a newer release or development commit, include its version and the result.

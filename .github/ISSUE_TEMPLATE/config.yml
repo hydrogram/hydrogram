@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Ask Hydrogram related questions
-    url: https://stackoverflow.com/questions/tagged/hydrogram
-    about: This place is only for reporting issues about Hydrogram. You can ask questions at StackOverflow.
-  - name: Join the Telegram channel
+  - name: Questions and general feedback
+    url: https://github.com/orgs/hydrogram/discussions
+    about: Ask usage questions, get help, or discuss ideas with the community.
+  - name: Hydrogram news
     url: https://t.me/HydrogramNews
-    about: Join the official channel and stay tuned for news, updates and announcements.
+    about: Follow the official channel for news, updates, and announcements.

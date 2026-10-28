@@ -1,20 +1,45 @@
 name: Feature request
-description: Suggest ideas, new features or enhancements
+description: Suggest a feature or improvement for Hydrogram
 labels: [enhancement]
 body:
-  - type: checkboxes
+  - type: markdown
     attributes:
-      label: Checklist
+      value: |
+        For help using an existing feature, use [GitHub Discussions](https://github.com/orgs/hydrogram/discussions).
+        Keep credentials, session data, and personal information out of examples.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
       options:
-        - label: I believe the idea is awesome and would benefit the framework
-          required: true
-        - label: I have searched in the issue tracker for similar requests, including closed ones
+        - label: I searched open and closed issues for similar requests.
           required: true
 
   - type: textarea
+    id: use_case
     attributes:
-      label: Description
-      description: Provide a detailed description of the request
-      placeholder: Description...
+      label: Problem or use case
+      description: Explain what you are trying to accomplish, the current limitation, and who would benefit.
     validations:
       required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe how the feature should work. Include a proposed API or usage example when helpful, and explain how existing behavior would be affected.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and workarounds
+      description: Describe existing methods, raw API calls, or other approaches you considered and why they do not meet your needs.
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References and additional context
+      description: Link relevant Telegram API documentation, related issues, or examples. If the request depends on a specific API layer, include it here.

@@ -1,37 +1,52 @@
-# Pull Request Template
-
 ## Description
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
-
-Closes #(issue)
+<!-- Explain the problem, motivation, and resulting behavior. Link related issues;
+use "Closes #123" only when this PR resolves the issue. List new dependencies
+and explain why they are needed. -->
 
 ## Type of change
 
-Please delete options that are not relevant.
+<!-- Select all that apply. -->
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] This change requires a documentation update
+- [ ] Bug fix
+- [ ] New feature or enhancement
+- [ ] Documentation
+- [ ] Refactoring, maintenance, or tooling
+- [ ] Breaking change (describe the impact and migration steps below)
 
-## How Has This Been Tested?
+## Compatibility and migration
 
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
+<!-- Describe public API or behavior changes and any required migration.
+For breaking changes, include a before/after example when helpful.
+Write "Not applicable" if there is no compatibility impact. -->
 
-- [ ] Test A
-- [ ] Test B
+## Validation
 
-### Test Configuration
+<!-- List the exact commands you ran and their results, including focused tests.
+Explain any checks you could not run. For documentation-only changes, describe
+how you checked the documentation; runtime tests may be marked not applicable.
+Typical checks from the repository root:
+  uv run make api
+  uv run pytest tests
+  uv run ruff format --check .
+  uv run ruff check . --ignore=E501
+  uv run pre-commit run --all-files
+For documentation builds: uv run make docs
+-->
 
-- Operating System:
-- Python Version:
+- Operating system:
+- Python version:
+- Commands and results:
 
 ## Checklist
 
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have made corresponding changes to the documentation
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] My changes generate no new warnings
-- [ ] New and existing unit tests pass locally with my changes
+<!-- Check applicable items and explain any exceptions. See CONTRIBUTING.md. -->
+
+- [ ] I reviewed my changes and followed the repository guidelines.
+- [ ] The code remains compatible with Python 3.9+.
+- [ ] I added or updated tests for changed behavior, where applicable.
+- [ ] Tests and style checks pass, or limitations are explained above.
+- [ ] I updated affected public API docstrings and documentation, where applicable.
+- [ ] I added a release fragment at `news/<issue-or-pr>.<category>.rst` (`feature`, `bugfix`, `doc`, `removal`, or `misc`).
+- [ ] For compiler changes, I updated sources/templates and regenerated the API rather than editing generated files.
+- [ ] For new public methods/types, I registered method mixins and exported types through the relevant `__init__.py` files.
