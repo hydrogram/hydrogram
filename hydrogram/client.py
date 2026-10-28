@@ -48,6 +48,7 @@ from hydrogram.errors import (
     BadRequest,
     CDNFileHashMismatch,
     ChannelPrivate,
+    RPCError,
     SessionPasswordNeeded,
     VolumeLocNotFound,
 )
@@ -352,6 +353,27 @@ class Client(Methods):
     async def __aenter__(self):
         return await self.start()
 
+    @property
+    def connection_health(self) -> dict:
+        """Snapshot of the main session's connection health.
+
+        Includes ``state``, ``is_connected``, ``dc_id``, ``reconnect_attempt``,
+        ``pending_requests``, ``last_received_at`` and ``last_error``.
+        This property performs no network requests. Use it to inspect transient
+        recovery independently of the client lifecycle flag ``is_connected``.
+        """
+        if self.session is None:
+            return {
+                "state": "stopped",
+                "is_connected": False,
+                "dc_id": None,
+                "reconnect_attempt": 0,
+                "pending_requests": 0,
+                "last_received_at": None,
+                "last_error": None,
+            }
+        return self.session.health
+
     async def __aexit__(self, *args):
         with contextlib.suppress(ConnectionError):
             await self.stop()
@@ -382,7 +404,12 @@ class Client(Methods):
                 if self.update_manager is not None:
                     self.update_manager.request_recovery()
                 else:
-                    await self.invoke(raw.functions.updates.GetState())
+                    try:
+                        await self.invoke(raw.functions.updates.GetState())
+                    except (OSError, asyncio.TimeoutError, RPCError):
+                        # An idle period is not a transport failure. Session pings
+                        # own liveness checks and coordinate any necessary recovery.
+                        log.warning("Update watchdog probe failed", exc_info=True)
 
     async def authorize(self) -> User:
         if self.bot_token:

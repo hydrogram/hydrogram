@@ -21,10 +21,10 @@ from __future__ import annotations
 
 import asyncio
 import bisect
-import contextlib
 import logging
 import os
-from datetime import datetime, timedelta
+import random
+from datetime import datetime
 from hashlib import sha1
 from io import BytesIO
 from typing import TYPE_CHECKING, ClassVar
@@ -34,12 +34,21 @@ from hydrogram import raw
 from hydrogram.crypto import mtproto
 from hydrogram.errors import (
     AuthKeyDuplicated,
+    AuthKeyInvalid,
+    AuthKeyPermEmpty,
+    AuthKeyUnregistered,
     BadMsgNotification,
+    ConnectionLostError,
     FloodWait,
     InternalServerError,
+    RequestTimeoutError,
     RPCError,
     SecurityCheckMismatch,
     ServiceUnavailable,
+    SessionExpired,
+    SessionRevoked,
+    UserDeactivated,
+    UserDeactivatedBan,
 )
 from hydrogram.raw.all import layer
 from hydrogram.raw.core import FutureSalts, Int, MsgContainer, TLObject
@@ -56,6 +65,7 @@ class Result:
     def __init__(self):
         self.value = None
         self.event = asyncio.Event()
+        self.error = None
 
 
 class Session:
@@ -66,7 +76,10 @@ class Session:
     ACKS_THRESHOLD = 10
     PING_INTERVAL = 5
     STORED_MSG_IDS_MAX_SIZE = 1000 * 2
-    RECONNECT_THRESHOLD = timedelta(seconds=10)
+    MAX_RECONNECT_ATTEMPTS = 5
+    RECONNECT_DELAY = 1.0
+    MAX_RECONNECT_DELAY = 30.0
+    STABLE_CONNECTION_INTERVAL = 30.0
 
     TRANSPORT_ERRORS: ClassVar = {
         404: "auth key not found",
@@ -106,69 +119,175 @@ class Session:
         self.stored_msg_ids = []
 
         self.ping_task = None
-        self.ping_task_event = asyncio.Event()
-
         self.recv_task = None
 
         self.is_started = asyncio.Event()
-        self.restart_lock = asyncio.Lock()
+        self.recovery_task = None
+        self._background_tasks = set()
+        self._stopped = True
+        self._state = "stopped"
+        self._last_error = None
+        self._terminal_error = None
+        self._attempt_error = None
+        self._reset_session = False
+        self._connected_at = None
+        self._send_lock = asyncio.Lock()
+        self._lifecycle_lock = asyncio.Lock()
+        self.reconnect_attempt = 0
+        self.last_received_at = None
 
-        self.last_reconnect_attempt = None
+    @property
+    def health(self) -> dict:
+        """Return a snapshot of transport readiness, without probing the network."""
+        return {
+            "state": self._state,
+            "is_connected": self.is_started.is_set() and not self._connection_closed(),
+            "dc_id": self.dc_id,
+            "reconnect_attempt": self.reconnect_attempt,
+            "pending_requests": len(self.results),
+            "last_received_at": self.last_received_at,
+            "last_error": str(self._last_error) if self._last_error else None,
+        }
+
+    def _connection_closed(self):
+        return (
+            self.connection is None
+            or self.connection.protocol is None
+            or self.connection.protocol.closed
+        )
+
+    def _fail_pending(self, reason):
+        for result in self.results.values():
+            if not result.event.is_set():
+                result.error = ConnectionLostError(
+                    f"Connection lost ({reason}); request delivery is uncertain"
+                )
+                result.event.set()
+
+    def _background_done(self, task):
+        self._background_tasks.discard(task)
+        if not task.cancelled() and task.exception() is not None:
+            log.error("Session background task failed", exc_info=task.exception())
+
+    def _create_background_task(self, coro):
+        task = self.client.loop.create_task(coro)
+        self._background_tasks.add(task)
+        task.add_done_callback(self._background_done)
+
+    async def _notify_disconnect(self):
+        if not self.is_media and callable(self.client.disconnect_handler):
+            try:
+                await self.client.disconnect_handler(self.client)
+            except Exception:
+                log.exception("Disconnect handler failed")
+
+    def _request_recovery(self, reason, *, connection=None, terminal=False):
+        # A late failure on an old transport must not tear down its replacement.
+        if self._stopped or (connection is not None and connection is not self.connection):
+            return None
+        if self._state == "failed":
+            return None
+        if (
+            self._connected_at is not None
+            and self.client.loop.time() - self._connected_at >= self.STABLE_CONNECTION_INTERVAL
+        ):
+            self.reconnect_attempt = 0
+        self._connected_at = None
+        self._last_error = reason
+        self._attempt_error = reason
+        if terminal:
+            self._terminal_error = reason
+        was_started = self.is_started.is_set()
+        self.is_started.clear()
+        self._fail_pending(reason)
+        if self.recovery_task is None or self.recovery_task.done():
+            if self._state != "connecting":
+                self._state = "reconnecting"
+            self.recovery_task = self.client.loop.create_task(self._recover())
+            # Observe background failures even when there are no RPC callers.
+            self.recovery_task.add_done_callback(self._recovery_done)
+        if was_started:
+            log.warning(
+                "Session connection lost: dc=%s error=%s",
+                self.dc_id,
+                type(reason).__name__,
+                extra={
+                    "dc_id": self.dc_id,
+                    "connection_state": self._state,
+                    "connection_error": str(reason),
+                },
+            )
+            self._create_background_task(self._notify_disconnect())
+        return self.recovery_task
+
+    @staticmethod
+    def _recovery_done(task):
+        if not task.cancelled():
+            task.exception()
 
     async def start(self):
-        while True:
-            self.connection = self.client.connection_factory(
-                dc_id=self.dc_id,
-                test_mode=self.test_mode,
-                ipv6=self.client.ipv6,
-                proxy=self.client.proxy,
-                media=self.is_media,
-                protocol_factory=self.client.protocol_factory,
+        async with self._lifecycle_lock:
+            if self.is_started.is_set() and not self._connection_closed():
+                return
+            # An explicit start permits a new budget after terminal failure/stop.
+            self._stopped = False
+            if self._state in {"stopped", "failed"}:
+                self._state = "connecting"
+                self._terminal_error = None
+                self.reconnect_attempt = 0
+            task = self.recovery_task
+            if task is None or task.done():
+                task = self._request_recovery(ConnectionError("Session starting"))
+        try:
+            await asyncio.shield(task)
+        except asyncio.CancelledError:
+            if not self._stopped and self.recovery_task is task:
+                await self.stop()
+            raise
+
+    async def _connect(self):
+        self._attempt_error = None
+        if self._reset_session:
+            # Reset only the ephemeral MTProto session, keeping the authorization key.
+            self.session_id = os.urandom(8)
+            self.msg_factory = MsgFactory()
+            self.stored_msg_ids.clear()
+            self._reset_session = False
+        self.connection = self.client.connection_factory(
+            dc_id=self.dc_id,
+            test_mode=self.test_mode,
+            ipv6=self.client.ipv6,
+            proxy=self.client.proxy,
+            media=self.is_media,
+            protocol_factory=self.client.protocol_factory,
+        )
+        await self.connection.connect()
+        self.recv_task = self.client.loop.create_task(self.recv_worker())
+        await self.send(raw.functions.Ping(ping_id=0), timeout=self.START_TIMEOUT)
+        if not self.is_cdn:
+            await self.send(
+                raw.functions.InvokeWithLayer(
+                    layer=layer,
+                    query=raw.functions.InitConnection(
+                        api_id=await self.client.storage.api_id(),
+                        app_version=self.client.app_version,
+                        device_model=self.client.device_model,
+                        system_version=self.client.system_version,
+                        system_lang_code=self.client.lang_code,
+                        lang_code=self.client.lang_code,
+                        lang_pack="",
+                        query=raw.functions.help.GetConfig(),
+                    ),
+                ),
+                timeout=self.START_TIMEOUT,
             )
-
-            try:
-                await self.connection.connect()
-
-                self.recv_task = self.client.loop.create_task(self.recv_worker())
-
-                await self.send(raw.functions.Ping(ping_id=0), timeout=self.START_TIMEOUT)
-
-                if not self.is_cdn:
-                    await self.send(
-                        raw.functions.InvokeWithLayer(
-                            layer=layer,
-                            query=raw.functions.InitConnection(
-                                api_id=await self.client.storage.api_id(),
-                                app_version=self.client.app_version,
-                                device_model=self.client.device_model,
-                                system_version=self.client.system_version,
-                                system_lang_code=self.client.lang_code,
-                                lang_code=self.client.lang_code,
-                                lang_pack="",
-                                query=raw.functions.help.GetConfig(),
-                            ),
-                        ),
-                        timeout=self.START_TIMEOUT,
-                    )
-
-                self.ping_task = self.client.loop.create_task(self.ping_worker())
-
-                log.info("Session initialized: Layer %s", layer)
-                log.info("Device: %s - %s", self.client.device_model, self.client.app_version)
-                log.info("System: %s (%s)", self.client.system_version, self.client.lang_code)
-            except AuthKeyDuplicated as e:
-                await self.stop()
-                raise e
-            except (OSError, RPCError):
-                await self.stop()
-            except Exception as e:
-                await self.stop()
-                raise e
-            else:
-                break
-
+        if self._attempt_error is not None:
+            raise self._attempt_error
         self.is_started.set()
-
+        self._state = "connected"
+        self._connected_at = self.client.loop.time()
+        self._last_error = None
+        self.ping_task = self.client.loop.create_task(self.ping_worker())
         if (
             not self.is_media
             and not self.is_cdn
@@ -177,55 +296,136 @@ class Session:
         ):
             self.client.update_manager.request_recovery()
 
-        log.info("Session started")
+    async def _recover(self):
+        try:
+            if self._terminal_error is not None:
+                raise self._terminal_error
+            for _ in range(self.MAX_RECONNECT_ATTEMPTS - self.reconnect_attempt):
+                await self._close_transport()
+                if self._terminal_error is not None:
+                    raise self._terminal_error
+                if self.reconnect_attempt:
+                    ceiling = min(
+                        self.MAX_RECONNECT_DELAY,
+                        self.RECONNECT_DELAY * 2 ** (self.reconnect_attempt - 1),
+                    )
+                    delay = random.uniform(ceiling / 2, ceiling)
+                    log.warning(
+                        "Session reconnect backoff: dc=%s attempt=%s delay=%.2fs",
+                        self.dc_id,
+                        self.reconnect_attempt + 1,
+                        delay,
+                        extra={
+                            "dc_id": self.dc_id,
+                            "reconnect_attempt": self.reconnect_attempt + 1,
+                            "reconnect_delay": delay,
+                            "connection_state": self._state,
+                        },
+                    )
+                    await asyncio.sleep(delay)
+                self.reconnect_attempt += 1
+                try:
+                    await self._connect()
+                except (
+                    OSError,
+                    asyncio.TimeoutError,
+                    InternalServerError,
+                    ServiceUnavailable,
+                    BadMsgNotification,
+                ) as e:
+                    if self._terminal_error is not None:
+                        raise self._terminal_error from e
+                    if isinstance(e, BadMsgNotification) and not self._reset_session:
+                        raise
+                    self._last_error = e
+                    log.warning(
+                        "Session connection attempt failed: dc=%s attempt=%s error=%s",
+                        self.dc_id,
+                        self.reconnect_attempt,
+                        type(e).__name__,
+                        extra={
+                            "dc_id": self.dc_id,
+                            "reconnect_attempt": self.reconnect_attempt,
+                            "connection_state": self._state,
+                            "connection_error": str(e),
+                        },
+                    )
+                else:
+                    log.info(
+                        "Session connected: dc=%s attempt=%s", self.dc_id, self.reconnect_attempt
+                    )
+                    return
+            raise ConnectionError(
+                f"Session recovery failed after {self.MAX_RECONNECT_ATTEMPTS} attempts"
+            ) from self._last_error
+        except BaseException as e:
+            self.is_started.clear()
+            self._state = "stopped" if self._stopped else "failed"
+            self._last_error = e
+            self._fail_pending(e)
+            await self._close_transport()
+            if not isinstance(e, asyncio.CancelledError):
+                log.error(
+                    "Session recovery stopped: dc=%s error=%s",
+                    self.dc_id,
+                    type(e).__name__,
+                    extra={
+                        "dc_id": self.dc_id,
+                        "connection_state": self._state,
+                        "connection_error": str(e),
+                    },
+                )
+            raise
+
+    async def _close_transport(self):
+        tasks = [
+            task
+            for task in (self.ping_task, self.recv_task)
+            if task is not None and task is not asyncio.current_task()
+        ]
+        for task in tasks:
+            task.cancel()
+        if tasks:
+            await asyncio.gather(*tasks, return_exceptions=True)
+        self.ping_task = self.recv_task = None
+        if self.connection is not None:
+            await self.connection.close()
+        self.pending_acks.clear()
 
     async def stop(self):
-        self.is_started.clear()
-
-        self.stored_msg_ids.clear()
-
-        self.ping_task_event.set()
-
-        if self.ping_task is not None:
-            await self.ping_task
-
-        self.ping_task_event.clear()
-
-        # Cancel recv_task first to avoid race condition with connection close
-        # If connection closes before recv_task finishes, asyncio transport callbacks
-        # can become None while still being invoked, causing TypeError
-        if self.recv_task and not self.recv_task.done():
-            self.recv_task.cancel()
-
-            with contextlib.suppress(asyncio.CancelledError, asyncio.TimeoutError, RuntimeError):
-                await asyncio.wait_for(self.recv_task, timeout=1.0)
-
-            self.recv_task = None
-
-        if self.connection:
-            await self.connection.close()
-
-        if not self.is_media and callable(self.client.disconnect_handler):
-            try:
-                await self.client.disconnect_handler(self.client)
-            except Exception as e:
-                log.exception(e)
-
+        async with self._lifecycle_lock:
+            was_stopped = self._stopped
+            await self._stop()
+        if not was_stopped:
+            await self._notify_disconnect()
         log.info("Session stopped")
 
-    async def restart(self):
-        async with self.restart_lock:
-            now = datetime.now()
-            if (
-                self.last_reconnect_attempt
-                and now - self.last_reconnect_attempt < self.RECONNECT_THRESHOLD
-            ):
-                log.info("Reconnecting too frequently, sleeping for a while")
-                await asyncio.sleep(5)
+    async def _stop(self):
+        self._stopped = True
+        self.is_started.clear()
+        self._state = "stopped"
+        self._connected_at = None
+        self._fail_pending("Session stopped")
+        if self.recovery_task is not None and self.recovery_task is not asyncio.current_task():
+            self.recovery_task.cancel()
+            await asyncio.gather(self.recovery_task, return_exceptions=True)
+        await self._close_transport()
+        self.stored_msg_ids.clear()
+        tasks = [task for task in self._background_tasks if task is not asyncio.current_task()]
+        for task in tasks:
+            task.cancel()
+        if tasks:
+            await asyncio.gather(*tasks, return_exceptions=True)
 
-            self.last_reconnect_attempt = now
-            await self.stop()
-            await self.start()
+    async def restart(self):
+        if self._stopped:
+            raise ConnectionError("Session is stopped; call start() to connect")
+        task = self._request_recovery(ConnectionError("Session restart requested"))
+        if task is None:
+            raise ConnectionError(
+                "Session recovery failed; call start() to retry"
+            ) from self._last_error
+        await asyncio.shield(task)
 
     async def handle_packet(self, packet):
         data = await self.client.loop.run_in_executor(
@@ -281,8 +481,7 @@ class Session:
                         )
             except SecurityCheckMismatch as e:
                 log.info("Discarding packet: %s", e)
-                await self.connection.close()
-                return
+                continue
             else:
                 bisect.insort(self.stored_msg_ids, msg.msg_id)
 
@@ -291,6 +490,7 @@ class Session:
                 continue
 
             if isinstance(msg.body, raw.types.NewSessionCreated):
+                self.salt = msg.body.server_salt
                 if (
                     not self.is_media
                     and not self.is_cdn
@@ -312,7 +512,7 @@ class Session:
                     self.client.last_update_time = datetime.now()
                     self.client.update_manager.submit(msg.body)
                 else:
-                    self.client.loop.create_task(self.client.handle_updates(msg.body))
+                    self._create_background_task(self.client.handle_updates(msg.body))
 
             if (
                 isinstance(msg.body, raw.types.RpcResult)
@@ -349,112 +549,171 @@ class Session:
                 self.pending_acks.clear()
 
     async def ping_worker(self):
-        log.info("PingTask started")
-
-        while True:
-            try:
-                await asyncio.wait_for(self.ping_task_event.wait(), self.PING_INTERVAL)
-            except asyncio.TimeoutError:
-                pass
-            else:
-                break
-
-            with contextlib.suppress(OSError, RPCError):
+        try:
+            while True:
+                await asyncio.sleep(self.PING_INTERVAL)
+                # Require a pong; successful writes alone do not prove liveness.
                 await self.send(
                     raw.functions.PingDelayDisconnect(
-                        ping_id=0, disconnect_delay=self.WAIT_TIMEOUT + 10
+                        ping_id=0,
+                        disconnect_delay=int(self.WAIT_TIMEOUT + self.PING_INTERVAL + 10),
                     ),
-                    False,
+                    timeout=self.WAIT_TIMEOUT,
                 )
-
-        log.info("PingTask stopped")
+        except (OSError, asyncio.TimeoutError, RPCError) as e:
+            self._request_recovery(e, connection=self.connection)
+        except Exception as e:
+            log.exception("Session ping monitor failed: dc=%s", self.dc_id)
+            self._request_recovery(e, connection=self.connection, terminal=True)
 
     async def recv_worker(self):
-        log.info("NetworkTask started")
-
-        while True:
-            packet = await self.connection.recv()
-
-            if packet is None or len(packet) == 4:
-                if packet:
-                    error_code = -Int.read(BytesIO(packet))
-
-                    log.warning(
-                        "Server sent transport error: %s (%s)",
-                        error_code,
-                        Session.TRANSPORT_ERRORS.get(error_code, "unknown error"),
+        connection = self.connection
+        try:
+            while True:
+                packet = await connection.recv()
+                if packet is None:
+                    raise ConnectionError("Transport closed by peer")
+                if len(packet) == 4:
+                    code = -Int.read(BytesIO(packet))
+                    error = ConnectionError(
+                        f"Telegram transport error {code}: "
+                        f"{self.TRANSPORT_ERRORS.get(code, 'unknown error')}"
                     )
-
-                if self.is_started.is_set():
-                    self.client.loop.create_task(self.restart())
-
-                break
-
-            self.client.loop.create_task(self.handle_packet(packet))
-
-        log.info("NetworkTask stopped")
+                    self._request_recovery(
+                        error, connection=connection, terminal=code in {404, 444}
+                    )
+                    return
+                self.last_received_at = datetime.now()
+                # Keep packet processing ordered and owned by the receiver task.
+                await self.handle_packet(packet)
+        except (OSError, asyncio.TimeoutError, SecurityCheckMismatch) as e:
+            self._request_recovery(e, connection=connection)
+        except Exception as e:
+            log.exception("Session packet processing failed: dc=%s", self.dc_id)
+            self._request_recovery(e, connection=connection, terminal=True)
 
     async def send(
         self, data: TLObject, wait_response: bool = True, timeout: float = WAIT_TIMEOUT
     ):
-        message = self.msg_factory(data)
-        msg_id = message.msg_id
+        # Only an explicit rejection for a bad salt permits automatic resending.
+        for _ in range(self.MAX_RETRIES):
+            result = await self._send_once(data, wait_response, timeout)
+            if not isinstance(result, raw.types.BadServerSalt):
+                return result
+            self.salt = result.new_server_salt
+        raise BadMsgNotification(48)
 
-        if wait_response:
-            self.results[msg_id] = Result()
-
-        log.debug("Sent: %s", message)
-
-        payload = await self.client.loop.run_in_executor(
-            hydrogram.crypto_executor,
-            mtproto.pack,
-            message,
-            self.salt,
-            self.session_id,
-            self.auth_key,
-            self.auth_key_id,
-        )
-
-        try:
-            await self.connection.send(payload)
-        except OSError as e:
-            self.results.pop(msg_id, None)
-            raise e
-
-        if wait_response:
-            with contextlib.suppress(asyncio.TimeoutError):
-                await asyncio.wait_for(self.results[msg_id].event.wait(), timeout)
-
-            result = self.results.pop(msg_id).value
-
-            if result is None:
-                raise TimeoutError("Request timed out")
-
-            if isinstance(result, raw.types.RpcError):
-                if isinstance(
-                    data,
-                    (
-                        raw.functions.InvokeWithoutUpdates,
-                        raw.functions.InvokeWithTakeout,
-                    ),
-                ):
-                    data = data.query
-
-                RPCError.raise_it(result, type(data))
-
-            if isinstance(result, raw.types.BadMsgNotification):
-                log.warning(
-                    "%s: %s",
-                    BadMsgNotification.__name__,
-                    BadMsgNotification(result.error_code),
+    async def _write(self, data, wait_response, timeout):
+        # Serialize message numbering, encryption and writing, but never wait for
+        # a reply under this lock. Executor completion order can otherwise reorder
+        # MTProto sequence numbers on the wire under concurrent RPC load.
+        async with self._send_lock:
+            connection = self.connection
+            message = self.msg_factory(data)
+            payload = await self.client.loop.run_in_executor(
+                hydrogram.crypto_executor,
+                mtproto.pack,
+                message,
+                self.salt,
+                self.session_id,
+                self.auth_key,
+                self.auth_key_id,
+            )
+            if self._stopped or connection is None or connection is not self.connection:
+                raise ConnectionLostError(
+                    "Connection changed before sending", delivery_uncertain=False
                 )
+            if self._attempt_error is not None:
+                raise ConnectionLostError("Connection is recovering", delivery_uncertain=False)
+            msg_id = message.msg_id
+            result = Result()
+            if wait_response:
+                self.results[msg_id] = result
+            try:
+                await asyncio.wait_for(connection.send(payload), timeout)
+            except (OSError, asyncio.TimeoutError) as e:
+                self.results.pop(msg_id, None)
+                self._request_recovery(e, connection=connection)
+                raise ConnectionLostError("Send failed; request delivery is uncertain") from e
+            except BaseException:
+                self.results.pop(msg_id, None)
+                raise
+            return connection, msg_id, result
 
-            if isinstance(result, raw.types.BadServerSalt):
-                self.salt = result.new_server_salt
-                return await self.send(data, wait_response, timeout)
+    async def _send_once(self, data, wait_response, timeout):
+        connection, msg_id, result = await self._write(data, wait_response, timeout)
+        try:
+            if not wait_response:
+                return None
+            try:
+                await asyncio.wait_for(result.event.wait(), timeout)
+            except asyncio.TimeoutError as e:
+                error = RequestTimeoutError(
+                    "Request timed out; Telegram may have processed it. "
+                    "Check the outcome before retrying."
+                )
+                self._request_recovery(error, connection=connection)
+                raise error from e
+            if result.error is not None:
+                raise result.error
+            value = result.value
+        finally:
+            self.results.pop(msg_id, None)
 
-            return result
-        return None
+        if isinstance(value, raw.types.RpcError):
+            while isinstance(
+                data, (raw.functions.InvokeWithoutUpdates, raw.functions.InvokeWithTakeout)
+            ):
+                data = data.query
+            try:
+                RPCError.raise_it(value, type(data))
+            except (
+                AuthKeyDuplicated,
+                AuthKeyInvalid,
+                AuthKeyPermEmpty,
+                AuthKeyUnregistered,
+                SessionExpired,
+                SessionRevoked,
+                UserDeactivated,
+                UserDeactivatedBan,
+            ) as e:
+                self._request_recovery(e, connection=connection, terminal=True)
+                raise
+        if isinstance(value, raw.types.BadMsgNotification):
+            error = BadMsgNotification(value.error_code)
+            if value.error_code in {32, 33}:
+                if connection is self.connection:
+                    self._reset_session = True
+                self._request_recovery(error, connection=connection)
+            else:
+                # Clock/configuration errors need caller intervention, not replay.
+                self._request_recovery(error, connection=connection, terminal=True)
+            raise error
+        return value
+
+    async def _wait_connected(self):
+        if self._stopped:
+            raise ConnectionError("Session is stopped; call start() to connect")
+        if self._state == "failed":
+            raise ConnectionError(
+                "Session recovery failed; call start() to retry"
+            ) from self._last_error
+        if self.is_started.is_set() and not self._connection_closed():
+            return
+        task = self.recovery_task
+        if task is None or task.done():
+            task = self._request_recovery(ConnectionError("Transport is not ready"))
+        if task is None:
+            raise ConnectionError("Session is not connected") from self._last_error
+        # Caller cancellation must not cancel recovery shared with other RPCs.
+        try:
+            await asyncio.shield(task)
+        except asyncio.CancelledError:
+            if task.cancelled():
+                raise ConnectionError("Session stopped during recovery") from None
+            raise
+        if self._stopped or not self.is_started.is_set():
+            raise ConnectionError("Session stopped during recovery")
 
     async def invoke(
         self,
@@ -463,70 +722,26 @@ class Session:
         timeout: float = WAIT_TIMEOUT,
         sleep_threshold: float = SLEEP_THRESHOLD,
     ):
-        with contextlib.suppress(asyncio.TimeoutError):
-            await asyncio.wait_for(self.is_started.wait(), self.WAIT_TIMEOUT)
-
-        if isinstance(
-            query, (raw.functions.InvokeWithoutUpdates, raw.functions.InvokeWithTakeout)
+        if retries <= 0:
+            raise TimeoutError("Exceeded maximum number of retries")
+        inner_query = query
+        while isinstance(
+            inner_query, (raw.functions.InvokeWithoutUpdates, raw.functions.InvokeWithTakeout)
         ):
-            inner_query = query.query
-        else:
-            inner_query = query
-
+            inner_query = inner_query.query
         query_name = ".".join(inner_query.QUALNAME.split(".")[1:])
-
-        while retries > 0:
+        for attempt in range(retries):
+            await self._wait_connected()
             try:
-                if (
-                    self.connection is None
-                    or self.connection.protocol is None
-                    or getattr(self.connection.protocol, "closed", True)
-                ):
-                    log.warning(
-                        "[%s] Connection is closed or not established. Attempting to reconnect...",
-                        self.client.name,
-                    )
-                    await self.restart()
-                    await asyncio.sleep(1)
-                    continue
-
                 return await self.send(query, timeout=timeout)
             except FloodWait as e:
-                amount = e.value
-
-                if amount > sleep_threshold >= 0:
+                if e.value > sleep_threshold >= 0 or attempt + 1 >= retries:
                     raise
-
-                log.warning(
-                    '[%s] Waiting for %s seconds before continuing (required by "%s")',
-                    self.client.name,
-                    amount,
-                    query_name,
-                )
-
-                await asyncio.sleep(amount)
-            except (OSError, InternalServerError, ServiceUnavailable) as e:
-                retries -= 1
-                if retries == 0:
-                    raise e
-
-                (log.warning if retries < 2 else log.info)(
-                    '[%s] Retrying "%s" due to: %s',
-                    Session.MAX_RETRIES - retries,
-                    query_name,
-                    str(e) or repr(e),
-                )
-
-                if isinstance(e, OSError) and retries > 1:
-                    try:
-                        await self.restart()
-                    except Exception as restart_error:
-                        log.warning(
-                            "[%s] Failed to restart session: %s",
-                            self.client.name,
-                            str(restart_error) or repr(restart_error),
-                        )
-
-                await asyncio.sleep(0.5)
-
-        raise TimeoutError("Exceeded maximum number of retries")
+                log.warning('Waiting %s seconds for "%s"', e.value, query_name)
+                await asyncio.sleep(e.value)
+            except ConnectionLostError as e:
+                if e.delivery_uncertain or attempt + 1 >= retries:
+                    raise
+            # RPC/server errors and ambiguous transport failures are surfaced.
+            # Retrying an arbitrary query here could duplicate side effects.
+        raise ConnectionError("Request could not be sent after recovery")

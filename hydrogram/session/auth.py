@@ -66,7 +66,8 @@ class Auth:
     async def invoke(self, data: TLObject):
         data = self.pack(data)
         await self.connection.send(data)
-        response = BytesIO(await self.connection.recv())
+        # Authentication runs before the session's ping monitor is available.
+        response = BytesIO(await asyncio.wait_for(self.connection.recv(), 15))
 
         return self.unpack(response)
 

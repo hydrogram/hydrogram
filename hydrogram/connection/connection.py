@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import random
 from typing import TYPE_CHECKING
 
 from hydrogram.session.internals import DataCenter
@@ -56,16 +57,21 @@ class Connection:
         self.protocol: TCP | None = None
 
     async def connect(self) -> None:
-        for i in range(Connection.MAX_CONNECTION_ATTEMPTS):
+        for i in range(self.MAX_CONNECTION_ATTEMPTS):
             self.protocol = self.protocol_factory(ipv6=self.ipv6, proxy=self.proxy)
 
             try:
                 log.info("Connecting...")
                 await self.protocol.connect(self.address)
-            except OSError as e:
+            except (OSError, asyncio.TimeoutError) as e:
                 log.warning("Unable to connect due to network issues: %s", e)
                 await self.protocol.close()
-                await asyncio.sleep(1)
+                if i + 1 == self.MAX_CONNECTION_ATTEMPTS:
+                    raise ConnectionError("Transport connection attempts exhausted") from e
+                await asyncio.sleep(random.uniform(0.5, 1.0) * 2**i)
+            except BaseException:
+                await self.protocol.close()
+                raise
             else:
                 log.info(
                     "Connected! %s DC%s%s - IPv%s",
@@ -76,15 +82,19 @@ class Connection:
                 )
                 break
         else:
-            log.warning("Connection failed! Trying again...")
-            raise ConnectionError
+            raise ConnectionError("No transport connection attempts configured")
 
     async def close(self) -> None:
-        await self.protocol.close()
+        if self.protocol is not None:
+            await self.protocol.close()
         log.info("Disconnected")
 
     async def send(self, data: bytes) -> None:
+        if self.protocol is None:
+            raise ConnectionError("Transport is not connected")
         await self.protocol.send(data)
 
     async def recv(self) -> bytes | None:
+        if self.protocol is None:
+            return None
         return await self.protocol.recv()

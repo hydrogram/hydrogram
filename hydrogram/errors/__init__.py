@@ -26,6 +26,20 @@ from .pyromod import ListenerStopped, ListenerTimeout
 from .rpc_error import UnknownError
 
 
+class ConnectionLostError(ConnectionError):
+    """The connection was lost; a sent request's delivery may be uncertain."""
+
+    def __init__(self, message: str, *, delivery_uncertain: bool = True) -> None:
+        self.delivery_uncertain = delivery_uncertain
+        super().__init__(message)
+
+
+class RequestTimeoutError(TimeoutError):
+    """A sent request timed out. It may have been processed by Telegram."""
+
+    delivery_uncertain: bool = True
+
+
 class BadMsgNotification(Exception):  # noqa: N818
     descriptions: ClassVar = {
         16: "The msg_id is too low, the client time has to be synchronized.",
@@ -74,8 +88,10 @@ class CDNFileHashMismatch(SecurityError):  # noqa: N818
 __all__ = [
     "BadMsgNotification",
     "CDNFileHashMismatch",
+    "ConnectionLostError",
     "ListenerStopped",
     "ListenerTimeout",
+    "RequestTimeoutError",
     "SecurityCheckMismatch",
     "SecurityError",
     "UnknownError",

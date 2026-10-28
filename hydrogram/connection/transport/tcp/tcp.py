@@ -61,7 +61,11 @@ class TCP:
     @property
     def closed(self) -> bool:
         return (
-            self._closed or self.writer is None or self.writer.is_closing() or self.reader is None
+            self._closed
+            or self.writer is None
+            or self.writer.is_closing()
+            or self.reader is None
+            or self.reader.at_eof()
         )
 
     async def _connect_via_proxy(self, destination: tuple[str, int]) -> None:
@@ -93,11 +97,13 @@ class TCP:
         )
         sock.settimeout(TCP.TIMEOUT)
 
-        await self.loop.sock_connect(sock=sock, address=destination)
-
-        sock.setblocking(False)
-
-        self.reader, self.writer = await asyncio.open_connection(sock=sock)
+        try:
+            await self.loop.sock_connect(sock=sock, address=destination)
+            sock.setblocking(False)
+            self.reader, self.writer = await asyncio.open_connection(sock=sock)
+        except BaseException:
+            sock.close()
+            raise
 
     async def _connect_via_direct(self, destination: tuple[str, int]) -> None:
         host, port = destination
@@ -136,13 +142,12 @@ class TCP:
             self._closed = True
 
     async def send(self, data: bytes) -> None:
-        if self.writer is None or self._closed:
-            raise OSError("Connection is closed")
-
         async with self.lock:
+            if self.closed:
+                raise OSError("Connection is closed")
             try:
                 self.writer.write(data)
-                await self.writer.drain()
+                await asyncio.wait_for(self.writer.drain(), self.TIMEOUT)
             except Exception as e:
                 log.info("Send exception: %s %s", type(e).__name__, e)
                 self._closed = True
@@ -157,7 +162,10 @@ class TCP:
         while len(data) < length:
             try:
                 chunk = await asyncio.wait_for(self.reader.read(length - len(data)), TCP.TIMEOUT)
-            except (OSError, asyncio.TimeoutError):
+            except asyncio.TimeoutError:
+                # A quiet socket is normal. Session pings detect unresponsive peers.
+                continue
+            except OSError:
                 self._closed = True
                 return None
             else:

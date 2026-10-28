@@ -1,0 +1,4 @@
+Recover closed or unresponsive MTProto connections with coordinated, bounded
+backoff and preserve authentication state. Fail uncertain RPCs without replaying
+side effects, clean up recovery tasks on shutdown, and expose
+``Client.connection_health`` for diagnostics.

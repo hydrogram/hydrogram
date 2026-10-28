@@ -59,7 +59,8 @@ class Invoke:
                 The API Schema function filled with proper arguments.
 
             retries (``int``):
-                Number of retries.
+                Attempt limit for requests not yet sent and explicit flood waits.
+                Requests with uncertain delivery and server errors are not replayed.
 
             timeout (``float``):
                 Timeout in seconds.
@@ -72,6 +73,10 @@ class Invoke:
 
         Raises:
             RPCError: In case of a Telegram RPC error.
+            ConnectionLostError: If the transport fails. Check ``delivery_uncertain``
+                before deciding whether the request can be safely retried.
+            RequestTimeoutError: If Telegram does not respond in time. The request
+                may have been processed; check its outcome before retrying.
         """
         if not self.is_connected:
             raise ConnectionError("Client has not been started yet")

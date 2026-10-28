@@ -51,7 +51,12 @@ class Connect:
             await self.storage.test_mode(),
         )
 
-        await self.session.start()
+        try:
+            await self.session.start()
+        except BaseException:
+            await self.session.stop()
+            await self.storage.close()
+            raise
 
         self.is_connected = True
 

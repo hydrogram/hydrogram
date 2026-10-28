@@ -59,6 +59,14 @@ class Stop:
         """
 
         async def do_it():
+            # Do not make worker shutdown wait for an in-flight reconnect budget.
+            # Pending RPCs must be released before waiting on their handlers.
+            if (
+                self.session is not None
+                and self.session.recovery_task is not None
+                and not self.session.recovery_task.done()
+            ):
+                await self.session.stop()
             await self.terminate()
             await self.disconnect()
 

@@ -17,10 +17,12 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Hydrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+import asyncio
 import logging
 
 import hydrogram
 from hydrogram import raw
+from hydrogram.errors import RPCError
 
 log = logging.getLogger(__name__)
 
@@ -41,8 +43,13 @@ class Terminate:
             raise ConnectionError("Client is already terminated")
 
         if self.takeout_id:
-            await self.invoke(raw.functions.account.FinishTakeoutSession())
-            log.info("Takeout session %s finished", self.takeout_id)
+            try:
+                await self.invoke(raw.functions.account.FinishTakeoutSession())
+            except (OSError, asyncio.TimeoutError, RPCError):
+                log.warning("Could not finish takeout session during shutdown", exc_info=True)
+            else:
+                log.info("Takeout session %s finished", self.takeout_id)
+            self.takeout_id = None
 
         if self.update_manager is not None:
             await self.update_manager.stop()
@@ -58,7 +65,9 @@ class Terminate:
         self.updates_watchdog_event.set()
 
         if self.updates_watchdog_task is not None:
-            await self.updates_watchdog_task
+            self.updates_watchdog_task.cancel()
+            await asyncio.gather(self.updates_watchdog_task, return_exceptions=True)
+            self.updates_watchdog_task = None
 
         self.updates_watchdog_event.clear()
 
