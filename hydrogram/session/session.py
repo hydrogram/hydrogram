@@ -630,7 +630,8 @@ class Session:
             if wait_response:
                 self.results[msg_id] = result
             try:
-                await asyncio.wait_for(connection.send(payload), timeout)
+                async with asyncio.timeout(timeout):
+                    await connection.send(payload)
             except (TimeoutError, OSError) as e:
                 self.results.pop(msg_id, None)
                 self._request_recovery(e, connection=connection)
@@ -646,7 +647,8 @@ class Session:
             if not wait_response:
                 return None
             try:
-                await asyncio.wait_for(result.event.wait(), timeout)
+                async with asyncio.timeout(timeout):
+                    await result.event.wait()
             except TimeoutError as e:
                 error = RequestTimeoutError(
                     "Request timed out; Telegram may have processed it. "
