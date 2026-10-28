@@ -1,0 +1,3 @@
+Add opt-in ``Client(catch_up=True)`` recovery for missed MTProto updates,
+including persisted common and channel cursors, reconnect and gap reconciliation,
+and duplicate suppression during recovery.

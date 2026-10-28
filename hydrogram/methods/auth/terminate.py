@@ -44,6 +44,9 @@ class Terminate:
             await self.invoke(raw.functions.account.FinishTakeoutSession())
             log.info("Takeout session %s finished", self.takeout_id)
 
+        if self.update_manager is not None:
+            await self.update_manager.stop()
+
         await self.storage.save()
         await self.dispatcher.stop()
 

@@ -208,6 +208,24 @@ class BaseStorage(ABC):
         """
         ...
 
+    async def get_update_states(self) -> dict[int, tuple[int, int, int, int]]:
+        """Load update cursors as ``{channel_id: (pts, qts, date, seq)}``.
+
+        Channel ID 0 denotes the common state. This optional storage extension
+        is required only when ``Client(catch_up=True)`` is used.
+        """
+        raise NotImplementedError("This storage engine does not support catch_up")
+
+    async def set_update_state(
+        self, channel_id: int, pts: int, qts: int, date: int, seq: int
+    ) -> None:
+        """Atomically and durably replace one update cursor.
+
+        Channel IDs are raw positive Telegram IDs; 0 denotes the common state.
+        The update date is independent of the session's last-save date.
+        """
+        raise NotImplementedError("This storage engine does not support catch_up")
+
     async def export_session_string(self) -> str:
         """Exports the session string for the current session.
 

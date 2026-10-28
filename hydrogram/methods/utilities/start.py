@@ -66,12 +66,19 @@ class Start:
                 ).id
                 log.info("Takeout session %s initiated", self.takeout_id)
 
-            await self.invoke(raw.functions.updates.GetState())
+            if self.update_manager is None:
+                await self.invoke(raw.functions.updates.GetState())
         except (Exception, KeyboardInterrupt):
             await self.disconnect()
             raise
         else:
             self.me = await self.get_me()
-            await self.initialize()
+            try:
+                await self.initialize()
+            except BaseException:
+                if self.update_manager is not None:
+                    await self.update_manager.stop()
+                    await self.disconnect()
+                raise
 
             return self

@@ -169,6 +169,14 @@ class Session:
 
         self.is_started.set()
 
+        if (
+            not self.is_media
+            and not self.is_cdn
+            and self.client.update_manager is not None
+            and self.client.is_initialized
+        ):
+            self.client.update_manager.request_recovery()
+
         log.info("Session started")
 
     async def stop(self):
@@ -283,6 +291,12 @@ class Session:
                 continue
 
             if isinstance(msg.body, raw.types.NewSessionCreated):
+                if (
+                    not self.is_media
+                    and not self.is_cdn
+                    and self.client.update_manager is not None
+                ):
+                    self.client.update_manager.request_recovery()
                 continue
 
             msg_id = None
@@ -294,7 +308,31 @@ class Session:
             elif isinstance(msg.body, raw.types.Pong):
                 msg_id = msg.body.msg_id
             elif self.client is not None:
-                self.client.loop.create_task(self.client.handle_updates(msg.body))
+                if self.client.update_manager is not None:
+                    self.client.last_update_time = datetime.now()
+                    self.client.update_manager.submit(msg.body)
+                else:
+                    self.client.loop.create_task(self.client.handle_updates(msg.body))
+
+            if (
+                isinstance(msg.body, raw.types.RpcResult)
+                and not self.is_media
+                and not self.is_cdn
+                and self.client.update_manager is not None
+                and isinstance(
+                    msg.body.result,
+                    (
+                        raw.types.Updates,
+                        raw.types.UpdatesCombined,
+                        raw.types.UpdateShort,
+                        raw.types.UpdateShortMessage,
+                        raw.types.UpdateShortChatMessage,
+                        raw.types.UpdateShortSentMessage,
+                        raw.types.UpdatesTooLong,
+                    ),
+                )
+            ):
+                self.client.update_manager.submit(msg.body.result)
 
             if msg_id in self.results:
                 self.results[msg_id].value = getattr(msg.body, "result", msg.body)

@@ -48,6 +48,9 @@ class Initialize:
 
         self.load_plugins()
 
+        if self.update_manager is not None:
+            await self.update_manager.start()
+
         await self.dispatcher.start()
 
         self.updates_watchdog_task = asyncio.create_task(self.updates_watchdog())

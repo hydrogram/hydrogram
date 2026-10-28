@@ -56,6 +56,7 @@ from hydrogram.methods import Methods
 from hydrogram.session import Auth, Session
 from hydrogram.storage import BaseStorage, SQLiteStorage
 from hydrogram.types import ListenerTypes, TermsOfService, User
+from hydrogram.update_manager import UpdateManager
 from hydrogram.utils import ainput
 
 from .connection import Connection
@@ -171,6 +172,11 @@ class Client(Methods):
             Useful for batch programs that don't need to deal with updates.
             Defaults to False (updates enabled and received).
 
+        catch_up (``bool``, *optional*):
+            Recover missed updates and MTProto update gaps using persisted session cursors.
+            Defaults to False. Ignored with *no_updates* or *takeout*.
+            See :doc:`/topics/more-on-updates` for delivery guarantees and API limits.
+
         takeout (``bool``, *optional*):
             Pass True to let the client use a takeout session instead of a normal one, implies *no_updates=True*.
             Useful for exporting Telegram data. Methods invoked inside a takeout session (such as get_chat_history,
@@ -258,6 +264,7 @@ class Client(Methods):
         connection_factory: builtins.type[Connection] = Connection,
         protocol_factory: builtins.type[TCP] = TCPAbridged,
         message_cache_size: int = 1000,
+        catch_up: bool = False,
     ):
         super().__init__()
 
@@ -282,6 +289,10 @@ class Client(Methods):
         self.plugins = plugins
         self.parse_mode = parse_mode
         self.no_updates = no_updates
+        self.catch_up = catch_up
+        self.update_manager = (
+            UpdateManager(self) if catch_up and not no_updates and not takeout else None
+        )
         self.takeout = takeout
         self.sleep_threshold = sleep_threshold
         self.hide_password = hide_password
@@ -368,7 +379,10 @@ class Client(Methods):
             if datetime.now() - self.last_update_time > timedelta(
                 seconds=self.UPDATES_WATCHDOG_INTERVAL
             ):
-                await self.invoke(raw.functions.updates.GetState())
+                if self.update_manager is not None:
+                    self.update_manager.request_recovery()
+                else:
+                    await self.invoke(raw.functions.updates.GetState())
 
     async def authorize(self) -> User:
         if self.bot_token:
@@ -584,6 +598,10 @@ class Client(Methods):
 
     async def handle_updates(self, updates):
         self.last_update_time = datetime.now()
+
+        if self.update_manager is not None:
+            self.update_manager.submit(updates)
+            return
 
         if isinstance(updates, (raw.types.Updates, raw.types.UpdatesCombined)):
             is_min = any((

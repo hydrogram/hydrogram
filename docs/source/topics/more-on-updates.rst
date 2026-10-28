@@ -219,3 +219,77 @@ The output of both (equivalent) examples will be:
     0
     1
     2
+
+Recovering missed updates
+-------------------------
+
+Enable recovery explicitly when constructing a client:
+
+.. code-block:: python
+
+    from hydrogram import Client
+
+    app = Client("my_account", catch_up=True)
+
+``catch_up`` defaults to ``False``, preserving the existing update handling
+behavior. It is ignored when ``no_updates=True`` or ``takeout=True``.
+Register handlers before starting the client so they can receive recovered
+updates as soon as initialization finishes.
+
+With recovery enabled, Hydrogram stores the common ``pts``, ``qts``, ``date``
+and ``seq`` cursors and separate channel/supergroup ``pts`` cursors. A single
+worker serializes incoming containers and recovery requests, applies updates
+in sequence, and discards events already covered by the appropriate cursor.
+It requests differences at startup, after reconnecting or a server session
+reset, when a counter gap is detected, on ``UpdatesTooLong`` and
+``UpdateChannelTooLong``, and after a period without updates. Channel recovery
+normally follows Telegram's channel notifications instead of polling every
+known channel. Handler callbacks still run with the configured number of
+``workers``; their completion order is independent of update enqueue order.
+
+The first run establishes a current baseline rather than replaying arbitrary
+account history. New channels start from their first observed update or the
+cursor supplied by Telegram. If Telegram supplies neither, Hydrogram fetches
+current channel information. Subsequent runs with the same file session resume
+from saved cursors. Existing SQLite sessions are migrated automatically without
+changing their credentials or session-string format. In-memory sessions and
+exported session strings do not retain update cursors across processes.
+Custom storage engines must implement ``BaseStorage.get_update_states`` and
+``BaseStorage.set_update_state`` to support this option; existing engines
+remain usable with recovery disabled. Keep recovery enabled consistently:
+updates processed while it is disabled do not advance its saved cursors and
+may be replayed if it is later enabled again.
+
+Recovery is bounded and respects Telegram's available update history. Common
+difference requests use a total limit of 10,000 counter increments, channel
+requests fetch up to 100 updates per page, and recovery yields after at most
+100 pages before resuming from its checkpoint with backoff. Failed requests
+retain their cursors and retry with backoff. Recovery pauses when the dispatcher
+has 10,000 queued updates; its incoming buffer holds up to 1,000 containers.
+Overflow requests another difference and logs a warning, since ephemeral
+updates such as typing notifications cannot be replayed reliably.
+
+Both user and bot accounts can use Telegram's difference methods. Bot privacy,
+channel membership, permissions, and the kinds of events Telegram retains still
+apply. An inaccessible channel is logged and skipped so other updates can
+continue. If Telegram rejects a cursor or returns ``DifferenceTooLong`` or
+``ChannelDifferenceTooLong``, Hydrogram logs the unrecoverable gap and
+reconciles to current state. A channel history snapshot is not dispatched as
+new messages. A reset of the common state also reconciles known channels,
+since their notifications may have been lost. Recovery cannot recreate expired
+or deleted updates, and it does not scan message history to invent events.
+
+Cursors record handoff to the dispatcher, not successful application-side
+processing. Graceful shutdown cancels recovery, finishes an in-flight checkpoint
+when possible, and drains dispatched updates. There is no transactional
+exactly-once guarantee across a forced process kill, storage failure, or a
+handler's external side effects: a crash can interrupt a callback or its
+checkpoint. Applications requiring stronger delivery guarantees should use
+idempotent handlers and persist their own processing results. Secret-chat data
+is forwarded to raw handlers; recovery does not add secret-chat decryption.
+
+See Telegram's `update handling rules <https://core.telegram.org/api/updates>`_,
+`updates.getDifference <https://core.telegram.org/method/updates.getDifference>`_
+and `updates.getChannelDifference
+<https://core.telegram.org/method/updates.getChannelDifference>`_ for the
+underlying protocol and retention limits.

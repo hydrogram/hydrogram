@@ -32,6 +32,17 @@ from hydrogram import raw, utils
 
 from .base import BaseStorage, InputPeer
 
+UPDATE_STATE_SCHEMA = """
+CREATE TABLE IF NOT EXISTS update_state
+(
+    channel_id INTEGER PRIMARY KEY,
+    pts        INTEGER NOT NULL,
+    qts        INTEGER NOT NULL,
+    date       INTEGER NOT NULL,
+    seq        INTEGER NOT NULL
+);
+"""
+
 SCHEMA = """
 CREATE TABLE sessions
 (
@@ -87,7 +98,7 @@ def get_input_peer(peer_id: int, access_hash: int, peer_type: str) -> InputPeer:
 
 
 class SQLiteStorage(BaseStorage):
-    VERSION = 3
+    VERSION = 4
     USERNAME_TTL = 8 * 60 * 60
     FILE_EXTENSION = ".session"
 
@@ -122,6 +133,10 @@ class SQLiteStorage(BaseStorage):
             await self.conn.execute("ALTER TABLE sessions ADD api_id INTEGER")
             version += 1
 
+        if version == 3:
+            await self.conn.execute(UPDATE_STATE_SCHEMA)
+            version += 1
+
         await self.version(version)
         await self.conn.commit()
 
@@ -130,7 +145,7 @@ class SQLiteStorage(BaseStorage):
             logging.warning("Database connection is not available.")
             return
 
-        await self.conn.executescript(SCHEMA)
+        await self.conn.executescript(SCHEMA + UPDATE_STATE_SCHEMA)
         await self.conn.execute(
             "INSERT INTO version VALUES (?)",
             (self.VERSION,),
@@ -259,6 +274,25 @@ class SQLiteStorage(BaseStorage):
             raise KeyError(f"Phone number not found: {phone_number}")
 
         return get_input_peer(*r)
+
+    async def get_update_states(self) -> dict[int, tuple[int, int, int, int]]:
+        if self.conn is None:
+            raise RuntimeError("Storage is not open")
+        async with self.conn.execute(
+            "SELECT channel_id, pts, qts, date, seq FROM update_state"
+        ) as cursor:
+            return {row[0]: tuple(row[1:]) for row in await cursor.fetchall()}
+
+    async def set_update_state(
+        self, channel_id: int, pts: int, qts: int, date: int, seq: int
+    ) -> None:
+        if self.conn is None:
+            raise RuntimeError("Storage is not open")
+        await self.conn.execute(
+            "REPLACE INTO update_state (channel_id, pts, qts, date, seq) VALUES (?, ?, ?, ?, ?)",
+            (channel_id, pts, qts, date, seq),
+        )
+        await self.conn.commit()
 
     async def _get(self, attr: str) -> Any:
         if not self.conn:
