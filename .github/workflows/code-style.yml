@@ -22,4 +22,4 @@ jobs:
     - name: Analysing the code with Ruff
       run: |
         uv run --locked ruff format --check .
-        uv run --locked ruff check . --ignore=E501
+        uv run --locked ruff check --output-format=github .

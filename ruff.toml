@@ -1,4 +1,15 @@
 line-length = 99
+# Keep preview behavior identical in editors, pre-commit, and the locked environment.
+required-version = "==0.17.3"
+# Keep compiler output untouched even when a hook or editor passes a file directly.
+force-exclude = true
+extend-exclude = [
+    "hydrogram/errors/exceptions",
+    "hydrogram/raw/all.py",
+    "hydrogram/raw/base",
+    "hydrogram/raw/functions",
+    "hydrogram/raw/types",
+]
 
 [lint]
 select = [
@@ -22,6 +33,12 @@ select = [
     "PL",   # pylint
 ]
 ignore = [
+    "line-too-long", # E501: the formatter wraps lines on a best-effort basis.
+    # These rules conflict with Ruff's formatter (the E and W families select them).
+    "indentation-with-invalid-multiple", # E111
+    "indentation-with-invalid-multiple-comment", # E114
+    "over-indented", # E117
+    "tab-indentation", # W191
     "ambiguous-unicode-character-string",
     "ambiguous-unicode-character-docstring",
     "ambiguous-unicode-character-comment",
@@ -38,6 +55,7 @@ ignore = [
     "noqa-comments", # Preserve the project's existing suppression syntax.
     "too-many-statements-in-try-clause", # Keep the existing complexity policy.
 ]
+# Retain the project's existing preview rules; review changes when upgrading Ruff.
 preview = true
 
 [lint.per-file-ignores]
@@ -49,4 +67,6 @@ known-first-party = ["hydrogram"]
 
 [format]
 docstring-code-format = true
+line-ending = "lf"
+# Retain the existing style without reformatting the codebase.
 preview = true

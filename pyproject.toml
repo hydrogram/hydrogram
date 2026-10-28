@@ -64,7 +64,7 @@ cache-keys = [
 [dependency-groups]
 # Keep lower bounds compatible with Python 3.11; uv locks newer versions where supported.
 dev = [
-    "ruff>=0.17.3",
+    "ruff==0.17.3",
     "pytest>=9.2.0",
     "pytest-asyncio>=1.4.1",
     "pytest-cov>=7.1.0",

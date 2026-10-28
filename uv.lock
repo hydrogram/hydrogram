@@ -683,7 +683,7 @@ dev = [
     { name = "pytest-asyncio", specifier = ">=1.4.1" },
     { name = "pytest-cov", specifier = ">=7.1.0" },
     { name = "requests", specifier = ">=2.34.2" },
-    { name = "ruff", specifier = ">=0.17.3" },
+    { name = "ruff", specifier = "==0.17.3" },
     { name = "twine", specifier = ">=7.0.0" },
 ]
 

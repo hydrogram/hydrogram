@@ -46,7 +46,9 @@ documentation.
 To refresh all locked dependencies, run `uv lock --upgrade`, then synchronize and
 validate the environment. Keep dependency lower bounds compatible with Python 3.11;
 the universal lockfile selects newer releases on Python versions that support them.
-Keep the Ruff pre-commit revision aligned with the version declared in `pyproject.toml`.
+Keep the Ruff pre-commit revision, `ruff.toml`'s `required-version`, and the exact
+version declared in `pyproject.toml` aligned. Ruff's linter and formatter use preview
+mode to retain the existing rules and style, so review their changes when upgrading.
 
 ## Find and Change the Right Code
 
@@ -69,11 +71,20 @@ Ruff handles formatting and linting, with a target line length of 99 characters.
 ```bash
 uv run ruff format .
 uv run ruff format --check .
-uv run ruff check . --ignore=E501
+uv run ruff check .
 uv run pre-commit run --all-files
 ```
 
-Pre-commit also checks whitespace, merge conflicts, private keys, TOML/YAML, and release fragment filenames. Its Ruff hooks can modify files, including applying unsafe fixes; review the resulting diff and rerun checks after fixes.
+The shared `ruff.toml` ignores `E501` because the formatter wraps lines on a
+best-effort basis, and excludes generated API modules and exceptions even when
+passed directly. The Python target is inferred from `requires-python` in
+`pyproject.toml`; keep it aligned with the library's minimum supported version.
+
+Pre-commit also checks whitespace, merge conflicts, private keys, TOML/YAML, and
+release fragment filenames. Its Ruff hooks apply safe lint fixes before formatting;
+review the resulting diff and rerun checks after fixes. Apply unsafe fixes only
+deliberately with `uv run ruff check --fix --unsafe-fixes`, then review and test any
+behavior changes.
 
 ## Testing
 
