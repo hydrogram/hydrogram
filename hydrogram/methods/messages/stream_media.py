@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import math
+from contextlib import aclosing
 from typing import BinaryIO
 
 import hydrogram
@@ -113,5 +114,6 @@ class StreamMedia:
             chunks = math.ceil(file_size / 1024 / 1024)
             offset += chunks
 
-        async for chunk in self.get_file(file_id_obj, file_size, limit, offset):
-            yield chunk
+        async with aclosing(self.get_file(file_id_obj, file_size, limit, offset)) as chunks:
+            async for chunk in chunks:
+                yield chunk
