@@ -59,6 +59,7 @@ class SendAudio:
         | types.ForceReply = None,
         progress: Callable | None = None,
         progress_args: tuple = (),
+        random_id: int | None = None,
     ) -> types.Message | None:
         """Send audio files.
 
@@ -143,6 +144,11 @@ class SendAudio:
                 You can pass anything you need to be available in the progress callback scope; for example, a Message
                 object or a Client instance in order to edit the message with the updated progress status.
 
+            random_id (``int``, *optional*):
+                Client message ID for retrying the same send. Must be a signed 64-bit integer
+                (booleans are not accepted). Defaults to an automatically generated ID.
+                See :doc:`/topics/message-idempotency` for retry scope and limitations.
+
         Other Parameters:
             current (``int``):
                 The amount of bytes transmitted so far.
@@ -153,6 +159,10 @@ class SendAudio:
             *args (``tuple``, *optional*):
                 Extra custom arguments as defined in the ``progress_args`` parameter.
                 You can either keep ``*args`` or add every single extra argument in your function signature.
+
+        Raises:
+            TypeError: If ``random_id`` is neither an integer nor ``None``, or is a boolean.
+            ValueError: If ``random_id`` is outside the signed 64-bit range.
 
         Returns:
             :obj:`~hydrogram.types.Message` | ``None``: On success, the sent audio message is returned, otherwise, in
@@ -180,6 +190,8 @@ class SendAudio:
 
                 await app.send_audio("me", "audio.mp3", progress=progress)
         """
+
+        utils.validate_random_id(random_id)
         file = None
 
         try:
@@ -231,7 +243,7 @@ class SendAudio:
                             media=media,
                             silent=disable_notification or None,
                             reply_to=reply_to,
-                            random_id=self.rnd_id(),
+                            random_id=self.rnd_id() if random_id is None else random_id,
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,
                             invert_media=show_caption_above_media,

@@ -46,6 +46,7 @@ class SendMessage:
         | types.ReplyKeyboardMarkup
         | types.ReplyKeyboardRemove
         | types.ForceReply = None,
+        random_id: int | None = None,
     ) -> types.Message:
         """Send text messages.
 
@@ -91,6 +92,15 @@ class SendMessage:
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
 
+            random_id (``int``, *optional*):
+                Client message ID for retrying the same send. Must be a signed 64-bit integer
+                (booleans are not accepted). Defaults to an automatically generated ID.
+                See :doc:`/topics/message-idempotency` for retry scope and limitations.
+
+        Raises:
+            TypeError: If ``random_id`` is neither an integer nor ``None``, or is a boolean.
+            ValueError: If ``random_id`` is outside the signed 64-bit range.
+
         Returns:
             :obj:`~hydrogram.types.Message`: On success, the sent text message is returned.
 
@@ -134,6 +144,8 @@ class SendMessage:
                 )
         """
 
+        utils.validate_random_id(random_id)
+
         message, entities = (
             await utils.parse_text_entities(self, text, parse_mode, entities)
         ).values()
@@ -146,7 +158,7 @@ class SendMessage:
                 no_webpage=disable_web_page_preview or None,
                 silent=disable_notification or None,
                 reply_to=reply_to,
-                random_id=self.rnd_id(),
+                random_id=self.rnd_id() if random_id is None else random_id,
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
                 message=message,

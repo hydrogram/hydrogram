@@ -153,6 +153,7 @@ Meta
     topics/serializing
     topics/proxy
     topics/scheduling
+    topics/message-idempotency
     topics/mtproto-vs-botapi
     topics/debugging
     topics/test-servers

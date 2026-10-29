@@ -37,6 +37,7 @@ class SendGame:
         | types.ReplyKeyboardMarkup
         | types.ReplyKeyboardRemove
         | types.ForceReply = None,
+        random_id: int | None = None,
     ) -> types.Message:
         """Send a game.
 
@@ -69,6 +70,15 @@ class SendGame:
                 An object for an inline keyboard. If empty, one ‘Play game_title’ button will be shown automatically.
                 If not empty, the first button must launch the game.
 
+            random_id (``int``, *optional*):
+                Client message ID for retrying the same send. Must be a signed 64-bit integer
+                (booleans are not accepted). Defaults to an automatically generated ID.
+                See :doc:`/topics/message-idempotency` for retry scope and limitations.
+
+        Raises:
+            TypeError: If ``random_id`` is neither an integer nor ``None``, or is a boolean.
+            ValueError: If ``random_id`` is outside the signed 64-bit range.
+
         Returns:
             :obj:`~hydrogram.types.Message`: On success, the sent game message is returned.
 
@@ -77,6 +87,8 @@ class SendGame:
 
                 await app.send_game(chat_id, "gamename")
         """
+
+        utils.validate_random_id(random_id)
         reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
 
         r = await self.invoke(
@@ -90,7 +102,7 @@ class SendGame:
                 message="",
                 silent=disable_notification or None,
                 reply_to=reply_to,
-                random_id=self.rnd_id(),
+                random_id=self.rnd_id() if random_id is None else random_id,
                 noforwards=protect_content,
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
             )

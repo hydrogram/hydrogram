@@ -43,6 +43,7 @@ class SendDice:
         | types.ReplyKeyboardMarkup
         | types.ReplyKeyboardRemove
         | types.ForceReply = None,
+        random_id: int | None = None,
     ) -> types.Message | None:
         """Send a dice with a random value from 1 to 6.
 
@@ -82,6 +83,15 @@ class SendDice:
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
 
+            random_id (``int``, *optional*):
+                Client message ID for retrying the same send. Must be a signed 64-bit integer
+                (booleans are not accepted). Defaults to an automatically generated ID.
+                See :doc:`/topics/message-idempotency` for retry scope and limitations.
+
+        Raises:
+            TypeError: If ``random_id`` is neither an integer nor ``None``, or is a boolean.
+            ValueError: If ``random_id`` is outside the signed 64-bit range.
+
         Returns:
             :obj:`~hydrogram.types.Message`: On success, the sent dice message is returned.
 
@@ -98,6 +108,8 @@ class SendDice:
                 await app.send_dice(chat_id, "🏀")
         """
 
+        utils.validate_random_id(random_id)
+
         reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
 
         r = await self.invoke(
@@ -106,7 +118,7 @@ class SendDice:
                 media=raw.types.InputMediaDice(emoticon=emoji),
                 silent=disable_notification or None,
                 reply_to=reply_to,
-                random_id=self.rnd_id(),
+                random_id=self.rnd_id() if random_id is None else random_id,
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,
                 reply_markup=await reply_markup.write(self) if reply_markup else None,

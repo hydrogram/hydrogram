@@ -33,6 +33,7 @@ class SendInlineBotResult:
         message_thread_id: int | None = None,
         disable_notification: bool | None = None,
         reply_to_message_id: int | None = None,
+        random_id: int | None = None,
     ) -> raw.base.Updates:
         """Send an inline bot result.
         Bot results can be retrieved using :meth:`~hydrogram.Client.get_inline_bot_results`
@@ -62,6 +63,15 @@ class SendInlineBotResult:
             reply_to_message_id (``int``, *optional*):
                 If the message is a reply, ID of the original message.
 
+            random_id (``int``, *optional*):
+                Client message ID for retrying the same send. Must be a signed 64-bit integer
+                (booleans are not accepted). Defaults to an automatically generated ID.
+                See :doc:`/topics/message-idempotency` for retry scope and limitations.
+
+        Raises:
+            TypeError: If ``random_id`` is neither an integer nor ``None``, or is a boolean.
+            ValueError: If ``random_id`` is outside the signed 64-bit range.
+
         Returns:
             :obj:`~hydrogram.raw.base.Updates`: Currently, on success, a raw result is returned.
 
@@ -71,6 +81,8 @@ class SendInlineBotResult:
                 await app.send_inline_bot_result(chat_id, query_id, result_id)
         """
 
+        utils.validate_random_id(random_id)
+
         reply_to = utils.get_reply_head_fm(message_thread_id, reply_to_message_id)
 
         return await self.invoke(
@@ -78,7 +90,7 @@ class SendInlineBotResult:
                 peer=await self.resolve_peer(chat_id),
                 query_id=query_id,
                 id=result_id,
-                random_id=self.rnd_id(),
+                random_id=self.rnd_id() if random_id is None else random_id,
                 silent=disable_notification or None,
                 reply_to=reply_to,
             )

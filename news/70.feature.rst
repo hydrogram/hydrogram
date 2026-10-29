@@ -1,0 +1,2 @@
+Add an optional, validated ``random_id`` to single-message sending methods so
+background jobs can reuse a stable MTProto message ID across retries.

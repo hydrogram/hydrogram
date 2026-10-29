@@ -43,6 +43,16 @@ PyromodConfig = SimpleNamespace(
 )
 
 
+def validate_random_id(random_id: int | None) -> None:
+    """Validate a caller-supplied MTProto message ID without changing generation state."""
+    if random_id is None:
+        return
+    if isinstance(random_id, bool) or not isinstance(random_id, int):
+        raise TypeError("random_id must be an integer or None (booleans are not accepted)")
+    if not -(1 << 63) <= random_id < (1 << 63):
+        raise ValueError("random_id must be between -9223372036854775808 and 9223372036854775807")
+
+
 async def ainput(prompt: str = "", *, hide: bool = False):
     """Just like the built-in input, but async"""
     with ThreadPoolExecutor(1) as executor:
